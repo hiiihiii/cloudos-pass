@@ -1,4 +1,4 @@
-package com.tanli.example.demo;
+package com.tanli.example;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
