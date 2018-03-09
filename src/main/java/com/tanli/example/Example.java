@@ -13,11 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 @EnableAutoConfiguration
 
 public class Example {
-//    @RequestMapping("/")
-//    @ResponseBody
-//    String home() {
-//        return "Hello World!";
-//    }
 
     @RequestMapping("/")
     @ResponseBody

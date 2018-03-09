@@ -10,7 +10,9 @@
 </div>
 <div th:replace="common/footer::footer"></div>
 <script type="text/javascript">
-    require(["index"]);
+    require(["../js/require-config"],function (require_config) {
+        require(["index"]);
+    });
 </script>
 </body>
 </html>

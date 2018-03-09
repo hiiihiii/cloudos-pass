@@ -1,4 +1,4 @@
 "use strict";
-require(["require-config"],function (require_config) {
+require(["../js/require-config"],function (require_config) {
 
 });
