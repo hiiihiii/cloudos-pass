@@ -6,6 +6,10 @@ require.config({
     paths: {
         "jquery": "lib/jquery/jquery-3.3.1.min",
         "vue":"lib/vue/vue.min",
-        "index":"js/index"
+        "index":"js/index",
+        "bootstrap":"lib/bootstrap/js/bootstrap.min.js"
+    },
+    shim:{
+
     }
 });

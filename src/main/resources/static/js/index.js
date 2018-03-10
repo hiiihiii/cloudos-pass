@@ -3,7 +3,6 @@ define([
     'jquery',
     "vue"
 ],function ($,Vue) {
-    debugger;
     if($(".index")[0]){
         var indexVue = new Vue({
             el:".index",
