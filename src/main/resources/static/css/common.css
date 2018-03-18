@@ -189,3 +189,68 @@ span.checkbox+a{
     white-space: normal;
 }
 /*右侧内容结束*/
+
+/*概览开始*/
+#overview {
+    display: flex;
+    padding-top: 100px;
+}
+#overview .left-content {
+    flex: 1;
+    background-color: rgb(232, 235, 238);
+}
+#overview .right-content {
+    flex: 4;
+    background-color: rgb(232, 235, 238);
+}
+#overview .flex-col {
+    display: flex;
+    flex-direction: column;
+}
+.left-top {
+    flex: 2;
+    padding-top: 10px;
+    padding-left: 10px;
+}
+.left-bottom {
+    flex: 3;
+    padding-top: 5px;
+    padding-left: 10px;
+}
+#overview .left-top .content-box,
+#overview .left-bottom .content-box{
+    font-size: 14px;
+    background-color: rgb(255,255,255);
+    padding-top: 5px;
+    padding-left: 5px;
+}
+.content-box .box-title{
+    padding-left: 5px;
+    border-left: 4px solid rgb(130,121,114);
+}
+#overview #app-statistics{
+    height: 180px;
+    width: 272px;
+}
+.exception-list {
+    height: 313px;
+    overflow: auto;
+}
+.exception-app {
+    display: flex;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+.exception-app img {
+    flex: 1;
+    height: 80px;
+    width: 80px;
+}
+.exception-app .info {
+    flex: 2;
+    padding-top: 15px;
+}
+.exception-app .info .time {
+    color: rgba(0,0,0,0.5);
+}
+/*概览结束*/
