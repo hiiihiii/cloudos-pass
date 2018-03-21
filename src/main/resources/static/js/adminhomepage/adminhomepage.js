@@ -18,36 +18,30 @@ define([
                     debugger;
                     var echartsObj = echarts.init(document.getElementById("app-statistics"));
                     var option = {
-                        tooltip: {
-                            trigger: 'item',
-                            formatter: "{a} <br/>{b} : {c} ({d}%)"
+                        tooltip: { // 鼠标悬浮时的提示信息
+                            trigger: 'item', // 触发类型
+                            formatter: "{b} : {c} ({d}%)"
                         },
-                        legend: {
-                            orient : 'vertical',
-                            x : 'right',
+                        legend: {  // 图例
+                            orient : 'vertical', // 图例方向
+                            x : 'right',         // 水平放置位置
                             data: ["运行","停止","异常"]
                         },
-                        series:[{
-                            name:"",
-                            type:"pie",
-                            radius : ['50%', '70%'],
-                            itemStyle : {
-                                normal : {
-                                    label : {
-                                        show : false
-                                    },
-                                    labelLine : {
-                                        show : false
-                                    }
-                                },
-                                emphasis : {
-                                    label : {
-                                        show : true,
-                                        position : 'center',
-                                        textStyle : {
-                                            fontSize : '20',
-                                            fontWeight : 'bold'
-                                        }
+                        series:[{  //驱动图表生成的数据内容数组
+                            name: "", //系列的名称
+                            type: "pie", //图表类型
+                            radius : ['35%', '60%'], //半径
+                            label:{
+                                show: false
+                            },
+                            emphasis : { //强调样式（悬浮时样式）
+                                label : {
+                                    show : true,
+                                    position : 'center',
+                                    formatter: "{c}",
+                                    textStyle : {
+                                        fontSize : '20',
+                                        fontWeight : 'bold'
                                     }
                                 }
                             },
