@@ -1,5 +1,5 @@
 # spring-d-demo项目简介
-使用spring boot搭建项目
+使用spring boot和maven搭建项目
 前端使用了vue.js(2.X)和requirejs
 
 # 运行方法
