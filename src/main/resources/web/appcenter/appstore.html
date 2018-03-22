@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <div th:replace="common/header::header"></div>
+</head>
+<body>
+<div class="header">
+    <div>
+        <div class="header-left">
+            <h3>容器PaaS平台</h3>
+        </div>
+        <div class="header-center">
+            <div class="parent-menu">
+                <i class="fa fa-tachometer"></i>
+                <div class="parent-menu-title">
+                    <span>概览</span>
+                </div>
+            </div>
+            <div class="parent-menu">
+                <i class="fa fa-server"></i>
+                <div class="parent-menu-title">
+                    <span>服务</span>
+                </div>
+            </div>
+            <div class="parent-menu">
+                <i class="fa fa-briefcase "></i>
+                <div class="parent-menu-title">
+                    <span>配置</span>
+                </div>
+            </div>
+            <div class="parent-menu">
+                <i class="fa fa-cog"></i>
+                <div class="parent-menu-title">
+                    <span>系统参数</span>
+                </div>
+            </div>
+        </div>
+        <div class="header-right">
+            <i class="fa fa-user-circle-o"></i>
+            <span>admin</span>
+            <a>退出</a>
+        </div>
+    </div>
+    <div class="breadcrumbs">
+        <a >服务</a>
+        <a >应用仓库</a>
+    </div>
+</div>
+<div id="appstore">
+    <div class="content">
+        <div class="content-left">
+            <div class="nav">
+                <ul>
+                    <li class="repo-type selected-temp">
+                        <span class="repo-icon"><i class="fa fa-shopping-cart"></i></span>
+                        <a >公有仓库</a>
+                        <span><i class="fa fa-angle-right"></i></span>
+                    </li>
+                    <div class="app-items">
+                        <div class="app-type-all">
+                            <span class="checkbox">
+                                <i class="fa fa-check"></i>
+                            </span>
+                            <a >全部</a>
+                        </div>
+                        <div class="app-type">
+                            <span class="checkbox">
+                                <i class="fa fa-check"></i>
+                            </span>
+                            <a >镜像应用</a>
+                        </div>
+                        <div class="app-type">
+                            <span class="checkbox">
+                                <i class="fa fa-check"></i>
+                            </span>
+                            <a >模板应用</a>
+                        </div>
+                    </div>
+                    <li class="repo-type">
+                        <span class="repo-icon"><i class="fa fa-shopping-cart"></i></span>
+                        <a >私有仓库</a>
+                        <span><i class="fa fa-angle-right"></i></span>
+                    </li>
+                    <div class="app-items">
+                        <div class="app-type-all">
+                            <span class="checkbox">
+                                <i class="fa fa-check"></i>
+                            </span>
+                            <a >全部</a>
+                        </div>
+                        <div class="app-type">
+                            <span class="checkbox">
+                                <i class="fa fa-check"></i>
+                            </span>
+                            <a >镜像应用</a>
+                        </div>
+                        <div class="app-type">
+                            <span class="checkbox">
+                                <i class="fa fa-check"></i>
+                            </span>
+                            <a >模板应用</a>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+        <div class="content-right">
+            <div class="app-box">
+                <div class="docker">
+                    <img src="../images/docker-blue.png" />
+                </div>
+                <div class="app-name">
+                    <h5>tomcat</h5>
+                </div>
+                <div class="app-tag">
+                    <span>WebServer</span>
+                </div>
+                <div class="app-img">
+                    <img src="../images/tomcat.PNG" />
+                </div>
+                <div class="app-desc" title="Tomcat服务器是一个免费的开放源代码的Web应用服务器。Tomcat是Apache软件基金会（Apache Software Foundation）的Jakarta项目中的一个核心项目，由Apache、Sun和其他一些公司及个人共同开发而成。由于有了Sun的参与和支持，最新的Servlet 和JSP规范总是能在Tomcat中得到体现，Tomcat 5支持最新的Servlet 2.4和JSP 2.0规范。因为Tomcat技术先进、性能稳定，而且免费，因而深受Java爱好者的喜爱并得到了部分软件开发商的认可，是目前比较流行的Web应用服务器。">
+                    Tomcat服务器是一个免费的开放源代码的Web应用服务器。Tomcat是Apache软件基金会（Apache Software Foundation）的Jakarta项目中的一个核心项目，由Apache、Sun和其他一些公司及个人共同开发而成。由于有了Sun的参与和支持，最新的Servlet 和JSP规范总是能在Tomcat中得到体现，Tomcat 5支持最新的Servlet 2.4和JSP 2.0规范。因为Tomcat技术先进、性能稳定，而且免费，因而深受Java爱好者的喜爱并得到了部分软件开发商的认可，是目前比较流行的Web应用服务器。
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="common/footer::footer"></div>
+</body>
+</html>
