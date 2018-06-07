@@ -9,7 +9,9 @@ require.config({
         "bootstrap":"lib/bootstrap/js/bootstrap.min",
         "echarts":"lib/echarts/echarts.min",
         "index":"js/index",
-        "adminhomepage":"js/adminhomepage/adminhomepage"
+        "adminhomepage":"js/adminhomepage/adminhomepage",
+        "common-module":"js/common-module",
+        "appstore":"js/appcenter/appstore"
     },
     shim:{
 

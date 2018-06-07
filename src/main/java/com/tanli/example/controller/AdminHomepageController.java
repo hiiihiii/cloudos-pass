@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("adminhomepage")
 public class AdminHomepageController {
 
-    @RequestMapping(value = "/")
+    @RequestMapping(value = {"/",""})
     public ModelAndView index(){
         return new ModelAndView("homepage/adminhomepage");
     }

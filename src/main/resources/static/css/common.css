@@ -27,6 +27,42 @@
     margin-top: 22px;
     margin-right: 30px;
 }
+.parent-menu:hover,
+.parent-menu-selected{
+    border-bottom: 4px solid rgb(236, 103, 11);
+    cursor: pointer;
+}
+.child-menu{
+    position: absolute;
+    background: #ffffff;
+    padding: 5px 30px 10px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.13);
+    box-shadow: 0px 0px 10px #d2cdcd;
+    margin-top: 5px;
+    display: none;
+}
+.child-menu .sub-menu-group span{
+    font-size: 12px;
+    color: rgba(20, 2, 2, 0.48)
+}
+.child-menu .child-menu-title{
+    display: inline-block;
+    margin: 5px 10px;
+    color: #4a4e53;
+}
+.child-menu .sub-menu-group{
+    margin-left: 10px;
+}
+.child-menu a{
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 20px;
+    padding: 5px 13px;
+}
+.child-menu a:hover,
+.child-menu-selected{
+    border: 1px solid rgb(236,103,11);
+}
 .header-center .parent-menu i {
     color: #767b80;
 }
