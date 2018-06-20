@@ -14,6 +14,6 @@ require.config({
         "appstore":"js/appcenter/appstore"
     },
     shim:{
-
+        "bootstrap": ["jquery"]
     }
 });

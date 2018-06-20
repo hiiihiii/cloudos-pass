@@ -11,25 +11,26 @@
         <div class="content-left">
             <div class="nav">
                 <ul>
-                    <li class="repo-type selected-temp">
+                    <li class="repo-type repo-type-selected">
                         <span class="repo-icon"><i class="fa fa-shopping-cart"></i></span>
                         <a >公有仓库</a>
-                        <span><i class="fa fa-angle-right"></i></span>
+                        <span v-cloak="" v-show="showPublic" ><i class="fa fa-angle-down"></i></span>
+                        <span v-cloak="" v-show="!showPublic"><i class="fa fa-angle-right"></i></span>
                     </li>
-                    <div class="app-items">
-                        <div class="app-type-all">
+                    <div v-cloak="" class="app-items" v-show="appType == 'public'" >
+                        <div class="app-type-all app-item-selected">
                             <span class="checkbox">
                                 <i class="fa fa-check"></i>
                             </span>
                             <a >全部</a>
                         </div>
-                        <div class="app-type">
+                        <div class="app-type app-item-selected">
                             <span class="checkbox">
                                 <i class="fa fa-check"></i>
                             </span>
                             <a >镜像应用</a>
                         </div>
-                        <div class="app-type">
+                        <div class="app-type app-item-selected">
                             <span class="checkbox">
                                 <i class="fa fa-check"></i>
                             </span>
@@ -39,9 +40,10 @@
                     <li class="repo-type">
                         <span class="repo-icon"><i class="fa fa-shopping-cart"></i></span>
                         <a >私有仓库</a>
-                        <span><i class="fa fa-angle-right"></i></span>
+                        <span v-cloak="" v-show="showPrivate"><i class="fa fa-angle-down"></i></span>
+                        <span v-cloak="" v-show="!showPrivate"><i class="fa fa-angle-right"></i></span>
                     </li>
-                    <div class="app-items">
+                    <div v-cloak="" class="app-items" v-show="appType == 'private'">
                         <div class="app-type-all">
                             <span class="checkbox">
                                 <i class="fa fa-check"></i>
@@ -65,6 +67,14 @@
             </div>
         </div>
         <div class="content-right">
+            <div class="tool-box col-lg-12">
+                <div class="col-lg-8 operation">
+                    <div class="btn cloud-btn" v-on:click="showUploadDialog"><i class="fa fa-plus"></i>上传镜像</div>
+                    <div class="btn cloud-btn">构建镜像</div>
+                    <div class="btn cloud-btn"><i class="fa fa-refresh"></i>刷新</div>
+                </div>
+                <div class="col-lg-4"></div>
+            </div>
             <div class="app-box">
                 <div class="docker">
                     <img src="../images/docker-blue.png" />
@@ -85,6 +95,7 @@
         </div>
     </div>
 </div>
+<div th:replace="appcenter/upload_image::upload_image"></div>
 <div th:replace="common/footer::footer"></div>
 <script type="text/javascript">
     require(["../js/require-config"],function (require_config) {

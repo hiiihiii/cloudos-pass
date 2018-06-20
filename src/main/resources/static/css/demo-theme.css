@@ -7,13 +7,38 @@ ul{
     list-style-type: none;
 }
 
-a{
+a, a:hover{
     display: inline-block;
     text-decoration: none;
+    color: #000000;
+    cursor: pointer;
 }
 img{
     vertical-align: middle;
 }
 *{
     box-sizing: border-box;
+}
+/*按钮*/
+.cloud-btn, .cloud-btn:hover{
+    font-size: 12px;
+    color: #ffffff;
+    background-color: #7a7275;
+    border-color: #7a7275;
+    border-radius: 0;
+    padding: 5px 12px;
+}
+.cloud-btn i{
+    padding-right: 5px;
+}
+/*模态框*/
+.modal-backdrop{
+    background-color: #fff;
+}
+.modal-dialog{
+    margin-top: 110px;
+}
+/*vue*/
+[v-cloak] {
+    visibility: hidden;
 }
