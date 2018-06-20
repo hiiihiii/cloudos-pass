@@ -27,6 +27,7 @@ img{
     border-color: #7a7275;
     border-radius: 0;
     padding: 5px 12px;
+    width: 87px;
 }
 .cloud-btn i{
     padding-right: 5px;
@@ -35,8 +36,18 @@ img{
 .modal-backdrop{
     background-color: #fff;
 }
+.modal-title{
+    display: inline-block;
+    font-size: 15px;
+}
+.cloud-modal-title{
+
+}
 .modal-dialog{
     margin-top: 110px;
+}
+.modal-footer{
+    text-align: center;
 }
 /*vue*/
 [v-cloak] {

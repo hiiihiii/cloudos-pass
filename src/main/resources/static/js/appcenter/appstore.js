@@ -4,8 +4,9 @@ define([
     "vue",
     "echarts",
     "common-module",
-    "bootstrap"
-],function ($, Vue, echarts, common_module, bootstrap) {
+    "bootstrap",
+    "bootstrapSwitch"
+],function ($, Vue, echarts, common_module, bootstrap, bootstrapSwitch) {
     if($("#appstore")[0]){
         var appstore = new Vue({
             el: "#appstore",
@@ -21,9 +22,26 @@ define([
             },
             methods: {
                 showUploadDialog: function () {
-                    $("#upload_image").modal("show");
+                    $("#isPublic").bootstrapSwitch({
+                        onText:'是',
+                        offText:'否',
+                        // onColor:"success",
+                        // offColor:"info",
+                        onSwitchChange: function (event, state) {
+                            if(state){
+
+                            } else {
+
+                            }
+                        }
+                    });
+                    $("#upload_image").modal({backdrop: 'static', keyboard: false});
                 }
             }
+        });
+
+        $('#upload_image').on('shown.bs.modal', function () {
+
         });
     }
 });

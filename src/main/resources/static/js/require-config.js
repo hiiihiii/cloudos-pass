@@ -7,13 +7,16 @@ require.config({
         "jquery": "lib/jquery/jquery-3.3.1.min",
         "vue":"lib/vue/vue.min",
         "bootstrap":"lib/bootstrap/js/bootstrap.min",
+        "bootstrapSwitch": "lib/bootstrap/js/bootstrap-switch.min",
         "echarts":"lib/echarts/echarts.min",
-        "index":"js/index",
-        "adminhomepage":"js/adminhomepage/adminhomepage",
+        "jquery-validate": "lib/jquery-validation/jquery.validate.min",
         "common-module":"js/common-module",
-        "appstore":"js/appcenter/appstore"
+        "adminhomepage":"js/adminhomepage/adminhomepage",
+        "appstore":"js/appcenter/appstore",
+        "upload_image": "js/appcenter/upload_image"
     },
     shim:{
-        "bootstrap": ["jquery"]
+        "bootstrap": ["jquery"],
+        "jquery-validate": ["jquery"]
     }
 });

@@ -1,18 +1,55 @@
 <!DOCTYPE html>
 <html>
 <body>
-<div th:fragment="upload_image">
-    <div class="modal fade" id="upload_image" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div th:fragment="upload_image" id="upload_image_dialog">
+    <div class="modal fade" id="upload_image" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">模态框（Modal）标题</h4>
+                    <div class="cloud-modal-title">
+                        <i class="fa fa-plus"></i>
+                        <h4 class="modal-title">上传镜像</h4>
+                    </div>
                 </div>
-                <div class="modal-body">在这里添加一些文本</div>
+                <div class="modal-body">
+                    <form id="upload_image_form" role="form">
+                        <div class="base-info">
+                            <!--应用名称-->
+                            <div class="form-group">
+                                <label>名称</label>
+                                <input type="text" class="form-control" id="appName" name="appName" placeholder="请输入名称" />
+                            </div>
+                            <!--是否公有-->
+                            <div class="form-group">
+                                <label>是否公有</label>
+                                <div id="isPublic" class="switch">
+                                    <input type="checkbox" checked="checked" />
+                                </div>
+                            </div>
+                            <!--图标-->
+                            <!--版本-->
+                            <!--标签-->
+                            <!--应用简介-->
+                            <!--版本特性-->
+                        </div>
+                        <div class="config-info">
+                            <!--源文件-->
+                            <!--目录映射-->
+                            <!--运行命令-->
+                            <!--命令参数-->
+                            <!--环境变量-->
+                        </div>
+                        <div class="runtime-info">
+
+                        </div>
+                    </form>
+                </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary">提交更改</button>
+                    <button type="button" class="btn cloud-btn">上一步</button>
+                    <button type="button" class="btn cloud-btn">下一步</button>
+                    <button type="button" class="btn cloud-btn">确定</button>
+                    <button type="button" class="btn cloud-btn" data-dismiss="modal">取消</button>
                 </div>
             </div>
         </div>
