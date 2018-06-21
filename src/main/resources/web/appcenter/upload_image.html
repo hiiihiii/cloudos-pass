@@ -12,36 +12,138 @@
                         <h4 class="modal-title">上传镜像</h4>
                     </div>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body cloud-modal-body">
                     <form id="upload_image_form" role="form">
-                        <div class="base-info">
-                            <!--应用名称-->
-                            <div class="form-group">
-                                <label>名称</label>
-                                <input type="text" class="form-control" id="appName" name="appName" placeholder="请输入名称" />
-                            </div>
-                            <!--是否公有-->
-                            <div class="form-group">
-                                <label>是否公有</label>
-                                <div id="isPublic" class="switch">
-                                    <input type="checkbox" checked="checked" />
+                        <div class="modal-body-left">
+                            <ul class="info-type">
+                                <li class="info-item info-item-selected">基本信息</li>
+                                <li class="info-item">配置信息</li>
+                                <li class="info-item">环境要求</li>
+                            </ul>
+                        </div>
+                        <div class="modal-body-right">
+                            <div class="base-info">
+                                <!--应用名称-->
+                                <div class="form-group">
+                                    <label>名称</label>
+                                    <div>
+                                        <input type="text" class="form-control" id="appName" name="appName" placeholder="请输入名称" />
+                                    </div>
+                                </div>
+                                <!--是否公有-->
+                                <div class="form-group">
+                                    <label>是否公有</label>
+                                    <div id="isPublic" class="switch">
+                                        <input type="checkbox" class="form-control" checked="checked" />
+                                    </div>
+                                </div>
+                                <!--图标-->
+                                <div class="form-group">
+                                    <label>图标</label>
+                                    <div class="file-container">
+                                        <input class="form-control file-input" type="text" name="logoFileName" readonly="readonly" />
+                                        <input type="file" class="file-input-btn" name="logo"/>
+                                        <label class="btn cloud-btn"><i class="fa fa-upload"></i>选择文件</label>
+                                    </div>
+                                </div>
+                                <!--版本-->
+                                <div class="form-group">
+                                    <label >版本</label>
+                                    <div>
+                                        <input class="form-control" type="text" name="version"/>
+                                    </div>
+                                </div>
+                                <!--标签-->
+                                <div class="form-group">
+                                    <label >标签</label>
+                                    <div>
+                                        <select class="select2" name="appTag">
+                                            <option v-for="(val, key) in definedAppTag" value="key">{{key}}</option>
+                                        </select>
+                                        <input class="form-control input-select2" type="text" name="appTag_input"/>
+                                    </div>
+                                </div>
+                                <!--应用简介-->
+                                <div class="form-group">
+                                    <label >应用简介</label>
+                                    <div>
+                                        <textarea class="form-control" name="description"></textarea>
+                                    </div>
+                                </div>
+                                <!--版本特性-->
+                                <div class="form-group">
+                                    <label >版本特性</label>
+                                    <div>
+                                        <textarea class="form-control" name="v_description"></textarea>
+                                    </div>
                                 </div>
                             </div>
-                            <!--图标-->
-                            <!--版本-->
-                            <!--标签-->
-                            <!--应用简介-->
-                            <!--版本特性-->
-                        </div>
-                        <div class="config-info">
-                            <!--源文件-->
-                            <!--目录映射-->
-                            <!--运行命令-->
-                            <!--命令参数-->
-                            <!--环境变量-->
-                        </div>
-                        <div class="runtime-info">
+                            <div class="config-info">
+                                <!--源文件-->
+                                <div class="form-group">
+                                    <label>源文件</label>
+                                    <div class="file-container">
+                                        <input class="form-control file-input" type="text" name="sourceFileName" readonly="readonly" />
+                                        <input type="file" class="file-input-btn" name="sourceFile"/>
+                                        <label class="btn cloud-btn"><i class="fa fa-upload"></i>选择文件</label>
+                                    </div>
+                                </div>
+                                <!--目录映射-->
+                                <div class="form-group">
+                                    <label >目录映射</label>
+                                    <div>
+                                        <input class="form-control" type="text" name="volumeDir"/>
+                                    </div>
+                                </div>
+                                <!--运行命令-->
+                                <div class="form-group">
+                                    <label >运行命令</label>
+                                    <div>
+                                        <input class="form-control" type="text" name="cmd"/>
+                                    </div>
+                                </div>
+                                <!--命令参数-->
+                                <div class="form-group">
+                                    <label >命令参数</label>
+                                    <div>
+                                        <input class="form-control" type="text" name="cmdParam"/>
+                                    </div>
+                                </div>
+                                <!--环境变量-->
+                            </div>
+                            <div class="runtime-info">
+                                <div class="form-group">
+                                    <label >启动限制</label>
+                                </div>
+                                <div class="form-group">
+                                    <label >CPU</label>
+                                    <div>
+                                        <input class="form-control" type="text" name="mincpu"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label >内存</label>
+                                    <div>
+                                        <input class="form-control" type="text" name="minMemory"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label >运行限制</label>
 
+                                </div>
+                                <div class="form-group">
+                                    <label >CPU</label>
+                                    <div>
+                                        <input class="form-control" type="text" name="maxcpu"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label >内存</label>
+                                    <div>
+                                        <input class="form-control" type="text" name="maxMemory"/>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>

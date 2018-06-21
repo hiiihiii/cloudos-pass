@@ -5,15 +5,16 @@ define([
     "echarts",
     "common-module",
     "bootstrap",
-    "bootstrapSwitch"
-],function ($, Vue, echarts, common_module, bootstrap, bootstrapSwitch) {
+    "bootstrapSwitch",
+    "select2"
+],function ($, Vue, echarts, common_module, bootstrap, bootstrapSwitch, select2) {
     if($("#appstore")[0]){
         var appstore = new Vue({
             el: "#appstore",
             data: {
                 appType: "public",
                 showPublic: true,
-                showPrivate: false,
+                showPrivate: false
             },
             mounted: function () {
                 var _self = this;
@@ -22,11 +23,15 @@ define([
             },
             methods: {
                 showUploadDialog: function () {
-                    $("#isPublic").bootstrapSwitch({
-                        onText:'是',
-                        offText:'否',
-                        // onColor:"success",
-                        // offColor:"info",
+                    //select2初始化
+                    $("#upload_image_form select[name='appTag']").select2({
+                        "multiple": false,
+
+                    });
+                    //开关按钮初始化
+                    $("#upload_image_form input[type='checkbox']").bootstrapSwitch({
+                        onText:'',
+                        offText:'',
                         onSwitchChange: function (event, state) {
                             if(state){
 

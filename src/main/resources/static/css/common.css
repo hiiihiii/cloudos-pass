@@ -317,3 +317,59 @@ span.checkbox+a{
     color: rgba(0,0,0,0.5);
 }
 /*概览结束*/
+/*上传镜像开始*/
+#upload_image_form .select2+input {
+    position: relative;
+    margin-top: -30px;
+    width: 94%;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+#upload_image_form .select2-selection {
+    height: 30px;
+}
+#upload_image_form .select2-selection__arrow {
+    height: 28px;
+}
+#upload_image_form .file-input {
+    display: inline-block;
+    width: 74%;
+}
+#upload_image_form .file-input-btn {
+    opacity: 0;
+    display: inline-block;
+    width: 87px;
+}
+#upload_image_form label.cloud-btn {
+    margin-left: -90px;
+    width: 90px;
+    margin-bottom: 3px;
+    cursor: pointer;
+}
+#upload_image_form .modal-body-left {
+    display: inline-block;
+    width: 135px;
+    position: absolute;
+}
+#upload_image_form .modal-body-right {
+    display: inline-block;
+    width: 375px;
+    margin-left: 165px;
+}
+#upload_image_form .info-type {
+    text-align: center;
+    box-shadow: 1px 0px 3px #dedada;
+}
+#upload_image_form .info-item-selected {
+    border-right: 4px solid #ec670b;
+    background-image: -webkit-linear-gradient(left, rgba(236, 103, 11, 0) 0%, rgba(236, 103, 11, 0.3) 100%);
+    background-image: -moz-linear-gradient(left, rgba(236, 103, 11, 0) 0%, rgba(236, 103, 11, 0.3) 100%);
+    background-image: -o-linear-gradient(left, rgba(236, 103, 11, 0) 0%, rgba(236, 103, 11, 0.3) 100%);
+    background-image: linear-gradient(left, rgba(236, 103, 11, 0) 0%, rgba(236, 103, 11, 0.3) 100%);
+    color: #ec670b;
+}
+#upload_image_form .info-item {
+    padding: 10px 0;
+    font-size: 12px;
+}
+/*上传镜像结束*/

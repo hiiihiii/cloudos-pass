@@ -46,8 +46,42 @@ img{
 .modal-dialog{
     margin-top: 110px;
 }
+.cloud-modal-body {
+    overflow: auto;
+    height: 400px;
+}
 .modal-footer{
     text-align: center;
+    box-shadow: 0px -1px 0px #f1e8e8;
+}
+/*开关按钮*/
+.bootstrap-switch{
+    border-radius: 17px;
+    height: 22px;
+}
+.bootstrap-switch-container {
+    height: 100%;
+}
+.bootstrap-switch-container span{
+    display: inline-block !important;
+    height: 100% !important;
+}
+.bootstrap-switch-primary{
+    background: #ec670b !important;
+}
+.bootstrap-switch-label{
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    -khtml-border-radius: 50%;
+}
+/*select2*/
+span.select2{
+    width: 100% !important;
+}
+/**/
+.form-control{
+    height: 30px;
 }
 /*vue*/
 [v-cloak] {
