@@ -16,13 +16,16 @@
                     <form id="upload_image_form" role="form">
                         <div class="modal-body-left">
                             <ul class="info-type">
-                                <li class="info-item info-item-selected">基本信息</li>
-                                <li class="info-item">配置信息</li>
-                                <li class="info-item">环境要求</li>
+                                <li class="info-item"
+                                    v-bind:class="infoTag == 'baseInfo' ? 'info-item-selected' : ''">基本信息</li>
+                                <li class="info-item"
+                                    v-bind:class="infoTag == 'configInfo' ? 'info-item-selected' : ''">配置信息</li>
+                                <li class="info-item"
+                                    v-bind:class="infoTag == 'runtimeInfo' ? 'info-item-selected' : ''">环境要求</li>
                             </ul>
                         </div>
                         <div class="modal-body-right">
-                            <div class="base-info">
+                            <div class="base-info" v-show="infoTag == 'baseInfo'" v-cloak="">
                                 <!--应用名称-->
                                 <div class="form-group">
                                     <label>名称</label>
@@ -78,7 +81,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="config-info">
+                            <div class="config-info" v-show="infoTag == 'configInfo'" v-cloak="">
                                 <!--源文件-->
                                 <div class="form-group">
                                     <label>源文件</label>
@@ -111,7 +114,7 @@
                                 </div>
                                 <!--环境变量-->
                             </div>
-                            <div class="runtime-info">
+                            <div class="runtime-info" v-show="infoTag == 'runtimeInfo'" v-cloak="">
                                 <div class="form-group">
                                     <label >启动限制</label>
                                 </div>
@@ -148,10 +151,12 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn cloud-btn">上一步</button>
-                    <button type="button" class="btn cloud-btn">下一步</button>
-                    <button type="button" class="btn cloud-btn">确定</button>
-                    <button type="button" class="btn cloud-btn" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn cloud-btn" v-show="previousStep"
+                            v-on:click="toPrevious" v-cloak="">上一步</button>
+                    <button type="button" class="btn cloud-btn" v-show="nextStep"
+                            v-on:click="toNext" v-cloak="">下一步</button>
+                    <button type="button" class="btn cloud-btn" v-show="submitTag" v-cloak="">确定</button>
+                    <button type="button" class="btn cloud-btn" data-dismiss="modal" v-cloak="">取消</button>
                 </div>
             </div>
         </div>

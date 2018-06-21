@@ -71,9 +71,8 @@ img{
 }
 .bootstrap-switch-label{
     -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
     border-radius: 50%;
-    -khtml-border-radius: 50%;
+    -moz-border-radius: 50%;
 }
 /*select2*/
 span.select2{
