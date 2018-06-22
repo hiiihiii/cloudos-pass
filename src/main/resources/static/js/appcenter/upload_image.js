@@ -21,7 +21,6 @@ define([
             },
             methods: {
                 toNext: function () {
-                    debugger
                     var _self = this;
                     if(_self.infoTag == 'baseInfo'){
                         _self.infoTag = 'configInfo';

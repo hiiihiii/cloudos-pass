@@ -1,26 +1,26 @@
 h1, h2, h3, h4, h5. h6 {
     margin: 0;
 }
-ul{
+ul {
     margin: 0;
     padding: 0;
     list-style-type: none;
 }
 
-a, a:hover{
+a, a:hover {
     display: inline-block;
     text-decoration: none;
     color: #000000;
     cursor: pointer;
 }
-img{
+img {
     vertical-align: middle;
 }
-*{
+* {
     box-sizing: border-box;
 }
 /*按钮*/
-.cloud-btn, .cloud-btn:hover{
+.cloud-btn, .cloud-btn:hover {
     font-size: 12px;
     color: #ffffff;
     background-color: #7a7275;
@@ -29,59 +29,68 @@ img{
     padding: 5px 12px;
     width: 87px;
 }
-.cloud-btn i{
+.cloud-btn i {
     padding-right: 5px;
 }
 /*模态框*/
-.modal-backdrop{
+.modal-backdrop {
     background-color: #fff;
 }
-.modal-title{
+.modal-title {
     display: inline-block;
     font-size: 15px;
 }
-.cloud-modal-title{
+.cloud-modal-title {
 
 }
-.modal-dialog{
+.modal-dialog {
     margin-top: 110px;
 }
 .cloud-modal-body {
     overflow: auto;
     height: 400px;
 }
-.modal-footer{
+.modal-footer {
     text-align: center;
     box-shadow: 0px -1px 0px #f1e8e8;
 }
 /*开关按钮*/
-.bootstrap-switch{
+.bootstrap-switch {
     border-radius: 17px;
     height: 22px;
 }
 .bootstrap-switch-container {
     height: 100%;
 }
-.bootstrap-switch-container span{
+.bootstrap-switch-container span {
     display: inline-block !important;
     height: 100% !important;
 }
-.bootstrap-switch-primary{
+.bootstrap-switch-primary {
     background: #ec670b !important;
 }
-.bootstrap-switch-label{
+.bootstrap-switch-label {
     -webkit-border-radius: 50%;
     border-radius: 50%;
     -moz-border-radius: 50%;
 }
 /*select2*/
-span.select2{
+span.select2 {
     width: 100% !important;
 }
 /**/
-.form-control{
+.form-control {
     height: 30px;
     border-radius: 0.25em;
+    padding: 6px 6px;
+}
+.form-group {
+    position: relative;
+}
+
+.cloud-modal-table > thead > tr > th {
+    font-weight: normal;
+    white-space: nowrap;
 }
 /*vue*/
 [v-cloak] {

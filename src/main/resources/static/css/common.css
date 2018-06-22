@@ -372,4 +372,34 @@ span.checkbox+a{
     padding: 10px 0;
     font-size: 12px;
 }
+#upload_image .modal-dialog {
+    width: 750px;
+}
+#upload_image_form #portGroup .cloud-panel-heading {
+    padding: 7px 9px;
+}
+#upload_image_form #portGroup .panel-title {
+    font-size: 14px;
+}
+#upload_image .modal-table-operation {
+    cursor: pointer;
+    display: inline-block;
+    padding-top: 4px;
+}
+#upload_image .form-group > span {
+    position: absolute;
+    cursor: pointer;
+    right: -20px;
+}
+#upload_image #port_table{
+    width: 500px;
+}
+#upload_image .runtime-input {
+    width: 75%;
+    display: inline-block;
+}
+#upload_image .runtime-select {
+    width: 23%;
+    display: inline-block;
+}
 /*上传镜像结束*/

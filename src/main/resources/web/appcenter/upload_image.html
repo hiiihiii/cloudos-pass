@@ -108,11 +108,68 @@
                                 <!--命令参数-->
                                 <div class="form-group">
                                     <label >命令参数</label>
+                                    <span><i class="fa fa-plus"></i></span>
                                     <div>
                                         <input class="form-control" type="text" name="cmdParam"/>
                                     </div>
                                 </div>
                                 <!--环境变量-->
+                                <div class="form-group">
+                                    <label>环境变量</label>
+                                    <span><i class="fa fa-plus"></i></span>
+                                    <div class="modal-table-box">
+                                        <table class="table cloud-modal-table">
+                                            <thead>
+                                            <tr>
+                                                <th>变量</th>
+                                                <th>值</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td><input class="form-control" type="text" name="envKey"/></td>
+                                                <td><input class="form-control" type="text" name="envValue"/></td>
+                                                <td><span class="modal-table-operation"><i class="fa fa-trash-o"></i></span></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!--端口映射-->
+                                <div class="form-group">
+                                    <label>端口映射</label>
+                                    <span style="right: -130px;"><i class="fa fa-plus"></i></span>
+                                    <div class="modal-table-box">
+                                        <table class="table cloud-modal-table" id="port_table">
+                                            <thead>
+                                            <tr>
+                                                <th>名称</th>
+                                                <th style="width: 82px;">协议</th>
+                                                <th>容器端口</th>
+                                                <th>集群内端口</th>
+                                                <th>集群外端口</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td><input class="form-control" type="text" id="portName0" name="portName"/></td>
+                                                <td>
+                                                    <select class="form-control" name="protocol" id="protocol0">
+                                                        <option value="TCP">TCP</option>
+                                                        <option value="UDP">UDP</option>
+                                                    </select>
+                                                </td>
+                                                <td><input class="form-control" type="text" id="containerPort0" maxlength="5" name="containerPort"/></td>
+                                                <td><input class="form-control" type="text" id="port0" maxlength="5" name="port"/></td>
+                                                <td><input class="form-control" type="text" id="targetPort0" maxlength="5" name="targetPort"/></td>
+                                                <td><!--<span class="modal-table-operation"><i class="fa fa-trash-o"></i></span>--></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                             <div class="runtime-info" v-show="infoTag == 'runtimeInfo'" v-cloak="">
                                 <div class="form-group">
@@ -127,12 +184,15 @@
                                 <div class="form-group">
                                     <label >内存</label>
                                     <div>
-                                        <input class="form-control" type="text" name="minMemory"/>
+                                        <input class="form-control runtime-input" type="text" name="minMemory"/>
+                                        <select class="form-control runtime-select" name="minMemoryUnit">
+                                            <option value="MB">MB</option>
+                                            <option value="GB">GB</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label >运行限制</label>
-
                                 </div>
                                 <div class="form-group">
                                     <label >CPU</label>
@@ -143,7 +203,11 @@
                                 <div class="form-group">
                                     <label >内存</label>
                                     <div>
-                                        <input class="form-control" type="text" name="maxMemory"/>
+                                        <input class="form-control runtime-input" type="text" name="maxMemory"/>
+                                        <select class="form-control runtime-select" name="maxMemoryUnit">
+                                            <option value="MB">MB</option>
+                                            <option value="GB">GB</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
