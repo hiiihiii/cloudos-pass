@@ -70,9 +70,7 @@ img {
     background: #ec670b !important;
 }
 .bootstrap-switch-label {
-    -webkit-border-radius: 50%;
-    border-radius: 50%;
-    -moz-border-radius: 50%;
+    border-radius: 50% !important;
 }
 /*select2*/
 span.select2 {

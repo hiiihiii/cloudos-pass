@@ -7,7 +7,7 @@ require.config({
         "jquery": "lib/jquery/jquery-3.3.1.min",
         "vue":"lib/vue/vue.min",
         "bootstrap":"lib/bootstrap/js/bootstrap.min",
-        "bootstrapSwitch": "lib/bootstrap/js/bootstrap-switch.min",
+        "bootstrapSwitch": "lib/bootstrap/js/bootstrap-switch",
         "echarts":"lib/echarts/echarts.min",
         "jquery-validate": "lib/jquery-validation/jquery.validate.min",
         "select2": "/lib/select2/js/select2.min",

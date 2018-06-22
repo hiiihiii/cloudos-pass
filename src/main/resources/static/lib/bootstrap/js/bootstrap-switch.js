@@ -130,6 +130,13 @@
     var _this2 = this;
 
     var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.ope;
+    /**************************************************为本项目修改源代码********************/
+    if (state) {
+          _this2.$container.parent().css('background','#ec670b');
+    } else {
+          _this2.$container.parent().css('background','#eeeeee');
+    }
+    /**************************************************为本项目修改源代码********************/
 
     this.$container.css('margin-left', function () {
       var values = [0, '-' + _this2.privateHandleWidth + 'px'];

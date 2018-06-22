@@ -30,14 +30,14 @@
                                 <div class="form-group">
                                     <label>名称</label>
                                     <div>
-                                        <input type="text" class="form-control" id="appName" name="appName" placeholder="请输入名称" />
+                                        <input type="text" class="form-control" id="appName" name="appName" placeholder="请输入名称" maxlength="64"/>
                                     </div>
                                 </div>
                                 <!--是否公有-->
                                 <div class="form-group">
                                     <label>是否公有</label>
                                     <div id="isPublic" class="switch">
-                                        <input type="checkbox" class="form-control" checked="checked" />
+                                        <input type="checkbox" class="form-control" />
                                     </div>
                                 </div>
                                 <!--图标-->
@@ -70,14 +70,14 @@
                                 <div class="form-group">
                                     <label >应用简介</label>
                                     <div>
-                                        <textarea class="form-control" name="description"></textarea>
+                                        <textarea class="form-control" name="description" maxlength="100"></textarea>
                                     </div>
                                 </div>
                                 <!--版本特性-->
                                 <div class="form-group">
                                     <label >版本特性</label>
                                     <div>
-                                        <textarea class="form-control" name="v_description"></textarea>
+                                        <textarea class="form-control" name="v_description" maxlength="1000"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -106,19 +106,23 @@
                                     </div>
                                 </div>
                                 <!--命令参数-->
-                                <div class="form-group">
+                                <div class="form-group" id="cmdParam-box">
                                     <label >命令参数</label>
-                                    <span><i class="fa fa-plus"></i></span>
-                                    <div>
+                                    <span v-on:click="addCmdParam"><i class="fa fa-plus"></i></span>
+                                    <div class="cmdParam-item">
                                         <input class="form-control" type="text" name="cmdParam"/>
                                     </div>
+                                    <!--<div class="cmdParam-item">-->
+                                        <!--<input class="form-control" type="text" name="cmdParam"/>-->
+                                        <!--<span class="delete-cmd-btn"><i class="fa fa-trash-o"></i></span>-->
+                                    <!--</div>-->
                                 </div>
                                 <!--环境变量-->
                                 <div class="form-group">
                                     <label>环境变量</label>
-                                    <span><i class="fa fa-plus"></i></span>
+                                    <span v-on:click="addEnv"><i class="fa fa-plus"></i></span>
                                     <div class="modal-table-box">
-                                        <table class="table cloud-modal-table">
+                                        <table class="table cloud-modal-table" id="env_table">
                                             <thead>
                                             <tr>
                                                 <th>变量</th>
@@ -127,19 +131,14 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td><input class="form-control" type="text" name="envKey"/></td>
-                                                <td><input class="form-control" type="text" name="envValue"/></td>
-                                                <td><span class="modal-table-operation"><i class="fa fa-trash-o"></i></span></td>
-                                            </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                                 <!--端口映射-->
-                                <div class="form-group">
+                                <div class="form-group port-form-group" >
                                     <label>端口映射</label>
-                                    <span style="right: -130px;"><i class="fa fa-plus"></i></span>
+                                    <span v-on:click="addPort"><i class="fa fa-plus"></i></span>
                                     <div class="modal-table-box">
                                         <table class="table cloud-modal-table" id="port_table">
                                             <thead>

@@ -375,23 +375,21 @@ span.checkbox+a{
 #upload_image .modal-dialog {
     width: 750px;
 }
-#upload_image_form #portGroup .cloud-panel-heading {
-    padding: 7px 9px;
-}
-#upload_image_form #portGroup .panel-title {
-    font-size: 14px;
-}
 #upload_image .modal-table-operation {
     cursor: pointer;
     display: inline-block;
     padding-top: 4px;
 }
-#upload_image .form-group > span {
+#upload_image .form-group > span,
+#upload_image .cmdParam-item .delete-cmd-btn {
     position: absolute;
     cursor: pointer;
     right: -20px;
 }
-#upload_image #port_table{
+#upload_image .cmdParam-item .delete-cmd-btn {
+    bottom: 4px;
+}
+#upload_image #port_table {
     width: 500px;
 }
 #upload_image .runtime-input {
@@ -401,5 +399,14 @@ span.checkbox+a{
 #upload_image .runtime-select {
     width: 23%;
     display: inline-block;
+}
+#upload_image .port-form-group {
+    width: 500px;
+}
+#upload_image .cmdParam-item {
+    position: relative;
+}
+#upload_image .cmdParam-item:not(:last-child) {
+    margin-bottom: 15px;
 }
 /*上传镜像结束*/
