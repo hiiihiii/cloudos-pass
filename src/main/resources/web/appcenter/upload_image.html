@@ -44,8 +44,9 @@
                                 <div class="form-group">
                                     <label>图标</label>
                                     <div class="file-container">
-                                        <input class="form-control file-input" type="text" name="logoFileName" readonly="readonly" />
-                                        <input type="file" class="file-input-btn" name="logo"/>
+                                        <input class="form-control file-input" type="text" name="logoFileName"
+                                               v-model="bindData.logoFileName" readonly="readonly" />
+                                        <input type="file" class="file-input-btn" name="logo" id="logo" v-on:change="fileChange('logo')"/>
                                         <label class="btn cloud-btn"><i class="fa fa-upload"></i>选择文件</label>
                                     </div>
                                 </div>
@@ -60,10 +61,11 @@
                                 <div class="form-group">
                                     <label >标签</label>
                                     <div>
-                                        <select class="select2" name="appTag">
-                                            <option v-for="(val, key) in definedAppTag" value="key">{{key}}</option>
+                                        <select class="select2" name="appTag"  v-on:change="tagChange">
+                                            <option v-for="(val, key) in definedAppTag" v-bind:value="key">{{key}}</option>
                                         </select>
-                                        <input class="form-control input-select2" type="text" name="appTag_input"/>
+                                        <input class="form-control input-select2" type="text"
+                                               v-model="bindData.appTag_input" name="appTag_input"/>
                                     </div>
                                 </div>
                                 <!--应用简介-->
@@ -86,8 +88,9 @@
                                 <div class="form-group">
                                     <label>源文件</label>
                                     <div class="file-container">
-                                        <input class="form-control file-input" type="text" name="sourceFileName" readonly="readonly" />
-                                        <input type="file" class="file-input-btn" name="sourceFile"/>
+                                        <input class="form-control file-input" type="text" name="sourceFileName"
+                                               v-model="bindData.sourceFileName" readonly="readonly" />
+                                        <input type="file" class="file-input-btn" name="sourceFile" id="source" v-on:change="fileChange('source')"/>
                                         <label class="btn cloud-btn"><i class="fa fa-upload"></i>选择文件</label>
                                     </div>
                                 </div>

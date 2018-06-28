@@ -22,16 +22,18 @@ define([
                 _self.showPrivate = false;
             },
             methods: {
+                //显示上传镜像框框
                 showUploadDialog: function () {
                     //select2初始化
                     $("#upload_image_form select[name='appTag']").select2({
-                        "multiple": false,
-
+                        dropdownParent: $('#upload_image'),
+                        minimumResultsForSearch: -1//去除搜索框
                     });
+                    $("#upload_image_form select[name='appTag']").val("");
                     //开关按钮初始化
                     $("#upload_image_form input[type='checkbox']").bootstrapSwitch({
-                        onText:'',
-                        offText:'',
+                        onText: '',
+                        offText: '',
                         onSwitchChange: function (event, state) {
                             if(state){
 

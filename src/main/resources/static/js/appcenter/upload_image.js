@@ -16,8 +16,12 @@ define([
                 infoTag: "baseInfo",
                 nextStep: true,
                 previousStep: false,
-                submitTag: false
-
+                submitTag: false,
+                bindData: {
+                    logoFileName: "",
+                    sourceFileName: "",
+                    appTag_input: ""
+                }
             },
             methods: {
                 //下一步
@@ -112,14 +116,48 @@ define([
                         /*detach方法可以删除绑定的时间，而remove不能*/
                         $(this).parents("tr").detach();
                     });
+                },
+
+                //选择文件
+                fileChange: function (id) {
+                    var _self = this;
+                    switch (id){
+                        case "logo":
+                            var logoFile = document.getElementById("logo");
+                            if(logoFile.files[0]){
+                                _self.bindData.logoFileName = logoFile.files[0].name;
+                            }
+                            break;
+                        case "source":
+                            var sourceFile = document.getElementById("source");
+                            if(sourceFile.files[0]){
+                                _self.bindData.sourceFileName = sourceFile.files[0].name;
+                            }
+                            break;
+                    }
+                },
+
+                //选择标签
+                tagChange: function () {
+                    debugger
+                    var _self = this;
+                    var tag = $("#upload_image_form select[name='appTag']").val();
+                    _self.bindData.appTag_input = tag;
                 }
             }
         });
+
         $("#upload_image_dialog").on("hidden.bs.modal", function () {
             upload_image.infoTag = "baseInfo";
             upload_image.nextStep = true;
             upload_image.previousStep = false;
             upload_image.submitTag =  false;
+            upload_image.bindData.logoFileName = "";
+            upload_image.bindData.sourceFileName = "";
+            upload_image.bindData.appTag_input = "";
+        });
+        $("#upload_image_form select[name='appTag']").on("change",function(e){
+            upload_image.bindData.appTag_input = $("#upload_image_form select[name='appTag']").val();
         })
     }
 });
