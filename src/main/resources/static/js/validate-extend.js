@@ -2,8 +2,9 @@
  * Created by tanli on 2018/7/10 0010.
  */
 define([
-    'jquery'
-], function ($) {
+    'jquery',
+    'jquery-validate'
+], function ($, jquery_validate) {
     //必填验证
     $.validator.addMethod("required", function (value, element) {
         if(value == ''){

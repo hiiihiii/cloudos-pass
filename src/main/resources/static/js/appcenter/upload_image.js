@@ -232,7 +232,7 @@ define([
             upload_image.bindData.sourceFileName = "";
             upload_image.bindData.appTag_input = "";
         });
-        $("#upload_image_form select[name='appTag']").on("change",function(e){
+        $("#upload_image_form select[name='appTag']").on("change",function(){
             upload_image.bindData.appTag_input = $("#upload_image_form select[name='appTag']").val();
         })
     }

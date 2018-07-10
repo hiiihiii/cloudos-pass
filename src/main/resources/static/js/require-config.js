@@ -5,21 +5,22 @@ require.config({
     baseUrl: "../",
     paths: {
         "jquery": "lib/jquery/jquery-3.3.1.min",
-        "vue":"lib/vue/vue.min",
-        "bootstrap":"lib/bootstrap/js/bootstrap.min",
+        "vue": "lib/vue/vue.min",
+        "bootstrap": "lib/bootstrap/js/bootstrap.min",
         "bootstrapSwitch": "lib/bootstrap/js/bootstrap-switch",
-        "echarts":"lib/echarts/echarts.min",
+        "echarts": "lib/echarts/echarts.min",
         "jquery-validate": "lib/jquery-validation/jquery.validate.min",
         "validate-extend": 'js/validate-extend',
         "select2": "lib/select2/js/select2.min",
-        "common-module":"js/common-module",
-        "adminhomepage":"js/adminhomepage/adminhomepage",
-        "appstore":"js/appcenter/appstore",
+        "common-module": "js/common-module",
+        "adminhomepage": "js/adminhomepage/adminhomepage",
+        "appstore": "js/appcenter/appstore",
         "upload_image": "js/appcenter/upload_image",
         "apporch": "js/appcenter/apporch",
         "application": "js/appcenter/application"
     },
     shim:{
-        "bootstrap": ["jquery"]
+        "bootstrap": ["jquery"],
+        "jquery-validate": ['jquery']
     }
 });
