@@ -231,6 +231,20 @@ define([
             upload_image.bindData.logoFileName = "";
             upload_image.bindData.sourceFileName = "";
             upload_image.bindData.appTag_input = "";
+            upload_image.bindData.ports = [{
+                "portName": '',
+                "protocol": '',
+                "containerPort": '',
+                "port": '',
+                "targetPort": ''
+            }];
+            upload_image.bindData.envs = [];
+
+            $("#upload_image_form input[type='text']").val("");
+            $("#upload_image_form select[name='protocol']").val("TCP");
+            $("#upload_image_form select[name='minMemoryUnit']").val("MB");
+            $("#upload_image_form select[name='maxMemoryUnit']").val("MB");
+            $("#upload_image_form textarea").val("");
         });
         $("#upload_image_form select[name='appTag']").on("change",function(){
             upload_image.bindData.appTag_input = $("#upload_image_form select[name='appTag']").val();
