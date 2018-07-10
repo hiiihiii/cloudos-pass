@@ -2,8 +2,10 @@
 define([
     'jquery',
     'vue',
-    'bootstrap'
-], function ($, Vue, bootstrap, bootstrapSwitch) {
+    'bootstrap',
+    'jquery-validate',
+    'validate-extend'
+], function ($, Vue, bootstrap, bootstrapSwitch, jquery_validate, validate_extend) {
     if($("#upload_image_dialog")[0]){
         var upload_image = new Vue({
             el: "#upload_image",
@@ -20,7 +22,15 @@ define([
                 bindData: {
                     logoFileName: "",
                     sourceFileName: "",
-                    appTag_input: ""
+                    appTag_input: "",
+                    ports:[{
+                        "portName": '',
+                        "protocol": '',
+                        "containerPort": '',
+                        "port": '',
+                        "targetPort": ''
+                    }],
+                    envs:[]
                 }
             },
             methods: {
@@ -79,42 +89,59 @@ define([
 
                 //增加环境变量
                 addEnv: function () {
+                    var _self = this;
+                    var count = _self.bindData.envs.length;
                     var envStr =
                         '<tr>' +
-                        '<td><input class="form-control" type="text" name="envKey"/></td>' +
-                        '<td><input class="form-control" type="text" name="envValue"/></td>' +
+                        '<td><input class="form-control" type="text" name="envKey" id="envKey' + count + '"/></td>' +
+                        '<td><input class="form-control" type="text" name="envValue" id="envValue' + count + '"/></td>' +
                         '<td><span class="modal-table-operation"><i class="fa fa-trash-o"></i></span></td>' +
                         '</tr>';
                     var envTbody = $("#upload_image #env_table tbody");
                     envTbody.append(envStr);
+                    _self.bindData.envs.push({
+                        "envKey": "",
+                        "envValue": ""
+                    });
                     var trs = envTbody.find("tr");
                     $(trs[trs.length-1]).on("click", ".modal-table-operation", function () {
                         /*detach方法可以删除绑定的时间，而remove不能*/
                         $(this).parents("tr").detach();
+                        _self.bindData.envs.pop();
                     });
                 },
 
                 //增加端口映射
                 addPort: function () {
+                    var _self = this;
+                    var count = _self.bindData.ports.length;
                     var portStr = '<tr>' +
-                        '<td><input class="form-control" type="text" id="portName0" name="portName"/></td>' +
+                        '<td><input class="form-control" type="text" id="portName' + count + '" name="portName"/></td>' +
                         '<td>' +
-                        '<select class="form-control" name="protocol" id="protocol0">' +
+                        '<select class="form-control" name="protocol" id="protocol' + count + '">' +
                         '<option value="TCP">TCP</option>' +
                         '<option value="UDP">UDP</option>' +
                         '</select>' +
                         '</td>' +
-                        '<td><input class="form-control" type="text" id="containerPort0" maxlength="5" name="containerPort"/></td>' +
-                        '<td><input class="form-control" type="text" id="port0" maxlength="5" name="port"/></td>' +
-                        '<td><input class="form-control" type="text" id="targetPort0" maxlength="5" name="targetPort"/></td>' +
+                        '<td><input class="form-control" type="text" id="containerPort' + count + '" maxlength="5" name="containerPort"/></td>' +
+                        '<td><input class="form-control" type="text" id="port' + count + '" maxlength="5" name="port"/></td>' +
+                        '<td><input class="form-control" type="text" id="targetPort' + count + '" maxlength="5" name="targetPort"/></td>' +
                         '<td><span class="modal-table-operation"><i class="fa fa-trash-o"></i></span></td>' +
                         '</tr>';
                     var portTbody = $("#upload_image #port_table tbody");
                     portTbody.append(portStr);
+                    _self.bindData.ports.push({
+                        "portName": '',
+                        "protocol": '',
+                        "containerPort": '',
+                        "port": '',
+                        "targetPort": ''
+                    });
                     var trs = portTbody.find("tr");
                     $(trs[trs.length-1]).on("click", ".modal-table-operation", function () {
                         /*detach方法可以删除绑定的时间，而remove不能*/
                         $(this).parents("tr").detach();
+                        _self.bindData.ports.pop();
                     });
                 },
 
@@ -143,6 +170,55 @@ define([
                     var _self = this;
                     var tag = $("#upload_image_form select[name='appTag']").val();
                     _self.bindData.appTag_input = tag;
+                }
+            }
+        });
+
+        // 上传镜像校验
+        var validator = $("#upload_image_form").validate({
+            rules: {
+                appName: {
+                    required: true,
+                    notEmpty: true
+                },
+                logoFileName: {
+                    required: true
+                },
+                version: {
+                    required: true,
+                    notEmpty: true
+                },
+                appTag_input: {
+                    required: true,
+                    notEmpty: true
+                },
+                sourceFileName: {
+                    required: true
+                },
+                portName: {
+                    required: true,
+                    notEmpty: true
+                },
+                protocol: {
+                    required: true,
+                    notEmpty: true
+                },
+                containerPort: {
+                    required: true,
+                    notEmpty: true
+                },
+                port: {
+                    required: true,
+                    notEmpty: true
+                },
+                targetPort: {
+                    required: true,
+                    notEmpty: true
+                }
+            },
+            messages: {
+                appName: {
+
                 }
             }
         });

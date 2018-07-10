@@ -10,6 +10,7 @@ require.config({
         "bootstrapSwitch": "lib/bootstrap/js/bootstrap-switch",
         "echarts":"lib/echarts/echarts.min",
         "jquery-validate": "lib/jquery-validation/jquery.validate.min",
+        "validate-extend": 'js/validate-extend',
         "select2": "lib/select2/js/select2.min",
         "common-module":"js/common-module",
         "adminhomepage":"js/adminhomepage/adminhomepage",
@@ -19,7 +20,6 @@ require.config({
         "application": "js/appcenter/application"
     },
     shim:{
-        "bootstrap": ["jquery"],
-        "jquery-validate": ["jquery"]
+        "bootstrap": ["jquery"]
     }
 });

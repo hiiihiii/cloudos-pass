@@ -90,6 +90,13 @@ span.select2 {
     font-weight: normal;
     white-space: nowrap;
 }
+/*验证*/
+label.error{
+    font-weight: normal;
+    color: rgb(255, 0, 0);
+    font-size: 12px;
+    margin-bottom: 0;
+}
 /*vue*/
 [v-cloak] {
     visibility: hidden;
