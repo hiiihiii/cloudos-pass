@@ -14,7 +14,9 @@ require.config({
         "common-module":"js/common-module",
         "adminhomepage":"js/adminhomepage/adminhomepage",
         "appstore":"js/appcenter/appstore",
-        "upload_image": "js/appcenter/upload_image"
+        "upload_image": "js/appcenter/upload_image",
+        "apporch": "js/appcenter/apporch",
+        "application": "js/appcenter/application"
     },
     shim:{
         "bootstrap": ["jquery"],
