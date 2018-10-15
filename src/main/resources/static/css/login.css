@@ -1,0 +1,29 @@
+.login {
+    background-image: url(../images/login/login_background.jpg);
+    background-size: cover;
+    position: relative;
+}
+.login-box{
+    height: 380px;
+    width: 380px;
+    top: 150px;
+    right: 190px;
+    background-color: white;
+    position: absolute;
+}
+.login-box .login-header {
+    padding-left: 25px;
+    padding-top: 15px;
+}
+.login-box .login-form {
+    padding-left: 25px;
+    margin-top: 30px;
+}
+.login-form input{
+    display: inline-block;
+    width: 93%;
+    height: 40px;
+    margin-bottom: 5px;
+    padding-left: 10px;
+}
+

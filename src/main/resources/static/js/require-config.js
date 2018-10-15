@@ -17,7 +17,8 @@ require.config({
         "appstore": "js/appcenter/appstore",
         "upload_image": "js/appcenter/upload_image",
         "apporch": "js/appcenter/apporch",
-        "application": "js/appcenter/application"
+        "application": "js/appcenter/application",
+        "login": "js/login"
     },
     shim:{
         "bootstrap": ["jquery"],
