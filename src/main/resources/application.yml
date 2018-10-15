@@ -1,0 +1,7 @@
+#激活想要使用的环境，active的值和application-dev或application-pro短横线后的值
+spring:
+  profiles:
+    active: dev
+
+
+
