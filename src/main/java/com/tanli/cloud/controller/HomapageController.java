@@ -1,4 +1,4 @@
-package com.tanli.example.controller;
+package com.tanli.cloud.controller;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;

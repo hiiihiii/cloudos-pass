@@ -1,4 +1,4 @@
-package com.tanli.example.controller.appcenter;
+package com.tanli.cloud.controller;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -7,11 +7,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 @EnableAutoConfiguration
 @Controller
-@RequestMapping("appcenter")
-public class AppstoreController {
+@RequestMapping("adminhomepage")
+public class AdminHomepageController {
 
     @RequestMapping(value = {"/",""})
     public ModelAndView index(){
-        return new ModelAndView("appcenter/appstore");
+        return new ModelAndView("homepage/adminhomepage");
     }
 }

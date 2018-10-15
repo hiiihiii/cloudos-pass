@@ -1,22 +1,19 @@
-package com.tanli.example;
+package com.tanli.cloud.controller.appmanage;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * Created by Administrator on 2017/8/26 0026.
+ * Created by tanli on 2018/7/10 0010.
  */
-@Controller
 @EnableAutoConfiguration
-
-public class Example {
-
-    @RequestMapping("/")
-    @ResponseBody
+@Controller
+@RequestMapping("application")
+public class ApplicationController {
+    @RequestMapping(value = {"/",""})
     public ModelAndView index(){
-        return new ModelAndView("index");
+        return new ModelAndView("appmanage/application");
     }
 }

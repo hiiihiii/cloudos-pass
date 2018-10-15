@@ -1,4 +1,4 @@
-package com.tanli.example.config;
+package com.tanli.cloud.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;

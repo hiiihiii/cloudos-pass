@@ -1,4 +1,4 @@
-package com.tanli.example.config;
+package com.tanli.cloud.config;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
