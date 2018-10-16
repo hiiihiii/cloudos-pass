@@ -15,15 +15,27 @@
     padding-left: 25px;
     padding-top: 15px;
 }
-.login-box .login-form {
+.login-box #login-form {
     padding-left: 25px;
     margin-top: 30px;
 }
-.login-form input{
+#login-form input{
     display: inline-block;
     width: 93%;
     height: 40px;
     margin-bottom: 5px;
     padding-left: 10px;
+    font-size: 12px;
+    outline: none;/*屏蔽框自带的高亮效果*/
+    border: 1px solid #ccc;
 }
-
+#login-form input:hover,
+#login-form input:focus {
+    border-color: #00c1de;
+}
+#login-form input[type='submit'] {
+    background-color: #00c1de;
+    border: #00c1de;
+    color: #ffffff;
+    font-size: 14px;
+}
