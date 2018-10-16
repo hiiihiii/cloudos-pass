@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50634
 File Encoding         : 65001
 
-Date: 2018-10-15 16:57:54
+Date: 2018-10-16 18:40:56
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -83,8 +83,8 @@ INSERT INTO `tl_role` VALUES ('550e8400-e19b-41d4-a716-446655440000', 'public_us
 -- ----------------------------
 DROP TABLE IF EXISTS `tl_user`;
 CREATE TABLE `tl_user` (
-  `user_uuid` varchar(32) NOT NULL,
-  `role_uuid` varchar(32) NOT NULL,
+  `user_uuid` varchar(36) NOT NULL,
+  `role_uuid` varchar(36) NOT NULL,
   `username` varchar(36) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
@@ -96,3 +96,4 @@ CREATE TABLE `tl_user` (
 -- ----------------------------
 -- Records of tl_user
 -- ----------------------------
+INSERT INTO `tl_user` VALUES ('780e8400-e19b-41d4-a716-446655440000', '550e8400-e19b-41d4-a716-446655440000', 'admin', 'cloud', '1@1', '123', '2018-10-15 16:52:15', '2018-10-15 16:52:15');
