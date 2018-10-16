@@ -22,12 +22,18 @@ define([
                     $.ajax({
                         type: "post",
                         data: user,
-                        url: "/loginVerify",
+                        url: "/loginIn",
                         dataType: "json",
                         content_type: "application/json",
                         success: function (data) {
                             // debugger;
                             console.log(data.data);
+                            var user = data.data;
+                            // if(user.role_name ==="admin_user") { //云管理员
+                                window.location.href = "/adminhomepage";
+                            // } else {
+                            //     window.location.href = "/";
+                            // }
                         },
                         error: function () {
                             console.log("error");

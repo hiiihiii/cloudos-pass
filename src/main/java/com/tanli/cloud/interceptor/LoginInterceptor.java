@@ -1,5 +1,6 @@
 package com.tanli.cloud.interceptor;
 
+import com.tanli.cloud.model.response.LoginingUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -32,11 +33,11 @@ public class LoginInterceptor implements HandlerInterceptor {
             return true;
         }
         HttpSession session = request.getSession();
-        if(session.getAttribute("userId") == null){
+        if(session.getAttribute("login_user") == null){
             response.sendRedirect(request.getContextPath()+"/login");
             return true;
         } else {
-            session.setAttribute("userId",session.getAttribute("userId"));
+            session.setAttribute("login_user",session.getAttribute("login_user"));
             return true;
         }
     }
@@ -58,6 +59,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         notLoginPaths.add("/");
         notLoginPaths.add("/index");
         notLoginPaths.add("/login");
+        notLoginPaths.add("/loginIn");
         if(notLoginPaths.contains(path)){
             return false;
         } else {

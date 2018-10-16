@@ -2,10 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tanli.cloud.dao.LoginDao">
 
-    <select id="loginVefiry" resultType="com.tanli.cloud.model.User">
-        SELECT * FROM tl_user
+    <select id="loginVefiry" resultType="com.tanli.cloud.model.response.LoginingUser">
+        SELECT * FROM tl_user, tl_role
         WHERE username = #{userName, jdbcType=VARCHAR}
         AND password = #{password, jdbcType=VARCHAR}
+        AND tl_user.role_uuid = tl_role.role_uuid
     </select>
 
 </mapper>

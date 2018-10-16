@@ -1,6 +1,7 @@
 package com.tanli.cloud.dao;
 
 import com.tanli.cloud.model.User;
+import com.tanli.cloud.model.response.LoginingUser;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -8,5 +9,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface LoginDao {
-    public User loginVefiry(User user);
+    public LoginingUser loginVefiry(User user);
 }

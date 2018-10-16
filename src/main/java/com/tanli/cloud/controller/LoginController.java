@@ -1,6 +1,7 @@
 package com.tanli.cloud.controller;
 
 import com.tanli.cloud.model.User;
+import com.tanli.cloud.model.response.LoginingUser;
 import com.tanli.cloud.service.UserManageService;
 import com.tanli.cloud.utils.APIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +29,18 @@ public class LoginController {
         return new ModelAndView("login");
     }
 
-    @PostMapping("/loginVerify")
+    @PostMapping("/loginIn")
     @ResponseBody
     public APIResponse loginVerify(HttpServletRequest request, String username, String password){
         User user = new User();
         user.setPassword(password);
         user.setUserName(username);
-        APIResponse test = userManageService.loginVerify(user);
-        return test;
+        LoginingUser userInfo = userManageService.loginVerify(user);
+        if(null != userInfo){
+            request.getSession().setAttribute("login_user", userInfo);
+            return APIResponse.success(userInfo);
+        } else {
+            return APIResponse.fail("fail");
+        }
     }
 }
