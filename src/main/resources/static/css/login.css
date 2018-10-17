@@ -29,6 +29,20 @@
     outline: none;/*屏蔽框自带的高亮效果*/
     border: 1px solid #ccc;
 }
+#login-form #rememberMe-box {
+    position: relative;
+}
+#login-form #rememberMe {
+    width: 15px !important;
+    height: 20px !important;
+}
+#rememberMe-box .rememberMe-text {
+    display: inline-block;
+    position: absolute;
+    font-size: 12px;
+    top: 6px;
+    left: 20px;
+}
 #login-form input:hover,
 #login-form input:focus {
     border-color: #00c1de;

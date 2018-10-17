@@ -12,16 +12,19 @@ require.config({
         "jquery-validate": "lib/jquery-validation/jquery.validate.min",
         "validate-extend": 'js/validate-extend',
         "select2": "lib/select2/js/select2.min",
+        "datatables":"lib/datatables/js/jquery.dataTables.min",
         "common-module": "js/common-module",
         "adminhomepage": "js/adminhomepage/adminhomepage",
         "appstore": "js/appcenter/appstore",
         "upload_image": "js/appcenter/upload_image",
         "apporch": "js/appcenter/apporch",
         "application": "js/appcenter/application",
-        "login": "js/login"
+        "login": "js/login",
+        "role": "js/system/role"
     },
     shim:{
         "bootstrap": ["jquery"],
-        "jquery-validate": ['jquery']
+        "jquery-validate": ['jquery'],
+        "datatables": ['jquery']
     }
 });

@@ -1,14 +1,14 @@
 package com.tanli.cloud.controller.role;
 
-import com.tanli.cloud.model.Role;
 import com.tanli.cloud.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by tanli on 2018/10/15 0015.
@@ -19,6 +19,11 @@ import java.sql.Timestamp;
 public class RoleController {
     @Autowired
     public RoleService roleService;
+
+    @RequestMapping({"", "/"})
+    public ModelAndView roleIndex(HttpServletRequest request, HttpServletResponse response){
+        return new ModelAndView("system/role");
+    }
 
     @RequestMapping("/add")
     public void addRole(HttpServletRequest httpServletRequest){

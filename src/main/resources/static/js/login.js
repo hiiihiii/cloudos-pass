@@ -27,13 +27,19 @@ define([
                         content_type: "application/json",
                         success: function (data) {
                             // debugger;
-                            console.log(data.data);
-                            var user = data.data;
-                            // if(user.role_name ==="admin_user") { //云管理员
+                            if("success" === data.code){
+                                var user = data.data;
+                                // if(user.role_name ==="admin_user") { //云管理员
                                 window.location.href = "/adminhomepage";
-                            // } else {
-                            //     window.location.href = "/";
-                            // }
+                                sessionStorage.currentMenu= "概览";
+                                sessionStorage.href= '/adminhomepage';
+                                // } else {
+                                //     window.location.href = "/";
+                                // }
+                            } else {
+
+                            }
+                            console.log(data.data);
                         },
                         error: function () {
                             console.log("error");
