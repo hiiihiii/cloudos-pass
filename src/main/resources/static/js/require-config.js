@@ -20,7 +20,8 @@ require.config({
         "apporch": "js/appcenter/apporch",
         "application": "js/appcenter/application",
         "login": "js/login",
-        "role": "js/system/role"
+        "role": "js/system/role",
+        "user": "js/system/user"
     },
     shim:{
         "bootstrap": ["jquery"],

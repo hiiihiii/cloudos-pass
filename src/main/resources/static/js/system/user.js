@@ -4,14 +4,14 @@ define([
     "vue",
     "datatables",
     "common-module"
-],function ($, Vue, DataTables, common_module) {
-    if($("#system_role")[0]){
+], function ($, Vue, DataTables, common_module) {
+    if($("#system_user")[0]){
         var roleVue = new Vue({
-            el:"#system_role",
+            el:"#system_user",
             data: {},
             mounted: function () {
                 debugger;
-                common_module.dataTables("#role_table");
+                common_module.dataTables("#user_table");
             },
             methods: {
                 getData: function () {

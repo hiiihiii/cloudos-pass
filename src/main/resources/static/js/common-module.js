@@ -18,6 +18,10 @@ define([
                 $("#setting-menu").addClass("parent-menu-selected");
                 $("#system-role-setting").addClass("child-menu-selected");
                 break;
+            case "/user":
+                $("#setting-menu").addClass("parent-menu-selected");
+                $("#system-user-setting").addClass("child-menu-selected");
+                break;
         }
     }
     //头部菜单的事件
@@ -56,13 +60,34 @@ define([
                 sessionStorage.currentMenu = "角色";
                 sessionStorage.href = "/role";
                 break;
+            case "system-user-setting":
+                sessionStorage.currentMenu = "用户";
+                sessionStorage.href = "/user";
+                break;
         }
     });
 
     // 创建表格
     function tables(id, options) {
+        debugger;
         var tableObj = $(id).DataTable({
-
+            searching: false,
+            ordering: true,
+            paging: true,
+            pageLength: 10,
+            pagingType: "full_numbers",
+            lengthChange: false,
+            language: {
+                emptyTable: "暂无数据",
+                info: "共_MAX_条记录",
+                zeroRecords: "未找到数据",
+                paginate: {
+                    first: "<<",
+                    last: ">>",
+                    next: ">",
+                    previous: "<"
+                }
+            }
         });
         return tableObj;
     }

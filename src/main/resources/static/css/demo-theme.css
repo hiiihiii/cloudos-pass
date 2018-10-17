@@ -101,3 +101,10 @@ label.error{
 [v-cloak] {
     visibility: hidden;
 }
+#system_role,
+#system_user {
+    padding-top: 100px;
+}
+.dataTables_wrapper {
+    margin: 0 15px;
+}

@@ -1,4 +1,4 @@
-package com.tanli.cloud.controller.role;
+package com.tanli.cloud.controller.system;
 
 import com.tanli.cloud.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
