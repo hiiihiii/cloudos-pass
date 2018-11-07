@@ -13,6 +13,7 @@ require.config({
         "validate-extend": 'js/validate-extend',
         "select2": "lib/select2/js/select2.min",
         "datatables":"lib/datatables/js/jquery.dataTables.min",
+        "twaver": "lib/twaver/twaver",
         "common-module": "js/common-module",
         "adminhomepage": "js/adminhomepage/adminhomepage",
         "appstore": "js/appcenter/appstore",
