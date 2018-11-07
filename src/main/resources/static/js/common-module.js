@@ -22,6 +22,10 @@ define([
                 $("#setting-menu").addClass("parent-menu-selected");
                 $("#system-user-setting").addClass("child-menu-selected");
                 break;
+            case "/apporch":
+                $("#service-menu").addClass("parent-menu-selected");
+                $("#apporch-menu").addClass("child-menu-selected");
+                break;
         }
     }
     //头部菜单的事件
@@ -64,6 +68,11 @@ define([
                 sessionStorage.currentMenu = "用户";
                 sessionStorage.href = "/user";
                 break;
+            case "apporch-menu":
+                sessionStorage.currentMenu = "应用编排";
+                sessionStorage.href = "/apporch";
+                break;
+
         }
     });
 

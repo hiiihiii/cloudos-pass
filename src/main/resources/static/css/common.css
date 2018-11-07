@@ -414,7 +414,8 @@ span.checkbox+a{
 
 /*角色开始*/
 #system_role .operate-box,
-#system_user .operate-box{
+#system_user .operate-box,
+#apporch .operate-box{
     margin-bottom: 10px;
     padding: 5px 15px;
     border-bottom: 1px solid rgba(0,0,0,0.11);
