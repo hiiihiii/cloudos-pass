@@ -40,7 +40,6 @@
     display: inline-block;
     position: absolute;
     font-size: 12px;
-    top: 6px;
     left: 20px;
 }
 #login-form input:hover,
@@ -52,4 +51,24 @@
     border: #00c1de;
     color: #ffffff;
     font-size: 14px;
+}
+#login-form #rememberMe + label::before {
+    content: "\a0";  /*不换行空格*/
+    display: inline-block;
+    vertical-align: .2em;
+    width: 14px;
+    height: 14px;
+    margin-right: .2em;
+    background-color: silver;
+    text-indent: .15em;
+    line-height: 14px;  /*行高不加单位，子元素将继承数字乘以自身字体尺寸而非父元素行高*/
+    color: #fff;
+}
+#login-form #rememberMe:checked + label::before {
+    content: "\2713";
+    background-color: rgb(236,103,11);
+}
+#login-form #rememberMe {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
 }

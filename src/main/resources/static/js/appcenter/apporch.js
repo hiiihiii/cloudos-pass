@@ -9,13 +9,16 @@ define([
     "common-module",
     "bootstrap",
     "bootstrapSwitch",
-    "select2"
-], function ($, Vue, echarts, common_module, bootstrap, bootstrapSwitch, select2) {
+    "select2",
+    "datatables"
+], function ($, Vue, echarts, common_module, bootstrap, bootstrapSwitch, select2, DataTables) {
     if($("#apporch")[0]){
         var orchVue = new Vue({
             el: "#apporch",
             data:{},
-            mounted: function(){},
+            mounted: function(){
+                common_module.dataTables("#template_table");
+            },
             methods: {}
         });
     }

@@ -106,6 +106,65 @@ label.error{
 #apporch {
     padding-top: 100px;
 }
-.dataTables_wrapper {
-    margin: 0 15px;
+.dataTables_info{
+    margin-left: 14px;
+}
+table.dataTable tbody tr {
+    font-size: 12px;
+}
+
+table.dataTable thead th {
+    padding: 10px 18px;
+    border-bottom: 1px solid #e2dede;
+}
+table.dataTable tbody td{
+    padding: 8px 18px;
+    border-bottom: 1px solid #e2dede;
+    vertical-align: middle;
+}
+table.dataTable.no-footer {
+    border-bottom: 1px solid #333;
+}
+.dataTables_paginate {
+    margin-right: 14px;
+    font-size: 12px;
+    padding-top: 0.755em !important;
+}
+.dataTables_paginate .paginate_button{
+    padding: 0.2em 0.55em !important;
+}
+
+.table-checkbox-box {
+    display: inline-block;
+    position: relative;
+    font-size: 12px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0 !important;
+}
+.checkbox-container {
+    position: relative;
+    font-size: 12px;
+    text-align: center;
+    padding: 10px;
+}
+.cloud-checkbox {
+    -webkit-appearance: none; /*去掉checkbox原有的样式*/
+    display: inline-block;
+    height: 14px;
+    width: 14px;
+    cursor: pointer;
+    outline: none !important;
+    border: 1px solid #bbb;
+    box-sizing: border-box;
+    border-radius: 0;
+    vertical-align:middle;
+}
+.cloud-checkbox:checked{
+    background-image: url("../images/icon.svg");
+    background-color: rgb(236,103,11);
+    border-color: rgb(236,103,11);
+    background-position: 98.61% 36.32%;
+    background-size: 1642.8571428571427% 1457.142857142857%;
+    background-repeat: no-repeat;
 }
