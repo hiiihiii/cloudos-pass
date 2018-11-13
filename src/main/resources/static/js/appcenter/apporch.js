@@ -19,7 +19,12 @@ define([
             mounted: function(){
                 common_module.dataTables("#template_table");
             },
-            methods: {}
+            methods: {
+                //显示增加模板框
+                showAddTemplateDialog: function () {
+                    $("#add_template").modal({backdrop: 'static', keyboard: false});
+                }
+            }
         });
     }
 });

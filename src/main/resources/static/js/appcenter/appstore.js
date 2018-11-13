@@ -20,6 +20,10 @@ define([
                 var _self = this;
                 _self.showPublic = true;
                 _self.showPrivate = false;
+                //设置分类全部选中
+                $(".app-items .cloud-checkbox").attr("checked", "true");
+                //为分类选择绑定事件
+                _self.classifyBind();
             },
             methods: {
                 //显示上传镜像框框
@@ -43,6 +47,21 @@ define([
                         }
                     });
                     $("#upload_image").modal({backdrop: 'static', keyboard: false});
+                },
+
+                classifyBind: function(){
+                    $("#appstore .nav").on("change", "input[type='checkbox']", function(){
+                        debugger
+                        var status = this.getAttribute("checked");//选中时status为"checked"
+                        var isPublic = false;
+                        var isAll = false;
+                        if($(this).parent().parent().attr("id") === "public_repo") {
+                            isPublic = true;
+                        }
+                        if($(this).hasClass("app-type-all")){
+                            isAll = true;
+                        }
+                    });
                 }
             }
         });

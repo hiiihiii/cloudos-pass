@@ -34,6 +34,7 @@ define([
                 }
             },
             methods: {
+
                 //下一步
                 toNext: function () {
                     var _self = this;
@@ -170,12 +171,18 @@ define([
                     var _self = this;
                     var tag = $("#upload_image_form select[name='appTag']").val();
                     _self.bindData.appTag_input = tag;
+                },
+
+                //提交上传
+                submitUpload: function () {
+
                 }
             }
         });
 
         // 上传镜像校验
         var validator = $("#upload_image_form").validate({
+
             rules: {
                 appName: {
                     required: true,

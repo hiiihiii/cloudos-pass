@@ -1,7 +1,7 @@
 /*头部导航开始*/
 .header {
     position: fixed;
-    z-index: 1999;
+    z-index: 1000;
     background: #ffffff;
     width: 100%;
 }
@@ -380,6 +380,9 @@ span.checkbox+a{
 #upload_image .modal-dialog {
     width: 750px;
 }
+#add_template .modal-dialog {
+    width: 1200px;
+}
 #upload_image .modal-table-operation {
     cursor: pointer;
     display: inline-block;
@@ -432,4 +435,11 @@ span.checkbox+a{
 #template_table{
     width: 98%;
     margin: auto;
+}
+
+.operate-btn {
+    display: inline-block;
+    margin-right: 5px;
+    cursor: pointer;
+    color: #767b80;
 }

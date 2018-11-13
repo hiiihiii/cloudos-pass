@@ -19,6 +19,7 @@ require.config({
         "appstore": "js/appcenter/appstore",
         "upload_image": "js/appcenter/upload_image",
         "apporch": "js/appcenter/apporch",
+        "add_template": "js/appcenter/add_template",
         "application": "js/appcenter/application",
         "login": "js/login",
         "role": "js/system/role",

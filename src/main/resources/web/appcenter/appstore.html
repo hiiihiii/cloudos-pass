@@ -18,27 +18,9 @@
                         <span v-cloak="" v-show="showPublic" ><i class="fa fa-angle-down"></i></span>
                         <span v-cloak="" v-show="!showPublic"><i class="fa fa-angle-right"></i></span>
                     </li>
-                    <div v-cloak="" class="app-items" v-show="appType == 'public'" >
-                        <!--<div class="app-type-all app-item-selected">-->
-                            <!--<span class="checkbox">-->
-                                <!--<i class="fa fa-check"></i>-->
-                            <!--</span>-->
-                            <!--<a >全部</a>-->
-                        <!--</div>-->
-                        <!--<div class="app-type app-item-selected">-->
-                            <!--<span class="checkbox">-->
-                                <!--<i class="fa fa-check"></i>-->
-                            <!--</span>-->
-                            <!--<a >镜像应用</a>-->
-                        <!--</div>-->
-                        <!--<div class="app-type app-item-selected">-->
-                            <!--<span class="checkbox">-->
-                                <!--<i class="fa fa-check"></i>-->
-                            <!--</span>-->
-                            <!--<a >模板应用</a>-->
-                        <!--</div>-->
+                    <div v-cloak="" class="app-items" v-show="appType == 'public'" id="public_repo">
                         <div class="checkbox-container">
-                            <input type="checkbox" class="cloud-checkbox app-type-all"/>
+                            <input type="checkbox" class="cloud-checkbox app-type-all" />
                             <span>全部</span>
                         </div>
                         <div class="checkbox-container">
@@ -56,28 +38,7 @@
                         <span v-cloak="" v-show="showPrivate"><i class="fa fa-angle-down"></i></span>
                         <span v-cloak="" v-show="!showPrivate"><i class="fa fa-angle-right"></i></span>
                     </li>
-                    <div v-cloak="" class="app-items" v-show="appType == 'private'">
-                        <!--<div class="app-type-all">-->
-                            <!--<span class="checkbox">-->
-                                <!--<i class="fa fa-check"></i>-->
-                            <!--</span>-->
-                            <!--<a >全部</a>-->
-                        <!--</div>-->
-                        <!--<div class="table-checkbox-box">-->
-                            <!--<input type="checkbox" class="table-checkbox"/>-->
-                        <!--</div>-->
-                        <!--<div class="app-type">-->
-                            <!--<span class="checkbox">-->
-                                <!--<i class="fa fa-check"></i>-->
-                            <!--</span>-->
-                            <!--<a >镜像应用</a>-->
-                        <!--</div>-->
-                        <!--<div class="app-type">-->
-                            <!--<span class="checkbox">-->
-                                <!--<i class="fa fa-check"></i>-->
-                            <!--</span>-->
-                            <!--<a >模板应用</a>-->
-                        <!--</div>-->
+                    <div v-cloak="" class="app-items" v-show="appType == 'private'" id="private_repo">
                         <div class="checkbox-container">
                             <input type="checkbox" class="cloud-checkbox app-type-all"/>
                             <span>全部</span>

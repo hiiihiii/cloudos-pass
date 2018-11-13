@@ -9,7 +9,7 @@
 <div th:replace="common/nav::menu"></div>
 <div id="apporch">
     <div class="operate-box col-md-12 col-sm-12 col-xs-12">
-        <div class="btn cloud-btn"><i class="fa fa-plus"></i>增加</div>
+        <div class="btn cloud-btn" v-on:click="showAddTemplateDialog"><i class="fa fa-plus"></i>增加</div>
         <div class="btn cloud-btn"><i class="fa fa-trash"></i>删除</div>
         <div class="btn cloud-btn"><i class="fa fa-refresh"></i>刷新</div>
     </div>
@@ -49,7 +49,11 @@
                 <td>test2</td>
                 <td>test2</td>
                 <td>test2</td>
-                <td>操作</td>
+                <td>
+                    <span class="operate-btn" title="部署"><i class="fa fa-toggle-right"></i></span>
+                    <span class="operate-btn" title="编辑"><i class="fa fa-pencil"></i></span>
+                    <span class="operate-btn" title="删除"><i class="fa fa-trash-o"></i></span>
+                </td>
             </tr>
             <tr>
                 <td>
@@ -89,10 +93,11 @@
     </div>
 
 </div>
+<div th:replace="appcenter/add_template::add_template"></div>
 <div th:replace="common/footer::footer"></div>
 <script type="text/javascript">
     require(["../js/require-config"],function (require_config) {
-        require(["apporch"]);
+        require(["apporch", "add_template"]);
     });
 </script>
 </body>
