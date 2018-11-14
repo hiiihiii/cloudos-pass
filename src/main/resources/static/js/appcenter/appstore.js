@@ -50,7 +50,7 @@ define([
                 },
 
                 classifyBind: function(){
-                    $("#appstore .nav").on("change", "input[type='checkbox']", function(){
+                    $("#appstore .nav").on("change", "input[type='chec  kbox']", function(){
                         debugger
                         var status = this.getAttribute("checked");//选中时status为"checked"
                         var isPublic = false;
@@ -66,8 +66,5 @@ define([
             }
         });
 
-        $('#upload_image').on('shown.bs.modal', function () {
-
-        });
     }
 });

@@ -31,7 +31,8 @@ define([
                         "targetPort": ''
                     }],
                     envs:[]
-                }
+                },
+                uploadType: "private"
             },
             methods: {
 
@@ -175,14 +176,97 @@ define([
 
                 //提交上传
                 submitUpload: function () {
+                    // if(!$("#upload_image_form").valid()){
+                    //     return;
+                    // }
+                    debugger
+                    var _self = this;
+                    var formData = new FormData();
+                    formData.append("appName", $("#upload_image_form #appName").val());
+                    var isPublic = $('#upload_image_form #isPublic input').bootstrapSwitch('state');
+                    if(isPublic){
+                        formData.append("type", "public");
+                    } else {
+                        formData.append("type", "private");
+                    }
+                    formData.append("logoFile", $("#upload_image_form #logo")[0].files[0]);
+                    formData.append("version",$("#upload_image_form #version").val());
+                    formData.append("appTag", _self.bindData.appTag_input);
+                    formData.append("description", $("#upload_image_form textarea[name='description']").val());
+                    formData.append("v_description", $("#upload_image_form textarea[name='v_description']").val());
+                    formData.append("sourceFile", $("#upload_image_form #source")[0].files[0]);
+                    formData.append("volumeDir", $("#upload_image_form input[name='volumeDir']").val());
+                    //构造metadata
+                    var metadata = _self.createMetadata();
+                    formData.append("metadata", metadata);
 
+                    $.ajax({
+                        url: "../appcenter/upload",
+                        type: "post",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(){},
+                        error: function(){}
+                    });
+                },
+
+                //构造上传时的metadata, 数据格式见static/json/metadata.json
+                createMetadata: function(){
+                    var metadata = {};
+                    //命令及命令参数
+                    var cmdParams = []
+                    $("#upload_image_form input[name='cmdParam']").each(function(){
+                        cmdParams.push($(this).val());
+                    });
+                    metadata.cmd = $("#upload_image_form input[name='cmd']").val(); //命令
+                    metadata.cmdParams = cmdParams;//命令参数
+                    //环境变量
+                    var envs = [];
+                    $("#upload_image_form input[name='envKey']").each(function(){
+                        var temp = {};
+                        var $this = $(this);
+                        var $tr = $this.parents("tr");
+                        temp.envKey = $this.val();
+                        temp.envValue = $tr.find("input[name='envValue']").val();
+                        envs.push(temp);
+                    })
+                    metadata.env = envs;
+                    //端口
+                    var ports = [];
+                    $("#upload_image_form input[name='portName']").each(function(){
+                        var temp = {};
+                        var $this = $(this);
+                        var $tr = $this.parents("tr");
+                        temp.portName = $this.val();
+                        temp.protocol = $tr.find("select[name='protocol']").val();
+                        temp.containerPort = $tr.find("input[name='containerPort']").val();
+                        temp.port = $tr.find("input[name='port']").val();
+                        temp.targetPort = $tr.find("input[name='targetPort']").val();
+                        ports.push(temp);
+                    })
+                    metadata.ports = ports;
+                    //启动限制
+                    metadata.requests = {
+                        "cpu": $("#upload_image_form input[name='mincpu']").val(),
+                        "memory": $("#upload_image_form input[name='minMemory']").val() + $("#upload_image_form select[name='minMemoryUnit']").val()
+                    };
+                    //运行限制
+                    metadata.limits = {
+                        "cpu": $("#upload_image_form input[name='maxcpu']").val(),
+                        "memory": $("#upload_image_form input[name='maxMemory']").val() + $("#upload_image_form select[name='maxMemoryUnit']").val()
+                    };
+
+                    return metadata;
                 }
             }
         });
 
         // 上传镜像校验
         var validator = $("#upload_image_form").validate({
-
+            // submitHandler: function(form){
+                // upload_image.submitUpload();
+            // },
             rules: {
                 appName: {
                     required: true,
@@ -253,6 +337,11 @@ define([
             $("#upload_image_form select[name='maxMemoryUnit']").val("MB");
             $("#upload_image_form textarea").val("");
         });
+
+        $('#upload_image').on('shown.bs.modal', function () {
+
+        });
+
         $("#upload_image_form select[name='appTag']").on("change",function(){
             upload_image.bindData.appTag_input = $("#upload_image_form select[name='appTag']").val();
         })

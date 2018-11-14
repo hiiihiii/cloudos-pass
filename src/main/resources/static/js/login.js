@@ -22,7 +22,7 @@ define([
                     $.ajax({
                         type: "post",
                         data: user,
-                        url: "/loginIn",
+                        url: "/login",
                         dataType: "json",
                         content_type: "application/json",
                         success: function (data) {

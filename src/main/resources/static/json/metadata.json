@@ -1,0 +1,24 @@
+{
+  "metadata": {
+    "cmd": "",
+    "cmdParams": [],
+    "env": [{
+      "envKey": "",
+      "envValue": ""
+    }],
+    "ports": [{
+      "portName":"",
+      "protocol":"",
+      "containerPort":"",
+      "port":"",
+      "targetPort":""
+    }],
+    "requests": {
+      "cpu":"",
+      "memory":""
+    },
+    "limits": {
+      "cpu":"",
+      "memory":""
+    }
+} }

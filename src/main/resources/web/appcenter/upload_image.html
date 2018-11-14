@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 <div class="modal-body cloud-modal-body">
-                    <form id="upload_image_form" role="form" class="form-horizontal">
+                    <form id="upload_image_form" role="form" class="form-horizontal" enctype="multipart/form-data">
                         <div class="modal-body-left">
                             <ul class="info-type">
                                 <li class="info-item"
@@ -54,7 +54,7 @@
                                 <div class="form-group">
                                     <label >版本</label>
                                     <div>
-                                        <input class="form-control" type="text" name="version"/>
+                                        <input class="form-control" type="text" name="version" id="version"/>
                                     </div>
                                 </div>
                                 <!--标签-->
@@ -221,7 +221,7 @@
                             v-on:click="toPrevious" v-cloak="">上一步</button>
                     <button type="button" class="btn cloud-btn" v-show="nextStep"
                             v-on:click="toNext" v-cloak="">下一步</button>
-                    <button type="button" class="btn cloud-btn" v-show="submitTag" v-cloak="">确定</button>
+                    <button type="button" class="btn cloud-btn" v-on:click="submitUpload" v-show="submitTag" v-cloak="">确定</button>
                     <button type="button" class="btn cloud-btn" data-dismiss="modal" v-cloak="">取消</button>
                 </div>
             </div>
