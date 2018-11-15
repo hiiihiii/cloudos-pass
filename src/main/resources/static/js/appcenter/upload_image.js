@@ -195,9 +195,10 @@ define([
                     formData.append("description", $("#upload_image_form textarea[name='description']").val());
                     formData.append("v_description", $("#upload_image_form textarea[name='v_description']").val());
                     formData.append("sourceFile", $("#upload_image_form #source")[0].files[0]);
-                    formData.append("volumeDir", $("#upload_image_form input[name='volumeDir']").val());
+                    formData.append("createType","upload");//表示镜像是用户自己上传的
+
                     //构造metadata
-                    var metadata = _self.createMetadata();
+                    var metadata = JSON.stringify(_self.createMetadata());
                     formData.append("metadata", metadata);
 
                     $.ajax({
@@ -214,6 +215,8 @@ define([
                 //构造上传时的metadata, 数据格式见static/json/metadata.json
                 createMetadata: function(){
                     var metadata = {};
+
+                    metadata.volume = $("#upload_image_form input[name='volumeDir']").val();
                     //命令及命令参数
                     var cmdParams = []
                     $("#upload_image_form input[name='cmdParam']").each(function(){

@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 @EnableAutoConfiguration
@@ -19,7 +21,9 @@ public class AppstoreController {
     }
 
     @PostMapping("upload")
-    public APIResponse uploadImage(ImageInfo imageInfo){
+    public APIResponse uploadImage(ImageInfo imageInfo,
+                                   @RequestParam("logoFile")MultipartFile logoFile,
+                                   @RequestParam("sourceFile")MultipartFile sourceFile) {
         return null;
     }
 

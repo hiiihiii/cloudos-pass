@@ -7,12 +7,16 @@ public class ImageInfo {
     private String repo_id;
     private String user_id;
     private String appName;
+    private String type;
     private String version;
+    private String appTag;
     private String description;
     private String v_description;
     private String logo_url;
     private String source_url;
-    private String create_type;
+    private String metadata;
+
+    private String createType;
     private Timestamp create_time;
     private Timestamp update_time;
 
@@ -46,6 +50,22 @@ public class ImageInfo {
 
     public void setAppName(String appName) {
         this.appName = appName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getAppTag() {
+        return appTag;
+    }
+
+    public void setAppTag(String appTag) {
+        this.appTag = appTag;
     }
 
     public String getVersion() {
@@ -88,12 +108,12 @@ public class ImageInfo {
         this.source_url = source_url;
     }
 
-    public String getCreate_type() {
-        return create_type;
+    public String getCreateType() {
+        return createType;
     }
 
-    public void setCreate_type(String create_type) {
-        this.create_type = create_type;
+    public void setCreateType(String createType) {
+        this.createType = createType;
     }
 
     public Timestamp getCreate_time() {
@@ -110,5 +130,13 @@ public class ImageInfo {
 
     public void setUpdate_time(Timestamp update_time) {
         this.update_time = update_time;
+    }
+
+    public String getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(String metadata) {
+        this.metadata = metadata;
     }
 }

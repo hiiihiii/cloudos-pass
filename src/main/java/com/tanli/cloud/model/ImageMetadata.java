@@ -5,9 +5,67 @@ import java.util.ArrayList;
 public class ImageMetadata {
     private String volume;
     private String cmd;
-    private ArrayList<String> cmdParams;
-    private ArrayList<Env> env;
-    private ArrayList<Port> ports;
+    private String[] cmdParams;
+    private Env[] env;
+    private Port[] ports;
+    private Resouce requests;
+    private Resouce limits;
+
+    public String getVolume() {
+        return volume;
+    }
+
+    public void setVolume(String volume) {
+        this.volume = volume;
+    }
+
+    public String getCmd() {
+        return cmd;
+    }
+
+    public void setCmd(String cmd) {
+        this.cmd = cmd;
+    }
+
+    public String[] getCmdParams() {
+        return cmdParams;
+    }
+
+    public void setCmdParams(String[] cmdParams) {
+        this.cmdParams = cmdParams;
+    }
+
+    public Env[] getEnv() {
+        return env;
+    }
+
+    public void setEnv(Env[] env) {
+        this.env = env;
+    }
+
+    public Port[] getPorts() {
+        return ports;
+    }
+
+    public void setPorts(Port[] ports) {
+        this.ports = ports;
+    }
+
+    public Resouce getRequests() {
+        return requests;
+    }
+
+    public void setRequests(Resouce requests) {
+        this.requests = requests;
+    }
+
+    public Resouce getLimits() {
+        return limits;
+    }
+
+    public void setLimits(Resouce limits) {
+        this.limits = limits;
+    }
 }
 
 class Env {
@@ -89,5 +147,31 @@ class Port {
 
     public void setTargetPort(String targetPort) {
         this.targetPort = targetPort;
+    }
+}
+
+class Resouce {
+    private String cpu;
+    private String memory;
+
+    public Resouce(String cpu, String memory) {
+        this.cpu = cpu;
+        this.memory = memory;
+    }
+
+    public String getCpu() {
+        return cpu;
+    }
+
+    public void setCpu(String cpu) {
+        this.cpu = cpu;
+    }
+
+    public String getMemory() {
+        return memory;
+    }
+
+    public void setMemory(String memory) {
+        this.memory = memory;
     }
 }
