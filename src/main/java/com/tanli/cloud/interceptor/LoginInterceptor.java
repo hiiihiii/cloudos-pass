@@ -26,10 +26,10 @@ public class LoginInterceptor implements HandlerInterceptor {
         throws Exception {
         String basePath = request.getContextPath();
         String path = request.getRequestURI();
-        LOGGE.info("basepath: " + basePath);
-        LOGGE.info("path: " + path);
+        LOGGE.info("[LoginInterceptor Error]: basepath " + basePath);
+        LOGGE.info("[LoginInterceptor Error]: path " + path);
 
-        if(!doLoginInterceptor(path, basePath)){
+         if(!doLoginInterceptor(path, basePath)){
             return true;
         }
         HttpSession session = request.getSession();
