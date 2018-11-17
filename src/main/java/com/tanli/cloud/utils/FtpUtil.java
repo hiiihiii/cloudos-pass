@@ -1,5 +1,6 @@
 package com.tanli.cloud.utils;
 
+import com.tanli.cloud.constant.Environment;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.slf4j.Logger;
@@ -13,26 +14,13 @@ import java.io.InputStream;
 public class FtpUtil {
 
     private static final Logger LOGGE = LoggerFactory.getLogger(FtpUtil.class);
-    //ftp服务器ip地址
-    private static final String FTP_ADDRESS = "132.232.140.33";//腾讯云服务器
-    //端口号
-    private static final int FTP_PORT = 21;
-    //用户名
-    private static final String FTP_USERNAME = "docker";
-//    private static final String FTP_USERNAME = "root";
-    //密码
-    private static final String FTP_PASSWORD = "dockerfile";
-//    private static final String FTP_PASSWORD = "i?3Q!8Laztan_li";
-
-    //文件路径
-    public final String FTP_BASEPATH = "/var/ftp";
 
     public String uploadFile(String fileName, InputStream input, String relativePath, String newFileName){
         FTPClient ftpClient = new FTPClient();
         ftpClient.setControlEncoding("UTF-8");
         try {
-            ftpClient.connect(FTP_ADDRESS, FTP_PORT);
-            ftpClient.login(FTP_USERNAME, FTP_PASSWORD);
+            ftpClient.connect(Environment.FTP_IP, Environment.FTP_PORT);
+            ftpClient.login(Environment.FTP_USERNAME, Environment.FTP_PASSWORD);
             int reply = ftpClient.getReplyCode();
             if(!FTPReply.isPositiveCompletion(reply)) {
                 ftpClient.disconnect();
@@ -48,7 +36,7 @@ public class FtpUtil {
             if( uploadResult ){
                 //修改文件名(appName+version.扩展名)
                 ftpClient.rename(fileName, newFileName);
-                result = FTP_ADDRESS + FTP_BASEPATH + relativePath + newFileName;
+                result = Environment.FTP_IP + Environment.FTP_BASEPATH + relativePath + "/" + newFileName;
             }
             input.close();
             ftpClient.logout();

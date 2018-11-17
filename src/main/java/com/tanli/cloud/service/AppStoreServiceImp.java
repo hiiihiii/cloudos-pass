@@ -40,17 +40,30 @@ public class AppStoreServiceImp implements AppStoreService {
     @Override
     public void uploadImage(ImageInfo imageInfo, MultipartFile logoFile, MultipartFile sourceFile) {
         //上传logo文件
-        String originalFileName = logoFile.getOriginalFilename();
+        String originalFileName = logoFile.getOriginalFilename();//必须使用originFileName
         String[] temp = originalFileName.split("\\.");
         String newFileName = imageInfo.getAppName() + "-" + imageInfo.getVersion() + "." + temp[temp.length-1];
-
-        //必须使用originFileName
         String logoUrl = uploadFile(originalFileName, logoFile, "logo", newFileName);
-        //上传源文件
-//        String sourceUrl = uploadFile(fileName, sourceFile, "source");
+        if(!("".equals(logoUrl))){
+            imageInfo.setLogo_url(logoUrl);
+            //上传源文件
+            originalFileName = sourceFile.getOriginalFilename();
+            temp = originalFileName.split("\\.");
+            newFileName = imageInfo.getAppName() + "-" + imageInfo.getVersion() + "." + temp[temp.length-1];
+            String sourceUrl = uploadFile(originalFileName, sourceFile, "source", newFileName);
+            if(!("".equals(sourceUrl))){
+                imageInfo.setSource_url(sourceUrl);
+
+            } else {
+                LOGGE.info("[AppStoreServiceImp Error]: " + "上传镜像源文件失败，文件名为：" + originalFileName);
+                return;
+            }
+
+        } else {
+            LOGGE.info("[AppStoreServiceImp Error]: " + "上传logo文件失败，文件名为：" + originalFileName);
+            return;
+        }
+
     }
-
-
-
 
 }
