@@ -1,6 +1,6 @@
 package com.tanli.cloud.utils;
 
-import com.tanli.cloud.constant.Environment;
+import com.tanli.cloud.constant.EnvConst;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.slf4j.Logger;
@@ -19,8 +19,8 @@ public class FtpUtil {
         FTPClient ftpClient = new FTPClient();
         ftpClient.setControlEncoding("UTF-8");
         try {
-            ftpClient.connect(Environment.FTP_IP, Environment.FTP_PORT);
-            ftpClient.login(Environment.FTP_USERNAME, Environment.FTP_PASSWORD);
+            ftpClient.connect(EnvConst.FTP_IP, EnvConst.FTP_PORT);
+            ftpClient.login(EnvConst.FTP_USERNAME, EnvConst.FTP_PASSWORD);
             int reply = ftpClient.getReplyCode();
             if(!FTPReply.isPositiveCompletion(reply)) {
                 ftpClient.disconnect();
@@ -36,7 +36,7 @@ public class FtpUtil {
             if( uploadResult ){
                 //修改文件名(appName+version.扩展名)
                 ftpClient.rename(fileName, newFileName);
-                result = Environment.FTP_IP + Environment.FTP_BASEPATH + relativePath + "/" + newFileName;
+                result = EnvConst.FTP_IP + EnvConst.FTP_BASEPATH + relativePath + "/" + newFileName;
             }
             input.close();
             ftpClient.logout();

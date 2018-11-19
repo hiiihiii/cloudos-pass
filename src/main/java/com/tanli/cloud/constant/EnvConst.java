@@ -3,7 +3,7 @@ package com.tanli.cloud.constant;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Environment {
+public class EnvConst {
     /**
      * ftp服务器配置
      */
