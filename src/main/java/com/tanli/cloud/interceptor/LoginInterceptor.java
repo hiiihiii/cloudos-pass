@@ -1,6 +1,5 @@
 package com.tanli.cloud.interceptor;
 
-import com.tanli.cloud.model.response.LoginingUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -26,8 +25,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         throws Exception {
         String basePath = request.getContextPath();
         String path = request.getRequestURI();
-        LOGGE.info("[LoginInterceptor Error]: basepath " + basePath);
-        LOGGE.info("[LoginInterceptor Error]: path " + path);
+        //LOGGE.info("[LoginInterceptor Error]: basepath " + basePath);
+        LOGGE.info("[LoginInterceptor Info]: path " + path);
 
          if(!doLoginInterceptor(path, basePath)){
             return true;

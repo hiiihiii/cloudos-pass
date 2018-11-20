@@ -66,41 +66,38 @@ public class AppStoreServiceImp implements AppStoreService {
         String logoUrl = uploadFile(originalFileName, logoFile, "logo", newFileName);
         if(!("".equals(logoUrl))){
             imageInfo.setLogo_url(logoUrl);
-            //上传源文件
-            //originalFileName = sourceFile.getOriginalFilename();
-            //temp = originalFileName.split("\\.");
-            //newFileName = imageInfo.getAppName() + "-" + imageInfo.getVersion() + "." + temp[temp.length-1];
-            //String sourceUrl = uploadFile(originalFileName, sourceFile, "source", newFileName);
-            //if(!("".equals(sourceUrl))){
-            //    imageInfo.setSource_url(sourceUrl);
             //load镜像
             String loadURL = EnvConst.docker_images_prefix + "load";
             String image = loadImage(loadURL, sourceFile);
             if(!("".equals(image))){
                 //tag镜像
                 String tagURL = EnvConst.docker_images_prefix + image + "/tag";
-                Boolean tagImage = tagImage(tagURL, imageInfo);
-                if(tagImage){
+                Boolean isTaged = tagImage(tagURL, imageInfo);
+                if(isTaged){
                     //push镜像
                     String pushUrl = EnvConst.docker_images_prefix + EnvConst.docker_api_ip + "/demo/" + imageInfo.getAppName() + "/push" ;
-                    pushImage(pushUrl, imageInfo.getVersion());
+                    Boolean isPushed = pushImage(pushUrl, imageInfo.getVersion());
+                    if(isPushed){
+
+                    }
                 }
             }
         } else {
             LOGGE.info("[AppStoreServiceImp Error]: " + "上传镜像源文件失败，文件名为：" + originalFileName);
             return;
         }
-
-        //} else {
-        //    LOGGE.info("[AppStoreServiceImp Error]: " + "上传logo文件失败，文件名为：" + originalFileName);
-        //    return;
-        //}
-
     }
 
+    /**
+     * 调用dockerapi /images/load
+     * @param url api的url
+     * @param sourceFile 待load的镜像文件
+     * @return 加载到的镜像文件名称或镜像ID
+     */
     public String loadImage(String url, MultipartFile sourceFile){
         String image = "";
         try {
+            LOGGE.info("[AppStoreServiceImp Info]: POST " + url);
             ResponseEntity<String> loadResponse = restTemplate.postForEntity(url, sourceFile.getBytes(), String.class);
             String msg = loadResponse.getBody().toString();
             int beginIndex = msg.indexOf("Loaded image");
@@ -112,18 +109,26 @@ public class AppStoreServiceImp implements AppStoreService {
                 return image;
             }
         } catch (IOException io){
-
+            LOGGE.info("[AppStoreServiceImp Error]: " + "load镜像失败");
+            io.printStackTrace();
         }
         return image;
     }
 
+    /**
+     * 调用dockerapi /images/{imageName/imageID}/tag?repo=XX&tag=XX
+     * @param url api的url
+     * @param imageInfo 用来获取repo和tag
+     * @return
+     */
     public Boolean tagImage(String url, ImageInfo imageInfo){
         Boolean result = false;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
-        map.add("repo",EnvConst.docker_api_ip + "demo" + imageInfo.getAppName());//根据用户的repo来代替demo
+        map.add("repo",EnvConst.docker_api_ip + "/demo/" + imageInfo.getAppName());//根据用户的repo来代替demo
         map.add("tag", imageInfo.getVersion());
+        LOGGE.info("[AppStoreServiceImp Info]: POST " + url + "?repo=" + map.get("repo") + "&tag=" + map.get("tag"));
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
         ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class );
         String code = response.getStatusCode().toString();
@@ -133,23 +138,38 @@ public class AppStoreServiceImp implements AppStoreService {
         return result;
     }
 
-    public void pushImage(String url, String tag){
+    /**
+     * 调用dockerapi /images/{repoName}/push?tag={tag}
+     * @param url api的url
+     * @param tag 标签tag
+     * @return
+     */
+    public Boolean pushImage(String url, String tag){
+        Boolean result = false;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        try{
+        try {
             String authStr = "{ \"username\": \"admin\", \"password\": \"Harbor12345\", \"serveraddress\": \"132.232.140.33\" }";
             String authStr_base64 = Base64.getEncoder().encodeToString(authStr.getBytes("utf-8"));
             headers.set("X-Registry-Auth", authStr_base64);
             MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
             map.add("tag", tag);
+            LOGGE.info("[AppStoreServiceImp Info]: POST " + url + "?tag=" + map.get("tag"));
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
             ResponseEntity<String> response = restTemplate.postForEntity( url, request , String.class);
-            response.getStatusCode();
+            String msg = response.getBody().toString();
+            LOGGE.info(msg);
+            if(response.getStatusCode().toString().equals("200") && !msg.contains("error")){
+                return true;
+            }
         } catch (UnsupportedEncodingException e){
-
+            LOGGE.info("[AppStoreServiceImp Error]: " + "tag镜像失败");
+            e.printStackTrace();
         } catch (HttpClientErrorException e){
-
+            LOGGE.info("[AppStoreServiceImp Error]: " + "tag镜像失败");
+            e.printStackTrace();
         }
+        return result;
     }
 
 }

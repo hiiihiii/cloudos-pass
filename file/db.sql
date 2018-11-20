@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50634
 File Encoding         : 65001
 
-Date: 2018-10-16 18:40:56
+Date: 2018-11-20 20:36:52
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,9 +20,9 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `tl_image`;
 CREATE TABLE `tl_image` (
-  `image_uuid` varchar(32) NOT NULL,
-  `repo_uuid` varchar(32) NOT NULL,
-  `uuid` varchar(32) NOT NULL,
+  `image_uuid` varchar(36) NOT NULL,
+  `repo_uuid` varchar(36) NOT NULL,
+  `uuid` varchar(36) NOT NULL,
   `name` varchar(64) DEFAULT NULL,
   `version` varchar(1000) DEFAULT NULL,
   `description` text,
@@ -44,8 +44,8 @@ CREATE TABLE `tl_image` (
 -- ----------------------------
 DROP TABLE IF EXISTS `tl_repository`;
 CREATE TABLE `tl_repository` (
-  `repo_uuid` varchar(32) NOT NULL,
-  `user_uuid` varchar(32) NOT NULL,
+  `repo_uuid` varchar(36) NOT NULL,
+  `user_uuid` varchar(36) NOT NULL,
   `repo_name` varchar(64) DEFAULT NULL,
   `repo_type` varchar(10) DEFAULT NULL,
   `url` varchar(100) NOT NULL,
@@ -59,6 +59,8 @@ CREATE TABLE `tl_repository` (
 -- ----------------------------
 -- Records of tl_repository
 -- ----------------------------
+INSERT INTO `tl_repository` VALUES ('550e8423-e29b-41d4-a716-446655440000', '780e8400-e19b-41d4-a716-446655440000', 'admin_project', 'private', 'https://132.232.140.33', 'admin', 'Harbor12345', null, '2018-11-15 16:52:15', '2018-11-15 16:52:15');
+INSERT INTO `tl_repository` VALUES ('66908423-e29b-41d4-a716-446655440000', '780e8400-e19b-41d4-a716-446655440000', 'library', 'public', 'https://132.232.140.33', 'admin', 'Harbor12345', null, '2018-11-15 16:52:15', '2018-11-15 16:52:15');
 
 -- ----------------------------
 -- Table structure for tl_role
