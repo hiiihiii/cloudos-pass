@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,14 +23,14 @@ public class LoginController {
     @Autowired
     private UserManageService userManageService;
 
-//    @RequestMapping({"/","/index", "/login"})
+    //@RequestMapping({"/","/index", "/login"})
     @GetMapping({"/", "/index", "/login"})
-//    @ResponseBody
+    //@ResponseBody
     public ModelAndView index(HttpServletRequest httpServletRequest) {
         return new ModelAndView("login");
     }
 
-//    @PostMapping("/loginIn")
+    //@PostMapping("/loginIn")
     @PostMapping("/login")
     @ResponseBody
     public APIResponse loginVerify(HttpServletRequest request, String username, String password){

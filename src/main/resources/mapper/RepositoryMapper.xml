@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tanli.cloud.dao.RepositoryDao">
+    <resultMap id="repo" type="com.tanli.cloud.model.response.Repository">
+        <id column="repo_uuid" property="repo_uuid"></id>
+        <result column="user_uuid" property="user_uuid" />
+        <result column="repo_name" property="repo_name" />
+        <result column="repo_type" property="repo_type" />
+        <result column="url" property="url" />
+        <result column="create_time" property="create_time" />
+        <result column="update_time" property="update_time" />
+    </resultMap>
+    <select id="getRepoByUserid" resultMap="repo">
+        SELECT t.repo_uuid, t.user_uuid, t.repo_name, t.repo_type, t.url, t.create_time, t.update_time
+        FROM tl_repository t
+        WHERE t.user_uuid = #{userid, jdbcType=VARCHAR}
+    </select>
+</mapper>
