@@ -1,6 +1,7 @@
 package com.tanli.cloud.controller.appcenter;
 
 import com.tanli.cloud.model.ImageInfo;
+import com.tanli.cloud.model.response.LoginingUser;
 import com.tanli.cloud.service.AppStoreService;
 import com.tanli.cloud.utils.APIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class AppstoreController {
     public APIResponse uploadImage(HttpServletRequest request, ImageInfo imageInfo,
                                    @RequestParam(value = "logoFile", required = true)MultipartFile logoFile,
                                    @RequestParam(value = "sourceFile", required = true)MultipartFile sourceFile) {
-//        User user = (User) request.getSession();
+        LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
 //        imageInfo.setUser_id(user.getUserId());
 
         appStoreService.uploadImage(imageInfo, logoFile, sourceFile);

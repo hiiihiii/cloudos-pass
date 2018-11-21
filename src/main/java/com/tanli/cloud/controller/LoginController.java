@@ -24,7 +24,7 @@ public class LoginController {
     private UserManageService userManageService;
 
     //@RequestMapping({"/","/index", "/login"})
-    @GetMapping({"/", "/index", "/login"})
+    @GetMapping({"/", "/index"})
     //@ResponseBody
     public ModelAndView index(HttpServletRequest httpServletRequest) {
         return new ModelAndView("login");

@@ -33,8 +33,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
         HttpSession session = request.getSession();
         if(session.getAttribute("login_user") == null){
-            response.sendRedirect(request.getContextPath()+"/login");
-            return true;
+            response.sendRedirect(request.getContextPath()+"/index");
+            return false;
         } else {
             session.setAttribute("login_user",session.getAttribute("login_user"));
             return true;
