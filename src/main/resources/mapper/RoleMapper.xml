@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tanli.cloud.dao.RoleDao">
 
-    <insert id="addRole" parameterType="com.tanli.cloud.model.Role" useGeneratedKeys="true"
+    <insert id="addRole" parameterType="com.tanli.cloud.model.Role"
         keyProperty="role_uuid">
         INSERT INTO tl_role(role_uuid,role_name,role_desc,create_time,update_time)
         VALUES (#{uuid},#{role_name},#{description},#{create_time},#{update_time})

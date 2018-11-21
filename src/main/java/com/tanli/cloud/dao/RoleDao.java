@@ -8,5 +8,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface RoleDao {
-    int addRole(Role role);
+    public int addRole(Role role);
 }

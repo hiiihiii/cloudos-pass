@@ -207,7 +207,9 @@ define([
                         data: formData,
                         processData: false,
                         contentType: false,
-                        success: function(){},
+                        success: function(data){
+                            console.log(data);
+                        },
                         error: function(){}
                     });
                 },

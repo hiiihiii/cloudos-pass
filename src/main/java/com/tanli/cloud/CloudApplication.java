@@ -13,6 +13,7 @@ public class CloudApplication {
 		SpringApplication.run(CloudApplication.class, args);
 	}
 
+	//设置session过期时间
 	@Bean
 	public EmbeddedServletContainerCustomizer containerCustomizer(){
 		return new EmbeddedServletContainerCustomizer() {

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,14 +30,14 @@ public class AppstoreController {
     }
 
     @PostMapping("upload")
+    @ResponseBody
     public APIResponse uploadImage(HttpServletRequest request, ImageInfo imageInfo,
                                    @RequestParam(value = "logoFile", required = true)MultipartFile logoFile,
                                    @RequestParam(value = "sourceFile", required = true)MultipartFile sourceFile) {
         LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
-//        imageInfo.setUser_id(user.getUserId());
+        imageInfo.setUser_id(user.getUser_uuid());
 
-        appStoreService.uploadImage(imageInfo, logoFile, sourceFile);
-        return null;
+        return appStoreService.uploadImage(imageInfo, logoFile, sourceFile, user);
     }
 
 }

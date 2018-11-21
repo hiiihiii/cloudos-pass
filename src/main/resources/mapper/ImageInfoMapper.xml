@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tanli.cloud.dao.ImageInfoDao">
+
+    <insert id="addImageInfo" parameterType="com.tanli.cloud.model.ImageInfo"
+            keyProperty="app_id">
+        INSERT INTO tl_image (image_uuid, repo_uuid, uuid, name, tag, version, description, v_description, logo_url, source_url,
+                              metadata, create_type, create_time, update_time)
+        VALUES (#{app_id}, #{repo_id}, #{user_id}, #{appName}, #{appTag}, #{version}, #{description}, #{v_description}, #{logo_url},
+                #{source_url}, #{metadata}, #{createType}, #{create_time}, #{update_time})
+    </insert>
+
+</mapper>

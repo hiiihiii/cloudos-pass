@@ -1,6 +1,8 @@
 package com.tanli.cloud.service;
 
+import com.tanli.cloud.dao.RepositoryDao;
 import com.tanli.cloud.model.response.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,10 +12,11 @@ import java.util.List;
  */
 @Service
 public class RepositoryServiceImp implements RepositoryService{
-
+    @Autowired
+    private RepositoryDao repositoryDao;
 
     @Override
     public List<Repository> getRepoByUserid(String userid) {
-        return null;
+        return repositoryDao.getRepoByUserid(userid);
     }
 }

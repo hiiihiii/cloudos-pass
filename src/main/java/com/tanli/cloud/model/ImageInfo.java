@@ -1,7 +1,5 @@
 package com.tanli.cloud.model;
 
-import java.sql.Timestamp;
-
 public class ImageInfo {
     private String app_id;
     private String repo_id;
@@ -15,10 +13,9 @@ public class ImageInfo {
     private String logo_url;
     private String source_url;
     private String metadata;
-
     private String createType;
-    private Timestamp create_time;
-    private Timestamp update_time;
+    private String create_time;
+    private String update_time;
 
     public String getApp_id() {
         return app_id;
@@ -116,19 +113,19 @@ public class ImageInfo {
         this.createType = createType;
     }
 
-    public Timestamp getCreate_time() {
+    public String getCreate_time() {
         return create_time;
     }
 
-    public void setCreate_time(Timestamp create_time) {
+    public void setCreate_time(String create_time) {
         this.create_time = create_time;
     }
 
-    public Timestamp getUpdate_time() {
+    public String getUpdate_time() {
         return update_time;
     }
 
-    public void setUpdate_time(Timestamp update_time) {
+    public void setUpdate_time(String update_time) {
         this.update_time = update_time;
     }
 
