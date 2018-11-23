@@ -12,7 +12,7 @@
         <div class="content-left">
             <div class="nav">
                 <ul>
-                    <li class="repo-type repo-type-selected">
+                    <li class="repo-type" v-bind:class="{'repo-type-selected': showPublic}" v-on:click="changeRepo('public', event)">
                         <span class="repo-icon"><i class="fa fa-shopping-cart"></i></span>
                         <a >公有仓库</a>
                         <span v-cloak="" v-show="showPublic" ><i class="fa fa-angle-down"></i></span>
@@ -32,7 +32,7 @@
                             <span>模板应用</span>
                         </div>
                     </div>
-                    <li class="repo-type">
+                    <li class="repo-type" v-bind:class="{'repo-type-selected': showPrivate}" v-on:click="changeRepo('private', event)">
                         <span class="repo-icon"><i class="fa fa-shopping-cart"></i></span>
                         <a >私有仓库</a>
                         <span v-cloak="" v-show="showPrivate"><i class="fa fa-angle-down"></i></span>

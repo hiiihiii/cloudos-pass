@@ -10,4 +10,27 @@
                 #{source_url}, #{metadata}, #{createType}, #{create_time}, #{update_time})
     </insert>
 
+    <resultMap id="imageInfos" type="com.tanli.cloud.model.ImageInfo">
+        <id column="image_uuid" property="app_id"></id>
+        <result column="repo_uuid" property="repo_id"></result>
+        <result column="uuid" property="user_id"></result>
+        <result column="name" property="appName"></result>
+        <result column="tag" property="appTag"></result>
+        <result column="version" property="version"></result>
+        <result column="description" property="description"></result>
+        <result column="v_description" property="v_description"></result>
+        <result column="logo_url" property="logo_url"></result>
+        <result column="source_url" property="source_url"></result>
+        <result column="metadata" property="metadata"></result>
+        <result column="create_type" property="createType"></result>
+        <result column="create_time" property="create_time"></result>
+        <result column="update_time" property="update_time"></result>
+    </resultMap>
+
+    <select id="getImages" resultMap="imageInfos" >
+        SELECT * FROM tl_image
+        WHERE repo_uuid = #{repoid}
+        AND uuid = #{userid}
+    </select>
+
 </mapper>
