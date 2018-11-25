@@ -2,8 +2,9 @@
 define([
     'jquery',
     "vue",
-    "datatables"
-],function ($, Vue, DataTables) {
+    "datatables",
+    "bootstrap-notify"
+],function ($, Vue, DataTables, BootstrapNotify) {
     debugger;
     if(sessionStorage.href){
         switch (sessionStorage.href){
@@ -101,7 +102,51 @@ define([
         return tableObj;
     }
     var commonModule = {
-        dataTables: tables
+        dataTables: tables,
+        notify: notify
     };
+
+    function notify( title, msg, type){
+        var icon = "glyphicon glyphicon-info-sign";
+        if(type === "success"){
+            icon = "glyphicon glyphicon-ok-sign";
+        } else if(type === "warning"){
+            icon = "glyphicon glyphicon-warning-sign";
+        } else if(type === "danger"){
+            icon = "glyphicon glyphicon-remove-sign";
+        }
+        $.notify({
+            title: title || "",
+            message: msg || "No Msg",
+            icon: icon
+        },{
+            element: 'body',
+            position: null,
+            type: "warning",
+            allow_dismiss: true,
+            newest_on_top: true,
+            showProgressbar: false,
+            placement: {
+                from: "bottom",
+                align: "center"
+            },
+            offset: 20,
+            spacing: 10,
+            z_index: 1031,
+            delay: 5000,
+            timer: 2000,
+            url_target: '_blank',
+            template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0} cloud-notify" role="alert">' +
+            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+            '<span data-notify="icon"></span> ' +
+            '<span data-notify="title">{1}</span> ' +
+            '<span data-notify="message">{2}</span>' +
+            '<div class="progress" data-notify="progressbar">' +
+            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+            '</div>' +
+            '<a href="{3}" target="{4}" data-notify="url"></a>' +
+            '</div>'
+        });
+    }
     return commonModule;
 });

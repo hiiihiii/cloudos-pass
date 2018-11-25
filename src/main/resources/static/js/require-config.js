@@ -8,6 +8,7 @@ require.config({
         "vue": "lib/vue/vue.min",
         "bootstrap": "lib/bootstrap/js/bootstrap.min",
         "bootstrapSwitch": "lib/bootstrap/js/bootstrap-switch",
+        "bootstrap-notify": "lib/bootstrap-notify/bootstrap-notify.min",
         "echarts": "lib/echarts/echarts.min",
         "jquery-validate": "lib/jquery-validation/jquery.validate.min",
         "validate-extend": 'js/validate-extend',
@@ -27,6 +28,7 @@ require.config({
     },
     shim:{
         "bootstrap": ["jquery"],
+        "bootstrap-notify": ["jquery"],
         "jquery-validate": ['jquery'],
         "datatables": ['jquery']
     }
