@@ -23,4 +23,12 @@ public class EnvConst {
     public static final String harbor_username = "admin";
     public static final String harbor_password = "Harbor12345";
 
+    /**
+     * kubernetes api配置
+     */
+    public static final String k8s_api_protocol = "http";
+    public static final String k8s_api_ip = "132.232.66.145";
+    public static final String k8s_api_port = "8080";
+    public static final String k8s_api_prefix = "http://132.232.66.145:8080/api/";
+
 }

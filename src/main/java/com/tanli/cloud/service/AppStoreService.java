@@ -11,4 +11,5 @@ public interface AppStoreService {
 
     public APIResponse uploadImage(ImageInfo imageInfo, MultipartFile logoFile, MultipartFile sourceFile, LoginingUser user);
 
+    public void deployImage();
 }

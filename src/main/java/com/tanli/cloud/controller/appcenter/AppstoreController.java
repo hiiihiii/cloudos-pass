@@ -51,6 +51,7 @@ public class AppstoreController {
      * appType: image/template/all
      */
     public APIResponse getAppInfo(HttpServletRequest request, String repoType, String appType){
+        appStoreService.deployImage();
         LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
         if("all".equals(appType)){
 
@@ -59,6 +60,7 @@ public class AppstoreController {
         } else {
 
         }
+
         return null;
     }
 }
