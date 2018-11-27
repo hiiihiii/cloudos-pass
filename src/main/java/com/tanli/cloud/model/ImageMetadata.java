@@ -1,15 +1,13 @@
 package com.tanli.cloud.model;
 
-import java.util.ArrayList;
-
 public class ImageMetadata {
     private String volume;
     private String cmd;
     private String[] cmdParams;
     private Env[] env;
     private Port[] ports;
-    private Resouce requests;
-    private Resouce limits;
+    private Resource requests;
+    private Resource limits;
 
     public String getVolume() {
         return volume;
@@ -51,19 +49,19 @@ public class ImageMetadata {
         this.ports = ports;
     }
 
-    public Resouce getRequests() {
+    public Resource getRequests() {
         return requests;
     }
 
-    public void setRequests(Resouce requests) {
+    public void setRequests(Resource requests) {
         this.requests = requests;
     }
 
-    public Resouce getLimits() {
+    public Resource getLimits() {
         return limits;
     }
 
-    public void setLimits(Resouce limits) {
+    public void setLimits(Resource limits) {
         this.limits = limits;
     }
 }
@@ -150,11 +148,11 @@ class Port {
     }
 }
 
-class Resouce {
+class Resource {
     private String cpu;
     private String memory;
 
-    public Resouce(String cpu, String memory) {
+    public Resource(String cpu, String memory) {
         this.cpu = cpu;
         this.memory = memory;
     }

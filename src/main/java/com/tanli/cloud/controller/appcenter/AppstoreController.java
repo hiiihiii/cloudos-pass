@@ -4,6 +4,7 @@ import com.tanli.cloud.model.ImageInfo;
 import com.tanli.cloud.model.response.LoginingUser;
 import com.tanli.cloud.service.AppStoreService;
 import com.tanli.cloud.service.ImageInfoService;
+import com.tanli.cloud.service.NodeService;
 import com.tanli.cloud.utils.APIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -26,6 +27,8 @@ public class AppstoreController {
     private AppStoreService appStoreService;
     @Autowired
     private ImageInfoService imageInfoService;
+    @Autowired
+    private NodeService nodeService;
 
     @RequestMapping(value = {"/",""})
     public ModelAndView index(){
@@ -51,7 +54,8 @@ public class AppstoreController {
      * appType: image/template/all
      */
     public APIResponse getAppInfo(HttpServletRequest request, String repoType, String appType){
-        appStoreService.deployImage();
+        //appStoreService.deployImage();
+        nodeService.getNodes();
         LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
         if("all".equals(appType)){
 
