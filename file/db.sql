@@ -10,28 +10,10 @@ Target Server Type    : MYSQL
 Target Server Version : 50634
 File Encoding         : 65001
 
-Date: 2018-11-27 17:23:49
+Date: 2018-11-20 20:36:52
 */
 
 SET FOREIGN_KEY_CHECKS=0;
-
--- ----------------------------
--- Table structure for tl_deployment
--- ----------------------------
-DROP TABLE IF EXISTS `tl_deployment`;
-CREATE TABLE `tl_deployment` (
-  `deploy_uuid` varchar(36) NOT NULL,
-  `user_uuid` varchar(36) NOT NULL,
-  `template_id` varchar(36) DEFAULT NULL,
-  `image_uuid` varchar(36) DEFAULT NULL,
-  `deploy_type` varchar(32) DEFAULT NULL,
-  `deploy_name` varchar(128) DEFAULT NULL,
-  `description` varchar(1000) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of tl_deployment
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for tl_image
@@ -42,7 +24,6 @@ CREATE TABLE `tl_image` (
   `repo_uuid` varchar(36) NOT NULL,
   `uuid` varchar(36) NOT NULL,
   `name` varchar(64) DEFAULT NULL,
-  `tag` varchar(64) DEFAULT NULL,
   `version` varchar(1000) DEFAULT NULL,
   `description` text,
   `v_description` text,
@@ -56,27 +37,6 @@ CREATE TABLE `tl_image` (
 
 -- ----------------------------
 -- Records of tl_image
--- ----------------------------
-INSERT INTO `tl_image` VALUES ('28fe9d90-0b74-410e-9820-5b4fbd8e6844', '550e8423-e29b-41d4-a716-446655440000', '780e8400-e19b-41d4-a716-446655440000', 'busybox', 'Application', '2.0', 'BusyBox 是一个集成了三百多个最常用Linux命令和工具的软件', '2.0', '132.232.140.33/var/ftp/logo/busybox-2.0.PNG', '132.232.140.33/admin_project/busybox:2.0', '{\"volume\":\"/data\",\"cmd\":\"ifconfig\",\"cmdParams\":[\"-a\"],\"env\":[{\"envKey\":\"port\",\"envValue\":\"1234\"}],\"ports\":[{\"portName\":\"busybox\",\"protocol\":\"TCP\",\"containerPort\":\"10090\",\"port\":\"10091\",\"targetPort\":\"10092\"}],\"requests\":{\"cpu\":\"0.2\",\"memory\":\"20MB\"},\"limits\":{\"cpu\":\"0.4\",\"memory\":\"40MB\"}}', 'upload', '2018-11-27 10:56:05', '2018-11-27 10:56:05');
-
--- ----------------------------
--- Table structure for tl_pod
--- ----------------------------
-DROP TABLE IF EXISTS `tl_pod`;
-CREATE TABLE `tl_pod` (
-  `uuid` varchar(36) NOT NULL,
-  `deploy_uuid` varchar(36) NOT NULL,
-  `name` varchar(64) DEFAULT NULL,
-  `namespace` varchar(64) DEFAULT NULL,
-  `hostIP` varchar(128) DEFAULT NULL,
-  `podIP` varchar(128) DEFAULT NULL,
-  `restartCount` varchar(10) DEFAULT NULL,
-  `image` varchar(1000) DEFAULT NULL,
-  `status` varchar(64) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of tl_pod
 -- ----------------------------
 
 -- ----------------------------
