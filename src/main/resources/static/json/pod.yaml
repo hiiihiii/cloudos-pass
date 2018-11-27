@@ -1,0 +1,174 @@
+{
+  "apiVersion": "string",
+  "kind": "string",
+  "metadata": {
+    "labels": {
+      "additionalProp1": "string",
+      "additionalProp2": "string",
+      "additionalProp3": "string"
+    },
+    "name": "string",
+    "namespace": "string"
+  },
+  "spec": {
+    "containers": [
+      {
+        "name": "string",
+        "image": "string",
+        "imagePullPolicy": "string",
+        "args": [
+          "string"
+        ],
+        "command": [
+          "string"
+        ],
+        "env": [
+          {
+            "name": "string",
+            "value": "string",
+            "valueFrom": {
+              "configMapKeyRef": {
+                "key": "string",
+                "name": "string"
+              },
+              "fieldRef": {
+                "apiVersion": "string",
+                "fieldPath": "string"
+              },
+              "resourceFieldRef": {
+                "containerName": "string",
+                "divisor": "string",
+                "resource": "string"
+              },
+              "secretKeyRef": {
+                "key": "string",
+                "name": "string"
+              }
+            }
+          }
+        ],
+        "ports": [
+                  {
+                    "containerPort": 0,
+                    "hostIP": "string",
+                    "hostPort": 0,
+                    "name": "string",
+                    "protocol": "string"
+                  }
+                ],
+        "resources": {
+          "limits": {
+            "additionalProp1": "string",
+            "additionalProp2": "string",
+            "additionalProp3": "string"
+          },
+          "requests": {
+            "additionalProp1": "string",
+            "additionalProp2": "string",
+            "additionalProp3": "string"
+          }
+        },
+        "workingDir": "string"
+      }
+    ],
+    "dnsPolicy": "string",
+    "hostIPC": true,
+    "hostNetwork": true,
+    "hostPID": true,
+    "hostname": "string",
+    "imagePullSecrets": [
+      {
+        "name": "string"
+      }
+    ],
+    "nodeName": "string",
+    "nodeSelector": {
+      "additionalProp1": "string",
+      "additionalProp2": "string",
+      "additionalProp3": "string"
+    },
+    "restartPolicy": "string",
+    "securityContext": {
+      "fsGroup": 0,
+      "runAsNonRoot": true,
+      "runAsUser": 0,
+      "seLinuxOptions": {
+        "level": "string",
+        "role": "string",
+        "type": "string",
+        "user": "string"
+      },
+      "supplementalGroups": [
+        0
+      ]
+    },
+    "serviceAccount": "string",
+    "serviceAccountName": "string",
+    "subdomain": "string",
+    "terminationGracePeriodSeconds": 0
+  },
+  "status": {
+    "conditions": [
+      {
+        "lastProbeTime": "2018-11-27T01:19:56.603Z",
+        "lastTransitionTime": "2018-11-27T01:19:56.603Z",
+        "message": "string",
+        "reason": "string",
+        "status": "string",
+        "type": "string"
+      }
+    ],
+    "containerStatuses": [
+      {
+        "containerID": "string",
+        "image": "string",
+        "imageID": "string",
+        "lastState": {
+          "running": {
+            "startedAt": "2018-11-27T01:19:56.603Z"
+          },
+          "terminated": {
+            "containerID": "string",
+            "exitCode": 0,
+            "finishedAt": "2018-11-27T01:19:56.603Z",
+            "message": "string",
+            "reason": "string",
+            "signal": 0,
+            "startedAt": "2018-11-27T01:19:56.603Z"
+          },
+          "waiting": {
+            "message": "string",
+            "reason": "string"
+          }
+        },
+        "name": "string",
+        "ready": true,
+        "restartCount": 0,
+        "state": {
+          "running": {
+            "startedAt": "2018-11-27T01:19:56.603Z"
+          },
+          "terminated": {
+            "containerID": "string",
+            "exitCode": 0,
+            "finishedAt": "2018-11-27T01:19:56.603Z",
+            "message": "string",
+            "reason": "string",
+            "signal": 0,
+            "startedAt": "2018-11-27T01:19:56.603Z"
+          },
+          "waiting": {
+            "message": "string",
+            "reason": "string"
+          }
+        }
+      }
+    ],
+    "hostIP": "string",
+    "message": "string",
+    "phase": "string",
+    "podIP": "string",
+    "reason": "string",
+    "startTime": "2018-11-27T01:19:56.603Z"
+  }
+}
