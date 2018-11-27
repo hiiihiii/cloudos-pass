@@ -77,9 +77,10 @@ define([
                         // contentType: false,
                         success: function (data) {
                             console.log(data);
+                            common_module.notify("[应用中心]","获取镜像数据成功", "success");
                         },
                         error: function () {
-
+                            common_module.notify("[应用中心]","获取镜像数据失败", "danger");
                         }
                     })
                 },

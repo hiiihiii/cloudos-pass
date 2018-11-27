@@ -178,3 +178,30 @@ table.dataTable.no-footer {
     background-size: 1642.8571428571427% 1457.142857142857%;
     background-repeat: no-repeat;
 }
+.cloud-notify {
+    position: absolute !important;
+    left: 1050px !important;
+    bottom: 500px !important;
+    width: 270px !important;
+    color: #333;
+}
+.glyphicon-info-sign {
+    color: #524848 !important;
+    top: 3px;
+}
+.glyphicon-ok-sign {
+    color: #469e51 !important;
+    top: 3px;
+}
+.glyphicon-warning-sign {
+    color: #eac659 !important;
+    top: 2px;
+}
+.glyphicon-remove-sign {
+    color: #ff0000;
+    top: 3px;
+}
+.alert-warning{
+    background-color: #e1e1e2;
+    border-color: #e1e1e2;
+}
