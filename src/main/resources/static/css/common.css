@@ -206,7 +206,8 @@ span.checkbox+a{
 .tool-box .btn,
 #system_role .operate-box .btn,
 #system_user .operate-box .btn,
-#apporch .operate-box .btn{
+#apporch .operate-box .btn,
+#k8s_node .operate-box .btn{
     margin-right: 5px;
 }
 .app-box {
@@ -422,7 +423,8 @@ span.checkbox+a{
 /*角色开始*/
 #system_role .operate-box,
 #system_user .operate-box,
-#apporch .operate-box{
+#apporch .operate-box,
+#k8s_node .operate-box{
     background-color: #eeeeee;
     margin-bottom: 10px;
     padding: 5px 15px;

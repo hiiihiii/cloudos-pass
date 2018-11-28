@@ -113,7 +113,8 @@ label.error{
 }
 #system_role,
 #system_user,
-#apporch {
+#apporch,
+#k8s_node {
     padding-top: 100px;
 }
 .dataTables_info{

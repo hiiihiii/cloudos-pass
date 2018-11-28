@@ -27,6 +27,10 @@ define([
                 $("#service-menu").addClass("parent-menu-selected");
                 $("#apporch-menu").addClass("child-menu-selected");
                 break;
+            case "/kubernetes":
+                $("#system-menu").addClass("parent-menu-selected");
+                $("#kubernetes-node").addClass("child-menu-selected");
+                break;
         }
     }
     //头部菜单的事件
@@ -73,7 +77,10 @@ define([
                 sessionStorage.currentMenu = "应用编排";
                 sessionStorage.href = "/apporch";
                 break;
-
+            case "kubernetes-node":
+                sessionStorage.currentMenu = "节点";
+                sessionStorage.href = "/kubernetes";
+                break;
         }
     });
 
@@ -106,6 +113,7 @@ define([
         notify: notify
     };
 
+    // 创建通知消息
     function notify( title, msg, type){
         var icon = "glyphicon glyphicon-info-sign";
         if(type === "success"){

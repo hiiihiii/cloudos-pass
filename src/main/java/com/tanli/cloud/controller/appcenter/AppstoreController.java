@@ -27,8 +27,7 @@ public class AppstoreController {
     private AppStoreService appStoreService;
     @Autowired
     private ImageInfoService imageInfoService;
-    @Autowired
-    private NodeService nodeService;
+
 
     @RequestMapping(value = {"/",""})
     public ModelAndView index(){
@@ -55,7 +54,6 @@ public class AppstoreController {
      */
     public APIResponse getAppInfo(HttpServletRequest request, String repoType, String appType){
         //appStoreService.deployImage();
-        nodeService.getNodes();
         LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
         if("all".equals(appType)){
 
