@@ -6,15 +6,17 @@ define([
     "common-module",
     "bootstrap",
     "bootstrapSwitch",
-    "select2"
-],function ($, Vue, echarts, common_module, bootstrap, bootstrapSwitch, select2) {
+    "select2",
+    "jpages"
+],function ($, Vue, echarts, common_module, bootstrap, bootstrapSwitch, select2, jPages) {
     if($("#appstore")[0]){
         var appstore = new Vue({
             el: "#appstore",
             data: {
                 appType: "public",
                 showPublic: true,
-                showPrivate: false
+                showPrivate: false,
+                imageInfos: ""
             },
             mounted: function () {
                 var _self = this;
@@ -65,6 +67,7 @@ define([
                     });
                 },
                 getAppData: function (repoType, appType) {
+                    var _self = this;
                     $.ajax({
                         url: "../appcenter/appinfo",
                         type: "get",
@@ -76,13 +79,26 @@ define([
                         // processData: false,
                         // contentType: false,
                         success: function (data) {
-                            console.log(data);
+                            _self.imageInfos = _self.convertData(data.data);
+                            console.log(_self.imageInfos);
                             common_module.notify("[应用中心]","获取镜像数据成功", "success");
                         },
                         error: function () {
                             common_module.notify("[应用中心]","获取镜像数据失败", "danger");
                         }
                     })
+                },
+                convertData: function(imageArray){
+                    var _self = this;
+                    for(var i = 0; i < imageArray.length; i++){
+                        debugger
+                        imageArray[i].createType = JSON.parse(imageArray[i].createType);
+                        imageArray[i].metadata = JSON.parse(imageArray[i].metadata);
+                        imageArray[i].source_url = JSON.parse(imageArray[i].source_url);
+                        imageArray[i].v_description = JSON.parse(imageArray[i].v_description);
+                        imageArray[i].version = JSON.parse(imageArray[i].version);
+                    }
+                    return imageArray;
                 },
                 changeRepo: function (repoType) {
                     var _self = this;

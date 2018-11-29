@@ -106,7 +106,7 @@ public class AppStoreServiceImp implements AppStoreService {
                         if(exist == null) {
                             imageInfo.setApp_id(UuidUtil.getUUID());
 
-                            Map<String, String> tem_map = new HashMap<>();
+                            Map<String, Object> tem_map = new HashMap<>();
                             tem_map.put(imageInfo.getVersion(), imageInfo.getV_description());
                             imageInfo.setV_description(JSONObject.fromObject(tem_map).toString());
 
@@ -115,7 +115,7 @@ public class AppStoreServiceImp implements AppStoreService {
                             imageInfo.setSource_url(JSONObject.fromObject(tem_map).toString());
 
                             tem_map.clear();
-                            tem_map.put(imageInfo.getVersion(), imageInfo.getMetadata());
+                            tem_map.put(imageInfo.getVersion(), JSONObject.fromObject(imageInfo.getMetadata()));
                             imageInfo.setMetadata(JSONObject.fromObject(tem_map).toString());
 
                             tem_map.clear();
