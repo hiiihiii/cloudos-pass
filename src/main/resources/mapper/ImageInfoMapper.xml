@@ -33,4 +33,8 @@
         AND uuid = #{userid}
     </select>
 
+    <select id="getImagesAll" resultMap="imageInfos">
+        SELECT * FROM tl_image
+    </select>
+
 </mapper>

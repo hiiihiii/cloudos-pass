@@ -4,6 +4,8 @@ import com.tanli.cloud.model.ImageInfo;
 import com.tanli.cloud.model.response.LoginingUser;
 import com.tanli.cloud.utils.APIResponse;
 
+import java.util.List;
+
 /**
  * Created by tanli on 2018/11/21 0021.
  */
@@ -11,4 +13,6 @@ public interface ImageInfoService {
     public int addImageInfo(ImageInfo imageInfo);
 
     public APIResponse getImages(LoginingUser user, String repoType, String appType);
+
+    public List<ImageInfo> getImagesAll();
 }

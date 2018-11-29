@@ -8,6 +8,7 @@ import com.tanli.cloud.utils.APIResponse;
 import com.tanli.cloud.utils.FtpUtil;
 import com.tanli.cloud.utils.RestClient;
 import com.tanli.cloud.utils.UuidUtil;
+import net.sf.json.JSONObject;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class AppStoreServiceImp implements AppStoreService {
@@ -89,18 +92,47 @@ public class AppStoreServiceImp implements AppStoreService {
                     String pushUrl = EnvConst.docker_images_prefix + EnvConst.docker_api_ip + "/" + repository.getRepo_name() +"/" + imageInfo.getAppName() + "/push" ;
                     Boolean isPushed = pushImage(pushUrl, imageInfo.getVersion());
                     if(isPushed){
-                        imageInfo.setApp_id(UuidUtil.getUUID());
-                        imageInfo.setRepo_id(repository.getRepo_uuid());
-                        imageInfo.setUser_id(user.getUser_uuid());
-                        imageInfo.setLogo_url(logoUrl);
-                        imageInfo.setSource_url(EnvConst.docker_api_ip + "/"+repository.getRepo_name() + "/" + repository.getRepo_name() + ":" + imageInfo.getVersion());
-                        DateTime now = DateTime.now();
-                        String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
-                        imageInfo.setCreate_time(nowStr);
-                        imageInfo.setUpdate_time(nowStr);
-                        int count = imageInfoService.addImageInfo(imageInfo);
-                        if(count > 0){
-                            return APIResponse.success();
+                        ImageInfo exist = imageInfoService.getImagesAll()
+                                .stream()
+                                .filter(imageInfo1 -> imageInfo1.getAppName().equals(imageInfo.getAppName()))
+                                .findFirst()
+                                .orElse(null);
+                        //数据库中是否已存在同名镜像
+                        if(exist == null) {
+                            imageInfo.setApp_id(UuidUtil.getUUID());
+                            imageInfo.setRepo_id(repository.getRepo_uuid());
+                            imageInfo.setUser_id(user.getUser_uuid());
+
+                            String[] tem_version = new String[]{imageInfo.getVersion()};
+                            imageInfo.setVersion(JSONObject.fromObject(tem_version).toString());
+                            
+                            Map<String, String> tem_map = new HashMap<>();
+                            tem_map.put(imageInfo.getVersion(), logoUrl);
+                            imageInfo.setLogo_url(tem_map.toString());
+
+                            tem_map.clear();
+                            tem_map.put(imageInfo.getVersion(), imageInfo.getV_description());
+                            imageInfo.setV_description(tem_map.toString());
+
+                            tem_map.clear();
+                            tem_map.put(imageInfo.getVersion(), EnvConst.docker_api_ip + "/"+repository.getRepo_name() + "/" + repository.getRepo_name() + ":" + imageInfo.getVersion());
+                            imageInfo.setSource_url(tem_map.toString());
+
+                            tem_map.clear();
+                            tem_map.put(imageInfo.getVersion(), imageInfo.getMetadata());
+                            imageInfo.setMetadata(tem_map.toString());
+
+                            DateTime now = DateTime.now();
+                            String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+                            imageInfo.setCreate_time(nowStr);
+                            imageInfo.setUpdate_time(nowStr);
+
+                            int count = imageInfoService.addImageInfo(imageInfo);
+                            if(count > 0){
+                                return APIResponse.success();
+                            }
+                        } else {
+
                         }
                     }
                 }

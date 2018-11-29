@@ -44,4 +44,10 @@ public class ImageInfoServiceImp implements ImageInfoService {
         });
         return APIResponse.success(imageInfos);
     }
+
+    @Override
+    public List<ImageInfo> getImagesAll() {
+        return null;
+    }
+
 }

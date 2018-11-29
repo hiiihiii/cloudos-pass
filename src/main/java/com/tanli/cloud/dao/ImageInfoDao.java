@@ -13,4 +13,5 @@ import java.util.List;
 public interface ImageInfoDao {
     public int addImageInfo(ImageInfo imageInfo);
     public List<ImageInfo> getImages(@Param("repoid") String repoid, @Param("userid") String userid);
+    public List<ImageInfo> getImagesAll();
 }
