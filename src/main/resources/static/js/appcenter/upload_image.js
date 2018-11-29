@@ -232,8 +232,8 @@ define([
                         var temp = {};
                         var $this = $(this);
                         var $tr = $this.parents("tr");
-                        temp.envKey = $this.val();
-                        temp.envValue = $tr.find("input[name='envValue']").val();
+                        temp.name = $this.val();
+                        temp.value = $tr.find("input[name='envValue']").val();
                         envs.push(temp);
                     })
                     metadata.env = envs;
