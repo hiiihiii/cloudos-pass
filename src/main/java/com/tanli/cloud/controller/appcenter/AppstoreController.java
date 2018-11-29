@@ -4,7 +4,6 @@ import com.tanli.cloud.model.ImageInfo;
 import com.tanli.cloud.model.response.LoginingUser;
 import com.tanli.cloud.service.AppStoreService;
 import com.tanli.cloud.service.ImageInfoService;
-import com.tanli.cloud.service.NodeService;
 import com.tanli.cloud.utils.APIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -58,11 +57,24 @@ public class AppstoreController {
         if("all".equals(appType)){
 
         } else if("image".equals(appType)){
-            return imageInfoService.getImages(user, repoType, appType);
+            return imageInfoService.getImages(user, repoType);
         } else {
 
         }
 
         return null;
+    }
+
+    @RequestMapping("checkexist")
+    @ResponseBody
+    /**
+     * 查询同名同版本的镜像是否已经存在
+     * appName: 镜像名称
+     * version: 版本号
+     * repoType: public/private
+     */
+    public APIResponse checkAppExist(HttpServletRequest request, String appName, String version, String repoType){
+        LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
+        return appStoreService.checkAppExist(user, appName, version, repoType);
     }
 }

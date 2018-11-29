@@ -12,4 +12,6 @@ public interface AppStoreService {
     public APIResponse uploadImage(ImageInfo imageInfo, MultipartFile logoFile, MultipartFile sourceFile, LoginingUser user);
 
     public void deployImage();
+
+    public APIResponse checkAppExist(LoginingUser user, String appName, String version, String repoType);
 }

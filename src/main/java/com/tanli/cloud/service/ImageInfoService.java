@@ -12,7 +12,9 @@ import java.util.List;
 public interface ImageInfoService {
     public int addImageInfo(ImageInfo imageInfo);
 
-    public APIResponse getImages(LoginingUser user, String repoType, String appType);
+    public APIResponse getImages(LoginingUser user, String repoType);
 
-    public List<ImageInfo> getImagesAll();
+    public List<ImageInfo> getImagesAll(LoginingUser user);
+
+    public int updateImageInfo(ImageInfo imageInfo);
 }

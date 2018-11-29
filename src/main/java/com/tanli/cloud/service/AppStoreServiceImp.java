@@ -1,6 +1,7 @@
 package com.tanli.cloud.service;
 
 import com.tanli.cloud.constant.EnvConst;
+import com.tanli.cloud.dao.ImageInfoDao;
 import com.tanli.cloud.model.ImageInfo;
 import com.tanli.cloud.model.response.LoginingUser;
 import com.tanli.cloud.model.response.Repository;
@@ -8,6 +9,7 @@ import com.tanli.cloud.utils.APIResponse;
 import com.tanli.cloud.utils.FtpUtil;
 import com.tanli.cloud.utils.RestClient;
 import com.tanli.cloud.utils.UuidUtil;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -28,9 +30,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class AppStoreServiceImp implements AppStoreService {
@@ -44,7 +44,7 @@ public class AppStoreServiceImp implements AppStoreService {
     @Autowired
     private RepositoryService repositoryService;
     @Autowired
-    private ImageInfoService imageInfoService;
+    private ImageInfoDao imageInfoDao;
 
     private static final Logger LOGGE = LoggerFactory.getLogger(AppStoreServiceImp.class);
 
@@ -92,47 +92,77 @@ public class AppStoreServiceImp implements AppStoreService {
                     String pushUrl = EnvConst.docker_images_prefix + EnvConst.docker_api_ip + "/" + repository.getRepo_name() +"/" + imageInfo.getAppName() + "/push" ;
                     Boolean isPushed = pushImage(pushUrl, imageInfo.getVersion());
                     if(isPushed){
-                        ImageInfo exist = imageInfoService.getImagesAll()
+                        ImageInfo exist = imageInfoDao.getImages(repository.getRepo_uuid(), user.getUser_uuid())
                                 .stream()
                                 .filter(imageInfo1 -> imageInfo1.getAppName().equals(imageInfo.getAppName()))
                                 .findFirst()
                                 .orElse(null);
+                        imageInfo.setRepo_id(repository.getRepo_uuid());
+                        imageInfo.setUser_id(user.getUser_uuid());
+                        imageInfo.setLogo_url(logoUrl);
+                        DateTime now = DateTime.now();
+                        String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
                         //数据库中是否已存在同名镜像
                         if(exist == null) {
                             imageInfo.setApp_id(UuidUtil.getUUID());
-                            imageInfo.setRepo_id(repository.getRepo_uuid());
-                            imageInfo.setUser_id(user.getUser_uuid());
 
-                            String[] tem_version = new String[]{imageInfo.getVersion()};
-                            imageInfo.setVersion(JSONObject.fromObject(tem_version).toString());
-                            
                             Map<String, String> tem_map = new HashMap<>();
-                            tem_map.put(imageInfo.getVersion(), logoUrl);
-                            imageInfo.setLogo_url(tem_map.toString());
-
-                            tem_map.clear();
                             tem_map.put(imageInfo.getVersion(), imageInfo.getV_description());
-                            imageInfo.setV_description(tem_map.toString());
+                            imageInfo.setV_description(JSONObject.fromObject(tem_map).toString());
 
                             tem_map.clear();
                             tem_map.put(imageInfo.getVersion(), EnvConst.docker_api_ip + "/"+repository.getRepo_name() + "/" + repository.getRepo_name() + ":" + imageInfo.getVersion());
-                            imageInfo.setSource_url(tem_map.toString());
+                            imageInfo.setSource_url(JSONObject.fromObject(tem_map).toString());
 
                             tem_map.clear();
                             tem_map.put(imageInfo.getVersion(), imageInfo.getMetadata());
-                            imageInfo.setMetadata(tem_map.toString());
+                            imageInfo.setMetadata(JSONObject.fromObject(tem_map).toString());
 
-                            DateTime now = DateTime.now();
-                            String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+                            tem_map.clear();
+                            tem_map.put(imageInfo.getVersion(), imageInfo.getCreateType());
+                            imageInfo.setCreateType(JSONObject.fromObject(tem_map).toString());
+
+                            List<String> tem_version = new ArrayList<String>();
+                            tem_version.add(imageInfo.getVersion());
+                            imageInfo.setVersion(JSONArray.fromObject(tem_version).toString());
+
                             imageInfo.setCreate_time(nowStr);
                             imageInfo.setUpdate_time(nowStr);
 
-                            int count = imageInfoService.addImageInfo(imageInfo);
+                            LOGGE.info("[AppStoreServiceImp Info]: Add ImageInfo" + imageInfo.toString());
+                            int count = imageInfoDao.addImageInfo(imageInfo);
                             if(count > 0){
                                 return APIResponse.success();
                             }
                         } else {
+                            imageInfo.setApp_id(exist.getApp_id());
 
+                            Map<String, String> tem_map = JSONObject.fromObject(exist.getV_description());
+                            tem_map.put(imageInfo.getVersion(), imageInfo.getV_description());
+                            imageInfo.setV_description(JSONObject.fromObject(tem_map).toString());
+
+                            tem_map = JSONObject.fromObject(exist.getSource_url());
+                            tem_map.put(imageInfo.getVersion(), EnvConst.docker_api_ip + "/"+repository.getRepo_name() + "/" + repository.getRepo_name() + ":" + imageInfo.getVersion());
+                            imageInfo.setSource_url(JSONObject.fromObject(tem_map).toString());
+
+                            tem_map = JSONObject.fromObject(exist.getMetadata());
+                            tem_map.put(imageInfo.getVersion(), imageInfo.getMetadata());
+                            imageInfo.setMetadata(JSONObject.fromObject(tem_map).toString());
+
+                            tem_map = JSONObject.fromObject(exist.getCreateType());
+                            tem_map.put(imageInfo.getVersion(), imageInfo.getCreateType());
+                            imageInfo.setCreateType(JSONObject.fromObject(tem_map).toString());
+
+                            List<String> versions = JSONArray.toList(JSONArray.fromObject(exist.getVersion()), String.class);
+                            versions.add(imageInfo.getVersion());
+                            imageInfo.setVersion(JSONArray.fromObject(versions).toString());
+
+                            imageInfo.setUpdate_time(nowStr);
+                            LOGGE.info("[AppStoreServiceImp Info]: Update ImageInfo" + imageInfo.toString());
+                            int count = imageInfoDao.updateImageInfo(imageInfo);
+                            if(count > 0){
+                                return APIResponse.success();
+                            }
                         }
                     }
                 }
@@ -237,4 +267,27 @@ public class AppStoreServiceImp implements AppStoreService {
         test.getStatusCode();
     }
 
+    @Override
+    public APIResponse checkAppExist(LoginingUser user, String appName, String version, String repoType){
+        Repository repository = repositoryService.getRepoByUserid(user.getUser_uuid())
+                .stream()
+                .filter(repository1 -> repository1.getRepo_type().equals(repoType))
+                .findFirst()
+                .orElse(null);
+        ImageInfo exist = imageInfoDao.getImages(repository.getRepo_uuid(), user.getUser_uuid())
+                .stream()
+                .filter(imageInfo -> imageInfo.getAppName().equals(appName))
+                .findFirst()
+                .orElse(null);
+        if(null == exist){
+            return APIResponse.success("not existed");
+        } else {
+            List<String> verisons = JSONArray.toList(JSONArray.fromObject(exist.getVersion()),String.class);
+            if(verisons.contains(version)){
+                return  APIResponse.success("existed");
+            } else {
+                return APIResponse.success("not existed");
+            }
+        }
+    }
 }

@@ -29,7 +29,7 @@ public class ImageInfoServiceImp implements ImageInfoService {
     }
 
     @Override
-    public APIResponse getImages(LoginingUser user, String repoType, String appType) {
+    public APIResponse getImages(LoginingUser user, String repoType) {
         String userId = user.getUser_uuid();
         List<ImageInfo> imageInfos = new ArrayList<>();
         //获取用户仓库
@@ -46,8 +46,13 @@ public class ImageInfoServiceImp implements ImageInfoService {
     }
 
     @Override
-    public List<ImageInfo> getImagesAll() {
-        return null;
+    public List<ImageInfo> getImagesAll(LoginingUser user) {
+        return imageInfoDao.getImagesAll(user.getUser_uuid());
+    }
+
+    @Override
+    public int updateImageInfo(ImageInfo imageInfo) {
+        return imageInfoDao.updateImageInfo(imageInfo);
     }
 
 }

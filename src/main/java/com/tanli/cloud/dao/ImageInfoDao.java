@@ -12,6 +12,7 @@ import java.util.List;
 @Mapper
 public interface ImageInfoDao {
     public int addImageInfo(ImageInfo imageInfo);
+    public int updateImageInfo(ImageInfo imageInfo);
     public List<ImageInfo> getImages(@Param("repoid") String repoid, @Param("userid") String userid);
-    public List<ImageInfo> getImagesAll();
+    public List<ImageInfo> getImagesAll(@Param("userid") String userid);
 }
