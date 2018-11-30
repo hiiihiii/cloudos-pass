@@ -186,9 +186,13 @@ public class AppStoreServiceImp implements AppStoreService {
             LOGGE.info("[AppStoreServiceImp Info]: POST " + url);
             ResponseEntity<String> loadResponse = restTemplate.postForEntity(url, sourceFile.getBytes(), String.class);
             String msg = loadResponse.getBody().toString();
-            int beginIndex = msg.indexOf("Loaded image");
+            int beginIndex = msg.indexOf("Loaded image ID");
             if(beginIndex > -1){
-                beginIndex += 14;
+                beginIndex += 24;
+                image = msg.substring(beginIndex, msg.length() - 6);
+                LOGGE.info("[AppStoreServiceImp Info]: " + image + " Loaded");
+            } else if(msg.indexOf("Loaded image") > -1){
+                beginIndex = msg.indexOf("Loaded image") + 14;
                 image = msg.substring(beginIndex, msg.length() - 6);
                 LOGGE.info("[AppStoreServiceImp Info]: " + image + " Loaded");
             } else {

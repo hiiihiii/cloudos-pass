@@ -61,6 +61,10 @@ define([
                 showDeployImage: function () {
                     $("#deploy_image").modal({backdrop: 'static', keyboard: false});
                 },
+                setDefault: function(event){
+                    var $this = $(event.target);
+                    $this.attr("src", "../images/app-default.png");
+                },
                 classifyBind: function(){
                     $("#appstore .nav").on("change", "input[type='chec  kbox']", function(){
                         debugger

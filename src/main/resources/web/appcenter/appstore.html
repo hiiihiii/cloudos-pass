@@ -80,7 +80,7 @@
                             <i class="fa fa-toggle-right"></i>
                         </div>
                         <div class="app-img">
-                            <img v-bind:src="imageInfo.logo_url" v-cloak=""/>
+                            <img v-bind:src="imageInfo.logo_url" v-on:error="setDefault(event)" v-cloak=""/>
                         </div>
                         <div class="app-desc" v-bind:title="imageInfo.description" v-cloak="">
                             {{imageInfo.description}}

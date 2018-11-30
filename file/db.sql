@@ -49,7 +49,7 @@ CREATE TABLE `tl_image` (
   `logo_url` varchar(1000) DEFAULT NULL,
   `source_url` varchar(1000) DEFAULT NULL,
   `metadata` text,
-  `create_type` varchar(10) DEFAULT NULL,
+  `create_type` varchar(1000) DEFAULT NULL,
   `create_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
