@@ -19,9 +19,9 @@
                                 <li class="info-item"
                                     v-bind:class="infoTag == 'baseInfo' ? 'info-item-selected' : ''">基本信息</li>
                                 <li class="info-item"
-                                    v-bind:class="infoTag == 'configInfo' ? 'info-item-selected' : ''">规格信息</li>
+                                    v-bind:class="infoTag == 'resourceInfo' ? 'info-item-selected' : ''">规格信息</li>
                                 <li class="info-item"
-                                    v-bind:class="infoTag == 'runtimeInfo' ? 'info-item-selected' : ''">配置信息</li>
+                                    v-bind:class="infoTag == 'configInfo' ? 'info-item-selected' : ''">配置信息</li>
                             </ul>
                         </div>
                         <div class="modal-body-right">
@@ -55,17 +55,47 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="config-info" v-show="infoTag == 'configInfo'" v-cloak="">
-                                <!--源文件-->
+                            <div class="resource-info" v-show="infoTag == 'resourceInfo'" v-cloak="">
                                 <div class="form-group">
-                                    <label>源文件</label>
-                                    <div class="file-container">
-                                        <input class="form-control file-input" type="text" name="sourceFileName"
-                                               v-model="bindData.sourceFileName" readonly="readonly" />
-                                        <input type="file" class="file-input-btn" name="sourceFile" id="source" v-on:change="fileChange('source')"/>
-                                        <label class="btn cloud-btn"><i class="fa fa-upload"></i>选择文件</label>
+                                    <label >启动限制</label>
+                                </div>
+                                <div class="form-group">
+                                    <label >CPU</label>
+                                    <div>
+                                        <input class="form-control" type="text" name="mincpu"/>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label >内存</label>
+                                    <div>
+                                        <input class="form-control runtime-input" type="text" name="minMemory"/>
+                                        <select class="form-control runtime-select" name="minMemoryUnit">
+                                            <option value="MB">MB</option>
+                                            <option value="GB">GB</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label >运行限制</label>
+                                </div>
+                                <div class="form-group">
+                                    <label >CPU</label>
+                                    <div>
+                                        <input class="form-control" type="text" name="maxcpu"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label >内存</label>
+                                    <div>
+                                        <input class="form-control runtime-input" type="text" name="maxMemory"/>
+                                        <select class="form-control runtime-select" name="maxMemoryUnit">
+                                            <option value="MB">MB</option>
+                                            <option value="GB">GB</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="config-info" v-show="infoTag == 'configInfo'" v-cloak="">
                                 <!--目录映射-->
                                 <div class="form-group">
                                     <label >目录映射</label>
@@ -145,46 +175,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="runtime-info" v-show="infoTag == 'runtimeInfo'" v-cloak="">
-                                <div class="form-group">
-                                    <label >启动限制</label>
-                                </div>
-                                <div class="form-group">
-                                    <label >CPU</label>
-                                    <div>
-                                        <input class="form-control" type="text" name="mincpu"/>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label >内存</label>
-                                    <div>
-                                        <input class="form-control runtime-input" type="text" name="minMemory"/>
-                                        <select class="form-control runtime-select" name="minMemoryUnit">
-                                            <option value="MB">MB</option>
-                                            <option value="GB">GB</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label >运行限制</label>
-                                </div>
-                                <div class="form-group">
-                                    <label >CPU</label>
-                                    <div>
-                                        <input class="form-control" type="text" name="maxcpu"/>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label >内存</label>
-                                    <div>
-                                        <input class="form-control runtime-input" type="text" name="maxMemory"/>
-                                        <select class="form-control runtime-select" name="maxMemoryUnit">
-                                            <option value="MB">MB</option>
-                                            <option value="GB">GB</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </form>
                 </div>
@@ -193,7 +183,7 @@
                             v-on:click="toPrevious" v-cloak="">上一步</button>
                     <button type="button" class="btn cloud-btn" v-show="nextStep"
                             v-on:click="toNext" v-cloak="">下一步</button>
-                    <button type="button" class="btn cloud-btn" v-on:click="submitUpload" v-show="submitTag" v-cloak="">确定</button>
+                    <button type="button" class="btn cloud-btn" v-on:click="" v-show="submitTag" v-cloak="">确定</button>
                     <button type="button" class="btn cloud-btn" data-dismiss="modal" v-cloak="">取消</button>
                 </div>
             </div>

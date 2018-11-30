@@ -377,21 +377,25 @@ span.checkbox+a{
     margin-bottom: 3px;
     cursor: pointer;
 }
-#upload_image_form .modal-body-left {
+#upload_image_form .modal-body-left,
+#deploy_image_form .modal-body-left{
     display: inline-block;
     width: 135px;
     position: absolute;
 }
-#upload_image_form .modal-body-right {
+#upload_image_form .modal-body-right,
+#deploy_image_form .modal-body-right{
     display: inline-block;
     width: 375px;
     margin-left: 165px;
 }
-#upload_image_form .info-type {
+#upload_image_form .info-type,
+#deploy_image_form .info-type{
     text-align: center;
     box-shadow: 1px 0px 3px #dedada;
 }
-#upload_image_form .info-item-selected {
+#upload_image_form .info-item-selected,
+#deploy_image_form .info-item-selected{
     border-right: 4px solid #ec670b;
     background-image: -webkit-linear-gradient(left, rgba(236, 103, 11, 0) 0%, rgba(236, 103, 11, 0.3) 100%);
     background-image: -moz-linear-gradient(left, rgba(236, 103, 11, 0) 0%, rgba(236, 103, 11, 0.3) 100%);
@@ -399,11 +403,13 @@ span.checkbox+a{
     background-image: linear-gradient(left, rgba(236, 103, 11, 0) 0%, rgba(236, 103, 11, 0.3) 100%);
     color: #ec670b;
 }
-#upload_image_form .info-item {
+#upload_image_form .info-item,
+#deploy_image_form .info-item{
     padding: 10px 0;
     font-size: 12px;
 }
-#upload_image .modal-dialog {
+#upload_image .modal-dialog,
+#deploy_image .modal-dialog{
     width: 750px;
 }
 #add_template .modal-dialog {
@@ -415,6 +421,7 @@ span.checkbox+a{
     padding-top: 4px;
 }
 #upload_image .form-group > span,
+#deploy_image .form-group > span,
 #upload_image .cmdParam-item .delete-cmd-btn {
     position: absolute;
     cursor: pointer;
@@ -423,24 +430,30 @@ span.checkbox+a{
 #upload_image .cmdParam-item .delete-cmd-btn {
     bottom: 4px;
 }
-#upload_image #port_table {
+#upload_image #port_table,
+#deploy_image #port_table {
     width: 500px;
 }
-#upload_image .runtime-input {
+#upload_image .runtime-input,
+#deploy_image .runtime-input{
     width: 75%;
     display: inline-block;
 }
-#upload_image .runtime-select {
+#upload_image .runtime-select,
+#deploy_image .runtime-select{
     width: 23%;
     display: inline-block;
 }
-#upload_image .port-form-group {
+#upload_image .port-form-group,
+#deploy_image .port-form-group {
     width: 500px;
 }
-#upload_image .cmdParam-item {
+#upload_image .cmdParam-item,
+#deploy_image .cmdParam-item {
     position: relative;
 }
-#upload_image .cmdParam-item:not(:last-child) {
+#upload_image .cmdParam-item:not(:last-child),
+#deploy_image .cmdParam-item:not(:last-child) {
     margin-bottom: 15px;
 }
 /*上传镜像结束*/

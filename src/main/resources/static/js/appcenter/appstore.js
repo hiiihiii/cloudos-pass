@@ -61,6 +61,7 @@ define([
                 showDeployImage: function () {
                     $("#deploy_image").modal({backdrop: 'static', keyboard: false});
                 },
+                //设置默认图标
                 setDefault: function(event){
                     var $this = $(event.target);
                     $this.attr("src", "../images/app-default.png");
