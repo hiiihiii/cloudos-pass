@@ -8,7 +8,7 @@ define([
     "bootstrapSwitch",
     "select2",
     "jpages"
-],function ($, Vue, echarts, common_module, bootstrap, bootstrapSwitch, select2, jPages) {
+],function ($, Vue, echarts, common_module, bootstrap, bootstrapSwitch, select2, jpages) {
     if($("#appstore")[0]){
         var appstore = new Vue({
             el: "#appstore",
@@ -28,6 +28,11 @@ define([
                 _self.classifyBind();
                 //todo 这里不应该是image，而是all
                 _self.getAppData("public", "image");
+
+                Vue.nextTick(function(){
+                    _self.initJpages("#appholder", "appcontainer");
+                });
+
             },
             methods: {
                 //显示上传镜像框框
@@ -76,6 +81,7 @@ define([
                             appType: appType
                         },
                         dataType: "json",
+                        async: false,
                         // processData: false,
                         // contentType: false,
                         success: function (data) {
@@ -90,15 +96,45 @@ define([
                 },
                 convertData: function(imageArray){
                     var _self = this;
+                    var test = [];
                     for(var i = 0; i < imageArray.length; i++){
-                        debugger
                         imageArray[i].createType = JSON.parse(imageArray[i].createType);
                         imageArray[i].metadata = JSON.parse(imageArray[i].metadata);
                         imageArray[i].source_url = JSON.parse(imageArray[i].source_url);
                         imageArray[i].v_description = JSON.parse(imageArray[i].v_description);
                         imageArray[i].version = JSON.parse(imageArray[i].version);
+                        imageArray[i].logo_url = "ftp://docker:dockerfile@" + imageArray[i].logo_url;
                     }
-                    return imageArray;
+                    test.push(imageArray[0])
+                    test.push(imageArray[0])
+                    test.push(imageArray[0])
+                    test.push(imageArray[0])
+                    test.push(imageArray[0])
+                    test.push(imageArray[0])
+                    test.push(imageArray[0])
+                    test.push(imageArray[0])
+                    test.push(imageArray[0])
+                    test.push(imageArray[0])
+                    test.push(imageArray[0])
+                    test.push(imageArray[0])
+                    test.push(imageArray[0])
+                    test.push(imageArray[0])
+                    return test;
+                },
+                initJpages:function (holderid, containerid) {
+                    debugger
+                    $(holderid).jPages({
+                        containerID : containerid,
+                        first: "《",
+                        last: "》",
+                        previous: "《",
+                        next: "》",
+                        perPage : 8, //每页显示数据为多少个
+                        startPage : 1, //起始页
+                        startRange : 2, //开始页码为2个
+                        midRange : 3, //最多显示几个页码页码,其余用..代替
+                        endRange : 2 //结束页码为2个,
+                    });
                 },
                 changeRepo: function (repoType) {
                     var _self = this;

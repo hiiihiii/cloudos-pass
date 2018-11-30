@@ -15,7 +15,7 @@ require.config({
         "select2": "lib/select2/js/select2.min",
         "datatables":"lib/datatables/js/jquery.dataTables.min",
         "twaver": "lib/twaver/twaver",
-        "jpages": "lib/jpages/js/jPages.min",
+        "jpages": "lib/jpages/js/jPages",
         "common-module": "js/common-module",
         "adminhomepage": "js/adminhomepage/adminhomepage",
         "appstore": "js/appcenter/appstore",

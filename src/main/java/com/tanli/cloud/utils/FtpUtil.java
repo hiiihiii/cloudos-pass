@@ -36,7 +36,7 @@ public class FtpUtil {
             if( uploadResult ){
                 //修改文件名(appName+version.扩展名)
                 ftpClient.rename(fileName, newFileName);
-                result = EnvConst.FTP_IP + EnvConst.FTP_BASEPATH + relativePath + "/" + newFileName;
+                result = EnvConst.FTP_IP + relativePath + "/" + newFileName;
             }
             input.close();
             ftpClient.logout();

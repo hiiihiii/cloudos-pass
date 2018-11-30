@@ -213,10 +213,23 @@ span.checkbox+a{
 .app-box {
     margin-top: 50px;
     margin-left: 12px;
+    /*width: 250px;*/
+    /*height: 200px;*/
+    /*position: relative;*/
+    /*background-color: #e5eaef;*/
+}
+#appcontainer li {
+    display: inline-block ;
     width: 250px;
     height: 200px;
     position: relative;
-    background-color: #e5eaef;
+    background-color: #f0f0f3;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+#appcontainer li:hover {
+    border: solid 2px rgb(236,103,11);
 }
 .app-box .docker {
     position: absolute;
@@ -233,9 +246,15 @@ span.checkbox+a{
 }
 .app-box .app-tag {
     position: absolute;
-    left: 178px;
+    left: 165px;
     top: 10px;
     font-size: 12px;
+}
+.app-box .app-deploy {
+    position: absolute;
+    left: 230px;
+    top: 8px;
+    color: #767b80;
 }
 .app-img {
     position: absolute;
@@ -256,6 +275,11 @@ span.checkbox+a{
     overflow: hidden;
     text-overflow:ellipsis;
     white-space: normal;
+}
+#appstore #appholder {
+    position: absolute;
+    top: 580px;
+    left: 710px;
 }
 /*右侧内容结束*/
 
