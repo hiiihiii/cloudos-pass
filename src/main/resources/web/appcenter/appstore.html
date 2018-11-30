@@ -76,7 +76,7 @@
                         <div class="app-tag">
                             <span v-cloak="">{{imageInfo.appTag}}</span>
                         </div>
-                        <div class="app-deploy" title="部署">
+                        <div class="app-deploy" title="部署" v-on:click="showDeployImage(imageInfo.app_id)">
                             <i class="fa fa-toggle-right"></i>
                         </div>
                         <div class="app-img">
@@ -93,10 +93,11 @@
     </div>
 </div>
 <div th:replace="appcenter/upload_image::upload_image"></div>
+<div th:replace="appcenter/deploy_image::deploy_image"></div>
 <div th:replace="common/footer::footer"></div>
 <script type="text/javascript">
     require(["../js/require-config"],function (require_config) {
-        require(["appstore", "upload_image"]);
+        require(["appstore", "upload_image", "deploy_image"]);
     });
 </script>
 </body>

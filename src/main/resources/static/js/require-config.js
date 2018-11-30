@@ -20,6 +20,7 @@ require.config({
         "adminhomepage": "js/adminhomepage/adminhomepage",
         "appstore": "js/appcenter/appstore",
         "upload_image": "js/appcenter/upload_image",
+        "deploy_image": "js/appcenter/deploy_image",
         "apporch": "js/appcenter/apporch",
         "add_template": "js/appcenter/add_template",
         "application": "js/appcenter/application",

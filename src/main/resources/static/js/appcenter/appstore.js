@@ -57,6 +57,10 @@ define([
                     });
                     $("#upload_image").modal({backdrop: 'static', keyboard: false});
                 },
+                //显示部署镜像框框
+                showDeployImage: function () {
+                    $("#deploy_image").modal({backdrop: 'static', keyboard: false});
+                },
                 classifyBind: function(){
                     $("#appstore .nav").on("change", "input[type='chec  kbox']", function(){
                         debugger
@@ -71,6 +75,7 @@ define([
                         }
                     });
                 },
+                //获取应用数据
                 getAppData: function (repoType, appType) {
                     var _self = this;
                     $.ajax({
@@ -121,6 +126,7 @@ define([
                     test.push(imageArray[0])
                     return test;
                 },
+                //初始化jpages插件
                 initJpages:function (holderid, containerid) {
                     debugger
                     $(holderid).jPages({
@@ -136,6 +142,7 @@ define([
                         endRange : 2 //结束页码为2个,
                     });
                 },
+                //切换仓库
                 changeRepo: function (repoType) {
                     var _self = this;
                     _self.appType = repoType;

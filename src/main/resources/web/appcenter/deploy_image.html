@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div th:fragment="deploy_image" id="deploy_image_dialog">
+    <div class="modal fade" id="deploy_image" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <div class="cloud-modal-title">
+                        <i class="fa fa-plus"></i>
+                        <h4 class="modal-title">部署镜像</h4>
+                    </div>
+                </div>
+                <div class="modal-body cloud-modal-body">
+                    <form id="deploy_image_form" role="form" class="form-horizontal" enctype="multipart/form-data">
+                        <div class="modal-body-left">
+                            <ul class="info-type">
+                                <li class="info-item"
+                                    v-bind:class="infoTag == 'baseInfo' ? 'info-item-selected' : ''">基本信息</li>
+                                <li class="info-item"
+                                    v-bind:class="infoTag == 'configInfo' ? 'info-item-selected' : ''">规格信息</li>
+                                <li class="info-item"
+                                    v-bind:class="infoTag == 'runtimeInfo' ? 'info-item-selected' : ''">配置信息</li>
+                            </ul>
+                        </div>
+                        <div class="modal-body-right">
+                            <div class="base-info" v-show="infoTag == 'baseInfo'" v-cloak="">
+                                <!--部署名称-->
+                                <div class="form-group">
+                                    <label>名称</label>
+                                    <div>
+                                        <input type="text" class="form-control" id="appName" name="appName" placeholder="请输入名称" maxlength="64"/>
+                                    </div>
+                                </div>
+                                <!--镜像名称-->
+                                <div class="form-group">
+                                    <label>镜像</label>
+                                    <div>
+
+                                    </div>
+                                </div>
+                                <!--版本-->
+                                <div class="form-group">
+                                    <label >版本</label>
+                                    <div>
+                                        <select class="form-control" name="version" id="version"></select>
+                                    </div>
+                                </div>
+                                <!--部署描述-->
+                                <div class="form-group">
+                                    <label >描述</label>
+                                    <div>
+                                        <textarea class="form-control" name="description" maxlength="100"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="config-info" v-show="infoTag == 'configInfo'" v-cloak="">
+                                <!--源文件-->
+                                <div class="form-group">
+                                    <label>源文件</label>
+                                    <div class="file-container">
+                                        <input class="form-control file-input" type="text" name="sourceFileName"
+                                               v-model="bindData.sourceFileName" readonly="readonly" />
+                                        <input type="file" class="file-input-btn" name="sourceFile" id="source" v-on:change="fileChange('source')"/>
+                                        <label class="btn cloud-btn"><i class="fa fa-upload"></i>选择文件</label>
+                                    </div>
+                                </div>
+                                <!--目录映射-->
+                                <div class="form-group">
+                                    <label >目录映射</label>
+                                    <div>
+                                        <input class="form-control" type="text" name="volumeDir"/>
+                                    </div>
+                                </div>
+                                <!--运行命令-->
+                                <div class="form-group">
+                                    <label >运行命令</label>
+                                    <div>
+                                        <input class="form-control" type="text" name="cmd"/>
+                                    </div>
+                                </div>
+                                <!--命令参数-->
+                                <div class="form-group" id="cmdParam-box">
+                                    <label >命令参数</label>
+                                    <span v-on:click="addCmdParam"><i class="fa fa-plus"></i></span>
+                                    <div class="cmdParam-item">
+                                        <input class="form-control" type="text" name="cmdParam"/>
+                                    </div>
+                                    <!--<div class="cmdParam-item">-->
+                                    <!--<input class="form-control" type="text" name="cmdParam"/>-->
+                                    <!--<span class="delete-cmd-btn"><i class="fa fa-trash-o"></i></span>-->
+                                    <!--</div>-->
+                                </div>
+                                <!--环境变量-->
+                                <div class="form-group">
+                                    <label>环境变量</label>
+                                    <span v-on:click="addEnv"><i class="fa fa-plus"></i></span>
+                                    <div class="modal-table-box">
+                                        <table class="table cloud-modal-table" id="env_table">
+                                            <thead>
+                                            <tr>
+                                                <th>变量</th>
+                                                <th>值</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!--端口映射-->
+                                <div class="form-group port-form-group" >
+                                    <label>端口映射</label>
+                                    <span v-on:click="addPort"><i class="fa fa-plus"></i></span>
+                                    <div class="modal-table-box">
+                                        <table class="table cloud-modal-table" id="port_table">
+                                            <thead>
+                                            <tr>
+                                                <th>名称</th>
+                                                <th style="width: 82px;">协议</th>
+                                                <th>容器端口</th>
+                                                <th>集群内端口</th>
+                                                <th>集群外端口</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td><input class="form-control" type="text" id="portName0" name="portName"/></td>
+                                                <td>
+                                                    <select class="form-control" name="protocol" id="protocol0">
+                                                        <option value="TCP">TCP</option>
+                                                        <option value="UDP">UDP</option>
+                                                    </select>
+                                                </td>
+                                                <td><input class="form-control" type="text" id="containerPort0" maxlength="5" name="containerPort"/></td>
+                                                <td><input class="form-control" type="text" id="port0" maxlength="5" name="port"/></td>
+                                                <td><input class="form-control" type="text" id="targetPort0" maxlength="5" name="targetPort"/></td>
+                                                <td><!--<span class="modal-table-operation"><i class="fa fa-trash-o"></i></span>--></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="runtime-info" v-show="infoTag == 'runtimeInfo'" v-cloak="">
+                                <div class="form-group">
+                                    <label >启动限制</label>
+                                </div>
+                                <div class="form-group">
+                                    <label >CPU</label>
+                                    <div>
+                                        <input class="form-control" type="text" name="mincpu"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label >内存</label>
+                                    <div>
+                                        <input class="form-control runtime-input" type="text" name="minMemory"/>
+                                        <select class="form-control runtime-select" name="minMemoryUnit">
+                                            <option value="MB">MB</option>
+                                            <option value="GB">GB</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label >运行限制</label>
+                                </div>
+                                <div class="form-group">
+                                    <label >CPU</label>
+                                    <div>
+                                        <input class="form-control" type="text" name="maxcpu"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label >内存</label>
+                                    <div>
+                                        <input class="form-control runtime-input" type="text" name="maxMemory"/>
+                                        <select class="form-control runtime-select" name="maxMemoryUnit">
+                                            <option value="MB">MB</option>
+                                            <option value="GB">GB</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn cloud-btn" v-show="previousStep"
+                            v-on:click="toPrevious" v-cloak="">上一步</button>
+                    <button type="button" class="btn cloud-btn" v-show="nextStep"
+                            v-on:click="toNext" v-cloak="">下一步</button>
+                    <button type="button" class="btn cloud-btn" v-on:click="submitUpload" v-show="submitTag" v-cloak="">确定</button>
+                    <button type="button" class="btn cloud-btn" data-dismiss="modal" v-cloak="">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
