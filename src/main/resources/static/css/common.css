@@ -227,6 +227,7 @@ span.checkbox+a{
     margin-right: 10px;
     margin-bottom: 10px;
     cursor: pointer;
+    float: left; /*为了使li按行显示*/
 }
 #appcontainer li:hover {
     border: solid 2px rgb(236,103,11);
