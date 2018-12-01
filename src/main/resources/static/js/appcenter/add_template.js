@@ -7,7 +7,7 @@ define([
     'validate-extend',
     'common-module',
     'twaver'
-], function ($, Vue, bootstrap, bootstrapSwitch, jquery_validate, validate_extend, common_module, Twaver) {
+], function ($, Vue, bootstrap, jquery_validate, validate_extend, common_module, Twaver) {
     if($("#add_template_dialog")[0]){
         var add_template = new Vue({
             el: "#add_template",
@@ -109,6 +109,41 @@ define([
                     };
                     _self.tWaver.network = network;
                     _self.tWaver.box = box;
+                    //设置canvas允许放在拖动的元素
+                    $("#canvas-box").on("dragover", "canvas", function(event){
+                        event.preventDefault();
+                        console.log("dropover")
+                    });
+                    $("#canvas-box").on("drop", "canvas", function (event) {
+                        event.preventDefault();
+                        console.log("drop");
+                    })
+                },
+                startDrag: function(event, apptype, appid){
+                    console.log("startdrag");
+                    debugger
+                    var _self = this;
+                    var dragItem, temList;
+                    switch (apptype) {
+                        case "DBMS":
+                           temList = _self.DBMSList;
+                           break;
+                        case "WebServer":
+                            temList = _self.WebServerList;
+                            break;
+                        case "Application":
+                            temList = _self.ApplicationList;
+                            break;
+                        default:
+                            temList = _self.OtherList;
+                    }
+                    for(var i = 0; i < temList.length; i++){
+                        if(temList[i].app_id == appid){
+                            dragItem = temList[i];
+                            break;
+                        }
+                    }
+                    console.log(dragItem);
                 }
             }
         });
