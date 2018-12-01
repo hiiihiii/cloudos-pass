@@ -5,8 +5,9 @@ define([
     'bootstrap',
     'jquery-validate',
     'validate-extend',
-    'common-module'
-], function ($, Vue, bootstrap, bootstrapSwitch, jquery_validate, validate_extend, common_module) {
+    'common-module',
+    'twaver'
+], function ($, Vue, bootstrap, bootstrapSwitch, jquery_validate, validate_extend, common_module, Twaver) {
     if($("#add_template_dialog")[0]){
         var add_template = new Vue({
             el: "#add_template",
@@ -22,10 +23,15 @@ define([
                 WebServerCount: 0,
                 ApplicationCount: 0,
                 OtherCount: 0,
+                tWaver:{
+                    network: "",
+                    box: ""
+                }
             },
             mounted: function(){
                 var _self = this;
                 _self.getImages();
+                _self.init();
             },
             methods: {
                 getImages: function(){
@@ -86,9 +92,23 @@ define([
                 setDefault: function (event) {
                     $(event.target).attr("src", "../images/app-default.png");
                 },
+                // 选择不同的标签
                 changeAppTag: function(apptag){
                     var _self = this;
                     _self.appTagToShow = apptag;
+                },
+                // 初始化画布
+                init: function () {
+                    var _self = this;
+                    var box = new twaver.ElementBox(); //容器
+                    var network = new twaver.vector.Network(box); //页面上的画布
+                    document.getElementById("canvas-box").appendChild(network.getView());
+                    network.adjustBounds({x:215,y:0,width:700,height:450});
+                    window.onresize = function (e) {
+                        network.adjustBounds({x:215,y:0,width:700,height:450});
+                    };
+                    _self.tWaver.network = network;
+                    _self.tWaver.box = box;
                 }
             }
         });
