@@ -12,8 +12,99 @@
                         <h4 class="modal-title">增加模板</h4>
                     </div>
                 </div>
-                <div class="modal-body cloud-modal-body ">
-
+                <div class="modal-body cloud-modal-body">
+                    <div class="modal-body-left">
+                        <!--DBMS应用-->
+                        <div class="app-tag-statistic-box">
+                            <div class="app-tag-statistic" v-show="appTagToShow != 'DBMS'" v-cloak="" v-on:click="changeAppTag('DBMS')">
+                                <span v-cloak="">DBMS({{DBMSCount}})</span>
+                                <span>
+                                    <i class="fa fa-angle-right"></i>
+                                </span>
+                            </div>
+                            <div class="app-tag-statistic app-tag-statistic-detail" v-show="appTagToShow == 'DBMS'" v-cloak="">
+                                <span v-cloak="">DBMS({{DBMSCount}})</span>
+                                <span>
+                                    <i class="fa fa-angle-down"></i>
+                                </span>
+                            </div>
+                            <ul class="app-items" v-show="appTagToShow == 'DBMS'" v-cloak="">
+                                <li class="app-item" v-for="db in DBMSList" v-bind:id="db.app_id" v-cloak="">
+                                    <img v-bind:src="db.logo_url" v-on:error="setDefault(event)"/>
+                                    <span v-cloak="">{{db.appName}}</span>
+                                    <label v-cloak="" v-text="db.type == 'public' ? '公有': '私有'"></label>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--WebServer应用-->
+                        <div class="app-tag-statistic-box">
+                            <div class="app-tag-statistic" v-cloak="" v-show="appTagToShow != 'WebServer'" v-on:click="changeAppTag('WebServer')">
+                                <span v-cloak="">WebServer({{WebServerCount}})</span>
+                                <span>
+                                    <i class="fa fa-angle-right"></i>
+                                </span>
+                            </div>
+                            <div class="app-tag-statistic app-tag-statistic-detail" v-cloak="" v-show="appTagToShow == 'WebServer'">
+                                <span v-cloak="">WebServer({{WebServerCount}})</span>
+                                <span>
+                                    <i class="fa fa-angle-down"></i>
+                                </span>
+                            </div>
+                            <ul class="app-items" v-cloak="" v-show="appTagToShow == 'WebServer'">
+                                <li class="app-item" v-for="web in WebServerList" v-bind:id="web.app_id" v-cloak="">
+                                    <img v-bind:src="web.logo_url" v-on:error="setDefault(event)"/>
+                                    <span v-cloak="">{{web.appName}}</span>
+                                    <label v-cloak="" v-text="web.type == 'public' ? '公有': '私有'"></label>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--Application-->
+                        <div class="app-tag-statistic-box">
+                            <div class="app-tag-statistic" v-cloak="" v-show="appTagToShow != 'Application'" v-on:click="changeAppTag('Application')">
+                                <span v-cloak="">Application({{ApplicationCount}})</span>
+                                <span>
+                                    <i class="fa fa-angle-right"></i>
+                                </span>
+                            </div>
+                            <div class="app-tag-statistic app-tag-statistic-detail" v-cloak="" v-show="appTagToShow == 'Application'">
+                                <span v-cloak="">Application({{ApplicationCount}})</span>
+                                <span>
+                                    <i class="fa fa-angle-down"></i>
+                                </span>
+                            </div>
+                            <ul class="app-items" v-cloak="" v-show="appTagToShow == 'Application'">
+                                <li class="app-item" v-for="app in ApplicationList" v-bind:id="app.app_id" v-cloak="">
+                                    <img v-bind:src="app.logo_url" v-on:error="setDefault(event)"/>
+                                    <span v-cloak="">{{app.appName}}</span>
+                                    <label v-cloak="" v-text="app.type == 'public' ? '公有': '私有'"></label>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--Other-->
+                        <div class="app-tag-statistic-box">
+                            <div class="app-tag-statistic" v-cloak="" v-show="appTagToShow != 'Other'" v-on:click="changeAppTag('Other')">
+                                <span v-cloak="">Other({{OtherCount}})</span>
+                                <span>
+                                    <i class="fa fa-angle-right"></i>
+                                </span>
+                            </div>
+                            <div class="app-tag-statistic app-tag-statistic-detail" v-cloak="" v-show="appTagToShow == 'Other'">
+                                <span v-cloak="">Other({{OtherCount}})</span>
+                                <span>
+                                    <i class="fa fa-angle-down"></i>
+                                </span>
+                            </div>
+                            <ul class="app-items" v-cloak="" v-show="appTagToShow == 'Other'">
+                                <li class="app-item" v-for="other in OtherList" v-bind:id="other.app_id" v-cloak="">
+                                    <img v-bind:src="other.logo_url" v-on:error="setDefault(event)"/>
+                                    <span v-cloak="">{{other.appName}}</span>
+                                    <label v-cloak="" v-text="other.type == 'public' ? '公有': '私有'"></label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="modal-body-middle"></div>
+                    <div class="modal-body-right"></div>
                 </div>
                 <div class="modal-footer">
 

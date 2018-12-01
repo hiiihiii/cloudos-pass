@@ -483,3 +483,49 @@ span.checkbox+a{
     cursor: pointer;
     color: #767b80;
 }
+/*应用编排开始*/
+#add_template_dialog .cloud-modal-body {
+    padding: 15px 0;
+}
+#add_template_dialog .modal-body-left {
+    width: 18%;
+    border-right: 1px solid #f7f6f6;
+}
+#add_template_dialog .app-tag-statistic {
+    padding: 15px 0;
+    border-bottom: 1px solid #cccccc;
+    cursor: pointer;
+    padding-left: 10px;
+}
+#add_template_dialog .app-tag-statistic-detail {
+    color: #ec670b;
+    cursor: default;
+    border-bottom: 1px solid #cccccc;
+    padding-left: 10px;
+}
+#add_template_dialog .app-tag-statistic > span{
+    display: inline-block;
+}
+#add_template_dialog .app-tag-statistic > span:not(:first-child) {
+    float: right;
+    padding-right: 10px;
+}
+#add_template_dialog .app-items {
+    background-color: rgba(190, 194, 195, 0.1);
+    padding: 0;
+    padding-left: 10px;
+}
+#add_template_dialog .app-item img {
+    width: 40px;
+    height: 40px;
+}
+#add_template_dialog .app-item label {
+    border: 1px solid #ccc;
+    padding: 0 10px;
+    background-color: white;
+    margin-left: 45px;
+    font-weight: normal;
+    font-size: 12px;
+    color: #bee6a0;
+}
+/*应用编排结束*/
