@@ -24,8 +24,8 @@ define([
                 ApplicationCount: 0,
                 OtherCount: 0,
                 tWaver:{
-                    network: "",
-                    box: ""
+                    network: {},
+                    box: {}
                 }
             },
             mounted: function(){
@@ -103,25 +103,57 @@ define([
                     var box = new twaver.ElementBox(); //容器
                     var network = new twaver.vector.Network(box); //页面上的画布
                     document.getElementById("canvas-box").appendChild(network.getView());
-                    network.adjustBounds({x:215,y:0,width:700,height:450});
+                    network.adjustBounds({x:215, y:0, width:700, height:460});
                     window.onresize = function (e) {
-                        network.adjustBounds({x:215,y:0,width:700,height:450});
+                        network.adjustBounds({x:215, y:0, width:700, height:460});
                     };
                     _self.tWaver.network = network;
                     _self.tWaver.box = box;
-                    //设置canvas允许放在拖动的元素
-                    $("#canvas-box").on("dragover", "canvas", function(event){
+                    var rootCanvas = network.getRootCanvas();
+                    var topCanvas = network.getTopCanvas();
+                    $(rootCanvas).css("background-color", "#ccc");
+                    //给topcanvas注册dragover事件
+                    $(topCanvas).on("dragover", function(event){
+                        //设置canvas允许放在拖动的元素
                         event.preventDefault();
                         console.log("dropover")
                     });
-                    $("#canvas-box").on("drop", "canvas", function (event) {
+                    //给topcanvas注册drop事件
+                    $(topCanvas).on("drop", function (event) {
                         event.preventDefault();
                         var dragItem = JSON.parse(event.originalEvent.dataTransfer.getData("text"));
-                        console.log(dragItem);
 
-                    })
+                        var isExist = false;
+                        var data = _self.tWaver.box.getDatas()._as;
+                        for(var i = 0; i < data.length; i++){
+                            if(data[i]._name == dragItem.appName){
+                                isExist = true;
+                                common_module.notify("[增加模板]", "该镜像已经存在，请重新选择", "warning");
+                                break;
+                            }
+                        }
+                        if(!isExist){
+                            var node = new twaver.Node();
+                            _self.registerNormalImage(dragItem.logo_url, dragItem.appName, 40, 40);
+                            node.setName(dragItem.appName);
+                            node.setImage(dragItem.appName);
+                            node.setLocation(event.offsetX - 40 / 2, event.offsetY - 40 / 2);
+                            _self.tWaver.box.add(node);
+                        }
+                    });
                 },
-                startDrag: function(event, apptype, appid){
+                // 在twaver中注册图片
+                registerNormalImage: function(url, name, width, height) {
+                    var _self = this;
+                    var image = new Image();
+                    image.src = url;
+                    image.onload = function() {
+                        twaver.Util.registerImage(name, image, width, height);
+                        image.onload = null;
+                        _self.tWaver.network.invalidateElementUIs();
+                    };
+                },
+                startDrag: function( apptype, appid, event ){
                     console.log("startdrag");
                     var _self = this;
                     var dragItem, temList;
@@ -144,8 +176,8 @@ define([
                             break;
                         }
                     }
+                    dragItem.logo_url = $(event.target).find("img").attr("src");
                     event.dataTransfer.setData("text", JSON.stringify(dragItem));
-                    console.log(dragItem);
                 }
             }
         });

@@ -30,8 +30,8 @@
                             </div>
                             <ul class="app-items" v-show="appTagToShow == 'DBMS'" v-cloak="">
                                 <li class="app-item" v-for="db in DBMSList" v-bind:id="db.app_id" draggable="true" v-cloak=""
-                                    v-on:dragstart="startDrag(event, 'DBMS', db.app_id)">
-                                    <img v-bind:src="db.logo_url" v-on:error="setDefault(event)" />
+                                    v-on:dragstart="startDrag( 'DBMS', db.app_id, $event)">
+                                    <img v-bind:src="db.logo_url" v-on:error="setDefault($event)" draggable="false"/>
                                     <span v-cloak="">{{db.appName}}</span>
                                     <label v-cloak="" v-text="db.type == 'public' ? '公有': '私有'"></label>
                                 </li>
@@ -53,8 +53,8 @@
                             </div>
                             <ul class="app-items" v-cloak="" v-show="appTagToShow == 'WebServer'">
                                 <li class="app-item" v-for="web in WebServerList" v-bind:id="web.app_id" draggable="true" v-cloak=""
-                                    v-on:dragstart="startDrag(event, 'WebServer', web.app_id)">
-                                    <img v-bind:src="web.logo_url" v-on:error="setDefault(event)" />
+                                    v-on:dragstart="startDrag('WebServer', web.app_id, $event)">
+                                    <img v-bind:src="web.logo_url" v-on:error="setDefault($event)" draggable="false" />
                                     <span v-cloak="">{{web.appName}}</span>
                                     <label v-cloak="" v-text="web.type == 'public' ? '公有': '私有'"></label>
                                 </li>
@@ -76,8 +76,8 @@
                             </div>
                             <ul class="app-items" v-cloak="" v-show="appTagToShow == 'Application'">
                                 <li class="app-item" v-for="app in ApplicationList" v-bind:id="app.app_id" draggable="true" v-cloak=""
-                                    v-on:dragstart="startDrag(event, 'Application', app.app_id)">
-                                    <img v-bind:src="app.logo_url" v-on:error="setDefault(event)" />
+                                    v-on:dragstart="startDrag('Application', app.app_id, $event)">
+                                    <img v-bind:src="app.logo_url" v-on:error="setDefault($event)" draggable="false" />
                                     <span v-cloak="">{{app.appName}}</span>
                                     <label v-cloak="" v-text="app.type == 'public' ? '公有': '私有'"></label>
                                 </li>
@@ -99,8 +99,8 @@
                             </div>
                             <ul class="app-items" v-cloak="" v-show="appTagToShow == 'Other'">
                                 <li class="app-item" v-for="other in OtherList" v-bind:id="other.app_id" draggable="true" v-cloak=""
-                                    v-on:dragstart="startDrag(event, 'Other', other.app_id)">
-                                    <img v-bind:src="other.logo_url" v-on:error="setDefault(event)"/>
+                                    v-on:dragstart="startDrag( 'Other', other.app_id, $event)">
+                                    <img v-bind:src="other.logo_url" v-on:error="setDefault($event)" draggable="false" />
                                     <span v-cloak="">{{other.appName}}</span>
                                     <label v-cloak="" v-text="other.type == 'public' ? '公有': '私有'"></label>
                                 </li>

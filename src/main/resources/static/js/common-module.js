@@ -125,7 +125,7 @@ define([
             icon: icon
         },{
             element: 'body',
-            position: null,
+            position: "relative",
             type: "warning",
             allow_dismiss: true,
             newest_on_top: true,
@@ -136,7 +136,7 @@ define([
             },
             offset: 20,
             spacing: 10,
-            z_index: 1031,
+            z_index: 2000,
             delay: 5000,
             timer: 2000,
             url_target: '_blank',
