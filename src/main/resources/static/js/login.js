@@ -26,7 +26,6 @@ define([
                         dataType: "json",
                         content_type: "application/json",
                         success: function (data) {
-                            // debugger;
                             if("success" === data.code){
                                 var user = data.data;
                                 // if(user.role_name ==="admin_user") { //云管理员
@@ -51,7 +50,6 @@ define([
         //验证
         var validator = $("#login-form").validate({
             submitHandler: function(form){
-                debugger;
                 if($(form).valid()){
                     loginbox.loginSubmit();
                 }

@@ -10,7 +10,6 @@ define([
             el:"#system_role",
             data: {},
             mounted: function () {
-                debugger;
                 common_module.dataTables("#role_table");
             },
             methods: {

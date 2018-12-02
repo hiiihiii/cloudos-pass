@@ -5,7 +5,6 @@ define([
     "datatables",
     "bootstrap-notify"
 ],function ($, Vue, DataTables, BootstrapNotify) {
-    debugger;
     if(sessionStorage.href){
         switch (sessionStorage.href){
             case "/adminhomepage":
@@ -35,7 +34,6 @@ define([
     }
     //头部菜单的事件
     $("body").on("click",".parent-menu", function () {
-        debugger
         // 跳转到概览页
         if(!$(this).find(".child-menu").length){
             $(".parent-menu").removeClass("parent-menu-selected");
@@ -54,7 +52,6 @@ define([
         $(this).find(".child-menu").hide();
     });
     $("body").on("click",".child-menu a",function () {
-        debugger;
         $(".child-menu a").removeClass("child-menu-selected");
         $(".parent-menu").removeClass("parent-menu-selected");
         $(this).addClass("child-menu-selected");
@@ -86,7 +83,6 @@ define([
 
     // 创建表格
     function tables(id, options) {
-        debugger;
         var tableObj = $(id).DataTable({
             searching: false,
             ordering: true,

@@ -168,7 +168,6 @@ define([
 
                 //选择标签
                 tagChange: function () {
-                    debugger
                     var _self = this;
                     var tag = $("#upload_image_form select[name='appTag']").val();
                     _self.bindData.appTag_input = tag;
@@ -179,7 +178,6 @@ define([
                     // if(!$("#upload_image_form").valid()){
                     //     return;
                     // }
-                    debugger
                     var _self = this;
                     var formData = new FormData();
                     formData.append("appName", $("#upload_image_form #appName").val());

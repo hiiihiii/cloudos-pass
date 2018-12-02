@@ -16,7 +16,7 @@ define([
                 submitTag: false,
             },
             mounted: function () {
-                debugger
+
             },
             methods: {
                 //下一步

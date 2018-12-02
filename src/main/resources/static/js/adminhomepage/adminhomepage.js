@@ -15,7 +15,6 @@ define([
 
             methods: {
                 initEcharts: function () {
-                    debugger;
                     var echartsObj = echarts.init(document.getElementById("app-statistics"));
                     var option = {
                         tooltip: { // 鼠标悬浮时的提示信息

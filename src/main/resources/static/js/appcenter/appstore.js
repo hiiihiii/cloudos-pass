@@ -67,8 +67,7 @@ define([
                     $this.attr("src", "../images/app-default.png");
                 },
                 classifyBind: function(){
-                    $("#appstore .nav").on("change", "input[type='chec  kbox']", function(){
-                        debugger
+                    $("#appstore .nav").on("change", "input[type='checkbox']", function(){
                         var status = this.getAttribute("checked");//选中时status为"checked"
                         var isPublic = false;
                         var isAll = false;
@@ -133,7 +132,6 @@ define([
                 },
                 //初始化jpages插件
                 initJpages:function (holderid, containerid) {
-                    debugger
                     $(holderid).jPages({
                         containerID : containerid,
                         first: "《",

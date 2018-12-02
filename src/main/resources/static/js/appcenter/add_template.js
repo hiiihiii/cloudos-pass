@@ -116,12 +116,13 @@ define([
                     });
                     $("#canvas-box").on("drop", "canvas", function (event) {
                         event.preventDefault();
-                        console.log("drop");
+                        var dragItem = JSON.parse(event.originalEvent.dataTransfer.getData("text"));
+                        console.log(dragItem);
+
                     })
                 },
                 startDrag: function(event, apptype, appid){
                     console.log("startdrag");
-                    debugger
                     var _self = this;
                     var dragItem, temList;
                     switch (apptype) {
@@ -143,6 +144,7 @@ define([
                             break;
                         }
                     }
+                    event.dataTransfer.setData("text", JSON.stringify(dragItem));
                     console.log(dragItem);
                 }
             }

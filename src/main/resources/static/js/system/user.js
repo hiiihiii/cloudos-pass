@@ -10,7 +10,6 @@ define([
             el:"#system_user",
             data: {},
             mounted: function () {
-                debugger;
                 common_module.dataTables("#user_table");
             },
             methods: {
