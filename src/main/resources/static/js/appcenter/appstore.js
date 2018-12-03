@@ -105,7 +105,6 @@ define([
                 },
                 convertData: function(imageArray){
                     var _self = this;
-                    var test = [];
                     for(var i = 0; i < imageArray.length; i++){
                         imageArray[i].createType = JSON.parse(imageArray[i].createType);
                         imageArray[i].metadata = JSON.parse(imageArray[i].metadata);
@@ -114,21 +113,7 @@ define([
                         imageArray[i].version = JSON.parse(imageArray[i].version);
                         imageArray[i].logo_url = "ftp://docker:dockerfile@" + imageArray[i].logo_url;
                     }
-                    test.push(imageArray[0])
-                    test.push(imageArray[0])
-                    test.push(imageArray[0])
-                    test.push(imageArray[0])
-                    test.push(imageArray[0])
-                    test.push(imageArray[0])
-                    test.push(imageArray[0])
-                    test.push(imageArray[0])
-                    test.push(imageArray[0])
-                    test.push(imageArray[0])
-                    test.push(imageArray[0])
-                    test.push(imageArray[0])
-                    test.push(imageArray[0])
-                    test.push(imageArray[0])
-                    return test;
+                    return imageArray;
                 },
                 //初始化jpages插件
                 initJpages:function (holderid, containerid) {
