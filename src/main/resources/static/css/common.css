@@ -485,11 +485,26 @@ span.checkbox+a{
 }
 /*应用编排开始*/
 #add_template_dialog .cloud-modal-body {
-    padding: 15px 0;
+    padding: 0;
 }
 #add_template_dialog .modal-body-left {
     width: 18%;
     border-right: 1px solid #f7f6f6;
+    float: left;
+}
+#add_template_dialog .modal-body-middle {
+    float: left;
+}
+#add_template_dialog .twaver-operation-box {
+    padding: 2px;
+    position: absolute;
+    background-color: #fff;
+    margin-left: 10px;
+    margin-top: 10px;
+    box-shadow: 1px 1px 1px #666;
+}
+#add_template_dialog .twaver-operation-box img {
+    cursor: pointer;
 }
 #add_template_dialog .app-tag-statistic {
     padding: 15px 0;

@@ -25,7 +25,10 @@ define([
                 OtherCount: 0,
                 tWaver:{
                     network: {},
-                    box: {}
+                    box: {},
+                    isLinkMode: false, //记录是否是连线模式
+                    from: null,
+                    to: null
                 }
             },
             mounted: function(){
@@ -34,6 +37,19 @@ define([
                 _self.init();
             },
             methods: {
+                //改变连线模式
+                changeLinkMode: function(type) {
+                    var _self = this;
+                    if(type === 'link'){
+                        _self.tWaver.isLinkMode = true;
+                    } else {
+                        _self.tWaver.isLinkMode = false;
+                    }
+                    //清空连线起点和终点
+                    _self.tWaver.from = null;
+                    _self.tWaver.to = null;
+                },
+                //获取所有镜像
                 getImages: function(){
                     var _self = this;
                     $.ajax({
@@ -68,6 +84,11 @@ define([
                         imageArray[i].v_description = JSON.parse(imageArray[i].v_description);
                         imageArray[i].version = JSON.parse(imageArray[i].version);
                         imageArray[i].logo_url = "ftp://docker:dockerfile@" + imageArray[i].logo_url;
+                        if(imageArray[i].appName.length > 7){
+                            imageArray[i].appNameShow = imageArray[i].appName.slice(0,7);
+                        } else {
+                            imageArray[i].appNameShow = imageArray[i].appName;
+                        }
                         switch (imageArray[i].appTag){
                             case "DBMS":
                                 _self.DBMSList.push(imageArray[i]);
@@ -116,13 +137,12 @@ define([
                     $(topCanvas).on("dragover", function(event){
                         //设置canvas允许放在拖动的元素
                         event.preventDefault();
-                        console.log("dropover")
                     });
                     //给topcanvas注册drop事件
                     $(topCanvas).on("drop", function (event) {
                         event.preventDefault();
+                        console.log("drop");
                         var dragItem = JSON.parse(event.originalEvent.dataTransfer.getData("text"));
-
                         var isExist = false;
                         var data = _self.tWaver.box.getDatas()._as;
                         for(var i = 0; i < data.length; i++){
@@ -141,6 +161,34 @@ define([
                             _self.tWaver.box.add(node);
                         }
                     });
+                    var selectionModel = box.getSelectionModel();
+                    selectionModel.addSelectionChangeListener(_self.nodeSelectionChangeHandler);
+                },
+                nodeSelectionChangeHandler: function(e){
+                    var _self = this;
+                    // 判断是否是连线模式
+                    if(_self.tWaver.isLinkMode) {
+                        var selectionModel = _self.tWaver.box.getSelectionModel();
+                        var last = selectionModel.getLastData();
+                        if(!_self.tWaver.from){
+                            _self.tWaver.from = last;
+                        } else if(!_self.tWaver.to){
+                            _self.tWaver.to = last;
+                            //创建连线
+                            var link = new twaver.Link(_self.tWaver.from, _self.tWaver.to);
+                            link.setName('test');
+                            // link.setToolTip('<b>Hello!</b>');
+                            link.setStyle('arrow.from', false);
+                            link.setStyle('arrow.to', true);
+                            link.setStyle('arrow.to', true);
+                            link.setStyle('arrow.to.fill', true);
+                            link.setStyle('arrow.to.shape', 'arrow.short');
+                            link.setStyle('arrow.to.color', '#0000ff');
+                            _self.tWaver.box.add(link);
+                            _self.tWaver.from = _self.tWaver.to;
+                            _self.tWaver.to = null;
+                        }
+                    }
                 },
                 // 在twaver中注册图片
                 registerNormalImage: function(url, name, width, height) {
