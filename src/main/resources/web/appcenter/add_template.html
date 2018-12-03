@@ -114,7 +114,100 @@
                             <img v-show="tWaver.isLinkMode" v-on:click="changeLinkMode('unlink')" src="../images/apporch/unlink.png" v-cloak=""/>
                         </div>
                     </div>
-                    <div class="modal-body-right"></div>
+                    <div class="modal-body-right">
+                        <div v-if="tWaver.selectedApp" v-cloak="">
+                            <label class="info-title">基本信息</label>
+                            <div class="app-info-box">
+                                <div class="form-group">
+                                    <label>镜像： </label>
+                                    <span v-cloak="">{{tWaver.selectedApp.appName}}</span>
+                                </div>
+                                <div class="form-group">
+                                    <label>版本： </label>
+                                    <select name="version" id="version" v-on:change="changeVersion($event)">
+                                        <option v-for="(item, index) in tWaver.selectedApp.version"
+                                                v-bind:value="item" v-cloak="">{{item}}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>标签： </label>
+                                    <span v-cloak="">{{tWaver.selectedApp.appTag}}</span>
+                                </div>
+                                <div class="form-group">
+                                    <label>描述： </label>
+                                    <span v-cloak="">{{tWaver.selectedApp.description}}</span>
+                                </div>
+                            </div>
+                            <label class="info-title">启动限制</label>
+                            <div class="app-info-box">
+                                <div class="form-group">
+                                    <label>CPU(核)： </label>
+                                    <input type="text" v-bind:value="selected.requests.cpu" name="minCpu" id="minCpu" />
+                                </div>
+                                <div class="form-group">
+                                    <label>内存： </label>
+                                    <input class="runtime-input" type="text"
+                                           v-bind:value="selected.requests.memory" name="minMemory" id="minMemory" />
+                                    <select class="runtime-select" v-bind:value="selected.requests.memoryUnit"
+                                            name="minMemoryUnit" id="minMemoryUnit">
+                                        <option value="MB">MB</option>
+                                        <option value="GB">GB</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <label class="info-title">运行限制</label>
+                            <div class="app-info-box">
+                                <div class="form-group">
+                                    <label>CPU(核)： </label>
+                                    <input type="text" v-bind:value="selected.limits.cpu" name="maxCpu" id="maxCpu" />
+                                </div>
+                                <div class="form-group">
+                                    <label>内存： </label>
+                                    <input class="runtime-input" type="text"
+                                           v-bind:value="selected.limits.memory" name="maxMemory" id="maxMemory" />
+                                    <select class="runtime-select"
+                                            v-bind:value="selected.limits.memoryUnit" name="maxMemoryUnit" id="maxMemoryUnit">
+                                        <option value="MB">MB</option>
+                                        <option value="GB">GB</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <label class="info-title">环境变量</label>
+                            <div class="app-info-box">
+                                <div v-for="(item) in selected.env">
+                                    <div class="form-group">
+                                        <label v-cloak="">{{item.name}}：</label>
+                                        <input type="text" v-bind:value="item.value" name="envValue" v-cloak=""/>
+                                    </div>
+                                </div>
+                            </div>
+                            <label class="info-title">端口映射</label>
+                            <div class="app-info-box" >
+                                <div v-for="(item) in selected.ports">
+                                    <div class="form-group">
+                                        <label>名称： </label>
+                                        <input type="text" v-bind:value="item.portName" v-cloak=""/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>容器端口： </label>
+                                        <input type="text" v-bind:value="item.containerPort" v-cloak=""/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>集群内端口： </label>
+                                        <input type="text" v-bind:value="item.port" v-cloak=""/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>集群外端口： </label>
+                                        <input type="text" v-bind:value="item.targetPort" v-cloak=""/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>协议： </label>
+                                        <input type="text" v-bind:value="item.protocol" v-cloak=""/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
 

@@ -28,8 +28,19 @@ define([
                     box: {},
                     isLinkMode: false, //记录是否是连线模式
                     from: null,
-                    to: null
-                }
+                    to: null,
+                    selectedApp: null
+                },
+                selected: {
+                    version: '',
+                    limits: {},
+                    requests: {},
+                    env: [],
+                    ports: []
+                },
+                // selectedApp: { //画布中被选中的app
+                //
+                // }  //画布中被选中的app
             },
             mounted: function(){
                 var _self = this;
@@ -85,7 +96,7 @@ define([
                         imageArray[i].version = JSON.parse(imageArray[i].version);
                         imageArray[i].logo_url = "ftp://docker:dockerfile@" + imageArray[i].logo_url;
                         if(imageArray[i].appName.length > 7){
-                            imageArray[i].appNameShow = imageArray[i].appName.slice(0,7);
+                            imageArray[i].appNameShow = imageArray[i].appName.slice(0,7) + "...";
                         } else {
                             imageArray[i].appNameShow = imageArray[i].appName;
                         }
@@ -118,27 +129,51 @@ define([
                     var _self = this;
                     _self.appTagToShow = apptag;
                 },
+                startDrag: function( apptype, appid, event ){
+                    console.log("startdrag");
+                    var _self = this;
+                    var dragItem, temList;
+                    switch (apptype) {
+                        case "DBMS":
+                            temList = _self.DBMSList;
+                            break;
+                        case "WebServer":
+                            temList = _self.WebServerList;
+                            break;
+                        case "Application":
+                            temList = _self.ApplicationList;
+                            break;
+                        default:
+                            temList = _self.OtherList;
+                    }
+                    for(var i = 0; i < temList.length; i++){
+                        if(temList[i].app_id == appid){
+                            dragItem = temList[i];
+                            break;
+                        }
+                    }
+                    dragItem.logo_url = $(event.target).find("img").attr("src");
+                    event.dataTransfer.setData("text", JSON.stringify(dragItem));
+                },
                 // 初始化画布
                 init: function () {
                     var _self = this;
                     var box = new twaver.ElementBox(); //容器
                     var network = new twaver.vector.Network(box); //页面上的画布
                     document.getElementById("canvas-box").appendChild(network.getView());
-                    network.adjustBounds({x:215, y:0, width:700, height:460});
+                    network.adjustBounds({x:215, y:0, width:760, height:460});
                     window.onresize = function (e) {
-                        network.adjustBounds({x:215, y:0, width:700, height:460});
+                        network.adjustBounds({x:215, y:0, width:760, height:460});
                     };
                     _self.tWaver.network = network;
                     _self.tWaver.box = box;
                     var rootCanvas = network.getRootCanvas();
                     var topCanvas = network.getTopCanvas();
-                    $(rootCanvas).css("background-color", "#ccc");
-                    //给topcanvas注册dragover事件
+                    //给topcanvas注册dragover、drop事件
                     $(topCanvas).on("dragover", function(event){
                         //设置canvas允许放在拖动的元素
                         event.preventDefault();
                     });
-                    //给topcanvas注册drop事件
                     $(topCanvas).on("drop", function (event) {
                         event.preventDefault();
                         console.log("drop");
@@ -161,15 +196,40 @@ define([
                             _self.tWaver.box.add(node);
                         }
                     });
-                    var selectionModel = box.getSelectionModel();
-                    selectionModel.addSelectionChangeListener(_self.nodeSelectionChangeHandler);
+                    //画布画网格
+                    network.paintBottom = _self.drawGrid;
+                    box.getSelectionModel().addSelectionChangeListener(_self.nodeSelectionChangeHandler);
                 },
+                //画网格
+                drawGrid: function (ctx, dirtyRect){
+                    var _self = this;
+                    var rootCanvas = _self.tWaver.network.getRootCanvas();
+                    ctx.fillStyle = '#ccc';
+                    ctx.fillRect(0,0,rootCanvas.width,rootCanvas.height);
+                    ctx.lineWidth = 0.2;
+                    ctx.strokeStyle = '#fff';
+                    for (var i = 10; i < ctx.canvas.width; i += 10) {
+                        ctx.beginPath();
+                        ctx.moveTo(i, 0);
+                        ctx.lineTo(i, ctx.canvas.height);
+                        ctx.closePath();
+                        ctx.stroke();
+                    }
+                    for (var j = 10; j < ctx.canvas.height; j += 10) {
+                        ctx.beginPath();
+                        ctx.moveTo(0, j);
+                        ctx.lineTo(ctx.canvas.width, j);
+                        ctx.closePath();
+                        ctx.stroke();
+                    }
+                },
+                //网元选中事件处理器
                 nodeSelectionChangeHandler: function(e){
                     var _self = this;
+                    var selectionModel = _self.tWaver.box.getSelectionModel();
+                    var last = selectionModel.getLastData();
                     // 判断是否是连线模式
-                    if(_self.tWaver.isLinkMode) {
-                        var selectionModel = _self.tWaver.box.getSelectionModel();
-                        var last = selectionModel.getLastData();
+                    if(_self.tWaver.isLinkMode && last!=null) {
                         if(!_self.tWaver.from){
                             _self.tWaver.from = last;
                         } else if(!_self.tWaver.to){
@@ -189,6 +249,11 @@ define([
                             _self.tWaver.to = null;
                         }
                     }
+                    if(last != null){
+                        var imageName = last.getName();
+                        console.log(imageName);
+                        _self.showSelectedAppInfo(imageName);
+                    }
                 },
                 // 在twaver中注册图片
                 registerNormalImage: function(url, name, width, height) {
@@ -201,31 +266,38 @@ define([
                         _self.tWaver.network.invalidateElementUIs();
                     };
                 },
-                startDrag: function( apptype, appid, event ){
-                    console.log("startdrag");
+                //显示画布中选中的应用的信息
+                showSelectedAppInfo: function (imageName) {
                     var _self = this;
-                    var dragItem, temList;
-                    switch (apptype) {
-                        case "DBMS":
-                           temList = _self.DBMSList;
-                           break;
-                        case "WebServer":
-                            temList = _self.WebServerList;
-                            break;
-                        case "Application":
-                            temList = _self.ApplicationList;
-                            break;
-                        default:
-                            temList = _self.OtherList;
-                    }
-                    for(var i = 0; i < temList.length; i++){
-                        if(temList[i].app_id == appid){
-                            dragItem = temList[i];
+                    for(var i = 0; i < _self.imageInfoList.length; i++){
+                        if(_self.imageInfoList[i].appName == imageName){
+                            _self.tWaver.selectedApp = _self.imageInfoList[i];
                             break;
                         }
                     }
-                    dragItem.logo_url = $(event.target).find("img").attr("src");
-                    event.dataTransfer.setData("text", JSON.stringify(dragItem));
+                    _self.getInfoByVersion(_self.tWaver.selectedApp.version[0],_self.tWaver.selectedApp)
+                },
+                getInfoByVersion: function (version, item) {
+                    var _self = this;
+                    var metadata = item.metadata[version];
+                    _self.selected.version = version;
+                    _self.selected.limits = {
+                        cpu: metadata.limits.cpu,
+                        memory: metadata.limits.memory.slice(0, metadata.limits.memory.length - 2),
+                        memoryUnit: metadata.limits.memory.slice(metadata.limits.memory.length - 2, metadata.limits.memory.length)
+                    };
+                    _self.selected.requests = {
+                        cpu: metadata.requests.cpu,
+                        memory: metadata.requests.memory.slice(0, metadata.requests.memory.length - 2),
+                        memoryUnit: metadata.requests.memory.slice(metadata.requests.memory.length - 2, metadata.requests.memory.length)
+                    };
+                    _self.selected.env = metadata.env;
+                    _self.selected.ports = metadata.ports;
+                },
+                changeVersion: function(event){
+                    var _self = this;
+                    var version = $(event.target).val();
+                    _self.getInfoByVersion(version, _self.tWaver.selectedApp);
                 }
             }
         });

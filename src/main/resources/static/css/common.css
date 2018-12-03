@@ -412,8 +412,12 @@ span.checkbox+a{
 #deploy_image .modal-dialog{
     width: 750px;
 }
+#add_template .cloud-modal-body {
+    height: 460px;
+    display: flex;
+}
 #add_template .modal-dialog {
-    width: 1200px;
+    width: 1300px;
 }
 #upload_image .modal-table-operation {
     cursor: pointer;
@@ -488,12 +492,17 @@ span.checkbox+a{
     padding: 0;
 }
 #add_template_dialog .modal-body-left {
-    width: 18%;
+    /*width: 18%;*/
     border-right: 1px solid #f7f6f6;
-    float: left;
+    /*float: left;*/
+    flex: 2;
 }
 #add_template_dialog .modal-body-middle {
-    float: left;
+    flex: 7;
+}
+#add_template_dialog .modal-body-right {
+    flex: 3;
+    overflow: auto;
 }
 #add_template_dialog .twaver-operation-box {
     padding: 2px;
@@ -542,5 +551,40 @@ span.checkbox+a{
     font-weight: normal;
     font-size: 12px;
     color: #bee6a0;
+}
+#add_template_dialog .app-item span {
+    display: inline-block;
+    width: 56px;
+    min-width: 56px;
+}
+#add_template_dialog .app-info-box {
+    padding-left: 15px;
+    margin-left: 5px;
+    border-bottom: 1px solid #cccccc;
+}
+#add_template_dialog .modal-body-right label {
+    font-weight: normal;
+    font-size: 12px;
+}
+#add_template_dialog .modal-body-right .info-title {
+    background-color: #e0d9d9;
+    padding: 2px 7px;
+    margin-left: 5px;
+}
+#add_template_dialog .form-group label {
+    width: 85px;
+    text-align: right;
+    font-size: 12px;
+}
+#add_template_dialog .form-group span {
+    font-size: 12px;
+}
+#add_template_dialog .form-group .runtime-input {
+    width: 100px;
+}
+#add_template_dialog .form-group .runtime-select {
+    display: inline-block;
+    width: 69px;
+    height: 26px;
 }
 /*应用编排结束*/
