@@ -14,6 +14,7 @@ define([
                 nextStep: true,
                 previousStep: false,
                 submitTag: false,
+                deployImageObj: '',
             },
             mounted: function () {
 
@@ -64,12 +65,21 @@ define([
                 addEnv: function () {},
 
                 //增加端口映射
-                addPort: function () {}
+                addPort: function () {},
+
+                //根据版本获取镜像信息
+                getImageInfoByVersion: function(version){
+
+                }
             }
         });
 
         $('#deploy_image').on('show.bs.modal', function () {
             console.log("deploy-image-show");
+            debugger;
+            var imageInfo = JSON.parse(sessionStorage.getItem("deployImage"));
+            deploy_image.deployImageObj = imageInfo;
+            // deploy_image.getImageInfoByVersion(imageInfo[])
         });
     }
 });
