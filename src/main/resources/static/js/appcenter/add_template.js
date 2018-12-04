@@ -60,6 +60,7 @@ define([
                     _self.twaverObj.to = null;
 
                 },
+
                 //获取所有镜像
                 getImages: function(){
                     var _self = this;
@@ -82,6 +83,7 @@ define([
                         }
                     });
                 },
+
                 convertData: function (imageArray) {
                     var _self = this;
                     _self.DBMSList = [];
@@ -120,15 +122,18 @@ define([
                     _self.OtherCount = _self.OtherList.length;
                     return imageArray;
                 },
+
                 // 设置默认图标
                 setDefault: function (event) {
                     $(event.target).attr("src", "../images/app-default.png");
                 },
+
                 // 选择不同的标签
                 changeAppTag: function(apptag){
                     var _self = this;
                     _self.appTagToShow = apptag;
                 },
+
                 startDrag: function( apptype, appid, event ){
                     console.log("startdrag");
                     var _self = this;
@@ -155,6 +160,7 @@ define([
                     dragItem.logo_url = $(event.target).find("img").attr("src");
                     event.dataTransfer.setData("text", JSON.stringify(dragItem));
                 },
+
                 // 初始化画布
                 init: function () {
                     var _self = this;
@@ -201,6 +207,7 @@ define([
                     box.getSelectionModel().addSelectionChangeListener(_self.nodeSelectionChangeHandler);
                     _self.popupMenuInit();
                 },
+
                 //右键删除
                 popupMenuInit: function(){
                     var _self = this;
@@ -242,6 +249,7 @@ define([
                         }
                     };
                 },
+
                 //画网格
                 drawGrid: function (ctx, dirtyRect){
                     var _self = this;
@@ -265,6 +273,7 @@ define([
                         ctx.stroke();
                     }
                 },
+
                 //网元选中事件处理器
                 nodeSelectionChangeHandler: function(e){
                     var _self = this;
@@ -300,6 +309,7 @@ define([
                         _self.showSelectedAppInfo(imageName);
                     }
                 },
+
                 // 在twaver中注册图片
                 registerNormalImage: function(url, name, width, height) {
                     var _self = this;
@@ -311,6 +321,7 @@ define([
                         _self.twaverObj.network.invalidateElementUIs();
                     };
                 },
+
                 //显示画布中选中的应用的信息
                 showSelectedAppInfo: function (imageName) {
                     var _self = this;
@@ -322,6 +333,7 @@ define([
                     }
                     _self.getInfoByVersion(_self.twaverObj.selectedApp.version[0],_self.twaverObj.selectedApp)
                 },
+
                 getInfoByVersion: function (version, item) {
                     var _self = this;
                     var metadata = item.metadata[version];
@@ -339,6 +351,7 @@ define([
                     _self.selected.env = metadata.env;
                     _self.selected.ports = metadata.ports;
                 },
+
                 changeVersion: function(event){
                     var _self = this;
                     var version = $(event.target).val();

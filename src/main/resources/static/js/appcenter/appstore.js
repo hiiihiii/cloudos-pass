@@ -57,10 +57,20 @@ define([
                     });
                     $("#upload_image").modal({backdrop: 'static', keyboard: false});
                 },
+
                 //显示部署镜像框框
-                showDeployImage: function () {
+                showDeployImage: function (appid) {
+                    var _self = this;
+                    for(var i = 0; i < _self.imageInfos.length; i++){
+                        if(_self.imageInfos[i].app_id == appid) {
+                            //与部署模态框共享信息
+                            sessionStorage.setItem("deployImage", JSON.stringify(_self.imageInfos[i]));
+                            break;
+                        }
+                    }
                     $("#deploy_image").modal({backdrop: 'static', keyboard: false});
                 },
+
                 //设置默认图标
                 setDefault: function(event){
                     var $this = $(event.target);
@@ -79,6 +89,7 @@ define([
                         }
                     });
                 },
+
                 //获取应用数据
                 getAppData: function (repoType, appType) {
                     var _self = this;
@@ -103,6 +114,7 @@ define([
                         }
                     })
                 },
+
                 convertData: function(imageArray){
                     var _self = this;
                     for(var i = 0; i < imageArray.length; i++){
@@ -115,6 +127,7 @@ define([
                     }
                     return imageArray;
                 },
+
                 //初始化jpages插件
                 initJpages:function (holderid, containerid) {
                     $(holderid).jPages({
@@ -130,6 +143,7 @@ define([
                         endRange : 2 //结束页码为2个,
                     });
                 },
+
                 //切换仓库
                 changeRepo: function (repoType) {
                     var _self = this;

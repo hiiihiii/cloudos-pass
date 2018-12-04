@@ -35,7 +35,6 @@ define([
                 uploadType: "private"
             },
             methods: {
-
                 //下一步
                 toNext: function () {
                     var _self = this;
@@ -341,8 +340,12 @@ define([
             $("#upload_image_form textarea").val("");
         });
 
-        $('#upload_image').on('shown.bs.modal', function () {
+        $('#upload_image').on('show.bs.modal', function () {
+            console.log("upload-image-show");
+        });
 
+        $('#upload_image').on('shown.bs.modal', function () {
+            console.log("upload-image-shown");
         });
 
         $("#upload_image_form select[name='appTag']").on("change",function(){
