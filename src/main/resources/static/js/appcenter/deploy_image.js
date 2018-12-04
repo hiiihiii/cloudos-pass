@@ -15,6 +15,17 @@ define([
                 previousStep: false,
                 submitTag: false,
                 deployImageObj: '',
+                selectedVersion: {
+                    version: '',
+                    limits: {},
+                    requests: {},
+                    volume: '',
+                    cmd: '',
+                    cmdParams: [],
+                    env: [],
+                    ports: []
+                }
+
             },
             mounted: function () {
 
@@ -69,7 +80,25 @@ define([
 
                 //根据版本获取镜像信息
                 getImageInfoByVersion: function(version){
-
+                    debugger
+                    var _self = this;
+                    var metadata = _self.deployImageObj.metadata[version];
+                    _self.selectedVersion.version = version;
+                    _self.selectedVersion.limits = {
+                        cpu: metadata.limits.cpu,
+                        memory: metadata.limits.memory.slice(0, metadata.limits.memory.length - 2),
+                        memoryUnit: metadata.limits.memory.slice(metadata.limits.memory.length - 2, metadata.limits.memory.length)
+                    };
+                    _self.selectedVersion.requests = {
+                        cpu: metadata.requests.cpu,
+                        memory: metadata.requests.memory.slice(0, metadata.requests.memory.length - 2),
+                        memoryUnit: metadata.requests.memory.slice(metadata.requests.memory.length - 2, metadata.requests.memory.length)
+                    };
+                    _self.selectedVersion.volume = metadata.volume;
+                    _self.selectedVersion.cmd = metadata.cmd;
+                    _self.selectedVersion.cmdParams = metadata.cmdParams;
+                    _self.selectedVersion.env = metadata.env;
+                    _self.selectedVersion.ports = metadata.ports;
                 }
             }
         });
@@ -79,7 +108,8 @@ define([
             debugger;
             var imageInfo = JSON.parse(sessionStorage.getItem("deployImage"));
             deploy_image.deployImageObj = imageInfo;
-            // deploy_image.getImageInfoByVersion(imageInfo[])
+            var version = imageInfo.version[0];
+            deploy_image.getImageInfoByVersion(version);
         });
     }
 });
