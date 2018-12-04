@@ -50,12 +50,15 @@ define([
                     var _self = this;
                     if(type === 'link'){
                         _self.twaverObj.isLinkMode = true;
+                        // _self.twaverObj.network.setCreateLinkInteractions();
                     } else {
                         _self.twaverObj.isLinkMode = false;
+                        // _self.twaverObj.network.setDefaultInteractions();
                     }
                     //清空连线起点和终点
                     _self.twaverObj.from = null;
                     _self.twaverObj.to = null;
+
                 },
                 //获取所有镜像
                 getImages: function(){
@@ -198,6 +201,7 @@ define([
                     box.getSelectionModel().addSelectionChangeListener(_self.nodeSelectionChangeHandler);
                     _self.popupMenuInit();
                 },
+                //右键删除
                 popupMenuInit: function(){
                     var _self = this;
                     var popupmenu = new twaver.controls.PopupMenu(_self.twaverObj.network);
@@ -223,12 +227,16 @@ define([
                                 _self.twaverObj.box.removeById(id);
                             } else {
                                 //删除node上的link
-                                var links = last.getLinks()._as;
-                                for(var i = 0; i < links.length; i++ ){
-                                    _self.twaverObj.box.removeById(links[i].getId());
+                                debugger
+                                var links = last.getLinks();
+                                if(links){
+                                    for(var i = 0; i < links._as.length; i++ ){
+                                        _self.twaverObj.box.removeById(links._as[i].getId());
+                                    }
                                 }
                                 //删除node
                                 _self.twaverObj.box.removeById(id);
+                                _self.twaverObj.box.selectedApp = null;
                             }
                             console.log("删除");
                         }
@@ -268,16 +276,19 @@ define([
                             _self.twaverObj.from = last;
                         } else if(!_self.twaverObj.to){
                             _self.twaverObj.to = last;
-                            //创建连线
+                            /**
+                             * 创建连线，
+                             * 连线样式设置参考http://doc.servasoft.com/twaver-document-center/recommended/twaver-html5-guide/%E7%BD%91%E5%85%83%E6%A0%B7%E5%BC%8F%E8%A1%A8/#link
+                             */
                             var link = new twaver.Link(_self.twaverObj.from, _self.twaverObj.to);
                             link.setName('test');
                             // link.setToolTip('<b>Hello!</b>');
-                            link.setStyle('arrow.from', false);
                             link.setStyle('arrow.to', true);
-                            link.setStyle('arrow.to', true);
-                            link.setStyle('arrow.to.fill', true);
                             link.setStyle('arrow.to.shape', 'arrow.short');
-                            link.setStyle('arrow.to.color', '#0000ff');
+                            link.setStyle('arrow.to.color', '#ffffff');
+                            link.setStyle("link.type", "flexional");
+                            link.setStyle("link.width", "2");
+                            link.setStyle("link.color", "#ffffff");
                             _self.twaverObj.box.add(link);
                             _self.twaverObj.from = _self.twaverObj.to;
                             _self.twaverObj.to = null;
