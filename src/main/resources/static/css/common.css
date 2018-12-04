@@ -539,6 +539,9 @@ span.checkbox+a{
     padding: 0;
     padding-left: 10px;
 }
+#add_template_dialog .app-item {
+    padding: 3px 0;
+}
 #add_template_dialog .app-item img {
     width: 40px;
     height: 40px;

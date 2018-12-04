@@ -110,32 +110,32 @@
                     <div class="modal-body-middle">
                         <div id="canvas-box"></div>
                         <div class="twaver-operation-box">
-                            <img v-show="!tWaver.isLinkMode" v-on:click="changeLinkMode('link')" src="../images/apporch/link.png" v-cloak=""/>
-                            <img v-show="tWaver.isLinkMode" v-on:click="changeLinkMode('unlink')" src="../images/apporch/unlink.png" v-cloak=""/>
+                            <img v-show="!twaverObj.isLinkMode" v-on:click="changeLinkMode('link')" src="../images/apporch/link.png" v-cloak=""/>
+                            <img v-show="twaverObj.isLinkMode" v-on:click="changeLinkMode('unlink')" src="../images/apporch/unlink.png" v-cloak=""/>
                         </div>
                     </div>
                     <div class="modal-body-right">
-                        <div v-if="tWaver.selectedApp" v-cloak="">
+                        <div v-if="twaverObj.selectedApp" v-cloak="">
                             <label class="info-title">基本信息</label>
                             <div class="app-info-box">
                                 <div class="form-group">
                                     <label>镜像： </label>
-                                    <span v-cloak="">{{tWaver.selectedApp.appName}}</span>
+                                    <span v-cloak="">{{twaverObj.selectedApp.appName}}</span>
                                 </div>
                                 <div class="form-group">
                                     <label>版本： </label>
                                     <select name="version" id="version" v-on:change="changeVersion($event)">
-                                        <option v-for="(item, index) in tWaver.selectedApp.version"
+                                        <option v-for="(item, index) in twaverObj.selectedApp.version"
                                                 v-bind:value="item" v-cloak="">{{item}}</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>标签： </label>
-                                    <span v-cloak="">{{tWaver.selectedApp.appTag}}</span>
+                                    <span v-cloak="">{{twaverObj.selectedApp.appTag}}</span>
                                 </div>
                                 <div class="form-group">
                                     <label>描述： </label>
-                                    <span v-cloak="">{{tWaver.selectedApp.description}}</span>
+                                    <span v-cloak="">{{twaverObj.selectedApp.description}}</span>
                                 </div>
                             </div>
                             <label class="info-title">启动限制</label>

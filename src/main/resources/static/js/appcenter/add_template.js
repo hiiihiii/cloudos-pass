@@ -23,7 +23,7 @@ define([
                 WebServerCount: 0,
                 ApplicationCount: 0,
                 OtherCount: 0,
-                tWaver:{
+                twaverObj:{
                     network: {},
                     box: {},
                     isLinkMode: false, //记录是否是连线模式
@@ -37,10 +37,7 @@ define([
                     requests: {},
                     env: [],
                     ports: []
-                },
-                // selectedApp: { //画布中被选中的app
-                //
-                // }  //画布中被选中的app
+                }
             },
             mounted: function(){
                 var _self = this;
@@ -52,13 +49,13 @@ define([
                 changeLinkMode: function(type) {
                     var _self = this;
                     if(type === 'link'){
-                        _self.tWaver.isLinkMode = true;
+                        _self.twaverObj.isLinkMode = true;
                     } else {
-                        _self.tWaver.isLinkMode = false;
+                        _self.twaverObj.isLinkMode = false;
                     }
                     //清空连线起点和终点
-                    _self.tWaver.from = null;
-                    _self.tWaver.to = null;
+                    _self.twaverObj.from = null;
+                    _self.twaverObj.to = null;
                 },
                 //获取所有镜像
                 getImages: function(){
@@ -165,8 +162,8 @@ define([
                     window.onresize = function (e) {
                         network.adjustBounds({x:215, y:0, width:760, height:460});
                     };
-                    _self.tWaver.network = network;
-                    _self.tWaver.box = box;
+                    _self.twaverObj.network = network;
+                    _self.twaverObj.box = box;
                     var rootCanvas = network.getRootCanvas();
                     var topCanvas = network.getTopCanvas();
                     //给topcanvas注册dragover、drop事件
@@ -179,7 +176,7 @@ define([
                         console.log("drop");
                         var dragItem = JSON.parse(event.originalEvent.dataTransfer.getData("text"));
                         var isExist = false;
-                        var data = _self.tWaver.box.getDatas()._as;
+                        var data = _self.twaverObj.box.getDatas()._as;
                         for(var i = 0; i < data.length; i++){
                             if(data[i]._name == dragItem.appName){
                                 isExist = true;
@@ -193,17 +190,54 @@ define([
                             node.setName(dragItem.appName);
                             node.setImage(dragItem.appName);
                             node.setLocation(event.offsetX - 40 / 2, event.offsetY - 40 / 2);
-                            _self.tWaver.box.add(node);
+                            _self.twaverObj.box.add(node);
                         }
                     });
                     //画布画网格
                     network.paintBottom = _self.drawGrid;
                     box.getSelectionModel().addSelectionChangeListener(_self.nodeSelectionChangeHandler);
+                    _self.popupMenuInit();
+                },
+                popupMenuInit: function(){
+                    var _self = this;
+                    var popupmenu = new twaver.controls.PopupMenu(_self.twaverObj.network);
+                    popupmenu.setMenuItems([
+                        {'label': "删除"}
+                    ]);
+                    popupmenu.onMenuItemRendered = function (div, menuItem) {
+                        div.parentElement.style.width = "100px"
+                    };
+                    //设置菜单是否显示
+                    popupmenu.isVisible = function (menuItem) {
+                        var selectionModel = _self.twaverObj.box.getSelectionModel();
+                        var last = selectionModel.getLastData();
+                        return last!= null ? true : false;
+                    };
+                    popupmenu.onAction = function (menuItem) {
+                        var selectionModel = _self.twaverObj.box.getSelectionModel();
+                        var last = selectionModel.getLastData();
+                        console.log(last);
+                        if(menuItem.label == '删除'){
+                            var id = last.getId();
+                            if(last instanceof twaver.Link){
+                                _self.twaverObj.box.removeById(id);
+                            } else {
+                                //删除node上的link
+                                var links = last.getLinks()._as;
+                                for(var i = 0; i < links.length; i++ ){
+                                    _self.twaverObj.box.removeById(links[i].getId());
+                                }
+                                //删除node
+                                _self.twaverObj.box.removeById(id);
+                            }
+                            console.log("删除");
+                        }
+                    };
                 },
                 //画网格
                 drawGrid: function (ctx, dirtyRect){
                     var _self = this;
-                    var rootCanvas = _self.tWaver.network.getRootCanvas();
+                    var rootCanvas = _self.twaverObj.network.getRootCanvas();
                     ctx.fillStyle = '#ccc';
                     ctx.fillRect(0,0,rootCanvas.width,rootCanvas.height);
                     ctx.lineWidth = 0.2;
@@ -226,16 +260,16 @@ define([
                 //网元选中事件处理器
                 nodeSelectionChangeHandler: function(e){
                     var _self = this;
-                    var selectionModel = _self.tWaver.box.getSelectionModel();
+                    var selectionModel = _self.twaverObj.box.getSelectionModel();
                     var last = selectionModel.getLastData();
                     // 判断是否是连线模式
-                    if(_self.tWaver.isLinkMode && last!=null) {
-                        if(!_self.tWaver.from){
-                            _self.tWaver.from = last;
-                        } else if(!_self.tWaver.to){
-                            _self.tWaver.to = last;
+                    if(_self.twaverObj.isLinkMode && last!=null) {
+                        if(!_self.twaverObj.from){
+                            _self.twaverObj.from = last;
+                        } else if(!_self.twaverObj.to){
+                            _self.twaverObj.to = last;
                             //创建连线
-                            var link = new twaver.Link(_self.tWaver.from, _self.tWaver.to);
+                            var link = new twaver.Link(_self.twaverObj.from, _self.twaverObj.to);
                             link.setName('test');
                             // link.setToolTip('<b>Hello!</b>');
                             link.setStyle('arrow.from', false);
@@ -244,9 +278,9 @@ define([
                             link.setStyle('arrow.to.fill', true);
                             link.setStyle('arrow.to.shape', 'arrow.short');
                             link.setStyle('arrow.to.color', '#0000ff');
-                            _self.tWaver.box.add(link);
-                            _self.tWaver.from = _self.tWaver.to;
-                            _self.tWaver.to = null;
+                            _self.twaverObj.box.add(link);
+                            _self.twaverObj.from = _self.twaverObj.to;
+                            _self.twaverObj.to = null;
                         }
                     }
                     if(last != null){
@@ -263,7 +297,7 @@ define([
                     image.onload = function() {
                         twaver.Util.registerImage(name, image, width, height);
                         image.onload = null;
-                        _self.tWaver.network.invalidateElementUIs();
+                        _self.twaverObj.network.invalidateElementUIs();
                     };
                 },
                 //显示画布中选中的应用的信息
@@ -271,11 +305,11 @@ define([
                     var _self = this;
                     for(var i = 0; i < _self.imageInfoList.length; i++){
                         if(_self.imageInfoList[i].appName == imageName){
-                            _self.tWaver.selectedApp = _self.imageInfoList[i];
+                            _self.twaverObj.selectedApp = _self.imageInfoList[i];
                             break;
                         }
                     }
-                    _self.getInfoByVersion(_self.tWaver.selectedApp.version[0],_self.tWaver.selectedApp)
+                    _self.getInfoByVersion(_self.twaverObj.selectedApp.version[0],_self.twaverObj.selectedApp)
                 },
                 getInfoByVersion: function (version, item) {
                     var _self = this;
@@ -297,7 +331,7 @@ define([
                 changeVersion: function(event){
                     var _self = this;
                     var version = $(event.target).val();
-                    _self.getInfoByVersion(version, _self.tWaver.selectedApp);
+                    _self.getInfoByVersion(version, _self.twaverObj.selectedApp);
                 }
             }
         });
