@@ -96,11 +96,10 @@
     </div>
 
 </div>
-<div th:replace="appcenter/add_template::add_template"></div>
 <div th:replace="common/footer::footer"></div>
 <script type="text/javascript">
     require(["../js/require-config"],function (require_config) {
-        require(["apporch", "add_template"]);
+        require(["apporch"]);
     });
 </script>
 </body>

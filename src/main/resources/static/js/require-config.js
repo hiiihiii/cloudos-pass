@@ -22,7 +22,6 @@ require.config({
         "upload_image": "js/appcenter/upload_image",
         "deploy_image": "js/appcenter/deploy_image",
         "apporch": "js/appcenter/apporch",
-        "add_template": "js/appcenter/add_template",
         "template": "js/appcenter/template",
         "application": "js/appcenter/application",
         "login": "js/login",

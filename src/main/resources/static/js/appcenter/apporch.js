@@ -20,10 +20,7 @@ define([
                 common_module.dataTables("#template_table");
             },
             methods: {
-                //显示增加模板框
-                showAddTemplateDialog: function () {
-                    $("#add_template").modal({backdrop: 'static', keyboard: false});
-                }
+
             }
         });
     }
