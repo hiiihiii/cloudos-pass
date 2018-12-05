@@ -13,7 +13,6 @@ define([
             el: "#add_template",
             data: {
                 imageInfoList: [],
-                DBMSList:"",
                 appTagToShow: "DBMS",
                 DBMSList: [],
                 WebServerList: [],
@@ -204,6 +203,9 @@ define([
                     });
                     //画布画网格
                     network.paintBottom = _self.drawGrid;
+                    /**
+                     * todo 可以考虑使用twaver自带的连线模式，但存在的问题是使用自带的连线模式时怎么设置link的样式
+                     */
                     box.getSelectionModel().addSelectionChangeListener(_self.nodeSelectionChangeHandler);
                     _self.popupMenuInit();
                 },
@@ -216,7 +218,7 @@ define([
                         {'label': "删除"}
                     ]);
                     popupmenu.onMenuItemRendered = function (div, menuItem) {
-                        div.parentElement.style.width = "100px"
+                        div.parentElement.style.width = "100px";
                     };
                     //设置菜单是否显示
                     popupmenu.isVisible = function (menuItem) {
