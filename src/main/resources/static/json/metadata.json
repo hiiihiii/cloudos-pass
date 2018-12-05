@@ -12,7 +12,7 @@
       "protocol":"",
       "containerPort":"",
       "port":"",
-      "targetPort":""
+      "nodePort":""
     }],
     "requests": {
       "cpu":"",

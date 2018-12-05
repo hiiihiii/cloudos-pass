@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50634
 File Encoding         : 65001
 
-Date: 2018-11-27 17:23:49
+Date: 2018-12-05 15:11:29
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -49,7 +49,7 @@ CREATE TABLE `tl_image` (
   `logo_url` varchar(1000) DEFAULT NULL,
   `source_url` varchar(1000) DEFAULT NULL,
   `metadata` text,
-  `create_type` varchar(1000) DEFAULT NULL,
+  `create_type` varchar(100) DEFAULT NULL,
   `create_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -57,7 +57,8 @@ CREATE TABLE `tl_image` (
 -- ----------------------------
 -- Records of tl_image
 -- ----------------------------
-INSERT INTO `tl_image` VALUES ('28fe9d90-0b74-410e-9820-5b4fbd8e6844', '550e8423-e29b-41d4-a716-446655440000', '780e8400-e19b-41d4-a716-446655440000', 'busybox', 'Application', '2.0', 'BusyBox 是一个集成了三百多个最常用Linux命令和工具的软件', '2.0', '132.232.140.33/var/ftp/logo/busybox-2.0.PNG', '132.232.140.33/admin_project/busybox:2.0', '{\"volume\":\"/data\",\"cmd\":\"ifconfig\",\"cmdParams\":[\"-a\"],\"env\":[{\"envKey\":\"port\",\"envValue\":\"1234\"}],\"ports\":[{\"portName\":\"busybox\",\"protocol\":\"TCP\",\"containerPort\":\"10090\",\"port\":\"10091\",\"targetPort\":\"10092\"}],\"requests\":{\"cpu\":\"0.2\",\"memory\":\"20MB\"},\"limits\":{\"cpu\":\"0.4\",\"memory\":\"40MB\"}}', 'upload', '2018-11-27 10:56:05', '2018-11-27 10:56:05');
+INSERT INTO `tl_image` VALUES ('73c1f3a7-a016-4dba-b150-96d2fe02959f', '66908423-e29b-41d4-a716-446655440000', '780e8400-e19b-41d4-a716-446655440000', 'busybox', 'Application', '[\"2.0\",\"3.0\"]', 'busybox是一个命令工具', '{\"2.0\":\"busybox2.0\",\"3.0\":\"busybox3.0\"}', '132.232.140.33/logo/busybox-3.0.PNG', '{\"2.0\":\"132.232.140.33/library/library:2.0\",\"3.0\":\"132.232.140.33/library/library:3.0\"}', '{\"2.0\":{\"volume\":\"/data\",\"cmd\":\"ifconfig\",\"cmdParams\":[\"\"],\"env\":[{\"name\":\"port\",\"value\":\"1234\"}],\"ports\":[{\"portName\":\"busybox\",\"protocol\":\"TCP\",\"containerPort\":\"10081\",\"port\":\"10082\",\"nodePort\":\"10083\"}],\"requests\":{\"cpu\":\"0.1\",\"memory\":\"10MB\"},\"limits\":{\"cpu\":\"0.1\",\"memory\":\"10MB\"}},\"3.0\":{\"volume\":\"\",\"cmd\":\"ifconfig\",\"cmdParams\":[\"\"],\"env\":[],\"ports\":[{\"portName\":\"busybox\",\"protocol\":\"TCP\",\"containerPort\":\"10081\",\"port\":\"10082\",\"nodePort\":\"10083\"}],\"requests\":{\"cpu\":\"0.1\",\"memory\":\"10MB\"},\"limits\":{\"cpu\":\"0.1\",\"memory\":\"20MB\"}}}', '{\"2.0\":\"upload\",\"3.0\":\"upload\"}', '2018-12-05 15:10:10', '2018-12-05 15:10:10');
+INSERT INTO `tl_image` VALUES ('469e2eb4-eee0-4e8f-a449-fb33a292af43', '66908423-e29b-41d4-a716-446655440000', '780e8400-e19b-41d4-a716-446655440000', 'hello-world', 'WebServer', '[\"1.0\"]', 'hello-world是一个测试镜像，它很小很小', '{\"1.0\":\"这是1.0版本，没什么特点\"}', '132.232.140.33/logo/hello-world-1.0.PNG', '{\"1.0\":\"132.232.140.33/library/library:1.0\"}', '{\"1.0\":{\"volume\":\"/data\",\"cmd\":\"\",\"cmdParams\":[\"\"],\"env\":[],\"ports\":[{\"portName\":\"hello\",\"protocol\":\"TCP\",\"containerPort\":\"8089\",\"port\":\"8089\",\"nodePort\":\"8080\"}],\"requests\":{\"cpu\":\"0.2\",\"memory\":\"10MB\"},\"limits\":{\"cpu\":\"0.2\",\"memory\":\"20MB\"}}}', '{\"1.0\":\"upload\"}', '2018-12-05 15:04:34', '2018-12-05 15:04:34');
 
 -- ----------------------------
 -- Table structure for tl_pod
@@ -119,6 +120,19 @@ CREATE TABLE `tl_role` (
 -- Records of tl_role
 -- ----------------------------
 INSERT INTO `tl_role` VALUES ('550e8400-e19b-41d4-a716-446655440000', 'public_user', '普通用户', '2018-10-15 16:52:15', '2018-10-15 16:52:15');
+
+-- ----------------------------
+-- Table structure for tl_svc
+-- ----------------------------
+DROP TABLE IF EXISTS `tl_svc`;
+CREATE TABLE `tl_svc` (
+  `uuid` varchar(36) DEFAULT NULL,
+  `deployment_uuid` varchar(36) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of tl_svc
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for tl_user

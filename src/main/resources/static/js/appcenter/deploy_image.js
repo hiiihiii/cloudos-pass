@@ -105,7 +105,7 @@ define([
 
                 //增加端口映射
                 addPort: function (portObj, canDelete) {
-                    portObj = portObj || {portName:'', protocol:'TCP',containerPort:'',port:'',targetPort:''};
+                    portObj = portObj || {portName:'', protocol:'TCP',containerPort:'',port:'',nodePort:''};
                     var portStr = '<tr>' +
                         '<td><input class="form-control" type="text" value="' + portObj.portName + '" name="portName"/></td>' +
                         '<td>' +
@@ -116,7 +116,7 @@ define([
                         '</td>' +
                         '<td><input class="form-control" type="text" maxlength="5" value="'+portObj.containerPort+'" name="containerPort"/></td>' +
                         '<td><input class="form-control" type="text" maxlength="5" value="'+portObj.port+'" name="port"/></td>' +
-                        '<td><input class="form-control" type="text" maxlength="5" value="'+portObj.targetPort+'" name="targetPort"/></td>';
+                        '<td><input class="form-control" type="text" maxlength="5" value="'+portObj.nodePort+'" name="nodePort"/></td>';
                     if(canDelete){
                         portStr +=
                             '<td><span class="modal-table-operation"><i class="fa fa-trash-o"></i></span></td>' +

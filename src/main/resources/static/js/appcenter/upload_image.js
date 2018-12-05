@@ -28,7 +28,7 @@ define([
                         "protocol": '',
                         "containerPort": '',
                         "port": '',
-                        "targetPort": ''
+                        "nodePort": ''
                     }],
                     envs:[]
                 },
@@ -126,7 +126,7 @@ define([
                         '</td>' +
                         '<td><input class="form-control" type="text" id="containerPort' + count + '" maxlength="5" name="containerPort"/></td>' +
                         '<td><input class="form-control" type="text" id="port' + count + '" maxlength="5" name="port"/></td>' +
-                        '<td><input class="form-control" type="text" id="targetPort' + count + '" maxlength="5" name="targetPort"/></td>' +
+                        '<td><input class="form-control" type="text" id="nodePort' + count + '" maxlength="5" name="nodePort"/></td>' +
                         '<td><span class="modal-table-operation"><i class="fa fa-trash-o"></i></span></td>' +
                         '</tr>';
                     var portTbody = $("#upload_image #port_table tbody");
@@ -136,7 +136,7 @@ define([
                         "protocol": '',
                         "containerPort": '',
                         "port": '',
-                        "targetPort": ''
+                        "nodePort": ''
                     });
                     var trs = portTbody.find("tr");
                     $(trs[trs.length-1]).on("click", ".modal-table-operation", function () {
@@ -244,7 +244,7 @@ define([
                         temp.protocol = $tr.find("select[name='protocol']").val();
                         temp.containerPort = $tr.find("input[name='containerPort']").val();
                         temp.port = $tr.find("input[name='port']").val();
-                        temp.targetPort = $tr.find("input[name='targetPort']").val();
+                        temp.nodePort = $tr.find("input[name='nodePort']").val();
                         ports.push(temp);
                     })
                     metadata.ports = ports;
@@ -304,7 +304,7 @@ define([
                     required: true,
                     notEmpty: true
                 },
-                targetPort: {
+                nodePort: {
                     required: true,
                     notEmpty: true
                 }
@@ -329,7 +329,7 @@ define([
                 "protocol": '',
                 "containerPort": '',
                 "port": '',
-                "targetPort": ''
+                "nodePort": ''
             }];
             upload_image.bindData.envs = [];
 
