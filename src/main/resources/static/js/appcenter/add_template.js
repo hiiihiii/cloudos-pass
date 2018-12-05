@@ -300,7 +300,8 @@ define([
                             link.setStyle("link.width", "2");
                             link.setStyle("link.color", "#ffffff");
                             _self.twaverObj.box.add(link);
-                            _self.twaverObj.from = _self.twaverObj.to;
+                            //完成一次连线就清空起始节点和终点
+                            _self.twaverObj.from = null;
                             _self.twaverObj.to = null;
                         }
                     }
