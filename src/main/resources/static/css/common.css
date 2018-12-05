@@ -419,19 +419,22 @@ span.checkbox+a{
 #add_template .modal-dialog {
     width: 1300px;
 }
-#upload_image .modal-table-operation {
+#upload_image .modal-table-operation,
+#deploy_image .modal-table-operation {
     cursor: pointer;
     display: inline-block;
     padding-top: 4px;
 }
 #upload_image .form-group > span,
 #deploy_image .form-group > span,
-#upload_image .cmdParam-item .delete-cmd-btn {
+#upload_image .cmdParam-item .delete-cmd-btn,
+#deploy_image .cmdParam-item .delete-cmd-btn {
     position: absolute;
     cursor: pointer;
     right: -20px;
 }
-#upload_image .cmdParam-item .delete-cmd-btn {
+#upload_image .cmdParam-item .delete-cmd-btn,
+#deploy_image .cmdParam-item .delete-cmd-btn {
     bottom: 4px;
 }
 #upload_image #port_table,

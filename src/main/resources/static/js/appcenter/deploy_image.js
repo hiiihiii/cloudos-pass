@@ -70,13 +70,75 @@ define([
                 },
 
                 //增加命令参数
-                addCmdParam: function () {},
+                addCmdParam: function (cmdParam) {
+                    cmdParam = cmdParam || '';
+                    var cmdParamStr =
+                        '<div class="cmdParam-item">' +
+                        '<input class="form-control" type="text" name="cmdParam" value="'+ cmdParam +'" />' +
+                        '<span class="delete-cmd-btn"><i class="fa fa-trash-o"></i></span>'+
+                        '</div>';
+                    var cmdParam_box = $("#deploy_image #cmdParam-box");
+                    cmdParam_box.append(cmdParamStr);
+                    var cmdParam_items = cmdParam_box.find(".delete-cmd-btn");
+                    $(cmdParam_items[cmdParam_items.length-1]).on("click", function () {
+                        $(this).parent().remove();
+                    });
+                },
 
                 //增加环境变量
-                addEnv: function () {},
+                addEnv: function (envObj) {
+                    envObj = envObj || {name:'', value: ''};
+                    var envStr =
+                        '<tr>' +
+                        '<td><input class="form-control" type="text" value="'+ envObj.name +'" name="envKey" /></td>' +
+                        '<td><input class="form-control" type="text" value="' + envObj.value + '" name="envValue" /></td>' +
+                        '<td><span class="modal-table-operation"><i class="fa fa-trash-o"></i></span></td>' +
+                        '</tr>';
+                    var envTbody = $("#deploy_image #env_table tbody");
+                    envTbody.append(envStr);
+                    var trs = envTbody.find("tr");
+                    $(trs[trs.length-1]).on("click", ".modal-table-operation", function () {
+                        /*detach方法可以删除绑定的事件，而remove能*/
+                        $(this).parents("tr").remove();
+                    });
+                },
 
                 //增加端口映射
-                addPort: function () {},
+                addPort: function (portObj, canDelete) {
+                    portObj = portObj || {portName:'', protocol:'TCP',containerPort:'',port:'',targetPort:''};
+                    var portStr = '<tr>' +
+                        '<td><input class="form-control" type="text" value="' + portObj.portName + '" name="portName"/></td>' +
+                        '<td>' +
+                        '<select class="form-control" name="protocol" value="' + portObj.protocol + '">' +
+                        '<option value="TCP">TCP</option>' +
+                        '<option value="UDP">UDP</option>' +
+                        '</select>' +
+                        '</td>' +
+                        '<td><input class="form-control" type="text" maxlength="5" value="'+portObj.containerPort+'" name="containerPort"/></td>' +
+                        '<td><input class="form-control" type="text" maxlength="5" value="'+portObj.port+'" name="port"/></td>' +
+                        '<td><input class="form-control" type="text" maxlength="5" value="'+portObj.targetPort+'" name="targetPort"/></td>';
+                    if(canDelete){
+                        portStr +=
+                            '<td><span class="modal-table-operation"><i class="fa fa-trash-o"></i></span></td>' +
+                            '</tr>';
+                    } else {
+                        portStr += '</tr>';
+                    }
+                    var portTbody = $("#deploy_image #port_table tbody");
+                    portTbody.append(portStr);
+                    var trs = portTbody.find("tr");
+                    $(trs[trs.length-1]).on("click", ".modal-table-operation", function () {
+                        /*detach方法不能删除绑定的事件，而remove能*/
+                        $(this).parents("tr").remove();
+                    });
+                },
+
+                //切换版本
+                changeRepo: function (event) {
+                    var _self = this;
+                    var version = $(event.target).val();
+                    _self.getImageInfoByVersion(version);
+                },
 
                 //根据版本获取镜像信息
                 getImageInfoByVersion: function(version){
@@ -99,6 +161,22 @@ define([
                     _self.selectedVersion.cmdParams = metadata.cmdParams;
                     _self.selectedVersion.env = metadata.env;
                     _self.selectedVersion.ports = metadata.ports;
+                    $("#deploy_image .cmdParam-item").remove();
+                    $("#deploy_image #env_table tbody tr").remove();
+                    $("#deploy_image #port_table tbody tr").remove();
+                    for(var i = 0; i < metadata.cmdParams.length; i++){
+                        _self.addCmdParam(metadata.cmdParams[i]);
+                    }
+                    for(var i = 0; i < metadata.env.length; i++){
+                        _self.addEnv(metadata.env[i]);
+                    }
+                    for(var i = 0; i < metadata.ports.length; i++){
+                        if(i === 0){
+                            _self.addPort(metadata.ports[i],false);
+                        } else {
+                            _self.addPort(metadata.ports[i],true);
+                        }
+                    }
                 }
             }
         });

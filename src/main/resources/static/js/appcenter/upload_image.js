@@ -84,7 +84,7 @@ define([
                     cmdParam_box.append(cmdParamStr);
                     var cmdParam_items = cmdParam_box.find(".delete-cmd-btn");
                     $(cmdParam_items[cmdParam_items.length-1]).on("click", function () {
-                        $(this).parent().detach();
+                        $(this).parent().remove();
                     });
                 },
 
@@ -106,8 +106,8 @@ define([
                     });
                     var trs = envTbody.find("tr");
                     $(trs[trs.length-1]).on("click", ".modal-table-operation", function () {
-                        /*detach方法可以删除绑定的时间，而remove不能*/
-                        $(this).parents("tr").detach();
+                        /*detach方法可以删除绑定的事件，而remove能*/
+                        $(this).parents("tr").remove();
                         _self.bindData.envs.pop();
                     });
                 },
@@ -140,8 +140,8 @@ define([
                     });
                     var trs = portTbody.find("tr");
                     $(trs[trs.length-1]).on("click", ".modal-table-operation", function () {
-                        /*detach方法可以删除绑定的时间，而remove不能*/
-                        $(this).parents("tr").detach();
+                        /*detach方法可以删除绑定的事件，而remove能*/
+                        $(this).parents("tr").remove();
                         _self.bindData.ports.pop();
                     });
                 },
@@ -217,7 +217,7 @@ define([
 
                     metadata.volume = $("#upload_image_form input[name='volumeDir']").val();
                     //命令及命令参数
-                    var cmdParams = []
+                    var cmdParams = [];
                     $("#upload_image_form input[name='cmdParam']").each(function(){
                         cmdParams.push($(this).val());
                     });
