@@ -234,7 +234,6 @@ define([
                                 _self.twaverObj.box.removeById(id);
                             } else {
                                 //删除node上的link
-                                debugger
                                 var links = last.getLinks();
                                 if(links){
                                     for(var i = 0; i < links._as.length; i++ ){

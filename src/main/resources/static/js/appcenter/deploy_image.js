@@ -142,7 +142,6 @@ define([
 
                 //根据版本获取镜像信息
                 getImageInfoByVersion: function(version){
-                    debugger
                     var _self = this;
                     var metadata = _self.deployImageObj.metadata[version];
                     _self.selectedVersion.version = version;
@@ -183,7 +182,6 @@ define([
 
         $('#deploy_image').on('show.bs.modal', function () {
             console.log("deploy-image-show");
-            debugger;
             var imageInfo = JSON.parse(sessionStorage.getItem("deployImage"));
             deploy_image.deployImageObj = imageInfo;
             var version = imageInfo.version[0];
