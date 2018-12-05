@@ -50,9 +50,6 @@ img {
 .modal-dialog {
     margin-top: 110px;
 }
-#add_template .modal-dialog {
-    margin-top: 60px;
-}
 .cloud-modal-body {
     overflow: auto;
     height: 380px;

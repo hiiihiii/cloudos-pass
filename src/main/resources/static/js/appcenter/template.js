@@ -9,8 +9,9 @@ define([
     'jquery-validate',
     'validate-extend',
     'common-module',
-    'twaver'
-], function ($, Vue, bootstrap, jquery_validate, validate_extend, common_module, Twaver) {
+    'twaver',
+    "bootstrapSwitch"
+], function ($, Vue, bootstrap, jquery_validate, validate_extend, common_module, Twaver, bootstrapSwitch) {
     if($("#template")[0]){
         var template = new Vue({
             el: "#template",
@@ -47,6 +48,21 @@ define([
                 _self.init();
             },
             methods: {
+                showTemplateDialog: function () {
+                    //开关按钮初始化
+                    $("#add_template_form input[type='checkbox']").bootstrapSwitch({
+                        onText: '',
+                        offText: '',
+                        onSwitchChange: function (event, state) {
+                            if(state){
+
+                            } else {
+
+                            }
+                        }
+                    });
+                    $("#add_template").modal({backdrop: 'static', keyboard: false});
+                },
                 //改变连线模式
                 changeLinkMode: function(type) {
                     var _self = this;

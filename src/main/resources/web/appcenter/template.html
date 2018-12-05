@@ -202,7 +202,59 @@
             </div>
         </div>
         <div class="operation-container">
-            <button type="button" class="btn cloud-btn" v-cloak="">确定</button>
+            <button type="button" class="btn cloud-btn" v-on:click="showTemplateDialog" v-cloak="">确定</button>
+        </div>
+    </div>
+    <!--模板信息框框-->
+    <div class="modal fade" id="add_template" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <div class="cloud-modal-title">
+                        <i class="fa fa-plus"></i>
+                        <h4 class="modal-title">模板信息</h4>
+                    </div>
+                </div>
+                <div class="modal-body cloud-modal-body">
+                    <form id="add_template_form" role="form" class="form-horizontal" enctype="multipart/form-data">
+                        <!--模板名称-->
+                        <div class="form-group">
+                            <label>名称</label>
+                            <div class="form-content">
+                                <input type="text" class="form-control" id="templateName" name="templateName" placeholder="请输入名称" maxlength="64"/>
+                            </div>
+                        </div>
+                        <!--图标-->
+                        <div class="form-group">
+                            <label>图标</label>
+                            <div class="file-container">
+                                <input class="form-control file-input" type="text" name="logoFileName" readonly="readonly" />
+                                <input type="file" class="file-input-btn" name="logo" id="logo" v-on:change=""/>
+                                <label class="btn cloud-btn select-file"><i class="fa fa-upload"></i>选择文件</label>
+                            </div>
+                        </div>
+                        <!--描述-->
+                        <div class="form-group">
+                            <label >应用简介</label>
+                            <div class="form-content">
+                                <textarea class="form-control" name="description" maxlength="1000"></textarea>
+                            </div>
+                        </div>
+                        <!--是否发布-->
+                        <div class="form-group">
+                            <label>是否公有</label>
+                            <div id="isPublish" class="switch">
+                                <input type="checkbox" class="form-control" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn cloud-btn" v-on:click="" v-cloak="">确定</button>
+                    <button type="button" class="btn cloud-btn" data-dismiss="modal" v-cloak="">取消</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

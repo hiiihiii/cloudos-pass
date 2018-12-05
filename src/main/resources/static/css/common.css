@@ -417,11 +417,10 @@ span.checkbox+a{
     width: 750px;
 }
 #add_template .cloud-modal-body {
-    height: 460px;
-    display: flex;
+    height: 300px;
 }
 #add_template .modal-dialog {
-    width: 1300px;
+    width: 500px;
 }
 #upload_image .modal-table-operation,
 #deploy_image .modal-table-operation {
@@ -588,7 +587,7 @@ span.checkbox+a{
     overflow: auto;
 }
 #template .form-group label {
-    width: 85px;
+    width: 80px;
     text-align: right;
     font-size: 12px;
 }
@@ -612,5 +611,29 @@ span.checkbox+a{
     box-shadow: 2px -2px 2px #ccc;
     padding: 5px 3px;
     background-color: white;
+}
+#add_template_form .form-group label{
+    font-size: 14px;
+    text-align: left;
+}
+#add_template_form .form-group .form-control{
+    margin-right: 50px;
+    width: 70%;
+}
+#add_template_form .select-file {
+    margin-left: 13px;
+    width: 90px !important;
+    margin-bottom: 3px;
+    cursor: pointer;
+    font-size: 12px !important;
+}
+#add_template_form .file-input-btn {
+    opacity: 0;
+    display: inline-block;
+    width: 87px;
+}
+#add_template_form .file-input {
+    display: inline-block;
+    width: 45% !important;
 }
 /*新版应用编排结束*/
