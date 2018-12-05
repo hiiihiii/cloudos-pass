@@ -1,0 +1,16 @@
+{
+  "relations": {
+    "app1": {
+      "app2": {
+        "name1": "value1",
+        "name2": "value2"
+      }
+    },
+    "app3": {
+      "app4": {
+        "name3": "value3",
+        "name4": "value4"
+      }
+    }
+  }
+}

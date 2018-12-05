@@ -26,6 +26,11 @@ public class AppOrchController {
         return new ModelAndView("appcenter/apporch");
     }
 
+    @RequestMapping("template")
+    public ModelAndView toTemplate(){
+        return new ModelAndView("appcenter/template");
+    }
+
     @RequestMapping("appinfo")
     @ResponseBody
     public APIResponse getImageInfo(HttpServletRequest request){

@@ -210,6 +210,10 @@ span.checkbox+a{
 #k8s_node .operate-box .btn{
     margin-right: 5px;
 }
+#apporch .add-template-btn {
+    text-decoration: none;
+    color: #fff;
+}
 .app-box {
     margin-top: 50px;
     margin-left: 12px;
@@ -490,7 +494,7 @@ span.checkbox+a{
     cursor: pointer;
     color: #767b80;
 }
-/*应用编排开始*/
+/*旧版应用编排开始*/
 #add_template_dialog .cloud-modal-body {
     padding: 0;
 }
@@ -593,4 +597,124 @@ span.checkbox+a{
     width: 69px;
     height: 26px;
 }
-/*应用编排结束*/
+/*旧版应用编排结束*/
+/*新版应用编排开始*/
+#template .content{
+    display: flex;
+    padding-top: 100px;
+    position: relative;
+}
+#template .content-left {
+    border-right: 1px solid #d2cdcd;
+    box-shadow: 0px 3px 3px #d2cdcd;
+    flex: 3;
+}
+#template .content-middle {
+    flex: 11;
+}
+#template .content-right {
+    flex: 4;
+    height: 500px;
+}
+#template .twaver-operation-box {
+    padding: 2px;
+    position: absolute;
+    background-color: #fff;
+    margin-left: 10px;
+    margin-top: 10px;
+    box-shadow: 1px 1px 1px #666;
+}
+#template .twaver-operation-box img {
+    cursor: pointer;
+}
+#template .app-tag-statistic {
+    padding: 15px 0;
+    border-bottom: 1px solid #cccccc;
+    cursor: pointer;
+    padding-left: 10px;
+}
+#template .app-tag-statistic-detail {
+    color: #ec670b;
+    cursor: default;
+    border-bottom: 1px solid #cccccc;
+    padding-left: 10px;
+}
+#template .app-tag-statistic > span{
+    display: inline-block;
+}
+#template .app-tag-statistic > span:not(:first-child) {
+    float: right;
+    padding-right: 10px;
+}
+#template .app-items {
+    background-color: rgba(47, 49, 49, 0.1);
+    padding: 0;
+    padding-left: 10px;
+}
+#template .app-item {
+    padding: 3px 0;
+}
+#template .app-item img {
+    width: 40px;
+    height: 40px;
+}
+#template .app-item label {
+    border: 1px solid #ccc;
+    padding: 0 10px;
+    background-color: white;
+    margin-left: 45px;
+    font-weight: normal;
+    font-size: 12px;
+    color: #bee6a0;
+}
+#template .app-item span {
+    display: inline-block;
+    width: 56px;
+    min-width: 56px;
+}
+#template .app-info-box {
+    padding-left: 15px;
+    margin-left: 5px;
+    border-bottom: 1px solid #cccccc;
+}
+#template .content-right label {
+    font-weight: normal;
+    font-size: 12px;
+}
+#template .content-right .info-title {
+    background-color: #e0d9d9;
+    padding: 2px 7px;
+    margin-left: 5px;
+}
+#template .content-right .app-info-container {
+    height: 100%;
+    padding-top: 3px;
+    overflow: auto;
+}
+#template .form-group label {
+    width: 85px;
+    text-align: right;
+    font-size: 12px;
+}
+#template .form-group span {
+    font-size: 12px;
+}
+#template .form-group .runtime-input {
+    width: 100px;
+}
+#template .form-group .runtime-select {
+    display: inline-block;
+    width: 69px;
+    height: 26px;
+}
+#template .operation-container {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 2px -2px 2px #ccc;
+    padding: 5px 3px;
+    background-color: white;
+}
+/*新版应用编排结束*/

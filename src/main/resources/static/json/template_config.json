@@ -1,0 +1,16 @@
+{
+  "app1": {
+    "version": "2.0",
+    "logo_url": "",
+    "source_url": "",
+    "metadata": {
+
+    }
+  },
+  "app2": {
+    "version": "1.0",
+    "logo_url": "",
+    "source_url": "",
+    "metadata": {}
+  }
+}

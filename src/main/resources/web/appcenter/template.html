@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <div th:replace="common/header::header"></div>
+</head>
+<body>
+<div th:replace="common/nav::menu"></div>
+<div id="template">
+    <div class="content">
+        <div class="content-left">
+            <!--DBMS应用-->
+            <div class="app-tag-statistic-box">
+                <div class="app-tag-statistic" v-show="appTagToShow != 'DBMS'" v-cloak="" v-on:click="changeAppTag('DBMS')">
+                    <span v-cloak="">DBMS({{DBMSCount}})</span>
+                    <span><i class="fa fa-angle-right"></i></span>
+                </div>
+                <div class="app-tag-statistic app-tag-statistic-detail" v-show="appTagToShow == 'DBMS'" v-cloak="">
+                    <span v-cloak="">DBMS({{DBMSCount}})</span>
+                    <span>
+                                    <i class="fa fa-angle-down"></i>
+                                </span>
+                </div>
+                <ul class="app-items" v-show="appTagToShow == 'DBMS'" v-cloak="">
+                    <li class="app-item" v-for="db in DBMSList" v-bind:id="db.app_id" draggable="true" v-cloak=""
+                        v-on:dragstart="startDrag( 'DBMS', db.app_id, $event)">
+                        <img v-bind:src="db.logo_url" v-on:error="setDefault($event)" draggable="false"/>
+                        <span v-bind:title="db.appName" v-cloak="">{{db.appNameShow}}</span>
+                        <label v-cloak="" v-text="db.type == 'public' ? '公有': '私有'"></label>
+                    </li>
+                </ul>
+            </div>
+            <!--WebServer应用-->
+            <div class="app-tag-statistic-box">
+                <div class="app-tag-statistic" v-cloak="" v-show="appTagToShow != 'WebServer'" v-on:click="changeAppTag('WebServer')">
+                    <span v-cloak="">WebServer({{WebServerCount}})</span>
+                    <span>
+                                    <i class="fa fa-angle-right"></i>
+                                </span>
+                </div>
+                <div class="app-tag-statistic app-tag-statistic-detail" v-cloak="" v-show="appTagToShow == 'WebServer'">
+                    <span v-cloak="">WebServer({{WebServerCount}})</span>
+                    <span>
+                                    <i class="fa fa-angle-down"></i>
+                                </span>
+                </div>
+                <ul class="app-items" v-cloak="" v-show="appTagToShow == 'WebServer'">
+                    <li class="app-item" v-for="web in WebServerList" v-bind:id="web.app_id" draggable="true" v-cloak=""
+                        v-on:dragstart="startDrag('WebServer', web.app_id, $event)">
+                        <img v-bind:src="web.logo_url" v-on:error="setDefault($event)" draggable="false" />
+                        <span v-bind:title="web.appName" v-cloak="">{{web.appNameShow}}</span>
+                        <label v-text="web.type == 'public' ? '公有': '私有'" v-cloak=""></label>
+                    </li>
+                </ul>
+            </div>
+            <!--Application-->
+            <div class="app-tag-statistic-box">
+                <div class="app-tag-statistic" v-cloak="" v-show="appTagToShow != 'Application'" v-on:click="changeAppTag('Application')">
+                    <span v-cloak="">Application({{ApplicationCount}})</span>
+                    <span>
+                                    <i class="fa fa-angle-right"></i>
+                                </span>
+                </div>
+                <div class="app-tag-statistic app-tag-statistic-detail" v-cloak="" v-show="appTagToShow == 'Application'">
+                    <span v-cloak="">Application({{ApplicationCount}})</span>
+                    <span>
+                                    <i class="fa fa-angle-down"></i>
+                                </span>
+                </div>
+                <ul class="app-items" v-cloak="" v-show="appTagToShow == 'Application'">
+                    <li class="app-item" v-for="app in ApplicationList" v-bind:id="app.app_id" draggable="true" v-cloak=""
+                        v-on:dragstart="startDrag('Application', app.app_id, $event)">
+                        <img v-bind:src="app.logo_url" v-on:error="setDefault($event)" draggable="false" />
+                        <span v-bind:title="app.appName" v-cloak="">{{app.appNameShow}}</span>
+                        <label v-cloak="" v-text="app.type == 'public' ? '公有': '私有'"></label>
+                    </li>
+                </ul>
+            </div>
+            <!--Other-->
+            <div class="app-tag-statistic-box">
+                <div class="app-tag-statistic" v-cloak="" v-show="appTagToShow != 'Other'" v-on:click="changeAppTag('Other')">
+                    <span v-cloak="">Other({{OtherCount}})</span>
+                    <span>
+                                    <i class="fa fa-angle-right"></i>
+                                </span>
+                </div>
+                <div class="app-tag-statistic app-tag-statistic-detail" v-cloak="" v-show="appTagToShow == 'Other'">
+                    <span v-cloak="">Other({{OtherCount}})</span>
+                    <span>
+                                    <i class="fa fa-angle-down"></i>
+                                </span>
+                </div>
+                <ul class="app-items" v-cloak="" v-show="appTagToShow == 'Other'">
+                    <li class="app-item" v-for="other in OtherList" v-bind:id="other.app_id" draggable="true" v-cloak=""
+                        v-on:dragstart="startDrag( 'Other', other.app_id, $event)">
+                        <img v-bind:src="other.logo_url" v-on:error="setDefault($event)" draggable="false" />
+                        <span v-bind:title="other.appName" v-cloak="">{{other.appNameShow}}</span>
+                        <label v-cloak="" v-text="other.type == 'public' ? '公有': '私有'"></label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="content-middle">
+            <div id="canvas-box"></div>
+            <div class="twaver-operation-box">
+                <img v-show="!twaverObj.isLinkMode" v-on:click="changeLinkMode('link')" src="../images/apporch/link.png" v-cloak=""/>
+                <img v-show="twaverObj.isLinkMode" v-on:click="changeLinkMode('unlink')" src="../images/apporch/unlink.png" v-cloak=""/>
+            </div>
+        </div>
+        <div class="content-right">
+            <div class="app-info-container" v-if="twaverObj.selectedApp" v-cloak="">
+                <label class="info-title">基本信息</label>
+                <div class="app-info-box">
+                    <div class="form-group">
+                        <label>镜像： </label>
+                        <span v-cloak="">{{twaverObj.selectedApp.appName}}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>版本： </label>
+                        <select name="version" id="version" v-on:change="changeVersion($event)">
+                            <option v-for="(item, index) in twaverObj.selectedApp.version"
+                                    v-bind:value="item" v-cloak="">{{item}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>标签： </label>
+                        <span v-cloak="">{{twaverObj.selectedApp.appTag}}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>描述： </label>
+                        <span v-cloak="">{{twaverObj.selectedApp.description}}</span>
+                    </div>
+                </div>
+                <label class="info-title">启动限制</label>
+                <div class="app-info-box">
+                    <div class="form-group">
+                        <label>CPU(核)： </label>
+                        <input type="text" v-bind:value="selected.requests.cpu" name="minCpu" id="minCpu" />
+                    </div>
+                    <div class="form-group">
+                        <label>内存： </label>
+                        <input class="runtime-input" type="text"
+                               v-bind:value="selected.requests.memory" name="minMemory" id="minMemory" />
+                        <select class="runtime-select" v-bind:value="selected.requests.memoryUnit"
+                                name="minMemoryUnit" id="minMemoryUnit">
+                            <option value="MB">MB</option>
+                            <option value="GB">GB</option>
+                        </select>
+                    </div>
+                </div>
+                <label class="info-title">运行限制</label>
+                <div class="app-info-box">
+                    <div class="form-group">
+                        <label>CPU(核)： </label>
+                        <input type="text" v-bind:value="selected.limits.cpu" name="maxCpu" id="maxCpu" />
+                    </div>
+                    <div class="form-group">
+                        <label>内存： </label>
+                        <input class="runtime-input" type="text"
+                               v-bind:value="selected.limits.memory" name="maxMemory" id="maxMemory" />
+                        <select class="runtime-select"
+                                v-bind:value="selected.limits.memoryUnit" name="maxMemoryUnit" id="maxMemoryUnit">
+                            <option value="MB">MB</option>
+                            <option value="GB">GB</option>
+                        </select>
+                    </div>
+                </div>
+                <label class="info-title">环境变量</label>
+                <div class="app-info-box">
+                    <div v-for="(item) in selected.env">
+                        <div class="form-group">
+                            <label v-cloak="">{{item.name}}：</label>
+                            <input type="text" v-bind:value="item.value" name="envValue" v-cloak=""/>
+                        </div>
+                    </div>
+                </div>
+                <label class="info-title">端口映射</label>
+                <div class="app-info-box" >
+                    <div v-for="(item) in selected.ports">
+                        <div class="form-group">
+                            <label>名称： </label>
+                            <input type="text" v-bind:value="item.portName" v-cloak=""/>
+                        </div>
+                        <div class="form-group">
+                            <label>容器端口： </label>
+                            <input type="text" v-bind:value="item.containerPort" v-cloak=""/>
+                        </div>
+                        <div class="form-group">
+                            <label>集群内端口： </label>
+                            <input type="text" v-bind:value="item.port" v-cloak=""/>
+                        </div>
+                        <div class="form-group">
+                            <label>集群外端口： </label>
+                            <input type="text" v-bind:value="item.nodePort" v-cloak=""/>
+                        </div>
+                        <div class="form-group">
+                            <label>协议： </label>
+                            <input type="text" v-bind:value="item.protocol" v-cloak=""/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="operation-container">
+            <button type="button" class="btn cloud-btn" v-cloak="">确定</button>
+        </div>
+    </div>
+</div>
+<div th:replace="common/footer::footer"></div>
+<script type="text/javascript">
+    require(["../js/require-config"],function (require_config) {
+        require(["template"]);
+    });
+</script>
+</body>
+</html>
