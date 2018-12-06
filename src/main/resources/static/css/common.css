@@ -647,4 +647,7 @@ span.checkbox+a{
     width: 44% !important;
     margin-right: 0 !important;
 }
+#template_table td a{
+    color: #003ce6;
+}
 /*新版应用编排结束*/

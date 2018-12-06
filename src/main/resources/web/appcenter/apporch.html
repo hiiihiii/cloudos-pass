@@ -26,70 +26,35 @@
                     </div>
                 </th>
                 <th>名称</th>
-                <th>test</th>
-                <th>test</th>
+                <th>图标</th>
+                <th>描述</th>
+                <th>已发布</th>
                 <th>操作</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
+            <tr v-for="template in templateList" v-cloak="">
                 <td>
                     <div class="checkbox-container table-checkbox-box">
                         <input class="cloud-checkbox" type="checkbox"/>
                     </div>
                 </td>
-                <td>test3</td>
-                <td>test3</td>
-                <td>test3</td>
-                <td>操作</td>
-            </tr>
-            <tr>
                 <td>
-                    <div class="checkbox-container table-checkbox-box">
-                        <input class="cloud-checkbox" type="checkbox"/>
-                    </div>
+                    <a href="#" target="_blank" v-cloak="" v-bind:title="template.templateName">{{template.templateName}}</a>
                 </td>
-                <td>test2</td>
-                <td>test2</td>
-                <td>test2</td>
+                <td>
+                    <a v-bind:href="template.temp_logo_url" target="_blank"
+                       v-bind:title="template.logo_url" v-cloak="">{{template.logo_url}}</a>
+                </td>
+                <td v-cloak="" v-bind:title="template.description">{{template.description}}</td>
+                <td v-cloak="" v-text="template.isPublish == '0'? '未发布': '已发布'"></td>
                 <td>
                     <span class="operate-btn" title="部署"><i class="fa fa-toggle-right"></i></span>
+                    <span class="operate-btn" title="发布"
+                        v-show="template.isPublish == '0'"><i class="fa fa-location-arrow"></i></span>
                     <span class="operate-btn" title="编辑"><i class="fa fa-pencil"></i></span>
                     <span class="operate-btn" title="删除"><i class="fa fa-trash-o"></i></span>
                 </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="checkbox-container table-checkbox-box">
-                        <input class="cloud-checkbox" type="checkbox"/>
-                    </div>
-                </td>
-                <td>test5</td>
-                <td>test5</td>
-                <td>test5</td>
-                <td>操作</td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="checkbox-container table-checkbox-box">
-                        <input class="cloud-checkbox" type="checkbox"/>
-                    </div>
-                </td>
-                <td>test4</td>
-                <td>test4</td>
-                <td>test4</td>
-                <td>操作</td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="checkbox-container table-checkbox-box">
-                        <input class="cloud-checkbox" type="checkbox"/>
-                    </div>
-                </td>
-                <td>test1</td>
-                <td>test1</td>
-                <td>test1</td>
-                <td>操作</td>
             </tr>
             </tbody>
         </table>

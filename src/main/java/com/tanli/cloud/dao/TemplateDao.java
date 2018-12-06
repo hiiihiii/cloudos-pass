@@ -2,6 +2,9 @@ package com.tanli.cloud.dao;
 
 import com.tanli.cloud.model.Template;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * Created by tanli on 2018/12/6 0006.
@@ -9,4 +12,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface TemplateDao {
     public int addTemplate(Template template);
+    public List<Template> getAllTemplate(@Param("userid")String userId);
 }

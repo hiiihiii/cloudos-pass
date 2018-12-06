@@ -7,4 +7,22 @@
         VALUES
         (#{uuid}, #{userId}, #{templateName},#{logo_url}, #{description}, #{relation}, #{config}, #{isPublish}, #{create_time},#{update_time})
     </insert>
+
+    <resultMap id="templates" type="com.tanli.cloud.model.Template">
+        <id column="uuid" property="uuid"></id>
+        <result column="user_uuid" property="userId"></result>
+        <result column="name" property="templateName"></result>
+        <result column="logo_url" property="logo_url"></result>
+        <result column="description" property="description"></result>
+        <result column="relation" property="relation"></result>
+        <result column="config" property="config"></result>
+        <result column="create_time" property="create_time"></result>
+        <result column="update_time" property="update_time"></result>
+        <result column="isPublish" property="isPublish"></result>
+    </resultMap>
+
+    <select id="getAllTemplate" resultMap="templates">
+        SELECT * FROM tl_template
+        WHERE user_uuid = #{userid}
+    </select>
 </mapper>
