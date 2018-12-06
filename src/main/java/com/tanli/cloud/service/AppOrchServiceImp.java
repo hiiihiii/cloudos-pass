@@ -2,15 +2,23 @@ package com.tanli.cloud.service;
 
 import com.tanli.cloud.dao.ImageInfoDao;
 import com.tanli.cloud.dao.RepositoryDao;
+import com.tanli.cloud.dao.TemplateDao;
 import com.tanli.cloud.model.ImageInfo;
+import com.tanli.cloud.model.Template;
 import com.tanli.cloud.model.response.LoginingUser;
 import com.tanli.cloud.model.response.Repository;
 import com.tanli.cloud.utils.APIResponse;
+import com.tanli.cloud.utils.FtpUtil;
+import com.tanli.cloud.utils.UuidUtil;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +28,13 @@ import java.util.List;
 @Service
 public class AppOrchServiceImp implements AppOrchService{
     @Autowired
+    private FtpUtil ftpUtil;
+    @Autowired
     private ImageInfoDao imageInfoDao;
     @Autowired
     private RepositoryDao repositoryDao;
+    @Autowired
+    private TemplateDao templateDao;
 
     private static final Logger LOGGE = LoggerFactory.getLogger(AppOrchServiceImp.class);
 
@@ -39,5 +51,46 @@ public class AppOrchServiceImp implements AppOrchService{
             imageInfos.addAll(temp);
         });
         return APIResponse.success(imageInfos);
+    }
+
+    @Override
+    public APIResponse addTemplate(LoginingUser user, Template template, MultipartFile file) {
+        //上传logo到FTP中
+        String originalFileName = file.getOriginalFilename();//必须使用originFileName
+        String[] temp = originalFileName.split("\\.");
+        String newFileName = template.getTemplateName() + "." + temp[temp.length-1];
+        String logoUrl = uploadFile(originalFileName, file, newFileName);
+        if(!(logoUrl.equals(""))){
+            template.setLogo_url(logoUrl);
+            //保存数据到数据库中
+            template.setUuid(UuidUtil.getUUID());
+            template.setUserId(user.getUser_uuid());
+            DateTime now = DateTime.now();
+            String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+            template.setCreate_time(nowStr);
+            template.setUpdate_time(nowStr);
+            int count = templateDao.addTemplate(template);
+            if(count > 0){
+                return APIResponse.success();
+            } else {
+                LOGGE.info("[AppOrchServiceImp Error]: " + "保存模板到数据库失败");
+                return APIResponse.fail("保存模板到数据库失败");
+            }
+        } else {
+            LOGGE.info("[AppOrchServiceImp Error]: " + "上传logo文件失败");
+            return APIResponse.fail("上传logo文件失败");
+        }
+    }
+
+    private String uploadFile(String fileName, MultipartFile file, String newFileName) {
+        String result = "";
+        String path = "/templatelogo";
+        try {
+            InputStream inputStream = file.getInputStream();
+            result = ftpUtil.uploadFile(fileName, inputStream, path, newFileName);
+        } catch (IOException e){
+            LOGGE.info("[AppOrchServiceImp Error]: " + fileName + "转换失败");
+        }
+        return result;
     }
 }

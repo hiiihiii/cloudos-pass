@@ -7,7 +7,6 @@ import com.tanli.cloud.model.response.LoginingUser;
 import com.tanli.cloud.model.response.Repository;
 import com.tanli.cloud.utils.APIResponse;
 import com.tanli.cloud.utils.FtpUtil;
-import com.tanli.cloud.utils.RestClient;
 import com.tanli.cloud.utils.UuidUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -37,8 +36,6 @@ public class AppStoreServiceImp implements AppStoreService {
 
     @Autowired
     private FtpUtil ftpUtil;
-    @Autowired
-    private RestClient restClient;
     @Resource
     RestTemplate restTemplate;
     @Autowired

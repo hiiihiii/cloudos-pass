@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tanli.cloud.dao.TemplateDao">
+    <insert id="addTemplate" parameterType="com.tanli.cloud.model.Template">
+        INSERT INTO tl_template
+        (uuid, user_uuid, name, logo_url, description, relation, config, isPublish, create_time, update_time)
+        VALUES
+        (#{uuid}, #{userId}, #{templateName},#{logo_url}, #{description}, #{relation}, #{config}, #{isPublish}, #{create_time},#{update_time})
+    </insert>
+</mapper>

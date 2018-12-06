@@ -1,5 +1,6 @@
 package com.tanli.cloud.controller.appcenter;
 
+import com.tanli.cloud.model.Template;
 import com.tanli.cloud.model.response.LoginingUser;
 import com.tanli.cloud.service.AppOrchService;
 import com.tanli.cloud.utils.APIResponse;
@@ -8,7 +9,9 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,8 +43,9 @@ public class AppOrchController {
     }
     @PostMapping("template/add")
     @ResponseBody
-    public APIResponse addTemplate(HttpServletRequest request){
+    public APIResponse addTemplate(HttpServletRequest request, Template template,
+                                   @RequestParam(value = "logoFile", required = true)MultipartFile logofile){
         LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
-        return null;
+        return appOrchService.addTemplate(user, template, logofile);
     }
 }
