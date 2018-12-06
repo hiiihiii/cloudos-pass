@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50634
 File Encoding         : 65001
 
-Date: 2018-12-05 15:11:29
+Date: 2018-12-06 20:54:45
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -21,11 +21,11 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `tl_deployment`;
 CREATE TABLE `tl_deployment` (
   `deploy_uuid` varchar(36) NOT NULL,
+  `deploy_name` varchar(128) DEFAULT NULL,
   `user_uuid` varchar(36) NOT NULL,
+  `deploy_type` varchar(32) DEFAULT NULL,
   `template_id` varchar(36) DEFAULT NULL,
   `image_uuid` varchar(36) DEFAULT NULL,
-  `deploy_type` varchar(32) DEFAULT NULL,
-  `deploy_name` varchar(128) DEFAULT NULL,
   `description` varchar(1000) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -66,18 +66,36 @@ INSERT INTO `tl_image` VALUES ('469e2eb4-eee0-4e8f-a449-fb33a292af43', '66908423
 DROP TABLE IF EXISTS `tl_pod`;
 CREATE TABLE `tl_pod` (
   `uuid` varchar(36) NOT NULL,
-  `deploy_uuid` varchar(36) NOT NULL,
+  `rc_uuid` varchar(36) NOT NULL,
+  `svc_uuid` varchar(36) NOT NULL,
   `name` varchar(64) DEFAULT NULL,
   `namespace` varchar(64) DEFAULT NULL,
   `hostIP` varchar(128) DEFAULT NULL,
   `podIP` varchar(128) DEFAULT NULL,
   `restartCount` varchar(10) DEFAULT NULL,
   `image` varchar(1000) DEFAULT NULL,
-  `status` varchar(64) DEFAULT NULL
+  `status` varchar(64) DEFAULT NULL,
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tl_pod
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for tl_rc
+-- ----------------------------
+DROP TABLE IF EXISTS `tl_rc`;
+CREATE TABLE `tl_rc` (
+  `uuid` varchar(36) DEFAULT NULL,
+  `deployment_uuid` varchar(36) DEFAULT NULL,
+  `content` text,
+  `create_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of tl_rc
 -- ----------------------------
 
 -- ----------------------------
@@ -127,12 +145,37 @@ INSERT INTO `tl_role` VALUES ('550e8400-e19b-41d4-a716-446655440000', 'public_us
 DROP TABLE IF EXISTS `tl_svc`;
 CREATE TABLE `tl_svc` (
   `uuid` varchar(36) DEFAULT NULL,
-  `deployment_uuid` varchar(36) DEFAULT NULL
+  `deployment_uuid` varchar(36) DEFAULT NULL,
+  `content` text,
+  `create_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tl_svc
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for tl_template
+-- ----------------------------
+DROP TABLE IF EXISTS `tl_template`;
+CREATE TABLE `tl_template` (
+  `uuid` varchar(36) NOT NULL,
+  `user_uuid` varchar(36) NOT NULL,
+  `name` varchar(64) DEFAULT NULL,
+  `logo_url` varchar(1000) DEFAULT NULL,
+  `description` varchar(1000) DEFAULT NULL,
+  `relation` varchar(1000) DEFAULT NULL,
+  `config` text,
+  `create_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `isPublish` varchar(10) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of tl_template
+-- ----------------------------
+INSERT INTO `tl_template` VALUES ('63bf7338-638f-4ea0-8400-ba8bb159d814', '780e8400-e19b-41d4-a716-446655440000', 'test-template', '132.232.140.33/templatelogo/test-template.jpg', '测试添加镜像模板', '{\"hello-world\":{\"busybox\":\"test\"}}', '{\"hello-world\":{\"version\":\"1.0\",\"logo_url\":\"132.232.140.33/logo/hello-world-1.0.PNG\",\"source_url\":\"132.232.140.33/library/library:1.0\",\"metadata\":{\"volume\":\"/data\",\"cmd\":\"\",\"cmdParams\":[\"\"],\"env\":[],\"ports\":[{\"portName\":\"hello\",\"protocol\":\"TCP\",\"containerPort\":\"8089\",\"port\":\"8089\",\"nodePort\":\"8080\"}],\"requests\":{\"cpu\":\"0.2\",\"memory\":\"10MB\"},\"limits\":{\"cpu\":\"0.2\",\"memory\":\"20MB\"}}},\"busybox\":{\"version\":\"2.0\",\"logo_url\":\"132.232.140.33/logo/busybox-3.0.PNG\",\"source_url\":\"132.232.140.33/library/library:2.0\",\"metadata\":{\"volume\":\"/data\",\"cmd\":\"ifconfig\",\"cmdParams\":[\"\"],\"env\":[{\"name\":\"port\",\"value\":\"1234\"}],\"ports\":[{\"portName\":\"busybox\",\"protocol\":\"TCP\",\"containerPort\":\"10081\",\"port\":\"10082\",\"nodePort\":\"10083\"}],\"requests\":{\"cpu\":\"0.1\",\"memory\":\"10MB\"},\"limits\":{\"cpu\":\"0.1\",\"memory\":\"10MB\"}}}}', '2018-12-06 19:43:20', '2018-12-06 19:43:20', '0');
 
 -- ----------------------------
 -- Table structure for tl_user

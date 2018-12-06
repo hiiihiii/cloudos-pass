@@ -16,7 +16,8 @@ define([
                 appType: "public",
                 showPublic: true,
                 showPrivate: false,
-                imageInfos: ""
+                imageInfos: [],
+                templates: []
             },
             mounted: function () {
                 var _self = this;
@@ -114,6 +115,8 @@ define([
                         }
                     })
                 },
+
+                //获取模板信息
 
                 convertData: function(imageArray){
                     var _self = this;
