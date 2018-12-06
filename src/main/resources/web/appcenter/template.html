@@ -24,7 +24,7 @@
                 <ul class="app-items" v-show="appTagToShow == 'DBMS'" v-cloak="">
                     <li class="app-item" v-for="db in DBMSList" v-bind:id="db.app_id" draggable="true" v-cloak=""
                         v-on:dragstart="startDrag( 'DBMS', db.app_id, $event)">
-                        <img v-bind:src="db.logo_url" v-on:error="setDefault($event)" draggable="false"/>
+                        <img v-bind:src="db.temp_logo_url" v-on:error="setDefault($event)" draggable="false"/>
                         <span v-bind:title="db.appName" v-cloak="">{{db.appNameShow}}</span>
                         <label v-cloak="" v-text="db.type == 'public' ? '公有': '私有'"></label>
                     </li>
@@ -47,7 +47,7 @@
                 <ul class="app-items" v-cloak="" v-show="appTagToShow == 'WebServer'">
                     <li class="app-item" v-for="web in WebServerList" v-bind:id="web.app_id" draggable="true" v-cloak=""
                         v-on:dragstart="startDrag('WebServer', web.app_id, $event)">
-                        <img v-bind:src="web.logo_url" v-on:error="setDefault($event)" draggable="false" />
+                        <img v-bind:src="web.temp_logo_url" v-on:error="setDefault($event)" draggable="false" />
                         <span v-bind:title="web.appName" v-cloak="">{{web.appNameShow}}</span>
                         <label v-text="web.type == 'public' ? '公有': '私有'" v-cloak=""></label>
                     </li>
@@ -70,7 +70,7 @@
                 <ul class="app-items" v-cloak="" v-show="appTagToShow == 'Application'">
                     <li class="app-item" v-for="app in ApplicationList" v-bind:id="app.app_id" draggable="true" v-cloak=""
                         v-on:dragstart="startDrag('Application', app.app_id, $event)">
-                        <img v-bind:src="app.logo_url" v-on:error="setDefault($event)" draggable="false" />
+                        <img v-bind:src="app.temp_logo_url" v-on:error="setDefault($event)" draggable="false" />
                         <span v-bind:title="app.appName" v-cloak="">{{app.appNameShow}}</span>
                         <label v-cloak="" v-text="app.type == 'public' ? '公有': '私有'"></label>
                     </li>
@@ -93,7 +93,7 @@
                 <ul class="app-items" v-cloak="" v-show="appTagToShow == 'Other'">
                     <li class="app-item" v-for="other in OtherList" v-bind:id="other.app_id" draggable="true" v-cloak=""
                         v-on:dragstart="startDrag( 'Other', other.app_id, $event)">
-                        <img v-bind:src="other.logo_url" v-on:error="setDefault($event)" draggable="false" />
+                        <img v-bind:src="other.temp_logo_url" v-on:error="setDefault($event)" draggable="false" />
                         <span v-bind:title="other.appName" v-cloak="">{{other.appNameShow}}</span>
                         <label v-cloak="" v-text="other.type == 'public' ? '公有': '私有'"></label>
                     </li>
@@ -180,7 +180,7 @@
                     </div>
                     <div class="form-group" v-for="(param, index) in selected.cmdParams">
                         <label>参数{{index+1}}： </label>
-                        <input type="text" v-model="param" name="cmdParam" />
+                        <input type="text" v-model="selected.cmdParams[index]" name="cmdParam" v-cloak=""/>
                     </div>
                 </div>
                 <label class="info-title">环境变量</label>
@@ -213,7 +213,10 @@
                         </div>
                         <div class="form-group">
                             <label>协议： </label>
-                            <input type="text" v-model="item.protocol" v-cloak=""/>
+                            <select class="protocol-select" v-model="item.protocol" v-cloak="">
+                                <option value="TCP">TCP</option>
+                                <option value="UDP">UDP</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -247,8 +250,9 @@
                         <div class="form-group">
                             <label>图标</label>
                             <div class="file-container">
-                                <input class="form-control file-input" type="text" name="logoFileName" readonly="readonly" />
-                                <input type="file" class="file-input-btn" name="logo" id="logo" v-on:change=""/>
+                                <input class="form-control file-input" type="text" name="logoFileName"
+                                       v-model="logoFileName" readonly="readonly" />
+                                <input type="file" class="file-input-btn" name="logo" id="logo" v-on:change="fileChange($event)"/>
                                 <label class="btn cloud-btn select-file"><i class="fa fa-upload"></i>选择文件</label>
                             </div>
                         </div>
@@ -269,7 +273,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn cloud-btn" v-on:click="" v-cloak="">确定</button>
+                    <button type="button" class="btn cloud-btn" v-on:click="submitAdd" v-cloak="">确定</button>
                     <button type="button" class="btn cloud-btn" data-dismiss="modal" v-cloak="">取消</button>
                 </div>
             </div>

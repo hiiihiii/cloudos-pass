@@ -6,6 +6,7 @@ import com.tanli.cloud.utils.APIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,5 +37,11 @@ public class AppOrchController {
     public APIResponse getImageInfo(HttpServletRequest request){
         LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
         return appOrchService.getImageInfo(user);
+    }
+    @PostMapping("template/add")
+    @ResponseBody
+    public APIResponse addTemplate(HttpServletRequest request){
+        LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
+        return null;
     }
 }

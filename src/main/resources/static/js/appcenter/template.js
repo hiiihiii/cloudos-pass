@@ -47,7 +47,9 @@ define([
                     env: [],
                     ports: []
                 },
-                appInfo: []   //用于最后统计信息
+                appInfo: [],   //用于最后统计信息
+                versions: [],  //用于最后统计信息，格式为{appName:'', version:''}
+                logoFileName: ''
             },
             mounted: function () {
                 var _self = this;
@@ -56,7 +58,7 @@ define([
             },
             methods: {
                 showTemplateDialog: function () {
-                    //开关按钮初始化
+                    //是否发布开关按钮初始化
                     $("#add_template_form input[type='checkbox']").bootstrapSwitch({
                         onText: '',
                         offText: '',
@@ -121,7 +123,7 @@ define([
                         imageArray[i].source_url = JSON.parse(imageArray[i].source_url);
                         imageArray[i].v_description = JSON.parse(imageArray[i].v_description);
                         imageArray[i].version = JSON.parse(imageArray[i].version);
-                        imageArray[i].logo_url = "ftp://docker:dockerfile@" + imageArray[i].logo_url;
+                        imageArray[i].temp_logo_url = "ftp://docker:dockerfile@" + imageArray[i].logo_url;
                         if(imageArray[i].appName.length > 7){
                             imageArray[i].appNameShow = imageArray[i].appName.slice(0,7) + "...";
                         } else {
@@ -182,7 +184,7 @@ define([
                             break;
                         }
                     }
-                    dragItem.logo_url = $(event.target).find("img").attr("src");
+                    dragItem.temp_logo_url = $(event.target).find("img").attr("src");
                     event.dataTransfer.setData("text", JSON.stringify(dragItem));
                 },
 
@@ -220,11 +222,18 @@ define([
                         }
                         if(!isExist){
                             var node = new twaver.Node();
-                            _self.registerNormalImage(dragItem.logo_url, dragItem.appName, 40, 40);
+                            _self.registerNormalImage(dragItem.temp_logo_url, dragItem.appName, 40, 40);
                             node.setName(dragItem.appName);
                             node.setImage(dragItem.appName);
                             node.setLocation(event.offsetX - 40 / 2, event.offsetY - 40 / 2);
                             _self.twaverObj.box.add(node);
+                            for(var i = 0; i < _self.imageInfoList.length; i++){
+                                if(dragItem.appName === _self.imageInfoList[i].appName){
+                                    _self.appInfo.push(_self.imageInfoList[i]);
+                                    _self.versions.push({appName: dragItem.appName, version: dragItem.version[0]});
+                                    break;
+                                }
+                            }
                         }
                     });
                     //画布画网格
@@ -344,19 +353,14 @@ define([
                         }
                     }
                     // 保存当前节点的信息
-                    // if(_self.twaverObj.selectedApp != null){
-                    //     var isExist = false;
-                    //     for(var i = 0; i < _self.appInfo.length; i++ ){
-                    //         if(_self.appInfo[i].appName === _self.selected.appName){
-                    //             _self.appInfo[i] = _self.selected;
-                    //             isExist = true;
-                    //             break;
-                    //         }
-                    //     }
-                    //     if(!isExist){
-                    //         _self.appInfo.push(_self.selected);
-                    //     }
-                    // }
+                    if(_self.twaverObj.selectedApp != null){
+                        for(var i = 0; i < _self.appInfo.length; i++){
+                            if(_self.twaverObj.selectedApp.appName === _self.appInfo[i].appName){
+                                _self.setInfoByVersion(i, _self.selected.version);
+                                _self.setVersionByName(_self.appInfo[i].appName);
+                            }
+                        }
+                    }
                     // 展示选中节点的信息
                     if(last != null){
                         var imageName = last.getName();
@@ -368,22 +372,61 @@ define([
                 //显示画布中选中的应用的信息
                 showSelectedAppInfo: function (imageName) {
                     var _self = this;
-                    for(var i = 0; i < _self.imageInfoList.length; i++){
-                        if(_self.imageInfoList[i].appName == imageName){
-                            _self.twaverObj.selectedApp = _self.imageInfoList[i];
+                    for(var i = 0; i < _self.appInfo.length; i++){
+                        if(_self.appInfo[i].appName == imageName){
+                            _self.twaverObj.selectedApp = _self.appInfo[i];
                             break;
                         }
                     }
-                    _self.getInfoByVersion(_self.twaverObj.selectedApp.version[0],_self.twaverObj.selectedApp)
+                    //加载之前最后展示过的版本，如果从未展示过就展示第一个版本的
+                    var version = _self.twaverObj.selectedApp.version[0];
+                    for(var i = 0; i < _self.versions.length; i++ ){
+                        if(_self.versions[i].appName == imageName){
+                            version = _self.versions[i].version;
+                            break;
+                        }
+                    }
+                    _self.getInfoByVersion(version, _self.twaverObj.selectedApp)
+                },
+
+                //记录最后展示的版本
+                setVersionByName: function (appName) {
+                    var _self = this;
+                    for(var i = 0; i < _self.versions.length; i++){
+                        if(_self.versions[i].appName == appName){
+                            _self.versions[i].version = _self.selected.version;
+                            return;
+                        }
+                    }
+                    _self.versions.push({appName: appName, version: _self.selected.version});
+                },
+
+                //根据版本设置选中的镜像信息
+                setInfoByVersion: function (index, version) {
+                    debugger
+                    var _self = this;
+                    _self.appInfo[index].metadata[version].requests = {
+                        cpu: _self.selected.requests.cpu,
+                        memory: _self.selected.requests.memory + _self.selected.requests.memoryUnit
+                    };
+                    _self.appInfo[index].metadata[version].limits = {
+                        cpu: _self.selected.limits.cpu,
+                        memory: _self.selected.limits.memory + _self.selected.limits.memoryUnit
+                    };
+                    _self.appInfo[index].metadata[version].volume = _self.selected.volume;
+                    _self.appInfo[index].metadata[version].cmd = _self.selected.cmd;
+                    _self.appInfo[index].metadata[version].cmdParams = _self.selected.cmdParams;
+                    _self.appInfo[index].metadata[version].env = _self.selected.env;
+                    _self.appInfo[index].metadata[version].ports = _self.selected.ports;
                 },
 
                 getInfoByVersion: function (version, item) {
                     var _self = this;
                     var metadata = item.metadata[version];
                     _self.selected.appName = item.appName;
+                    _self.selected.version = version;
                     _self.selected.appTag = item.appTag;
                     _self.selected.description = item.description;
-                    _self.selected.version = version;
                     _self.selected.volume = metadata.volume;
                     _self.selected.cmd = metadata.cmd;
                     _self.selected.cmdParams = metadata.cmdParams;
@@ -405,6 +448,86 @@ define([
                     var _self = this;
                     var version = $(event.target).val();
                     _self.getInfoByVersion(version, _self.twaverObj.selectedApp);
+                },
+
+                //设置文件名
+                fileChange: function(event){
+                    var _self = this;
+                    var logoFile = document.getElementById("logo");
+                    if(logoFile.files[0]){
+                        _self.logoFileName = logoFile.files[0].name;
+                    }
+                },
+
+                submitAdd: function(){
+                    var _self = this;
+                    var formData = new FormData();
+                    formData.append("templateName", $("#add_template_form input[name='templateName']").val());
+                    formData.append("logoFile", $("#add_template_form #logo")[0].files[0]);
+                    formData.append("description", $("#add_template_form textarea[name='description']").val());
+                    var isPublish = $('#add_template_form #isPublish input').bootstrapSwitch('state');
+                    if(isPublish){
+                        formData.append("isPublish", "1");
+                    } else {
+                        formData.append("isPublish", "0");
+                    }
+                    var relation = _self.createRelation();
+                    formData.append("relation",JSON.stringify(relation));
+                    var config = _self.createConfig();
+                    formData.append("config", JSON.stringify(config));
+
+                    $.ajax({
+                        url: "../apporch/template/add",
+                        type: "post",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(data){
+                            console.log(data);
+                        },
+                        error: function(){}
+                    });
+                },
+                
+                createRelation: function () {
+                    var _self = this;
+                    var relation = {};
+                    var data = _self.twaverObj.box.getDatas()._as;
+                    for(var i = 0; i < data.length; i++){
+                        if(data[i] instanceof twaver.Link){
+                            var fromName = data[i]._fromNode.getName();
+                            var toName = data[i]._toNode.getName();
+                            if(relation.hasOwnProperty(fromName)){
+                                relation[fromName][toName] = 'test';
+                            } else {
+                                relation[fromName] = {};
+                                relation[fromName][toName] = 'test';
+                            }
+                        }
+                    }
+                    return relation;
+                },
+                createConfig: function () {
+                    var _self = this;
+                    var config = {};
+                    for(var i=0; i< _self.versions.length; i++){
+                        var name = _self.versions[i].appName;
+                        var version = _self.versions[i].version;
+                        var imageInfo = {};
+                        for(var j=0; j < _self.appInfo.length; j++){
+                            if(_self.appInfo[j].appName === name){
+                                imageInfo = _self.appInfo[i];
+                                break;
+                            }
+                        }
+                        config[name] = {
+                            version: version,
+                            logo_url: imageInfo.logo_url,
+                            source_url: imageInfo.source_url[version],
+                            metadata: imageInfo.metadata[version]
+                        };
+                    }
+                    return config;
                 }
             }
         });
