@@ -32,15 +32,22 @@ define([
                     isLinkMode: false, //记录是否是连线模式
                     from: null,
                     to: null,
-                    selectedApp: null
+                    selectedApp: null  //记录画布中被选中的节点，格式与imageInfoList[i]一致
                 },
-                selected: {
+                selected: {            //用于在页面中绑定数据
+                    appName: '',
                     version: '',
+                    appTag: '',
+                    description: '',
+                    volume: '',
+                    cmd: '',
+                    cmdParams: [],
                     limits: {},
                     requests: {},
                     env: [],
                     ports: []
-                }
+                },
+                appInfo: []   //用于最后统计信息
             },
             mounted: function () {
                 var _self = this;
@@ -294,6 +301,18 @@ define([
                     }
                 },
 
+                // 在twaver中注册图片
+                registerNormalImage: function(url, name, width, height) {
+                    var _self = this;
+                    var image = new Image();
+                    image.src = url;
+                    image.onload = function() {
+                        twaver.Util.registerImage(name, image, width, height);
+                        image.onload = null;
+                        _self.twaverObj.network.invalidateElementUIs();
+                    };
+                },
+
                 //网元选中事件处理器
                 nodeSelectionChangeHandler: function(e){
                     var _self = this;
@@ -324,23 +343,26 @@ define([
                             _self.twaverObj.to = null;
                         }
                     }
+                    // 保存当前节点的信息
+                    // if(_self.twaverObj.selectedApp != null){
+                    //     var isExist = false;
+                    //     for(var i = 0; i < _self.appInfo.length; i++ ){
+                    //         if(_self.appInfo[i].appName === _self.selected.appName){
+                    //             _self.appInfo[i] = _self.selected;
+                    //             isExist = true;
+                    //             break;
+                    //         }
+                    //     }
+                    //     if(!isExist){
+                    //         _self.appInfo.push(_self.selected);
+                    //     }
+                    // }
+                    // 展示选中节点的信息
                     if(last != null){
                         var imageName = last.getName();
                         console.log(imageName);
                         _self.showSelectedAppInfo(imageName);
                     }
-                },
-
-                // 在twaver中注册图片
-                registerNormalImage: function(url, name, width, height) {
-                    var _self = this;
-                    var image = new Image();
-                    image.src = url;
-                    image.onload = function() {
-                        twaver.Util.registerImage(name, image, width, height);
-                        image.onload = null;
-                        _self.twaverObj.network.invalidateElementUIs();
-                    };
                 },
 
                 //显示画布中选中的应用的信息
@@ -358,7 +380,13 @@ define([
                 getInfoByVersion: function (version, item) {
                     var _self = this;
                     var metadata = item.metadata[version];
+                    _self.selected.appName = item.appName;
+                    _self.selected.appTag = item.appTag;
+                    _self.selected.description = item.description;
                     _self.selected.version = version;
+                    _self.selected.volume = metadata.volume;
+                    _self.selected.cmd = metadata.cmd;
+                    _self.selected.cmdParams = metadata.cmdParams;
                     _self.selected.limits = {
                         cpu: metadata.limits.cpu,
                         memory: metadata.limits.memory.slice(0, metadata.limits.memory.length - 2),

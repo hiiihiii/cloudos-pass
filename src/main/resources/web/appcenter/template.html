@@ -113,35 +113,35 @@
                 <div class="app-info-box">
                     <div class="form-group">
                         <label>镜像： </label>
-                        <span v-cloak="">{{twaverObj.selectedApp.appName}}</span>
+                        <span v-cloak="" v-text="selected.appName"></span>
                     </div>
                     <div class="form-group">
                         <label>版本： </label>
-                        <select name="version" id="version" v-on:change="changeVersion($event)">
+                        <select name="version" id="version" v-on:change="changeVersion($event)" v-model="selected.version">
                             <option v-for="(item, index) in twaverObj.selectedApp.version"
                                     v-bind:value="item" v-cloak="">{{item}}</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>标签： </label>
-                        <span v-cloak="">{{twaverObj.selectedApp.appTag}}</span>
+                        <span v-cloak="" v-text="selected.appTag"></span>
                     </div>
                     <div class="form-group">
                         <label>描述： </label>
-                        <span v-cloak="">{{twaverObj.selectedApp.description}}</span>
+                        <span v-cloak="" v-text="selected.description"></span>
                     </div>
                 </div>
                 <label class="info-title">启动限制</label>
                 <div class="app-info-box">
                     <div class="form-group">
                         <label>CPU(核)： </label>
-                        <input type="text" v-bind:value="selected.requests.cpu" name="minCpu" id="minCpu" />
+                        <input type="text" v-model="selected.requests.cpu" name="minCpu" id="minCpu" />
                     </div>
                     <div class="form-group">
                         <label>内存： </label>
                         <input class="runtime-input" type="text"
-                               v-bind:value="selected.requests.memory" name="minMemory" id="minMemory" />
-                        <select class="runtime-select" v-bind:value="selected.requests.memoryUnit"
+                               v-model="selected.requests.memory" name="minMemory" id="minMemory" />
+                        <select class="runtime-select" v-model="selected.requests.memoryUnit"
                                 name="minMemoryUnit" id="minMemoryUnit">
                             <option value="MB">MB</option>
                             <option value="GB">GB</option>
@@ -152,17 +152,35 @@
                 <div class="app-info-box">
                     <div class="form-group">
                         <label>CPU(核)： </label>
-                        <input type="text" v-bind:value="selected.limits.cpu" name="maxCpu" id="maxCpu" />
+                        <input type="text" v-model="selected.limits.cpu" name="maxCpu" id="maxCpu" />
                     </div>
                     <div class="form-group">
                         <label>内存： </label>
                         <input class="runtime-input" type="text"
-                               v-bind:value="selected.limits.memory" name="maxMemory" id="maxMemory" />
+                               v-model="selected.limits.memory" name="maxMemory" id="maxMemory" />
                         <select class="runtime-select"
-                                v-bind:value="selected.limits.memoryUnit" name="maxMemoryUnit" id="maxMemoryUnit">
+                                v-model="selected.limits.memoryUnit" name="maxMemoryUnit" id="maxMemoryUnit">
                             <option value="MB">MB</option>
                             <option value="GB">GB</option>
                         </select>
+                    </div>
+                </div>
+                <label class="info-title">工作目录</label>
+                <div class="app-info-box">
+                    <div class="form-group">
+                        <label>目录映射： </label>
+                        <input type="text" v-model="selected.volume" name="workDir" id="workDir" />
+                    </div>
+                </div>
+                <label class="info-title">运行命令</label>
+                <div class="app-info-box">
+                    <div class="form-group">
+                        <label>命令： </label>
+                        <input type="text" v-model="selected.cmd" name="cmd" id="cmd" />
+                    </div>
+                    <div class="form-group" v-for="(param, index) in selected.cmdParams">
+                        <label>参数{{index+1}}： </label>
+                        <input type="text" v-model="param" name="cmdParam" />
                     </div>
                 </div>
                 <label class="info-title">环境变量</label>
@@ -170,7 +188,7 @@
                     <div v-for="(item) in selected.env">
                         <div class="form-group">
                             <label v-cloak="">{{item.name}}：</label>
-                            <input type="text" v-bind:value="item.value" name="envValue" v-cloak=""/>
+                            <input type="text" v-model="item.value" name="envValue" v-cloak=""/>
                         </div>
                     </div>
                 </div>
@@ -179,23 +197,23 @@
                     <div v-for="(item) in selected.ports">
                         <div class="form-group">
                             <label>名称： </label>
-                            <input type="text" v-bind:value="item.portName" v-cloak=""/>
+                            <input type="text" v-model="item.portName" v-cloak=""/>
                         </div>
                         <div class="form-group">
                             <label>容器端口： </label>
-                            <input type="text" v-bind:value="item.containerPort" v-cloak=""/>
+                            <input type="text" v-model="item.containerPort" v-cloak=""/>
                         </div>
                         <div class="form-group">
                             <label>集群内端口： </label>
-                            <input type="text" v-bind:value="item.port" v-cloak=""/>
+                            <input type="text" v-model="item.port" v-cloak=""/>
                         </div>
                         <div class="form-group">
                             <label>集群外端口： </label>
-                            <input type="text" v-bind:value="item.nodePort" v-cloak=""/>
+                            <input type="text" v-model="item.nodePort" v-cloak=""/>
                         </div>
                         <div class="form-group">
                             <label>协议： </label>
-                            <input type="text" v-bind:value="item.protocol" v-cloak=""/>
+                            <input type="text" v-model="item.protocol" v-cloak=""/>
                         </div>
                     </div>
                 </div>
@@ -236,14 +254,14 @@
                         </div>
                         <!--描述-->
                         <div class="form-group">
-                            <label >应用简介</label>
+                            <label >描述</label>
                             <div class="form-content">
                                 <textarea class="form-control" name="description" maxlength="1000"></textarea>
                             </div>
                         </div>
                         <!--是否发布-->
                         <div class="form-group">
-                            <label>是否公有</label>
+                            <label>是否发布</label>
                             <div id="isPublish" class="switch">
                                 <input type="checkbox" class="form-control" />
                             </div>
