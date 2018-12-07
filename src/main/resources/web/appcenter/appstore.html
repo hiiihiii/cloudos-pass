@@ -66,8 +66,9 @@
             </div>
             <div class="app-box">
                 <ul id="appcontainer">
+                    <!--镜像-->
                     <li v-for="(imageInfo, index) in imageInfos" v-cloak="" v-bind:id="imageInfo.app_id">
-                        <div class="docker">
+                        <div class="applogo">
                             <img src="../images/docker-blue.png" v-cloak=""/>
                         </div>
                         <div class="app-name">
@@ -84,6 +85,24 @@
                         </div>
                         <div class="app-desc" v-bind:title="imageInfo.description" v-cloak="">
                             {{imageInfo.description}}
+                        </div>
+                    </li>
+                    <!--模板-->
+                    <li v-for="(template, index) in templateInfos" v-cloak="">
+                        <div class="applogo">
+                            <img src="../images/template.png" v-cloak=""/>
+                        </div>
+                        <div class="app-name">
+                            <h5 v-cloak="">{{template.templateName}}</h5>
+                        </div>
+                        <div class="app-deploy" title="部署" v-on:click="">
+                            <i class="fa fa-toggle-right"></i>
+                        </div>
+                        <div class="app-img">
+                            <img v-bind:src="template.temp_logo_url" v-on:error="setDefault($event)" v-cloak=""/>
+                        </div>
+                        <div class="app-desc" v-bind:title="template.description" v-cloak="">
+                            {{template.description}}
                         </div>
                     </li>
                 </ul>

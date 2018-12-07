@@ -23,6 +23,5 @@
 
     <select id="getAllTemplate" resultMap="templates">
         SELECT * FROM tl_template
-        WHERE user_uuid = #{userid}
     </select>
 </mapper>

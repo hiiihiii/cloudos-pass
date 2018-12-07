@@ -4,6 +4,7 @@ import com.tanli.cloud.model.ImageInfo;
 import com.tanli.cloud.model.response.LoginingUser;
 import com.tanli.cloud.service.AppStoreService;
 import com.tanli.cloud.service.ImageInfoService;
+import com.tanli.cloud.service.TemplateService;
 import com.tanli.cloud.utils.APIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -26,6 +27,8 @@ public class AppstoreController {
     private AppStoreService appStoreService;
     @Autowired
     private ImageInfoService imageInfoService;
+    @Autowired
+    private TemplateService templateService;
 
 
     @RequestMapping(value = {"/",""})
@@ -44,25 +47,23 @@ public class AppstoreController {
         return appStoreService.uploadImage(imageInfo, logoFile, sourceFile, user);
     }
 
-    @RequestMapping("appinfo")
+    @RequestMapping("imageinfo")
     @ResponseBody
     /**
      * 获取镜像或镜像模板信息
      * repoType: public/private
-     * appType: image/template/all
      */
-    public APIResponse getAppInfo(HttpServletRequest request, String repoType, String appType){
-        //appStoreService.deployImage();
+    public APIResponse getAppInfo(HttpServletRequest request, String repoType){
         LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
-        if("all".equals(appType)){
+        return imageInfoService.getImages(user, repoType);
 
-        } else if("image".equals(appType)){
-            return imageInfoService.getImages(user, repoType);
-        } else {
+    }
 
-        }
-
-        return null;
+    @RequestMapping("templateinfo")
+    @ResponseBody
+    public APIResponse getTemplateInfo(HttpServletRequest request, String repoType){
+        LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
+         return appStoreService.getTemplates(user, repoType);
     }
 
     @RequestMapping("checkexist")

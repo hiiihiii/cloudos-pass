@@ -14,4 +14,6 @@ public interface AppStoreService {
     public void deployImage();
 
     public APIResponse checkAppExist(LoginingUser user, String appName, String version, String repoType);
+
+    public APIResponse getTemplates(LoginingUser user, String repoType);
 }

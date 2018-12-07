@@ -2,7 +2,9 @@ package com.tanli.cloud.service;
 
 import com.tanli.cloud.constant.EnvConst;
 import com.tanli.cloud.dao.ImageInfoDao;
+import com.tanli.cloud.dao.TemplateDao;
 import com.tanli.cloud.model.ImageInfo;
+import com.tanli.cloud.model.Template;
 import com.tanli.cloud.model.response.LoginingUser;
 import com.tanli.cloud.model.response.Repository;
 import com.tanli.cloud.utils.APIResponse;
@@ -30,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AppStoreServiceImp implements AppStoreService {
@@ -42,6 +45,8 @@ public class AppStoreServiceImp implements AppStoreService {
     private RepositoryService repositoryService;
     @Autowired
     private ImageInfoDao imageInfoDao;
+    @Autowired
+    private TemplateDao templateDao;
 
     private static final Logger LOGGE = LoggerFactory.getLogger(AppStoreServiceImp.class);
 
@@ -290,5 +295,26 @@ public class AppStoreServiceImp implements AppStoreService {
                 return APIResponse.success("not existed");
             }
         }
+    }
+
+    @Override
+    public APIResponse getTemplates(LoginingUser user, String repoType) {
+        List<Template> templateList = templateDao.getAllTemplate();
+        if(("public").equals(repoType)){ //公有仓库
+            templateList = templateList
+                    .stream()
+                    .filter(template -> ("1").equals(template.getIsPublish()))
+                    .collect(Collectors.toList());
+        } else {                         //私有仓库
+            if(("admin_user").equals(user.getRole_name())){
+                templateList = templateList
+                        .stream()
+                        .filter(template -> user.getUser_uuid().equals(template.getUserId()))
+                        .collect(Collectors.toList());
+            } else {
+                templateList.clear();
+            }
+        }
+        return APIResponse.success(templateList);
     }
 }

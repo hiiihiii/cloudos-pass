@@ -17,7 +17,7 @@ define([
                 showPublic: true,
                 showPrivate: false,
                 imageInfos: [],
-                templates: []
+                templateInfos: []
             },
             mounted: function () {
                 var _self = this;
@@ -27,8 +27,9 @@ define([
                 $(".app-items .cloud-checkbox").attr("checked", "true");
                 //为分类选择绑定事件
                 _self.classifyBind();
-                //todo 这里不应该是image，而是all
-                _self.getAppData("public", "image");
+                //获取镜像和模板信息
+                _self.getImageData("public");
+                _self.getTemplate("public");
 
                 Vue.nextTick(function(){
                     _self.initJpages("#appholder", "appcontainer");
@@ -77,6 +78,7 @@ define([
                     var $this = $(event.target);
                     $this.attr("src", "../images/app-default.png");
                 },
+
                 classifyBind: function(){
                     $("#appstore .nav").on("change", "input[type='checkbox']", function(){
                         var status = this.getAttribute("checked");//选中时status为"checked"
@@ -92,21 +94,20 @@ define([
                 },
 
                 //获取应用数据
-                getAppData: function (repoType, appType) {
+                getImageData: function (repoType) {
                     var _self = this;
                     $.ajax({
-                        url: "../appcenter/appinfo",
+                        url: "../appcenter/imageinfo",
                         type: "get",
                         data: {
-                            repoType: repoType,
-                            appType: appType
+                            repoType: repoType
                         },
                         dataType: "json",
                         async: false,
                         // processData: false,
                         // contentType: false,
                         success: function (data) {
-                            _self.imageInfos = _self.convertData(data.data);
+                            _self.imageInfos = _self.convertData(data.data, 'image');
                             console.log(_self.imageInfos);
                             common_module.notify("[应用中心]","获取镜像数据成功", "success");
                         },
@@ -117,18 +118,51 @@ define([
                 },
 
                 //获取模板信息
-
-                convertData: function(imageArray){
+                getTemplate: function (repoType) {
                     var _self = this;
-                    for(var i = 0; i < imageArray.length; i++){
-                        imageArray[i].createType = JSON.parse(imageArray[i].createType);
-                        imageArray[i].metadata = JSON.parse(imageArray[i].metadata);
-                        imageArray[i].source_url = JSON.parse(imageArray[i].source_url);
-                        imageArray[i].v_description = JSON.parse(imageArray[i].v_description);
-                        imageArray[i].version = JSON.parse(imageArray[i].version);
-                        imageArray[i].logo_url = "ftp://docker:dockerfile@" + imageArray[i].logo_url;
+                    $.ajax({
+                        url: "../appcenter/templateinfo",
+                        type: 'get',
+                        dataType: 'json',
+                        data: {
+                            repoType: repoType
+                        },
+                        async: false,
+                        success: function (data) {
+                            if(data.code === "success"){
+                                _self.templateInfos = _self.convertData(data.data, 'template');
+                                console.log(_self.templateInfos);
+                                common_module.notify('[应用中心]', '获取模板信息成功', 'success');
+                            } else {
+                                common_module.notify('[应用中心]', '获取模板信息失败', 'fail');
+                            }
+                        },
+                        error: function () {
+                            common_module.notify('[应用中心]', '获取模板信息失败', 'fail');
+                        }
+                    });
+                },
+
+                convertData: function(dataArray, type){
+                    if(type === 'image'){
+                        for(var i = 0; i < dataArray.length; i++){
+                            dataArray[i].createType = JSON.parse(dataArray[i].createType);
+                            dataArray[i].metadata = JSON.parse(dataArray[i].metadata);
+                            dataArray[i].source_url = JSON.parse(dataArray[i].source_url);
+                            dataArray[i].v_description = JSON.parse(dataArray[i].v_description);
+                            dataArray[i].version = JSON.parse(dataArray[i].version);
+                            dataArray[i].logo_url = "ftp://docker:dockerfile@" + dataArray[i].logo_url;
+                            dataArray[i].appType = "docker";
+                        }
+                    } else {
+                        for(var i = 0; i < dataArray.length; i++) {
+                            dataArray[i].relation = JSON.parse(dataArray[i].relation);
+                            dataArray[i].config = JSON.parse(dataArray[i].config);
+                            dataArray[i].temp_logo_url = "ftp://docker:dockerfile@" + dataArray[i].logo_url;
+                            dataArray[i].appType = 'template';
+                        }
                     }
-                    return imageArray;
+                    return dataArray;
                 },
 
                 //初始化jpages插件

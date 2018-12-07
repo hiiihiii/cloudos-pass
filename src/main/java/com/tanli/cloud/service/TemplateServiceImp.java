@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by tanli on 2018/12/6 0006.
@@ -26,7 +27,17 @@ public class TemplateServiceImp implements TemplateService{
     public APIResponse getTemplate(LoginingUser user) {
         List<Template> templateList = new ArrayList<Template>();
         try{
-            templateList = templateDao.getAllTemplate(user.getUser_uuid());
+            if(("public_user").equals(user.getRole_name())){
+                templateList = templateDao.getAllTemplate()
+                        .stream()
+                        .filter(template -> ("1").equals(template.getIsPublish()))
+                        .collect(Collectors.toList());
+            } else if(("admin_user").equals(user.getRole_name())) {
+                templateList = templateDao.getAllTemplate()
+                        .stream()
+                        .filter(template -> user.getUser_uuid().equals(template.getUserId()))
+                        .collect(Collectors.toList());
+            }
             return APIResponse.success(templateList);
         } catch (Exception e){
             LOGGE.info("获取镜像模板失败");

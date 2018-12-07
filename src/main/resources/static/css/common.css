@@ -236,12 +236,12 @@ span.checkbox+a{
 #appcontainer li:hover {
     border: solid 2px rgb(236,103,11);
 }
-.app-box .docker {
+.app-box .applogo {
     position: absolute;
     top: 6px;
     left: 8px;
 }
-.app-box .docker img {
+.app-box .applogo img {
     width: 24px;
 }
 .app-box .app-name{

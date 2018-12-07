@@ -12,5 +12,5 @@ import java.util.List;
 @Mapper
 public interface TemplateDao {
     public int addTemplate(Template template);
-    public List<Template> getAllTemplate(@Param("userid")String userId);
+    public List<Template> getAllTemplate();
 }

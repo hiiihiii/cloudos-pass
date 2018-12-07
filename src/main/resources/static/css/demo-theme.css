@@ -7,7 +7,7 @@ ul {
     list-style-type: none;
 }
 
-a, a:hover {
+a, a:hover,a:visited {
     display: inline-block;
     text-decoration: none;
     color: #000000;
