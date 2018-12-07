@@ -8,4 +8,15 @@
         VALUES (#{uuid},#{role_name},#{description},#{create_time},#{update_time})
     </insert>
 
+    <resultMap id="roles" type="com.tanli.cloud.model.Role">
+        <id column="role_uuid" property="uuid"></id>
+        <result column="role_name" property="role_name"></result>
+        <result column="role_desc" property="description"></result>
+        <result column="create_time" property="create_time"></result>
+        <result column="update_time" property="update_time"></result>
+    </resultMap>
+
+    <select id="getAllRole" resultMap="roles">
+        SELECT * FROM tl_role
+    </select>
 </mapper>

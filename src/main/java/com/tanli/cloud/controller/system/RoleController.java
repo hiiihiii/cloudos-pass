@@ -1,10 +1,13 @@
 package com.tanli.cloud.controller.system;
 
+import com.tanli.cloud.model.response.LoginingUser;
 import com.tanli.cloud.service.RoleService;
+import com.tanli.cloud.utils.APIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,5 +40,12 @@ public class RoleController {
 //        role.setUpdate_time(ts);
 //
 //        roleService.addRole(role);
+    }
+
+    @RequestMapping("info")
+    @ResponseBody
+    public APIResponse getRoles(HttpServletRequest request){
+        LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
+        return roleService.getRoles(user);
     }
 }
