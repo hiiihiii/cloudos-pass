@@ -1,7 +1,7 @@
 package com.tanli.cloud.controller.appcenter;
 
 import com.tanli.cloud.model.Template;
-import com.tanli.cloud.model.response.LoginingUser;
+import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.service.AppOrchService;
 import com.tanli.cloud.service.TemplateService;
 import com.tanli.cloud.utils.APIResponse;
@@ -43,7 +43,7 @@ public class AppOrchController {
     @RequestMapping("appinfo")
     @ResponseBody
     public APIResponse getImageInfo(HttpServletRequest request){
-        LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
+        User user = (User) request.getSession().getAttribute("login_user");
         return appOrchService.getImageInfo(user);
     }
 
@@ -51,14 +51,14 @@ public class AppOrchController {
     @ResponseBody
     public APIResponse addTemplate(HttpServletRequest request, Template template,
                                    @RequestParam(value = "logoFile", required = true)MultipartFile logofile){
-        LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
+        User user = (User) request.getSession().getAttribute("login_user");
         return appOrchService.addTemplate(user, template, logofile);
     }
 
     @RequestMapping("templateinfo")
     @ResponseBody
     public APIResponse getTemplate(HttpServletRequest request, HttpServletResponse response){
-        LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
+        User user = (User) request.getSession().getAttribute("login_user");
         return templateService.getTemplate(user);
     }
 }

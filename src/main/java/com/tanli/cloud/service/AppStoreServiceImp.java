@@ -5,7 +5,7 @@ import com.tanli.cloud.dao.ImageInfoDao;
 import com.tanli.cloud.dao.TemplateDao;
 import com.tanli.cloud.model.ImageInfo;
 import com.tanli.cloud.model.Template;
-import com.tanli.cloud.model.response.LoginingUser;
+import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.model.response.Repository;
 import com.tanli.cloud.utils.APIResponse;
 import com.tanli.cloud.utils.FtpUtil;
@@ -69,7 +69,7 @@ public class AppStoreServiceImp implements AppStoreService {
     }
 
     @Override
-    public APIResponse uploadImage(ImageInfo imageInfo, MultipartFile logoFile, MultipartFile sourceFile, LoginingUser user) {
+    public APIResponse uploadImage(ImageInfo imageInfo, MultipartFile logoFile, MultipartFile sourceFile, User user) {
         //上传logo文件
         String originalFileName = logoFile.getOriginalFilename();//必须使用originFileName
         String[] temp = originalFileName.split("\\.");
@@ -274,7 +274,7 @@ public class AppStoreServiceImp implements AppStoreService {
     }
 
     @Override
-    public APIResponse checkAppExist(LoginingUser user, String appName, String version, String repoType){
+    public APIResponse checkAppExist(User user, String appName, String version, String repoType){
         Repository repository = repositoryService.getRepoByUserid(user.getUser_uuid())
                 .stream()
                 .filter(repository1 -> repository1.getRepo_type().equals(repoType))
@@ -298,7 +298,7 @@ public class AppStoreServiceImp implements AppStoreService {
     }
 
     @Override
-    public APIResponse getTemplates(LoginingUser user, String repoType) {
+    public APIResponse getTemplates(User user, String repoType) {
         List<Template> templateList = templateDao.getAllTemplate();
         if(("public").equals(repoType)){ //公有仓库
             templateList = templateList

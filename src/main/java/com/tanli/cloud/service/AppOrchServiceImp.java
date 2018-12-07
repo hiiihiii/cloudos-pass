@@ -5,7 +5,7 @@ import com.tanli.cloud.dao.RepositoryDao;
 import com.tanli.cloud.dao.TemplateDao;
 import com.tanli.cloud.model.ImageInfo;
 import com.tanli.cloud.model.Template;
-import com.tanli.cloud.model.response.LoginingUser;
+import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.model.response.Repository;
 import com.tanli.cloud.utils.APIResponse;
 import com.tanli.cloud.utils.FtpUtil;
@@ -39,7 +39,7 @@ public class AppOrchServiceImp implements AppOrchService{
     private static final Logger LOGGE = LoggerFactory.getLogger(AppOrchServiceImp.class);
 
     @Override
-    public APIResponse getImageInfo(LoginingUser user) {
+    public APIResponse getImageInfo(User user) {
         String userid = user.getUser_uuid();
         List<Repository> repositories = repositoryDao.getRepoByUserid(userid);
         List<ImageInfo> imageInfos = new ArrayList<ImageInfo>();
@@ -54,7 +54,7 @@ public class AppOrchServiceImp implements AppOrchService{
     }
 
     @Override
-    public APIResponse addTemplate(LoginingUser user, Template template, MultipartFile file) {
+    public APIResponse addTemplate(User user, Template template, MultipartFile file) {
         //上传logo到FTP中
         String originalFileName = file.getOriginalFilename();//必须使用originFileName
         String[] temp = originalFileName.split("\\.");

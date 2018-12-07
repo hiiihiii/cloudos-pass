@@ -1,7 +1,7 @@
 package com.tanli.cloud.controller.appcenter;
 
 import com.tanli.cloud.model.ImageInfo;
-import com.tanli.cloud.model.response.LoginingUser;
+import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.service.AppStoreService;
 import com.tanli.cloud.service.ImageInfoService;
 import com.tanli.cloud.service.TemplateService;
@@ -41,7 +41,7 @@ public class AppstoreController {
     public APIResponse uploadImage(HttpServletRequest request, ImageInfo imageInfo,
                                    @RequestParam(value = "logoFile", required = true)MultipartFile logoFile,
                                    @RequestParam(value = "sourceFile", required = true)MultipartFile sourceFile) {
-        LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
+        User user = (User) request.getSession().getAttribute("login_user");
         imageInfo.setUser_id(user.getUser_uuid());
 
         return appStoreService.uploadImage(imageInfo, logoFile, sourceFile, user);
@@ -54,7 +54,7 @@ public class AppstoreController {
      * repoType: public/private
      */
     public APIResponse getAppInfo(HttpServletRequest request, String repoType){
-        LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
+        User user = (User) request.getSession().getAttribute("login_user");
         return imageInfoService.getImages(user, repoType);
 
     }
@@ -62,7 +62,7 @@ public class AppstoreController {
     @RequestMapping("templateinfo")
     @ResponseBody
     public APIResponse getTemplateInfo(HttpServletRequest request, String repoType){
-        LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
+        User user = (User) request.getSession().getAttribute("login_user");
          return appStoreService.getTemplates(user, repoType);
     }
 
@@ -75,7 +75,7 @@ public class AppstoreController {
      * repoType: public/private
      */
     public APIResponse checkAppExist(HttpServletRequest request, String appName, String version, String repoType){
-        LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
+        User user = (User) request.getSession().getAttribute("login_user");
         return appStoreService.checkAppExist(user, appName, version, repoType);
     }
 }

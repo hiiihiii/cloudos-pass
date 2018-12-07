@@ -2,14 +2,13 @@ package com.tanli.cloud.service;
 
 import com.tanli.cloud.dao.RoleDao;
 import com.tanli.cloud.model.Role;
-import com.tanli.cloud.model.response.LoginingUser;
+import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.utils.APIResponse;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Created by tanli on 2018/10/15 0015.
@@ -27,7 +26,7 @@ public class RoleServiceImp implements RoleService {
     }
 
     @Override
-    public APIResponse getRoles(LoginingUser user) {
+    public APIResponse getRoles(User user) {
         try {
             List<Role> roles = roleDao.getAllRole();
             return APIResponse.success(roles);

@@ -3,7 +3,7 @@ package com.tanli.cloud.service;
 import com.tanli.cloud.dao.ImageInfoDao;
 import com.tanli.cloud.dao.RepositoryDao;
 import com.tanli.cloud.model.ImageInfo;
-import com.tanli.cloud.model.response.LoginingUser;
+import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.model.response.Repository;
 import com.tanli.cloud.utils.APIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class ImageInfoServiceImp implements ImageInfoService {
     }
 
     @Override
-    public APIResponse getImages(LoginingUser user, String repoType) {
+    public APIResponse getImages(User user, String repoType) {
         String userId = user.getUser_uuid();
         List<ImageInfo> imageInfos = new ArrayList<>();
         //获取用户仓库
@@ -46,7 +46,7 @@ public class ImageInfoServiceImp implements ImageInfoService {
     }
 
     @Override
-    public List<ImageInfo> getImagesAll(LoginingUser user) {
+    public List<ImageInfo> getImagesAll(User user) {
         return imageInfoDao.getImagesAll(user.getUser_uuid());
     }
 

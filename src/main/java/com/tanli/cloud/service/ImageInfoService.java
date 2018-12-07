@@ -1,7 +1,7 @@
 package com.tanli.cloud.service;
 
 import com.tanli.cloud.model.ImageInfo;
-import com.tanli.cloud.model.response.LoginingUser;
+import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.utils.APIResponse;
 
 import java.util.List;
@@ -12,9 +12,9 @@ import java.util.List;
 public interface ImageInfoService {
     public int addImageInfo(ImageInfo imageInfo);
 
-    public APIResponse getImages(LoginingUser user, String repoType);
+    public APIResponse getImages(User user, String repoType);
 
-    public List<ImageInfo> getImagesAll(LoginingUser user);
+    public List<ImageInfo> getImagesAll(User user);
 
     public int updateImageInfo(ImageInfo imageInfo);
 }

@@ -1,7 +1,6 @@
 package com.tanli.cloud.controller;
 
-import com.tanli.cloud.model.User;
-import com.tanli.cloud.model.response.LoginingUser;
+import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.service.UserManageService;
 import com.tanli.cloud.utils.APIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,25 +18,22 @@ import javax.servlet.http.HttpServletRequest;
  */
 @EnableAutoConfiguration
 @Controller
-public class LoginController {
+public class UserController {
     @Autowired
     private UserManageService userManageService;
 
-    //@RequestMapping({"/","/index", "/login"})
     @GetMapping({"/", "/index"})
-    //@ResponseBody
     public ModelAndView index(HttpServletRequest httpServletRequest) {
         return new ModelAndView("login");
     }
 
-    //@PostMapping("/loginIn")
     @PostMapping("/login")
     @ResponseBody
     public APIResponse loginVerify(HttpServletRequest request, String username, String password){
         User user = new User();
         user.setPassword(password);
         user.setUserName(username);
-        LoginingUser userInfo = userManageService.loginVerify(user);
+        User userInfo = userManageService.loginVerify(user);
         if(null != userInfo){
             request.getSession().setAttribute("login_user", userInfo);
             return APIResponse.success(userInfo);

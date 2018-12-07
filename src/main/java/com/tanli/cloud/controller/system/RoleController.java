@@ -1,6 +1,6 @@
 package com.tanli.cloud.controller.system;
 
-import com.tanli.cloud.model.response.LoginingUser;
+import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.service.RoleService;
 import com.tanli.cloud.utils.APIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class RoleController {
     @RequestMapping("info")
     @ResponseBody
     public APIResponse getRoles(HttpServletRequest request){
-        LoginingUser user = (LoginingUser) request.getSession().getAttribute("login_user");
+        User user = (User) request.getSession().getAttribute("login_user");
         return roleService.getRoles(user);
     }
 }

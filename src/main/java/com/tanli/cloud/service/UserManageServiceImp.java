@@ -1,9 +1,7 @@
 package com.tanli.cloud.service;
 
-import com.tanli.cloud.dao.LoginDao;
-import com.tanli.cloud.model.User;
-import com.tanli.cloud.model.response.LoginingUser;
-import com.tanli.cloud.utils.APIResponse;
+import com.tanli.cloud.dao.UserDao;
+import com.tanli.cloud.model.response.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +12,10 @@ import org.springframework.stereotype.Service;
 public class UserManageServiceImp implements UserManageService {
 
     @Autowired
-    private LoginDao loginDao;
+    private UserDao userDao;
 
     @Override
-    public LoginingUser loginVerify(User user) {
-        return loginDao.loginVefiry(user);
+    public User loginVerify(User user) {
+        return userDao.loginVefiry(user);
     }
 }

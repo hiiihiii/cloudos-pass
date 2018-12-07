@@ -2,7 +2,7 @@ package com.tanli.cloud.service;
 
 import com.tanli.cloud.dao.TemplateDao;
 import com.tanli.cloud.model.Template;
-import com.tanli.cloud.model.response.LoginingUser;
+import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.utils.APIResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class TemplateServiceImp implements TemplateService{
     private TemplateDao templateDao;
 
     @Override
-    public APIResponse getTemplate(LoginingUser user) {
+    public APIResponse getTemplate(User user) {
         List<Template> templateList = new ArrayList<Template>();
         try{
             if(("public_user").equals(user.getRole_name())){

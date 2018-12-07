@@ -1,12 +1,6 @@
-package com.tanli.cloud.model;
+package com.tanli.cloud.model.response;
 
-import java.sql.Timestamp;
-
-/**
- * Created by tanli on 2018/10/16 0016.
- */
 public class User {
-
     private String user_uuid;
 
     private String role_uuid;
@@ -16,23 +10,24 @@ public class User {
     private String password;
     private String email;
     private String telephone;
-    private Timestamp create_time;
-    private Timestamp update_time;
 
-    public String getUserId() {
+    private String role_name;
+    private String role_desc;
+
+    public String getUser_uuid() {
         return user_uuid;
     }
 
-    public void setUserId(String userId) {
-        this.user_uuid = userId;
+    public void setUser_uuid(String user_uuid) {
+        this.user_uuid = user_uuid;
     }
 
-    public String getRoleId() {
+    public String getRole_uuid() {
         return role_uuid;
     }
 
-    public void setRoleId(String roleId) {
-        this.role_uuid = roleId;
+    public void setRole_uuid(String role_uuid) {
+        this.role_uuid = role_uuid;
     }
 
     public String getUserName() {
@@ -67,19 +62,19 @@ public class User {
         this.telephone = telephone;
     }
 
-    public Timestamp getCreate_time() {
-        return create_time;
+    public String getRole_name() {
+        return role_name;
     }
 
-    public void setCreate_time(Timestamp create_time) {
-        this.create_time = create_time;
+    public void setRole_name(String role_name) {
+        this.role_name = role_name;
     }
 
-    public Timestamp getUpdate_time() {
-        return update_time;
+    public String getRole_desc() {
+        return role_desc;
     }
 
-    public void setUpdate_time(Timestamp update_time) {
-        this.update_time = update_time;
+    public void setRole_desc(String role_desc) {
+        this.role_desc = role_desc;
     }
 }
