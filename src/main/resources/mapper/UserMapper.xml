@@ -9,4 +9,21 @@
         AND tl_user.role_uuid = tl_role.role_uuid
     </select>
 
+    <resultMap id="userInfos" type="com.tanli.cloud.model.response.User">
+        <id column="user_uuid" property="user_uuid"></id>
+        <result column="role_uuid" property="role_uuid"></result>
+        <result column="username" property="userName"></result>
+        <result column="password" property="password"></result>
+        <result column="email" property="email"></result>
+        <result column="telephone" property="telephone"></result>
+        <result column="role_name" property="role_name"></result>
+        <result column="role_desc" property="role_desc"></result>
+        <result column="create_time" property="create_time"></result>
+        <result column="update_time" property="update_time"></result>
+    </resultMap>
+
+    <select id="getAllUser" resultMap="userInfos">
+        SELECT * from tl_user, tl_role
+        WHERE tl_user.role_uuid = tl_role.role_uuid
+    </select>
 </mapper>

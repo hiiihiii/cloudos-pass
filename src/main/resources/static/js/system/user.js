@@ -8,13 +8,37 @@ define([
     if($("#system_user")[0]){
         var roleVue = new Vue({
             el:"#system_user",
-            data: {},
+            data: {
+                userInfos: []
+            },
             mounted: function () {
-                common_module.dataTables("#user_table");
+                var _self = this;
+                _self.getData();
+                Vue.nextTick(function () {
+                    common_module.dataTables("#user_table");
+                });
             },
             methods: {
                 getData: function () {
-
+                    var _self = this;
+                    $.ajax({
+                        url: '../user/info',
+                        type: 'get',
+                        dataType: 'json',
+                        async: false,
+                        success: function (data) {
+                            if (data.code === 'success') {
+                                _self.userInfos = data.data;
+                                console.log(data.data);
+                                common_module.notify('[用户]', '获取用户数据成功', 'success');
+                            } else {
+                                common_module.notify('[用户]', '获取用户数据失败', 'danger');
+                            }
+                        },
+                        error: function () {
+                            common_module.notify('[用户]', '获取用户数据失败', 'danger');
+                        }
+                    });
                 }
             }
         });
