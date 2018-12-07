@@ -29,7 +29,7 @@ define([
                 _self.classifyBind();
                 //获取镜像和模板信息
                 _self.getImageData("public");
-                _self.getTemplate("public");
+                _self.getTemplate("private");
 
                 Vue.nextTick(function(){
                     _self.initJpages("#appholder", "appcontainer");
@@ -71,6 +71,18 @@ define([
                         }
                     }
                     $("#deploy_image").modal({backdrop: 'static', keyboard: false});
+                },
+
+                //显示部署镜像框框
+                showDeployTemplate: function (templateid) {
+                    var _self = this;
+                    for(var i = 0; i < _self.templateInfos.length; i++){
+                        if(_self.templateInfos[i].uuid === templateid) {
+                            sessionStorage.setItem("deployTemplate", JSON.stringify(_self.templateInfos[i]));
+                            break;
+                        }
+                    }
+                    $("#deploy_template").modal({backdrop: 'static', keyboard: false});
                 },
 
                 //设置默认图标

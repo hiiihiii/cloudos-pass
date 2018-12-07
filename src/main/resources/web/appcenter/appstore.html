@@ -88,14 +88,14 @@
                         </div>
                     </li>
                     <!--模板-->
-                    <li v-for="(template, index) in templateInfos" v-cloak="">
+                    <li v-for="(template, index) in templateInfos" v-bind:id="template.uuid" v-cloak="">
                         <div class="applogo">
                             <img src="../images/template.png" v-cloak=""/>
                         </div>
                         <div class="app-name">
                             <h5 v-cloak="">{{template.templateName}}</h5>
                         </div>
-                        <div class="app-deploy" title="部署" v-on:click="">
+                        <div class="app-deploy" title="部署" v-on:click="showDeployTemplate(template.uuid)">
                             <i class="fa fa-toggle-right"></i>
                         </div>
                         <div class="app-img">
@@ -113,10 +113,11 @@
 </div>
 <div th:replace="appcenter/upload_image::upload_image"></div>
 <div th:replace="appcenter/deploy_image::deploy_image"></div>
+<div th:replace="appcenter/deploy_template::deploy_template"></div>
 <div th:replace="common/footer::footer"></div>
 <script type="text/javascript">
     require(["../js/require-config"],function (require_config) {
-        require(["appstore", "upload_image", "deploy_image"]);
+        require(["appstore", "upload_image", "deploy_image", "deploy_template"]);
     });
 </script>
 </body>

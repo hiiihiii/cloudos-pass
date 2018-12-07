@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div th:fragment="deploy_template" id="deploy_template_dialog">
+    <div class="modal fade" id="deploy_template" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <div class="cloud-modal-title">
+                        <i class="fa fa-toggle-right"></i>
+                        <h4 class="modal-title">部署模板</h4>
+                    </div>
+                </div>
+                <div class="modal-body cloud-modal-body">
+                    <form id="deploy_template_form" role="form" class="form-horizontal" enctype="multipart/form-data">
+                        <div class="modal-body-left">
+                            <ul class="info-type">
+                                <li class="info-item"
+                                    v-bind:class="infoTag == 'baseInfo' ? 'info-item-selected' : ''">基本信息</li>
+                                <li class="info-item"
+                                    v-bind:class="infoTag == 'resourceInfo' ? 'info-item-selected' : ''">规格信息</li>
+                                <li class="info-item"
+                                    v-bind:class="infoTag == 'configInfo' ? 'info-item-selected' : ''">配置信息</li>
+                            </ul>
+                        </div>
+                        <div class="modal-body-right">
+                            <div class="base-info" v-show="infoTag == 'baseInfo'" v-cloak="">
+                                <!--部署名称-->
+                                <div class="form-group">
+                                    <label>名称</label>
+                                    <div>
+                                        <input type="text" class="form-control" id="appName" name="appName" placeholder="请输入名称" maxlength="64"/>
+                                    </div>
+                                </div>
+                                <!--模板名称-->
+                                <div class="form-group">
+                                    <label>模板</label>
+                                    <div style="display: inline-block; margin-left: 6px;">
+                                        <span v-cloak="">{{deployTemplateObj.templateName}}</span>
+                                    </div>
+                                </div>
+                                <!--部署描述-->
+                                <div class="form-group">
+                                    <label >描述</label>
+                                    <div>
+                                        <textarea class="form-control" name="description" maxlength="100"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="resource-info" v-show="infoTag == 'resourceInfo'" v-cloak="">
+
+                            </div>
+                            <div class="config-info" v-show="infoTag == 'configInfo'" v-cloak="">
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn cloud-btn" v-show="previousStep"
+                            v-on:click="toPrevious" v-cloak="">上一步</button>
+                    <button type="button" class="btn cloud-btn" v-show="nextStep"
+                            v-on:click="toNext" v-cloak="">下一步</button>
+                    <button type="button" class="btn cloud-btn" v-on:click="" v-show="submitTag" v-cloak="">确定</button>
+                    <button type="button" class="btn cloud-btn" data-dismiss="modal" v-cloak="">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

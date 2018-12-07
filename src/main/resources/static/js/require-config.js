@@ -21,6 +21,7 @@ require.config({
         "appstore": "js/appcenter/appstore",
         "upload_image": "js/appcenter/upload_image",
         "deploy_image": "js/appcenter/deploy_image",
+        "deploy_template": "js/appcenter/deploy_template",
         "apporch": "js/appcenter/apporch",
         "template": "js/appcenter/template",
         "application": "js/appcenter/application",
