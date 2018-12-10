@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--模板详情展示-->
+<head>
+    <meta charset="UTF-8" />
+    <div th:replace="common/header::header"></div>
+</head>
+<body>
+<div th:replace="common/nav::menu"></div>
+<div id="template_detail">
+
+</div>
+<div th:replace="common/footer::footer"></div>
+<script type="text/javascript">
+    require(["../js/require-config"],function (require_config) {
+        require(["template_detail"]);
+    });
+</script>
+</body>
+</html>

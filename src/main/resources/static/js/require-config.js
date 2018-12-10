@@ -24,6 +24,7 @@ require.config({
         "deploy_template": "js/appcenter/deploy_template",
         "apporch": "js/appcenter/apporch",
         "template": "js/appcenter/template",
+        "template_detail": "js/appcenter/template_detail",
         "application": "js/appcenter/application",
         "login": "js/login",
         "role": "js/system/role",

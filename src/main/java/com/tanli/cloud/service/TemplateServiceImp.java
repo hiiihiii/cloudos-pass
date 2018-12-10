@@ -40,9 +40,29 @@ public class TemplateServiceImp implements TemplateService{
             }
             return APIResponse.success(templateList);
         } catch (Exception e){
-            LOGGE.info("获取镜像模板失败");
+            LOGGE.info("[TemplateServiceImp Info]: " + "获取镜像模板失败");
             e.printStackTrace();
         }
         return APIResponse.fail("获取镜像模板失败");
+    }
+
+    @Override
+    public APIResponse getTemplateDetail(User user, String templateId) {
+        Template template = new Template();
+        try {
+            template = templateDao.getAllTemplate()
+                    .stream().
+                    filter(template1 -> template1.getUuid().equals(templateId))
+                    .findFirst()
+                    .orElse(null);
+            if(null == template) {
+                return APIResponse.fail(templateId + "不存在");
+            } else {
+                return APIResponse.success(template);
+            }
+        } catch (Exception e) {
+            LOGGE.info("[TemplateServiceImp Info]: " + "获取" + templateId + "镜像模板失败");
+            return APIResponse.fail(templateId + "获取" + templateId + "镜像模板失败");
+        }
     }
 }
