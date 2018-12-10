@@ -429,21 +429,25 @@ span.checkbox+a{
     width: 500px;
 }
 #upload_image .modal-table-operation,
-#deploy_image .modal-table-operation {
+#deploy_image .modal-table-operation,
+#deploy_template .modal-table-operation {
     cursor: pointer;
     display: inline-block;
     padding-top: 4px;
 }
 #upload_image .form-group > span,
 #deploy_image .form-group > span,
+#deploy_template .form-group > span,
 #upload_image .cmdParam-item .delete-cmd-btn,
-#deploy_image .cmdParam-item .delete-cmd-btn {
+#deploy_image .cmdParam-item .delete-cmd-btn,
+#deploy_template .cmdParam-item .delete-cmd-btn {
     position: absolute;
     cursor: pointer;
     right: -20px;
 }
 #upload_image .cmdParam-item .delete-cmd-btn,
-#deploy_image .cmdParam-item .delete-cmd-btn {
+#deploy_image .cmdParam-item .delete-cmd-btn,
+#deploy_template .cmdParam-item .delete-cmd-btn {
     bottom: 4px;
 }
 #upload_image #port_table,
@@ -451,25 +455,30 @@ span.checkbox+a{
     width: 500px;
 }
 #upload_image .runtime-input,
-#deploy_image .runtime-input{
+#deploy_image .runtime-input,
+#deploy_template .runtime-input {
     width: 75%;
     display: inline-block;
 }
 #upload_image .runtime-select,
-#deploy_image .runtime-select{
+#deploy_image .runtime-select,
+#deploy_template .runtime-select {
     width: 23%;
     display: inline-block;
 }
 #upload_image .port-form-group,
-#deploy_image .port-form-group {
+#deploy_image .port-form-group,
+#deploy_template .port-form-group {
     width: 500px;
 }
 #upload_image .cmdParam-item,
-#deploy_image .cmdParam-item {
+#deploy_image .cmdParam-item,
+#deploy_template .cmdParam-item {
     position: relative;
 }
 #upload_image .cmdParam-item:not(:last-child),
-#deploy_image .cmdParam-item:not(:last-child) {
+#deploy_image .cmdParam-item:not(:last-child),
+#deploy_template .cmdParam-item:not(:last-child) {
     margin-bottom: 15px;
 }
 /*上传镜像结束*/
@@ -657,3 +666,17 @@ span.checkbox+a{
     color: #003ce6;
 }
 /*新版应用编排结束*/
+/*部署模板开始*/
+#deploy_template_form .tab-pane {
+    margin-left: 20px;
+    margin-top: 10px;
+}
+#deploy_template_form .base-info {
+    margin-left: 20px;
+}
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+    color: #ec670b !important;
+}
+/*部署模板结束*/

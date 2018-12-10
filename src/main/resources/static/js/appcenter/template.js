@@ -509,7 +509,7 @@ define([
                 },
                 createConfig: function () {
                     var _self = this;
-                    var config = {};
+                    var config = [];
                     for(var i=0; i< _self.versions.length; i++){
                         var name = _self.versions[i].appName;
                         var version = _self.versions[i].version;
@@ -520,12 +520,14 @@ define([
                                 break;
                             }
                         }
-                        config[name] = {
+                        var temp = {
+                            appName: name,
                             version: version,
                             logo_url: imageInfo.logo_url,
                             source_url: imageInfo.source_url[version],
                             metadata: imageInfo.metadata[version]
                         };
+                        config.push(temp);
                     }
                     return config;
                 }

@@ -30,7 +30,7 @@
                                 <div class="form-group">
                                     <label>名称</label>
                                     <div>
-                                        <input type="text" class="form-control" id="appName" name="appName" placeholder="请输入名称" maxlength="64"/>
+                                        <input type="text" class="form-control" id="appName" name="appName" placeholder="请输入部署名称" maxlength="64"/>
                                     </div>
                                 </div>
                                 <!--模板名称-->
@@ -49,10 +49,146 @@
                                 </div>
                             </div>
                             <div class="resource-info" v-show="infoTag == 'resourceInfo'" v-cloak="">
-
+                                <ul id="resourceTab" class="nav nav-tabs">
+                                    <li v-bind:class="{active: index == 0}" v-for="(appInfo, index) in deployTemplateObj.config">
+                                        <a data-toggle="tab" v-bind:href="'#resource'+appInfo.appName">{{appInfo.appName}}</a>
+                                    </li>
+                                </ul>
+                                <div id="resourceTabContent" class="tab-content">
+                                    <div v-for="(appInfo, index) in deployTemplateObj.config" class="tab-pane fade"
+                                         v-bind:id="'resource'+appInfo.appName" v-bind:class="{active: index == 0, in: index == 0}">
+                                        <div class="form-group">
+                                            <label >启动限制</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label >CPU</label>
+                                            <div>
+                                                <input class="form-control" type="text" name="mincpu"
+                                                       v-bind:value="appInfo.metadata.requests.cpu" v-cloak=""/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label >内存</label>
+                                            <div>
+                                                <input class="form-control runtime-input" type="text" name="minMemory"
+                                                       v-bind:value="appInfo.metadata.requests.memory"/>
+                                                <select class="form-control runtime-select" name="minMemoryUnit"
+                                                        v-bind:value="appInfo.metadata.requests.memoryUnit" v-cloak="">
+                                                    <option value="MB">MB</option>
+                                                    <option value="GB">GB</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label >运行限制</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label >CPU</label>
+                                            <div>
+                                                <input class="form-control" type="text" name="maxcpu"
+                                                       v-bind:value="appInfo.metadata.limits.cpu" v-cloak=""/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label >内存</label>
+                                            <div>
+                                                <input class="form-control runtime-input" type="text" name="maxMemory"
+                                                       v-bind:value="appInfo.metadata.limits.memory" v-cloak=""/>
+                                                <select class="form-control runtime-select" name="maxMemoryUnit"
+                                                        v-bind:value="appInfo.metadata.limits.memoryUnit" v-cloak="">
+                                                    <option value="MB">MB</option>
+                                                    <option value="GB">GB</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="config-info" v-show="infoTag == 'configInfo'" v-cloak="">
-
+                                <ul id="configTab" class="nav nav-tabs">
+                                    <li v-for="(appInfo, index) in deployTemplateObj.config" v-bind:class="{active: index == 0}">
+                                        <a data-toggle="tab" v-bind:href="'#config'+appInfo.appName">{{appInfo.appName}}</a>
+                                    </li>
+                                </ul>
+                                <div id="configTabContent" class="tab-content">
+                                    <div v-for="(appInfo, index) in deployTemplateObj.config" class="tab-pane fade"
+                                         v-bind:id="'config'+appInfo.appName" v-bind:class="{active: index==0, in: index == 0}">
+                                        <!--服务名称-->
+                                        <div class="form-group">
+                                            <label>服务名称</label>
+                                            <div>
+                                                <input class="form-control" type="text" name="serviceName" />
+                                            </div>
+                                        </div>
+                                        <!--副本数-->
+                                        <div class="form-group">
+                                            <label>实例个数</label>
+                                            <div>
+                                                <input class="form-control" type="number" name="instanceCount" />
+                                            </div>
+                                        </div>
+                                        <!--目录映射-->
+                                        <div class="form-group">
+                                            <label >目录映射</label>
+                                            <div>
+                                                <input class="form-control" type="text" name="volumeDir"
+                                                       v-bind:value="appInfo.metadata.volume" v-cloak=""/>
+                                            </div>
+                                        </div>
+                                        <!--运行命令-->
+                                        <div class="form-group">
+                                            <label >运行命令</label>
+                                            <div>
+                                                <input class="form-control" type="text" name="cmd"
+                                                       v-bind:value="appInfo.metadata.cmd" v-cloak=""/>
+                                            </div>
+                                        </div>
+                                        <!--命令参数-->
+                                        <div class="form-group" v-bind:id="appInfo.appName+'cmdParam-box'">
+                                            <label >命令参数</label>
+                                            <span v-on:click="addCmdParam(appInfo.appName, '')"><i class="fa fa-plus"></i></span>
+                                        </div>
+                                        <!--环境变量-->
+                                        <div class="form-group">
+                                            <label>环境变量</label>
+                                            <span v-on:click="addEnv(appInfo.appName, [])"><i class="fa fa-plus"></i></span>
+                                            <div class="modal-table-box">
+                                                <table class="table cloud-modal-table" v-bind:id="appInfo.appName+'env_table'">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>变量</th>
+                                                        <th>值</th>
+                                                        <th>操作</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <!--端口映射-->
+                                        <div class="form-group port-form-group" >
+                                            <label>端口映射</label>
+                                            <span v-on:click="addPort(appInfo.appName, [], 'html')"><i class="fa fa-plus"></i></span>
+                                            <div class="modal-table-box">
+                                                <table class="table cloud-modal-table" v-bind:id="appInfo.appName+'port_table'">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>名称</th>
+                                                        <th style="width: 82px;">协议</th>
+                                                        <th>容器端口</th>
+                                                        <th>集群内端口</th>
+                                                        <th>集群外端口</th>
+                                                        <th>操作</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </form>
