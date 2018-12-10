@@ -16,10 +16,31 @@ define([
             el: '#template_detail',
             data: {},
             mounted: function () {
-
+                var _self = this;
+                _self.getDetail();
             },
             methods: {
+                getDetail: function () {
+                    var templateId = sessionStorage.getItem("templateId");
+                    $.ajax({
+                        url: '../apporch/templateinfo/detail',
+                        type: 'get',
+                        data: {
+                            templateId: templateId
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            if(data.code === 'success') {
 
+                            } else {
+
+                            }
+                        },
+                        error: function () {
+
+                        }
+                    })
+                }
             }
         });
     }

@@ -47,6 +47,10 @@ define([
                         }
                     });
                 },
+                toDetail: function (event) {
+                    var id = $(event.target).attr("id");
+                    sessionStorage.setItem("templateId", id);
+                },
                 convertData: function (templateArray) {
                     for(var i = 0; i < templateArray.length; i++){
                         templateArray[i].relation = JSON.parse(templateArray[i].relation);
