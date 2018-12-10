@@ -108,6 +108,7 @@ define([
                 //获取应用数据
                 getImageData: function (repoType) {
                     var _self = this;
+                    $(".loading").css("display", "block");
                     $.ajax({
                         url: "../appcenter/imageinfo",
                         type: "get",
@@ -122,9 +123,11 @@ define([
                             _self.imageInfos = _self.convertData(data.data, 'image');
                             console.log(_self.imageInfos);
                             common_module.notify("[应用中心]","获取镜像数据成功", "success");
+                            $(".loading").css("display", "none");
                         },
                         error: function () {
                             common_module.notify("[应用中心]","获取镜像数据失败", "danger");
+                            $(".loading").css("display", "none");
                         }
                     })
                 },

@@ -680,3 +680,14 @@ span.checkbox+a{
     color: #ec670b !important;
 }
 /*部署模板结束*/
+/*模板详情开始*/
+#template_detail .content {
+    display: flex;
+}
+#deploy_template .content-left {
+    flex: 5 !important;
+}
+#deploy_template .content-right {
+    flex: 1 !important;
+}
+/*模板详情结束*/

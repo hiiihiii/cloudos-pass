@@ -62,11 +62,16 @@ public class AppOrchController {
         return templateService.getTemplate(user);
     }
 
+    @RequestMapping("templatedetail")
+    @ResponseBody
+    public ModelAndView templateDetail(){
+        return new ModelAndView("appcenter/template_detail");
+    }
 
     @RequestMapping("templateinfo/detail")
     @ResponseBody
     public APIResponse getTemplateDetail(HttpServletRequest request, String templateId){
         User user = (User) request.getSession().getAttribute("login_user");
-        return null;
+        return templateService.getTemplateDetail(user, templateId);
     }
 }

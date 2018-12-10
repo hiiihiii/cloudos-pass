@@ -50,6 +50,8 @@ define([
                 toDetail: function (event) {
                     var id = $(event.target).attr("id");
                     sessionStorage.setItem("templateId", id);
+                    //在新页面打开
+                    window.open('../apporch/templatedetail')
                 },
                 convertData: function (templateArray) {
                     for(var i = 0; i < templateArray.length; i++){

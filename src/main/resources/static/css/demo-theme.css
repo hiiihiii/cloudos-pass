@@ -200,3 +200,9 @@ table.dataTable.no-footer {
     background-color: #e1e1e2;
     border-color: #e1e1e2;
 }
+.loading {
+    display: none;
+    position: absolute;
+    top: 250px;
+    left: 588px;
+}
