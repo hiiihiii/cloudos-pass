@@ -52,8 +52,8 @@
                 <td v-cloak="" v-text="template.isPublish == '0'? '未发布': '已发布'"></td>
                 <td>
                     <span class="operate-btn" title="部署"><i class="fa fa-toggle-right"></i></span>
-                    <span class="operate-btn" title="发布"
-                        v-show="template.isPublish == '0'"><i class="fa fa-location-arrow"></i></span>
+                    <span class="operate-btn" title="发布" v-on:click="publishTemplate(template.uuid, template.templateName)"
+                        v-show="template.isPublish == '0'" v-cloak=""><i class="fa fa-location-arrow"></i></span>
                     <span class="operate-btn" title="编辑"><i class="fa fa-pencil"></i></span>
                     <span class="operate-btn" title="删除"><i class="fa fa-trash-o"></i></span>
                 </td>

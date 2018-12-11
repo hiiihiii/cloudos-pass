@@ -74,4 +74,11 @@ public class AppOrchController {
         User user = (User) request.getSession().getAttribute("login_user");
         return templateService.getTemplateDetail(user, templateId);
     }
+
+    @PostMapping("publish")
+    @ResponseBody
+    public  APIResponse publish (HttpServletRequest request, String templateId){
+        User user = (User) request.getSession().getAttribute("login_user");
+        return templateService.publishTemplate(user, templateId);
+    }
 }

@@ -24,4 +24,10 @@
     <select id="getAllTemplate" resultMap="templates">
         SELECT * FROM tl_template
     </select>
+
+    <update id="publishTemplate">
+        UPDATE tl_template
+        SET isPublish = 1
+        WHERE uuid = #{templateId}
+    </update>
 </mapper>

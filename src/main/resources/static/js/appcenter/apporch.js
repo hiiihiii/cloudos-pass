@@ -60,6 +60,29 @@ define([
                         templateArray[i].temp_logo_url = "ftp://docker:dockerfile@" + templateArray[i].logo_url;
                     }
                     return templateArray;
+                },
+                publishTemplate: function (templateId, templateName) {
+                    console.log(templateId);
+                    var _self = this;
+                    $.ajax({
+                        url: "../apporch/publish",
+                        type: "post",
+                        data: {
+                            templateId: templateId
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            if(data.code == 'success'){
+                                common_module.notify('[应用编排]','发布镜像' + templateName + '成功','success');
+                                // _self.getTemplate();
+                            } else {
+                                common_module.notify('[应用编排]','发布镜像' + templateName + '失败','danger');
+                            }
+                        },
+                        error: function () {
+                            common_module.notify('[应用编排]','发布镜像' + templateName + '失败','danger');
+                        }
+                    });
                 }
             }
         });

@@ -65,4 +65,20 @@ public class TemplateServiceImp implements TemplateService{
             return APIResponse.fail(templateId + "获取" + templateId + "镜像模板失败");
         }
     }
+
+    @Override
+    public APIResponse publishTemplate(User user, String templateId) {
+        try {
+            int count = templateDao.publishTemplate(templateId);
+            if(count > 0) {
+                return APIResponse.success();
+            } else {
+                LOGGE.info("[TemplateServiceImp Info]: " + "发布镜像模板" + templateId + "失败");
+            }
+        } catch (Exception e) {
+            LOGGE.info("[TemplateServiceImp Info]: " + "发布镜像模板" + templateId + "失败");
+            e.printStackTrace();
+        }
+        return APIResponse.fail("发布镜像模板" + templateId + "失败");
+    }
 }

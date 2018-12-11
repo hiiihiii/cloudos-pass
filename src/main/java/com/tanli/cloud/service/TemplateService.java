@@ -9,4 +9,5 @@ import com.tanli.cloud.utils.APIResponse;
 public interface TemplateService {
     public APIResponse getTemplate(User user);
     public APIResponse getTemplateDetail(User user, String templateId);
+    public APIResponse publishTemplate(User user, String templateId);
 }
