@@ -31,4 +31,9 @@
         INSERT INTO tl_user (user_uuid, role_uuid, username, password, email, telephone, create_time, update_time)
         VALUES (#{user_uuid}, #{role_uuid}, #{userName}, #{password}, #{email}, #{telephone}, #{create_time}, #{update_time})
     </insert>
+
+    <delete id="deleteById">
+        DELETE FROM tl_user
+        WHERE user_uuid = #{id}
+    </delete>
 </mapper>

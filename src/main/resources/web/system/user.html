@@ -28,7 +28,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="user in userInfos" v-cloak="">
+        <tr v-for="user in userInfos" v-cloak="" v-bind:id="user.user_uuid">
             <td>
                 <div class="checkbox-container table-checkbox-box">
                     <input class="cloud-checkbox" type="checkbox"/>
@@ -40,7 +40,7 @@
             <td v-cloak="">{{user.telephone}}</td>
             <td v-cloak="">
                 <span class="operate-btn" title="编辑"><i class="fa fa-pencil"></i></span>
-                <span class="operate-btn" title="删除"><i class="fa fa-trash-o"></i></span>
+                <span class="operate-btn" title="删除" v-on:click=""><i class="fa fa-trash-o"></i></span>
             </td>
         </tr>
         </tbody>

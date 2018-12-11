@@ -118,6 +118,25 @@ define([
                             common_module.notify('[用户]', '添加用户失败', 'danger');
                         }
                     });
+                },
+
+                //todo 后期将参数id类型要改为数组，以适应多删除
+                deleteById: function (ids) {
+                    var _self = this;
+                    $.ajax({
+                        url: '../user/delete',
+                        type: 'post',
+                        data: {
+
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            if(data.code == "success"){} else {}
+                        },
+                        error: function () {
+
+                        }
+                    })
                 }
             }
         });

@@ -57,4 +57,20 @@ public class UserManageServiceImp implements UserManageService {
         }
         return APIResponse.fail("增加用户失败");
     }
+
+    @Override
+    public APIResponse deleteById(User user, String id) {
+        try {
+            int count = userDao.deleteById(id);
+            if(count > 0){
+                return APIResponse.success();
+            } else {
+                LOGGE.info("[UserManageServiceImp Info]: " + "删除用户" + id + "失败");
+            }
+        } catch (Exception e) {
+            LOGGE.info("[UserManageServiceImp Info]: " + "删除用户" + id + "失败");
+            e.printStackTrace();
+        }
+        return APIResponse.fail("删除用户失败");
+    }
 }
