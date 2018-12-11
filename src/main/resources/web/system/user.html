@@ -30,7 +30,7 @@
         <tbody>
         <tr v-for="user in userInfos" v-cloak="" v-bind:id="user.user_uuid">
             <td>
-                <div class="checkbox-container table-checkbox-box">
+                <div class="checkbox-container table-checkbox-box" v-cloak="" v-on:click="checkOne($event)">
                     <input class="cloud-checkbox" type="checkbox"/>
                 </div>
             </td>

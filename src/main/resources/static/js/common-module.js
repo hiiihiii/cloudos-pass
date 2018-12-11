@@ -83,7 +83,11 @@ define([
 
     // 创建表格
     function tables(id, options) {
-        var tableObj = $(id).DataTable({
+        var tableObj = $(id)
+            .on('page.dt', function () {
+                selectAll(id);
+            })
+            .DataTable({
             searching: false,
             ordering: true,
             paging: true,
@@ -102,6 +106,7 @@ define([
                 }
             }
         });
+        selectAll(id);
         return tableObj;
     }
     var commonModule = {
@@ -150,6 +155,14 @@ define([
             '</div>' +
             '<a href="{3}" target="{4}" data-notify="url"></a>' +
             '</div>'
+        });
+    }
+
+    // 设置id为tableid的表格中的checkbox全选中
+    function selectAll(tableid) {
+        debugger
+        $(tableid + " input[type='checkbox']").each(function (i, element) {
+            $(element).attr("checked", true);
         });
     }
     return commonModule;

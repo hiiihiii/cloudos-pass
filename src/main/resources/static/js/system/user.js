@@ -22,6 +22,9 @@ define([
                 });
             },
             methods: {
+                checkOne: function (event) {
+
+                },
                 getUserData: function () {
                     var _self = this;
                     $.ajax({
