@@ -684,10 +684,34 @@ span.checkbox+a{
 #template_detail .content {
     display: flex;
 }
-#deploy_template .content-left {
-    flex: 5 !important;
+#template_detail .content-left {
+    flex: 7 !important;
+    border-right: none;
+    box-shadow: none;
 }
-#deploy_template .content-right {
-    flex: 1 !important;
+#template_detail .content-right {
+    flex: 2 !important;
+    overflow: auto;
+}
+#template_detail .content-right label {
+    font-weight: normal;
+    font-size: 12px;
+}
+#template_detail .content-right .info-title {
+    background-color: #e0d9d9;
+    padding: 2px 7px;
+}
+#template_detail .content-right .app-info-box {
+    padding-left: 15px;
+    margin-left: 5px;
+    border-bottom: 1px solid #cccccc;
+}
+#template_detail .form-group label {
+    width: 80px;
+    text-align: right;
+    font-size: 12px;
+}
+#template_detail .form-group span {
+    font-size: 12px;
 }
 /*模板详情结束*/

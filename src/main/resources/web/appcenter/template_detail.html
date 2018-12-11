@@ -9,10 +9,102 @@
 <div th:replace="common/nav::menu"></div>
 <div id="template_detail">
     <div class="content">
-        <div class="content-right">
+        <div class="content-left">
             <div id="canvas-box"></div>
         </div>
-        <div class="content-left"></div>
+        <div class="content-right">
+            <div class="app-info-container" v-if="twaverObj.selectedApp != null" v-cloak="">
+                <label class="info-title">基本信息</label>
+                <div class="app-info-box">
+                    <div class="form-group">
+                        <label>镜像： </label>
+                        <span v-cloak="" >{{twaverObj.selectedApp.appName}}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>版本： </label>
+                        <span v-cloak="">{{twaverObj.selectedApp.version}}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>下载地址： </label>
+                        <span v-cloak="">{{twaverObj.selectedApp.source_url}}</span>
+                    </div>
+                </div>
+                <label class="info-title">启动限制</label>
+                <div class="app-info-box">
+                    <div class="form-group">
+                        <label>CPU(核)： </label>
+                        <span v-cloak="">{{twaverObj.selectedApp.metadata.requests.cpu}}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>内存： </label>
+                        <span v-cloak="">{{twaverObj.selectedApp.metadata.requests.memory}}</span>
+                    </div>
+                </div>
+                <label class="info-title">运行限制</label>
+                <div class="app-info-box">
+                    <div class="form-group">
+                        <label>CPU(核)： </label>
+                        <span v-cloak="">{{twaverObj.selectedApp.metadata.limits.cpu}}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>内存： </label>
+                        <span v-cloak="">{{twaverObj.selectedApp.metadata.limits.memory}}</span>
+                    </div>
+                </div>
+                <label class="info-title">工作目录</label>
+                <div class="app-info-box">
+                    <div class="form-group">
+                        <label>目录映射： </label>
+                        <span v-cloak="">{{twaverObj.selectedApp.metadata.volume}}</span>
+                    </div>
+                </div>
+                <label class="info-title">运行命令</label>
+                <div class="app-info-box">
+                    <div class="form-group">
+                        <label>命令： </label>
+                        <span v-cloak="">{{twaverObj.selectedApp.metadata.cmd}}</span>
+                    </div>
+                    <div class="form-group" v-for="(item, index) in twaverObj.selectedApp.metadata.cmdParams" v-cloak="">
+                        <label>参数{{index+1}}： </label>
+                        <span v-cloak="">{{item}}</span>
+                    </div>
+                </div>
+                <label class="info-title">环境变量</label>
+                <div class="app-info-box">
+                    <div v-for="(item) in twaverObj.selectedApp.metadata.env" v-cloak="">
+                        <div class="form-group">
+                            <label v-cloak="">{{item.name}}： </label>
+                            <span v-cloak="">{{item.value}}</span>
+                        </div>
+                    </div>
+                </div>
+                <label class="info-title">端口映射</label>
+                <div class="app-info-box">
+                    <div v-for="port in twaverObj.selectedApp.metadata.ports">
+                        <div class="form-group">
+                            <label>名称： </label>
+                            <span v-cloak="">{{port.portName}}</span>
+                        </div>
+                        <div class="form-group">
+                            <label>容器端口： </label>
+                            <span v-cloak="">{{port.containerPort}}</span>
+                        </div>
+                        <div class="form-group">
+                            <label>集群内端口： </label>
+                            <span v-cloak="">{{port.port}}</span>
+                        </div>
+                        <div class="form-group">
+                            <label>集群外端口： </label>
+                            <span v-cloak="">{{port.nodePort}}</span>
+                        </div>
+                        <div class="form-group">
+                            <label>协议： </label>
+                            <span v-cloak="">{{port.protocol}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div th:replace="common/footer::footer"></div>
