@@ -9,4 +9,5 @@ import com.tanli.cloud.utils.APIResponse;
 public interface UserManageService {
     public User loginVerify(User user);
     public APIResponse getUsers(User user);
+    public APIResponse addUser(User user);
 }

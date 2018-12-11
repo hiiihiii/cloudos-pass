@@ -41,4 +41,10 @@ public class UserController {
             return APIResponse.fail("fail");
         }
     }
+
+    @PostMapping("user/add")
+    @ResponseBody
+    public APIResponse addUser(HttpServletRequest request, User user){
+        return userManageService.addUser(user);
+    }
 }

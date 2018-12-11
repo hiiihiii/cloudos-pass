@@ -3,7 +3,8 @@ package com.tanli.cloud.service;
 import com.tanli.cloud.dao.UserDao;
 import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.utils.APIResponse;
-import org.apache.log4j.spi.LoggerFactory;
+import com.tanli.cloud.utils.UuidUtil;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +35,26 @@ public class UserManageServiceImp implements UserManageService {
             LOGGE.info("[UserManageServiceImp Info]: " + "获取用户数据失败");
             return APIResponse.fail("获取用户数据失败");
         }
+    }
+
+    @Override
+    public APIResponse addUser(User user) {
+        user.setUser_uuid(UuidUtil.getUUID());
+        DateTime now = DateTime.now();
+        String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+        user.setCreate_time(nowStr);
+        user.setUpdate_time(nowStr);
+        try {
+            int count = userDao.addUser(user);
+            if(count > 0){
+                return APIResponse.success();
+            } else {
+                LOGGE.info("[UserManageServiceImp Info]: " + "增加用户失败");
+            }
+        } catch (Exception e) {
+            LOGGE.info("[UserManageServiceImp Info]: " + "增加用户失败");
+            e.printStackTrace();
+        }
+        return APIResponse.fail("增加用户失败");
     }
 }

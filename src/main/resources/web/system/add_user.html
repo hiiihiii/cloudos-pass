@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div th:fragment="add_user" id="add_user_dialog">
+    <div class="modal fade" id="add_user" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <div class="cloud-modal-title">
+                        <i class="fa fa-plus"></i>
+                        <h4 class="modal-title">增加用户</h4>
+                    </div>
+                </div>
+                <div class="modal-body cloud-modal-body">
+                    <form id="add_user_form" role="form" class="form-horizontal" enctype="multipart/form-data">
+                        <!--用户名-->
+                        <div class="form-group">
+                            <label class="cloud-modal-label">用户名：</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名" maxlength="64"/>
+                        </div>
+                        <!--密码-->
+                        <div class="form-group">
+                            <label class="cloud-modal-label">密码：</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码" maxlength="64"/>
+                        </div>
+                        <!--确认密码-->
+                        <div class="form-group">
+                            <label class="cloud-modal-label">确认密码：</label>
+                            <input type="password" class="form-control" id="passwordAgain" name="passwordAgain" placeholder="请再次输入密码" maxlength="64"/>
+                        </div>
+                        <!--用户角色-->
+                        <div class="form-group">
+                            <label class="cloud-modal-label">用户角色：</label>
+                            <select class="form-control">
+                                <option v-for="role in roleInfos" v-cloak="" v-bind:value="role.uuid">
+                                    {{role.name}}
+                                </option>
+                            </select>
+                        </div>
+                        <!--邮箱-->
+                        <div class="form-group">
+                            <label class="cloud-modal-label">邮箱：</label>
+                            <input type="text" class="form-control" id="email" name="email" placeholder="1@1.com"/>
+                        </div>
+                        <!--联系方式-->
+                        <div class="form-group">
+                            <label class="cloud-modal-label">联系方式：</label>
+                            <input type="text" class="form-control" id="telephone" name="telephone" placeholder=""/>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn cloud-btn" v-on:click="submitAdd" v-cloak="">确定</button>
+                    <button type="button" class="btn cloud-btn" data-dismiss="modal" v-cloak="">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

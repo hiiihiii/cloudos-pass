@@ -206,3 +206,12 @@ table.dataTable.no-footer {
     top: 250px;
     left: 588px;
 }
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
+    background: none;
+    border: none;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: #eeeeee;
+    border: none;
+}

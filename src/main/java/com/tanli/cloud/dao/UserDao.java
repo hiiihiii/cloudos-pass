@@ -12,4 +12,5 @@ import java.util.List;
 public interface UserDao {
     public User loginVefiry(User user);
     public List<User> getAllUser();
+    public int addUser(User user);
 }

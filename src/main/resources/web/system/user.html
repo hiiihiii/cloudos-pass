@@ -8,9 +8,9 @@
 <div th:replace="common/nav::menu"></div>
 <div id="system_user">
     <div class="operate-box col-md-12 col-sm-12 col-xs-12">
-        <div class="btn cloud-btn"><i class="fa fa-plus"></i>增加</div>
+        <div class="btn cloud-btn" v-cloak="" v-on:click="showAddDialog"><i class="fa fa-plus"></i>增加</div>
         <div class="btn cloud-btn"><i class="fa fa-trash"></i>删除</div>
-        <div class="btn cloud-btn"><i class="fa fa-refresh"></i>刷新</div>
+        <div class="btn cloud-btn" v-cloak="" v-on:click="refreshTable"><i class="fa fa-refresh"></i>刷新</div>
     </div>
     <table class="table" id="user_table">
         <thead class="">
@@ -38,10 +38,14 @@
             <td v-cloak="">{{user.role_name}}</td>
             <td v-cloak="">{{user.email}}</td>
             <td v-cloak="">{{user.telephone}}</td>
-            <td v-cloak="">操作</td>
+            <td v-cloak="">
+                <span class="operate-btn" title="编辑"><i class="fa fa-pencil"></i></span>
+                <span class="operate-btn" title="删除"><i class="fa fa-trash-o"></i></span>
+            </td>
         </tr>
         </tbody>
     </table>
+    <div th:replace="system/add_user::add_user"></div>
 </div>
 <div th:replace="common/footer::footer"></div>
 <script type="text/javascript">

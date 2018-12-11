@@ -715,3 +715,20 @@ span.checkbox+a{
     font-size: 12px;
 }
 /*模板详情结束*/
+/*增加用户开始*/
+#add_user_form .form-group {
+    margin-left: 35px;
+    margin-right: 0px;
+}
+#add_user_form .form-control {
+    display: inline-block;
+    width: 65%;
+}
+#add_user_form .cloud-modal-label {
+    width: 75px;
+    text-align: right;
+}
+#add_user_dialog .cloud-modal-body {
+    height: 310px;
+}
+/*增加用户结束*/

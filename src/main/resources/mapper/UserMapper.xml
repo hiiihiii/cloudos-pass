@@ -26,4 +26,9 @@
         SELECT * from tl_user, tl_role
         WHERE tl_user.role_uuid = tl_role.role_uuid
     </select>
+
+    <insert id="addUser" parameterType="com.tanli.cloud.model.response.User">
+        INSERT INTO tl_user (user_uuid, role_uuid, username, password, email, telephone, create_time, update_time)
+        VALUES (#{user_uuid}, #{role_uuid}, #{userName}, #{password}, #{email}, #{telephone}, #{create_time}, #{update_time})
+    </insert>
 </mapper>
