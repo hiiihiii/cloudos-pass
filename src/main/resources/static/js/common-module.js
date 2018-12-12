@@ -85,33 +85,40 @@ define([
     function tables(id, options) {
         var tableObj = $(id)
             .on('page.dt', function () {
-                selectAll(id);
+                Vue.nextTick(function () {
+                    checkAll(id);
+                });
             })
             .DataTable({
-            searching: false,
-            ordering: true,
-            paging: true,
-            pageLength: 10,
-            pagingType: "full_numbers",
-            lengthChange: false,
-            language: {
-                emptyTable: "暂无数据",
-                info: "共_MAX_条记录",
-                zeroRecords: "未找到数据",
-                paginate: {
-                    first: "<<",
-                    last: ">>",
-                    next: ">",
-                    previous: "<"
+                searching: false,
+                ordering: true,
+                order : [1,'asc'],
+                columnDefs: [{
+                    orderable: false,//禁用排序
+                    targets:[0]   //指定的列
+                }],
+                paging: true,
+                pageLength: 10,
+                pagingType: "full_numbers",
+                lengthChange: false,
+                language: {
+                    emptyTable: "暂无数据",
+                    info: "共_MAX_条记录",
+                    zeroRecords: "未找到数据",
+                    paginate: {
+                        first: "<<",
+                        last: ">>",
+                        next: ">",
+                        previous: "<"
+                    }
                 }
-            }
-        });
-        selectAll(id);
+            });
         return tableObj;
     }
     var commonModule = {
         dataTables: tables,
-        notify: notify
+        notify: notify,
+        checkAll: checkAll
     };
 
     // 创建通知消息
@@ -158,12 +165,18 @@ define([
         });
     }
 
-    // 设置id为tableid的表格中的checkbox全选中
-    function selectAll(tableid) {
+    // 设置id为tableid的表格中的checkbox全选中或全部不选中
+    function checkAll(tableid) {
         debugger
-        $(tableid + " input[type='checkbox']").each(function (i, element) {
-            $(element).attr("checked", true);
-        });
+        if($(tableid + " thead input[type='checkbox']").prop("checked")){
+            $(tableid + " tbody input[type='checkbox']").each(function (i, element) {
+                $(element).attr("checked", true);
+            });
+        } else {
+            $(tableid + " tbody input[type='checkbox']").each(function (i, element) {
+                $(element).attr("checked", false);
+            });
+        }
     }
     return commonModule;
 });

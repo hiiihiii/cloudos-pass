@@ -22,8 +22,18 @@ define([
                 });
             },
             methods: {
+                selectAll: function (event) {
+                    debugger
+                    var id = $(event.target).parents('table').attr("id");
+                    common_module.checkAll("#" + id);
+                },
                 checkOne: function (event) {
+                    debugger
+                    var $tbody = $(event.target).parents('tbody');
+                    var $trs = $tbody.children('tr');
+                    $tbody.children('tr').each(function (index, element) {
 
+                    });
                 },
                 getUserData: function () {
                     var _self = this;
