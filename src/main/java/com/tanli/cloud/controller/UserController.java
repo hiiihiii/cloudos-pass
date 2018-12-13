@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -50,8 +51,9 @@ public class UserController {
 
     @PostMapping("user/delete")
     @ResponseBody
-    public APIResponse deleteUser(HttpServletRequest request, String userid){
+    public APIResponse deleteUser(HttpServletRequest request,
+                                  @RequestParam(value = "ids[]") String[] ids){
         User user =(User) request.getSession().getAttribute("login_user");
-        return userManageService.deleteById(user, userid);
+        return userManageService.deleteByIds(user, ids);
     }
 }

@@ -8,7 +8,9 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tanli on 2018/10/15 0015.
@@ -59,18 +61,29 @@ public class UserManageServiceImp implements UserManageService {
     }
 
     @Override
-    public APIResponse deleteById(User user, String id) {
-        try {
-            int count = userDao.deleteById(id);
-            if(count > 0){
-                return APIResponse.success();
-            } else {
-                LOGGE.info("[UserManageServiceImp Info]: " + "删除用户" + id + "失败");
+    public APIResponse deleteByIds(User user, String[] ids) {
+        Map<String, Integer> result = new HashMap<>();
+        int success = 0, fail = 0;
+        for(int i = 0 ; i < ids.length; i++){
+            try {
+                int count = userDao.deleteById(ids[i]);
+                if(count > 0){
+                    success += 1;
+                } else {
+                    fail += 1;
+                    LOGGE.info("[UserManageServiceImp Info]: " + "删除用户" + ids[i] + "失败");
+                }
+            } catch (Exception e) {
+                fail += 1;
+                LOGGE.info("[UserManageServiceImp Info]: " + "删除用户" + ids[i] + "失败");
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            LOGGE.info("[UserManageServiceImp Info]: " + "删除用户" + id + "失败");
-            e.printStackTrace();
         }
-        return APIResponse.fail("删除用户失败");
+        result.put("success", success);
+        result.put("fail", fail);
+        if(fail == ids.length) {
+            return APIResponse.fail("删除用户失败");
+        }
+        return APIResponse.success(result);
     }
 }

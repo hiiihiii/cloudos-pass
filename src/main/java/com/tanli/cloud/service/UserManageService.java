@@ -10,5 +10,5 @@ public interface UserManageService {
     public User loginVerify(User user);
     public APIResponse getUsers(User user);
     public APIResponse addUser(User user);
-    public APIResponse deleteById(User user, String id);
+    public APIResponse deleteByIds(User user, String[] ids);
 }
