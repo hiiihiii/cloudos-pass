@@ -170,11 +170,11 @@ define([
         debugger
         if($(tableid + " thead input[type='checkbox']").prop("checked")){
             $(tableid + " tbody input[type='checkbox']").each(function (i, element) {
-                $(element).attr("checked", true);
+                $(element).prop("checked", true);
             });
         } else {
             $(tableid + " tbody input[type='checkbox']").each(function (i, element) {
-                $(element).attr("checked", false);
+                $(element).prop("checked", false);
             });
         }
     }
