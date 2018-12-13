@@ -23,17 +23,26 @@ define([
             },
             methods: {
                 selectAll: function (event) {
-                    debugger
                     var id = $(event.target).parents('table').attr("id");
                     common_module.checkAll("#" + id);
                 },
                 checkOne: function (event) {
-                    debugger
                     var $tbody = $(event.target).parents('tbody');
-                    var $trs = $tbody.children('tr');
-                    $tbody.children('tr').each(function (index, element) {
-
+                    var thead_input = $tbody.parents("table").find("thead input[type='checkbox']")[0];
+                    var trs = $tbody.children('tr');
+                    var total = trs.length;
+                    var checked = 0;
+                    trs.each(function (index, element) {
+                        var input = $(element).find("input[type='checkbox']")[0];
+                        if($(input).prop("checked")){
+                            checked += 1;
+                        }
                     });
+                    if(checked == total){
+                        $(thead_input).prop("checked", true);
+                    } else {
+                        $(thead_input).prop("checked", false);
+                    }
                 },
                 getUserData: function () {
                     var _self = this;

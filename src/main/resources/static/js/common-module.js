@@ -167,7 +167,6 @@ define([
 
     // 设置id为tableid的表格中的checkbox全选中或全部不选中
     function checkAll(tableid) {
-        debugger
         if($(tableid + " thead input[type='checkbox']").prop("checked")){
             $(tableid + " tbody input[type='checkbox']").each(function (i, element) {
                 $(element).prop("checked", true);
