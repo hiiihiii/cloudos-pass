@@ -149,6 +149,17 @@ define([
                             common_module.notify('[应用模板]',"删除模板失败", 'danger');
                         }
                     })
+                },
+                //表格刷新
+                refreshTable: function () {
+                    var _self = this;
+                    if(_self.templateTableObj != null) {
+                        _self.templateTableObj.destroy();
+                    }
+                    _self.getTemplate();
+                    Vue.nextTick(function () {
+                        _self.templateTableObj = common_module.dataTables("#template_table");
+                    });
                 }
             }
         });

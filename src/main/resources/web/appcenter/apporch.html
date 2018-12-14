@@ -15,7 +15,8 @@
         </div>
         <div class="btn cloud-btn"
              v-on:click="deleteByIds($event, 'multiple')" v-cloak=""><i class="fa fa-trash"></i>删除</div>
-        <div class="btn cloud-btn"><i class="fa fa-refresh"></i>刷新</div>
+        <div class="btn cloud-btn"
+             v-on:click="refreshTable" v-cloak=""><i class="fa fa-refresh"></i>刷新</div>
     </div>
     <div>
         <table class="table" id="template_table">
