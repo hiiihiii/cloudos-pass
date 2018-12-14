@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -80,5 +82,33 @@ public class TemplateServiceImp implements TemplateService{
             e.printStackTrace();
         }
         return APIResponse.fail("发布镜像模板" + templateId + "失败");
+    }
+
+    @Override
+    public APIResponse deleteByIds(User user, String[] ids) {
+        Map<String, Integer> result = new HashMap<>();
+        int success = 0, fail = 0;
+        for(int i = 0; i < ids.length; i++) {
+            try {
+                int count = templateDao.deleteById(ids[i]);
+                if(count > 0) {
+                    success += 1;
+                } else {
+                    fail += 1;
+                    LOGGE.info("[TemplateServiceImp Info]: " + "删除镜像模板" + ids[i] + "失败");
+                }
+            } catch (Exception e) {
+                fail += 1;
+                LOGGE.info("[TemplateServiceImp Info]: " + "删除镜像模板" + ids[i] + "失败");
+                e.printStackTrace();
+            }
+        }
+        result.put("success", success);
+        result.put("fail", fail);
+        if(fail == ids.length){
+            return APIResponse.fail("删除镜像模板失败");
+        } else {
+            return APIResponse.success(result);
+        }
     }
 }

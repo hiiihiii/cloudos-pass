@@ -135,10 +135,8 @@ define([
                         ids.push($(event.target).parents('tr').attr('id'));
                     } else if('multiple' === type) {
                         $("#user_table tbody").children('tr').each(function(index,element) {
-                            debugger
                             var checkbox = $(element).find("input[type='checkbox']")[0];
                             if($(checkbox).prop("checked")) {
-
                                 ids.push($(element).attr('id'));
                             }
                         });

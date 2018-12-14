@@ -13,7 +13,8 @@
             <i class="fa fa-plus"></i>
             <a href="../apporch/template" class="add-template-btn" target="_blank">增加</a>
         </div>
-        <div class="btn cloud-btn"><i class="fa fa-trash"></i>删除</div>
+        <div class="btn cloud-btn"
+             v-on:click="deleteByIds($event, 'multiple')" v-cloak=""><i class="fa fa-trash"></i>删除</div>
         <div class="btn cloud-btn"><i class="fa fa-refresh"></i>刷新</div>
     </div>
     <div>
@@ -33,7 +34,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="template in templateList" v-cloak="">
+            <tr v-for="template in templateList" v-cloak="" v-bind:id="template.uuid">
                 <td>
                     <div class="checkbox-container table-checkbox-box" v-on:click="checkOne($event)">
                         <input class="cloud-checkbox" type="checkbox"/>
@@ -52,10 +53,12 @@
                 <td v-cloak="" v-text="template.isPublish == '0'? '未发布': '已发布'"></td>
                 <td>
                     <span class="operate-btn" title="部署"><i class="fa fa-toggle-right"></i></span>
-                    <span class="operate-btn" title="发布" v-on:click="publishTemplate(template.uuid, template.templateName)"
-                        v-show="template.isPublish == '0'" v-cloak=""><i class="fa fa-location-arrow"></i></span>
+                    <span class="operate-btn" title="发布"
+                          v-on:click="publishTemplate(template.uuid, template.templateName)"
+                          v-show="template.isPublish == '0'" v-cloak=""><i class="fa fa-location-arrow"></i></span>
                     <span class="operate-btn" title="编辑"><i class="fa fa-pencil"></i></span>
-                    <span class="operate-btn" title="删除"><i class="fa fa-trash-o"></i></span>
+                    <span class="operate-btn" title="删除"
+                          v-on:click="deleteByIds($event, 'one')"><i class="fa fa-trash-o"></i></span>
                 </td>
             </tr>
             </tbody>

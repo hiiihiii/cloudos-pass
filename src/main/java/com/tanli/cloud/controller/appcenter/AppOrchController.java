@@ -77,8 +77,16 @@ public class AppOrchController {
 
     @PostMapping("publish")
     @ResponseBody
-    public  APIResponse publish (HttpServletRequest request, String templateId){
+    public APIResponse publish (HttpServletRequest request, String templateId){
         User user = (User) request.getSession().getAttribute("login_user");
         return templateService.publishTemplate(user, templateId);
+    }
+
+    @PostMapping("delete")
+    @ResponseBody
+    public APIResponse delete (HttpServletRequest request,
+                               @RequestParam(value = "ids[]") String[] ids) {
+        User user = (User) request.getSession().getAttribute("login_user");
+        return templateService.deleteByIds(user, ids);
     }
 }

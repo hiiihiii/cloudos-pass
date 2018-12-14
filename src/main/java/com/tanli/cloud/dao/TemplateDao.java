@@ -14,4 +14,5 @@ public interface TemplateDao {
     public int addTemplate(Template template);
     public List<Template> getAllTemplate();
     public int publishTemplate(@Param("templateId")String templateId);
+    public int deleteById(@Param("templateId")String templateId);
 }

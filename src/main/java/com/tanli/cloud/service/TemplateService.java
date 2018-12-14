@@ -10,4 +10,5 @@ public interface TemplateService {
     public APIResponse getTemplate(User user);
     public APIResponse getTemplateDetail(User user, String templateId);
     public APIResponse publishTemplate(User user, String templateId);
+    public APIResponse deleteByIds(User user, String[] ids);
 }

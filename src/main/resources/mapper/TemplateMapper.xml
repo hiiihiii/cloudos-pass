@@ -30,4 +30,9 @@
         SET isPublish = 1
         WHERE uuid = #{templateId}
     </update>
+
+    <delete id="deleteById">
+        DELETE FROM tl_template
+        WHERE uuid = #{templateId}
+    </delete>
 </mapper>
