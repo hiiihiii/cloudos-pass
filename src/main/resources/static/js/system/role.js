@@ -20,6 +20,13 @@ define([
                 });
             },
             methods: {
+                checkAll: function (event) {
+                    var id = $(event.target).parents('table').attr("id");
+                    common_module.checkAll("#" + id);
+                },
+                checkOne: function (event) {
+                    common_module.checkOne(event);
+                },
                 getRoleData: function () {
                     var _self = this;
                     $.ajax({
