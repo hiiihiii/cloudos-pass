@@ -9,17 +9,18 @@ define([
         var roleVue = new Vue({
             el:"#system_role",
             data: {
-                roleInfos: []
+                roleInfos: [],
+                roleTableObj: ''
             },
             mounted: function () {
                 var _self = this;
-                _self.getData();
+                _self.getRoleData();
                 Vue.nextTick(function () {
-                    common_module.dataTables("#role_table");
+                    _self.roleTableObj = common_module.dataTables("#role_table");
                 });
             },
             methods: {
-                getData: function () {
+                getRoleData: function () {
                     var _self = this;
                     $.ajax({
                         url: '../role/info',
@@ -39,6 +40,16 @@ define([
                             common_module.notify('[角色]', '获取角色数据失败', 'danger');
                         }
                     })
+                },
+                refreshTable: function () {
+                    var _self = this;
+                    if(_self.roleTableObj != null) {
+                        _self.roleTableObj.destroy();
+                    }
+                    _self.getRoleData();
+                    Vue.nextTick(function () {
+                        _self.roleTableObj = common_module.dataTables("#role_table");
+                    });
                 }
             }
         });
