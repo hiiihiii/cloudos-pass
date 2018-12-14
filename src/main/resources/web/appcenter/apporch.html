@@ -21,7 +21,7 @@
             <thead class="">
             <tr>
                 <th>
-                    <div class="checkbox-container table-checkbox-box">
+                    <div class="checkbox-container table-checkbox-box" v-on:click="checkAll($event)">
                         <input class="cloud-checkbox" type="checkbox"/>
                     </div>
                 </th>
@@ -35,7 +35,7 @@
             <tbody>
             <tr v-for="template in templateList" v-cloak="">
                 <td>
-                    <div class="checkbox-container table-checkbox-box">
+                    <div class="checkbox-container table-checkbox-box" v-on:click="checkOne($event)">
                         <input class="cloud-checkbox" type="checkbox"/>
                     </div>
                 </td>

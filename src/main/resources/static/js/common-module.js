@@ -115,11 +115,6 @@ define([
             });
         return tableObj;
     }
-    var commonModule = {
-        dataTables: tables,
-        notify: notify,
-        checkAll: checkAll
-    };
 
     // 创建通知消息
     function notify( title, msg, type){
@@ -177,5 +172,30 @@ define([
             });
         }
     }
+
+    function checkOne(event) {
+        var $tbody = $(event.target).parents('tbody');
+        var thead_input = $tbody.parents("table").find("thead input[type='checkbox']")[0];
+        var trs = $tbody.children('tr');
+        var total = trs.length;
+        var checked = 0;
+        trs.each(function (index, element) {
+            var input = $(element).find("input[type='checkbox']")[0];
+            if($(input).prop("checked")){
+                checked += 1;
+            }
+        });
+        if(checked == total){
+            $(thead_input).prop("checked", true);
+        } else {
+            $(thead_input).prop("checked", false);
+        }
+    }
+    var commonModule = {
+        dataTables: tables,
+        notify: notify,
+        checkAll: checkAll,
+        checkOne: checkOne
+    };
     return commonModule;
 });

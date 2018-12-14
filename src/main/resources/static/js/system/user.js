@@ -22,27 +22,12 @@ define([
                 });
             },
             methods: {
-                selectAll: function (event) {
+                checkAll: function (event) {
                     var id = $(event.target).parents('table').attr("id");
                     common_module.checkAll("#" + id);
                 },
                 checkOne: function (event) {
-                    var $tbody = $(event.target).parents('tbody');
-                    var thead_input = $tbody.parents("table").find("thead input[type='checkbox']")[0];
-                    var trs = $tbody.children('tr');
-                    var total = trs.length;
-                    var checked = 0;
-                    trs.each(function (index, element) {
-                        var input = $(element).find("input[type='checkbox']")[0];
-                        if($(input).prop("checked")){
-                            checked += 1;
-                        }
-                    });
-                    if(checked == total){
-                        $(thead_input).prop("checked", true);
-                    } else {
-                        $(thead_input).prop("checked", false);
-                    }
+                    common_module.checkOne(event);
                 },
                 getUserData: function () {
                     var _self = this;
