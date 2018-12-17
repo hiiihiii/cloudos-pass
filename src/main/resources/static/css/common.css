@@ -509,6 +509,9 @@ span.checkbox+a{
     color: #767b80;
 }
 /*新版应用编排开始*/
+#template .template-form-control {
+    width: 174px;
+}
 #template .content{
     display: flex;
     padding-top: 100px;

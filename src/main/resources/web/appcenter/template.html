@@ -135,7 +135,7 @@
                 <div class="app-info-box">
                     <div class="form-group">
                         <label>CPU(核)： </label>
-                        <input type="text" v-model="selected.requests.cpu" name="minCpu" id="minCpu" />
+                        <input class="template-form-control" type="text" v-model="selected.requests.cpu" name="minCpu" id="minCpu" />
                     </div>
                     <div class="form-group">
                         <label>内存： </label>
@@ -152,7 +152,7 @@
                 <div class="app-info-box">
                     <div class="form-group">
                         <label>CPU(核)： </label>
-                        <input type="text" v-model="selected.limits.cpu" name="maxCpu" id="maxCpu" />
+                        <input class="template-form-control" type="text" v-model="selected.limits.cpu" name="maxCpu" id="maxCpu" />
                     </div>
                     <div class="form-group">
                         <label>内存： </label>
@@ -169,18 +169,18 @@
                 <div class="app-info-box">
                     <div class="form-group">
                         <label>目录映射： </label>
-                        <input type="text" v-model="selected.volume" name="workDir" id="workDir" />
+                        <input class="template-form-control" type="text" v-model="selected.volume" name="workDir" id="workDir" />
                     </div>
                 </div>
                 <label class="info-title">运行命令</label>
                 <div class="app-info-box">
                     <div class="form-group">
                         <label>命令： </label>
-                        <input type="text" v-model="selected.cmd" name="cmd" id="cmd" />
+                        <input class="template-form-control" type="text" v-model="selected.cmd" name="cmd" id="cmd" />
                     </div>
                     <div class="form-group" v-for="(param, index) in selected.cmdParams">
                         <label>参数{{index+1}}： </label>
-                        <input type="text" v-model="selected.cmdParams[index]" name="cmdParam" v-cloak=""/>
+                        <input class="template-form-control" type="text" v-model="selected.cmdParams[index]" name="cmdParam" v-cloak=""/>
                     </div>
                 </div>
                 <label class="info-title">环境变量</label>
@@ -188,7 +188,7 @@
                     <div v-for="(item) in selected.env">
                         <div class="form-group">
                             <label v-cloak="">{{item.name}}：</label>
-                            <input type="text" v-model="item.value" name="envValue" v-cloak=""/>
+                            <input class="template-form-control" type="text" v-model="item.value" name="envValue" v-cloak=""/>
                         </div>
                     </div>
                 </div>
@@ -197,11 +197,11 @@
                     <div v-for="(item) in selected.ports">
                         <div class="form-group">
                             <label>名称： </label>
-                            <input type="text" v-model="item.portName" v-cloak=""/>
+                            <input class="template-form-control" type="text" v-model="item.portName" v-cloak=""/>
                         </div>
                         <div class="form-group">
                             <label>容器端口： </label>
-                            <input type="text" v-model="item.containerPort" v-cloak=""/>
+                            <input class="template-form-control" type="text" v-model="item.containerPort" v-cloak=""/>
                         </div>
                         <div class="form-group">
                             <label>集群内端口： </label>
@@ -209,7 +209,7 @@
                         </div>
                         <div class="form-group">
                             <label>集群外端口： </label>
-                            <input type="text" v-model="item.nodePort" v-cloak=""/>
+                            <input class="template-form-control" type="text" v-model="item.nodePort" v-cloak=""/>
                         </div>
                         <div class="form-group">
                             <label>协议： </label>
