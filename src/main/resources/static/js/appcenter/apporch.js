@@ -87,8 +87,15 @@ define([
                         dataType: 'json',
                         success: function (data) {
                             if(data.code == 'success'){
+                                //销毁表格
+                                if(_self.templateTableObj != null) {
+                                    _self.templateTableObj.destroy();
+                                }
+                                _self.getTemplate();
+                                Vue.nextTick(function () {
+                                    _self.templateTableObj = common_module.dataTables("#template_table");
+                                });
                                 common_module.notify('[应用编排]','发布镜像' + templateName + '成功','success');
-                                // _self.getTemplate();
                             } else {
                                 common_module.notify('[应用编排]','发布镜像' + templateName + '失败','danger');
                             }
