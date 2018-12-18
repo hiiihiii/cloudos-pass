@@ -204,7 +204,9 @@ table.dataTable.no-footer {
     display: none;
     position: absolute;
     top: 250px;
-    left: 588px;
+    left: 625px;
+    height: 100px;
+    width: 100px;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.current,
 .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{

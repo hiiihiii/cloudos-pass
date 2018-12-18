@@ -27,14 +27,13 @@ define([
                 $(".app-items .cloud-checkbox").attr("checked", "true");
                 //为分类选择绑定事件
                 _self.classifyBind();
+
                 //获取镜像和模板信息
                 _self.getImageData("public");
-                _self.getTemplate("private");
-
+                _self.getTemplate("public");
                 Vue.nextTick(function(){
                     _self.initJpages("#appholder", "appcontainer");
                 });
-
             },
             methods: {
                 //显示上传镜像框框
@@ -105,7 +104,7 @@ define([
                     });
                 },
 
-                //获取应用数据
+                //获取镜像数据
                 getImageData: function (repoType) {
                     var _self = this;
                     $(".loading").css("display", "block");
@@ -123,11 +122,15 @@ define([
                             _self.imageInfos = _self.convertData(data.data, 'image');
                             console.log(_self.imageInfos);
                             common_module.notify("[应用中心]","获取镜像数据成功", "success");
-                            $(".loading").css("display", "none");
+                            setTimeout(function () {
+                                $(".loading").css("display", "none");
+                            }, 1000);
                         },
                         error: function () {
                             common_module.notify("[应用中心]","获取镜像数据失败", "danger");
-                            $(".loading").css("display", "none");
+                            setTimeout(function () {
+                                $(".loading").css("display", "none");
+                            }, 1000);
                         }
                     })
                 },
@@ -197,16 +200,101 @@ define([
                 },
 
                 //切换仓库
-                changeRepo: function (repoType) {
+                changeRepo: function (repoType, event) {
                     var _self = this;
                     _self.appType = repoType;
+                    $(event.target).next().find("input").each(function (i, element) {
+                        $(element).prop("checked",true);
+                    });
                     if(repoType === 'public'){
                         _self.showPrivate = false;
                         _self.showPublic = true;
+                        _self.getImageData("public");
+                        _self.getTemplate("public");
                     } else{
                         _self.showPrivate = true;
                         _self.showPublic = false;
+                        _self.getImageData("private");
+                        _self.getTemplate("private");
                     }
+                    Vue.nextTick(function(){
+                        _self.initJpages("#appholder", "appcontainer");
+                    });
+                },
+
+                checkAll: function (event, type) {
+                    var _self = this;
+                    var input = $(event.target);
+                    var isSelected = $(input).prop("checked");
+                    var parent = $(event.target).parents("div.app-items");
+                    $(parent).find("input[type='checkbox']").each(function (i, element) {
+                        $(element).prop("checked", isSelected);
+                    });
+                    if(isSelected) {
+                        _self.getImageData(type);
+                        _self.getTemplate(type);
+                    } else {
+                        _self.imageInfos = [];
+                        _self.templateInfos = [];
+                    }
+                    Vue.nextTick(function(){
+                        _self.initJpages("#appholder", "appcontainer");
+                    });
+                },
+                
+                checkOne: function (event, repoType, appType) {
+                    var _self = this;
+                    var target = $(event.target);
+                    var appTypeInput = $(target).parents("div.app-items").find("input.app-type");
+                    var selectedCount = 0;
+                    var select = {}; //记录选择情况
+                    appTypeInput.each(function (i, element) {
+                        var checked = $(element).prop("checked");
+                        select[$(element).val()] = checked;
+                        if(checked){
+                            selectedCount += 1;
+                        }
+                    });
+                    var appAllInput = $(target).parents("div.app-items").find("input.app-type-all")[0];
+                    if(selectedCount === appTypeInput.length) { //全选
+                        $(appAllInput).prop("checked", true);
+                        _self.getImageData(repoType);
+                        _self.getTemplate(repoType);
+                    } else { //非全选
+                        $(appAllInput).prop("checked", false);
+                        for (var key in select) {
+                            switch (key) {
+                                case 'image':
+                                    if(select[key]) {
+                                        _self.getImageData(repoType);
+                                    } else {
+                                        _self.imageInfos = [];
+                                    }
+                                    break;
+                                case 'template':
+                                    if(select[key]) {
+                                        _self.getTemplate(repoType);
+                                    } else {
+                                        _self.templateInfos = [];
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                    Vue.nextTick(function(){
+                        _self.initJpages("#appholder", "appcontainer");
+                    });
+                },
+
+                refreshRepo: function () {
+                    var _self = this;
+                    _self.showPrivate = false;
+                    _self.showPublic = true;
+                    _self.getImageData("public");
+                    _self.getTemplate("public");
+                    Vue.nextTick(function(){
+                        _self.initJpages("#appholder", "appcontainer");
+                    });
                 }
             }
         });

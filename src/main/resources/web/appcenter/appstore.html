@@ -19,16 +19,16 @@
                         <span v-cloak="" v-show="!showPublic"><i class="fa fa-angle-right"></i></span>
                     </li>
                     <div v-cloak="" class="app-items" v-show="appType == 'public'" id="public_repo">
-                        <div class="checkbox-container">
-                            <input type="checkbox" class="cloud-checkbox app-type-all" />
+                        <div class="checkbox-container" v-cloak="">
+                            <input type="checkbox" class="cloud-checkbox app-type-all" v-on:click="checkAll($event, 'public')" />
                             <span>全部</span>
                         </div>
-                        <div class="checkbox-container">
-                            <input type="checkbox" class="cloud-checkbox app-type"/>
+                        <div class="checkbox-container" v-cloak="">
+                            <input type="checkbox" value="image" class="cloud-checkbox app-type" v-on:click="checkOne($event, 'public', 'image')" />
                             <span>镜像应用</span>
                         </div>
-                        <div class="checkbox-container">
-                            <input type="checkbox" class="cloud-checkbox app-type"/>
+                        <div class="checkbox-container" v-cloak="">
+                            <input type="checkbox" value="template" class="cloud-checkbox app-type" v-on:click="checkOne($event, 'public', 'template')" />
                             <span>模板应用</span>
                         </div>
                     </div>
@@ -39,16 +39,16 @@
                         <span v-cloak="" v-show="!showPrivate"><i class="fa fa-angle-right"></i></span>
                     </li>
                     <div v-cloak="" class="app-items" v-show="appType == 'private'" id="private_repo">
-                        <div class="checkbox-container">
-                            <input type="checkbox" class="cloud-checkbox app-type-all"/>
+                        <div class="checkbox-container" v-cloak="">
+                            <input type="checkbox" class="cloud-checkbox app-type-all" v-on:click="checkAll($event, 'private')" />
                             <span>全部</span>
                         </div>
-                        <div class="checkbox-container">
-                            <input type="checkbox" class="cloud-checkbox app-type"/>
+                        <div class="checkbox-container" v-cloak="">
+                            <input type="checkbox" value="image" class="cloud-checkbox app-type" v-on:click="checkOne($event, 'private', 'image')" />
                             <span>镜像应用</span>
                         </div>
-                        <div class="checkbox-container">
-                            <input type="checkbox" class="cloud-checkbox app-type"/>
+                        <div class="checkbox-container" v-cloak="">
+                            <input type="checkbox" value="template" class="cloud-checkbox app-type" v-on:click="checkOne($event, 'private', 'template')" />
                             <span>模板应用</span>
                         </div>
                     </div>
@@ -58,9 +58,9 @@
         <div class="content-right">
             <div class="tool-box col-lg-12">
                 <div class="col-lg-8 operation">
-                    <div class="btn cloud-btn" v-on:click="showUploadDialog"><i class="fa fa-plus"></i>上传镜像</div>
+                    <div class="btn cloud-btn" v-on:click="showUploadDialog" v-cloak=""><i class="fa fa-plus"></i>上传镜像</div>
                     <div class="btn cloud-btn">构建镜像</div>
-                    <div class="btn cloud-btn"><i class="fa fa-refresh"></i>刷新</div>
+                    <div class="btn cloud-btn" v-on:click="refreshRepo" v-cloak=""><i class="fa fa-refresh"></i>刷新</div>
                 </div>
                 <div class="col-lg-4"></div>
             </div>
