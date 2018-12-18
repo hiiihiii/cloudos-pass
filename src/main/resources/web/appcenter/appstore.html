@@ -64,50 +64,60 @@
                 </div>
                 <div class="col-lg-4"></div>
             </div>
-            <div class="app-box">
-                <ul id="appcontainer">
-                    <!--镜像-->
-                    <li v-for="(imageInfo, index) in imageInfos" v-cloak="" v-bind:id="imageInfo.app_id">
-                        <div class="applogo">
-                            <img src="../images/docker-blue.png" v-cloak=""/>
-                        </div>
-                        <div class="app-name">
-                            <h5 v-cloak="">{{imageInfo.appName}}</h5>
-                        </div>
-                        <div class="app-tag">
-                            <span v-cloak="">{{imageInfo.appTag}}</span>
-                        </div>
-                        <div class="app-deploy" title="部署" v-on:click="showDeployImage(imageInfo.app_id)">
-                            <i class="fa fa-toggle-right"></i>
-                        </div>
-                        <div class="app-img">
-                            <img v-bind:src="imageInfo.logo_url" v-on:error="setDefault($event)" v-cloak=""/>
-                        </div>
-                        <div class="app-desc" v-bind:title="imageInfo.description" v-cloak="">
-                            {{imageInfo.description}}
-                        </div>
-                    </li>
-                    <!--模板-->
-                    <li v-for="(template, index) in templateInfos" v-bind:id="template.uuid" v-cloak="">
-                        <div class="applogo">
-                            <img src="../images/template.png" v-cloak=""/>
-                        </div>
-                        <div class="app-name">
-                            <h5 v-cloak="">{{template.templateName}}</h5>
-                        </div>
-                        <div class="app-deploy" title="部署" v-on:click="showDeployTemplate(template.uuid)">
-                            <i class="fa fa-toggle-right"></i>
-                        </div>
-                        <div class="app-img">
-                            <img v-bind:src="template.temp_logo_url" v-on:error="setDefault($event)" v-cloak=""/>
-                        </div>
-                        <div class="app-desc" v-bind:title="template.description" v-cloak="">
-                            {{template.description}}
-                        </div>
-                    </li>
-                </ul>
+            <div class="app">
+                <!--应用概览-->
+                <div class="app-overview">
+                    <div class="app-box">
+                        <ul id="appcontainer">
+                            <!--镜像-->
+                            <li v-for="(imageInfo, index) in imageInfos" v-bind:id="imageInfo.app_id"
+                                v-on:click="showAppDetail" v-cloak="">
+                                <div class="applogo">
+                                    <img src="../images/docker-blue.png" v-cloak=""/>
+                                </div>
+                                <div class="app-name">
+                                    <h5 v-cloak="">{{imageInfo.appName}}</h5>
+                                </div>
+                                <div class="app-tag">
+                                    <span v-cloak="">{{imageInfo.appTag}}</span>
+                                </div>
+                                <div class="app-deploy" title="部署" v-on:click="showDeployImage(imageInfo.app_id)">
+                                    <i class="fa fa-toggle-right"></i>
+                                </div>
+                                <div class="app-img">
+                                    <img v-bind:src="imageInfo.logo_url" v-on:error="setDefault($event)" v-cloak=""/>
+                                </div>
+                                <div class="app-desc" v-bind:title="imageInfo.description" v-cloak="">
+                                    {{imageInfo.description}}
+                                </div>
+                            </li>
+                            <!--模板-->
+                            <li v-for="(template, index) in templateInfos" v-bind:id="template.uuid" v-cloak="">
+                                <div class="applogo">
+                                    <img src="../images/template.png" v-cloak=""/>
+                                </div>
+                                <div class="app-name">
+                                    <h5 v-cloak="">{{template.templateName}}</h5>
+                                </div>
+                                <div class="app-deploy" title="部署" v-on:click="showDeployTemplate(template.uuid)">
+                                    <i class="fa fa-toggle-right"></i>
+                                </div>
+                                <div class="app-img">
+                                    <img v-bind:src="template.temp_logo_url" v-on:error="setDefault($event)" v-cloak=""/>
+                                </div>
+                                <div class="app-desc" v-bind:title="template.description" v-cloak="">
+                                    {{template.description}}
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="holder" id="appholder"></div>
+                </div>
+                <!--应用详情-->
+                <div class="app-detail" v-show="showDetail" v-cloak="">
+
+                </div>
             </div>
-            <div class="holder" id="appholder"></div>
         </div>
     </div>
 </div>

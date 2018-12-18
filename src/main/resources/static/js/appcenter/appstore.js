@@ -16,6 +16,7 @@ define([
                 appType: "public",
                 showPublic: true,
                 showPrivate: false,
+                showDetail: false,
                 imageInfos: [],
                 templateInfos: []
             },
@@ -295,6 +296,11 @@ define([
                     Vue.nextTick(function(){
                         _self.initJpages("#appholder", "appcontainer");
                     });
+                },
+
+                showAppDetail: function () {
+                    var _self = this;
+                    _self.showDetail = true;
                 }
             }
         });

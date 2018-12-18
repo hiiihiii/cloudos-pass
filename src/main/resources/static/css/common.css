@@ -215,10 +215,10 @@ span.checkbox+a{
     color: #fff;
 }
 .app-box {
-    margin-top: 50px;
+    margin-top: 10px;
     margin-left: 12px;
     /*width: 250px;*/
-    /*height: 200px;*/
+    height: 85%;
     /*position: relative;*/
     /*background-color: #e5eaef;*/
 }
@@ -282,9 +282,10 @@ span.checkbox+a{
     white-space: normal;
 }
 #appstore #appholder {
-    position: absolute;
-    top: 580px;
-    left: 710px;
+    /*position: absolute;*/
+    /*top: 580px;*/
+    /*left: 710px;*/
+    text-align: center;
 }
 /*右侧内容结束*/
 
@@ -352,6 +353,28 @@ span.checkbox+a{
     color: rgba(0,0,0,0.5);
 }
 /*概览结束*/
+/*展示应用开始*/
+#appstore .app {
+    display: flex;
+    width: 100%;
+}
+#appstore .app-overview {
+    flex: 1;
+    position: relative;
+    overflow: auto;
+    height: 490px;
+}
+#appstore .app-detail {
+    flex: 3;
+    /*display: none;*/
+    border: 1px solid #ccc;
+    border-right: none;
+    margin: 10px 0;
+    box-shadow: 0px 2px 5px #ccc;
+    height: 475px;
+    overflow: auto;
+}
+/*展示应用结束*/
 /*上传镜像开始*/
 #upload_image_form .select2+input {
     position: relative;
