@@ -71,7 +71,7 @@
                         <ul id="appcontainer">
                             <!--镜像-->
                             <li v-for="(imageInfo, index) in imageInfos" v-bind:id="imageInfo.app_id"
-                                v-on:click="showAppDetail" v-cloak="">
+                                v-on:click="showAppDetail($event, imageInfo.app_id, 'image', index)" v-cloak="">
                                 <div class="applogo">
                                     <img src="../images/docker-blue.png" v-cloak=""/>
                                 </div>
@@ -92,7 +92,8 @@
                                 </div>
                             </li>
                             <!--模板-->
-                            <li v-for="(template, index) in templateInfos" v-bind:id="template.uuid" v-cloak="">
+                            <li v-for="(template, index) in templateInfos" v-bind:id="template.uuid"
+                                v-on:click="showAppDetail($event, template.uuid, 'template', index)" v-cloak="">
                                 <div class="applogo">
                                     <img src="../images/template.png" v-cloak=""/>
                                 </div>
@@ -114,8 +115,116 @@
                     <div class="holder" id="appholder"></div>
                 </div>
                 <!--应用详情-->
-                <div class="app-detail" v-show="showDetail" v-cloak="">
+                <div class="app-detail" v-cloak="">
+                    <div class="detail-title">
+                        <ul id="detailTab" class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#baseInfo">基本信息</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#versionDetail">版本</a>
+                            </li>
+                        </ul>
+                        <div class="operation-box">
+                            <span><i class="fa fa-toggle-right"></i>部署</span>
+                            <span><i class="fa fa-trash-o"></i>删除</span>
+                        </div>
+                        <div class="close-box">
+                            <button type="button" class="close" v-on:click="closeAppDetail">&times;</button>
+                        </div>
+                    </div>
+                    <div class="detail-content tab-content" v-bind:id="selectedImage.app_id">
+                        <!--基本信息-->
+                        <div id="baseInfo" class="tab-pane fade in active">
 
+                        </div>
+                        <!--版本信息-->
+                        <div id="versionDetail" class="tab-pane fade">
+                            <div class="version-box">
+                                <span>《</span>
+                                <span class="version" v-bind:class="index == 0 ? 'version-selected' : ''"
+                                      v-for="(item,index) in selectedImage.version"
+                                      v-on:click="changeVersion($event)" v-cloak="">{{item}}</span>
+                                <span>》</span>
+                            </div>
+                            <div class="version-detail-box">
+                                <!--文件-->
+                                <div class="group-box">
+                                    <span class="group-title">文件</span>
+                                    <div class="group">
+                                        <span class="sub-title">下载地址:</span>
+                                        <span v-text="imageDetailBind.sourceUrl" v-cloak=""></span>
+                                    </div>
+                                </div>
+                                <!--运行环境-->
+                                <div class="group-box">
+                                    <span class="group-title">运行环境</span>
+                                    <div class="group">
+                                        <span class="sub-title">启动限制:</span>
+                                        <span v-text="imageDetailBind.requests" v-cloak=""></span>
+                                    </div>
+                                </div>
+                                <div class="group-box">
+                                    <span class="group-title no-text"></span>
+                                    <div class="group">
+                                        <span class="sub-title">运行限制:</span>
+                                        <span v-text="imageDetailBind.limits" v-cloak=""></span>
+                                    </div>
+                                </div>
+                                <!--目录映射-->
+                                <div class="group-box">
+                                    <span class="group-title">目录映射</span>
+                                    <div class="group">
+                                        <span class="sub-title">路径:</span>
+                                        <span v-text="imageDetailBind.volume" v-cloak=""></span>
+                                    </div>
+                                </div>
+                                <!--运行命令-->
+                                <div class="group-box">
+                                    <span class="group-title">运行命令</span>
+                                    <div class="group">
+                                        <span class="sub-title">命令:</span>
+                                        <span v-text="imageDetailBind.cmd" v-cloak=""></span>
+                                    </div>
+                                </div>
+                                <!--命令参数-->
+                                <div class="group-box" v-for="(param, index) in imageDetailBind.cmdParams" v-cloak="">
+                                    <span class="group-title" v-if="index==0">命令参数</span>
+                                    <span class="group-title no-text" v-if="index!=0"></span>
+                                    <div class="group">
+                                        <span class="sub-title">参数{{index+1}}:</span>
+                                        <span v-text="param" v-cloak=""></span>
+                                    </div>
+                                </div>
+                                <!--环境变量-->
+                                <div class="group-box" v-for="(item, index) in imageDetailBind.env" v-cloak="">
+                                    <span class="group-title" v-if="index==0">环境变量</span>
+                                    <span class="group-title no-text" v-if="index!=0"></span>
+                                    <div class="group">
+                                        <span class="sub-title" v-cloak="">{{item.name}}:</span>
+                                        <span v-text="item.value" v-cloak=""></span>
+                                    </div>
+                                </div>
+                                <!--端口映射-->
+                                <div class="group-box" v-for="(item, index) in imageDetailBind.ports" v-cloak="">
+                                    <span class="group-title" v-if="index==0">端口映射</span>
+                                    <span class="group-title no-text" v-if="index!=0"></span>
+                                    <div class="group">
+                                        <span class="sub-title" v-cloak="">{{item.portName}}:</span>
+                                        <span v-cloak="">容器端口:{{item.containerPort}}, 集群内端口:{{item.port}}, 集群外端口:{{item.nodePort}}, 协议:{{item.protocol}}</span>
+                                    </div>
+                                </div>
+                                <!--版本特性-->
+                                <div class="group-box">
+                                    <span class="group-title">版本特性</span>
+                                    <div class="group">
+                                        <span class="sub-title">特性:</span>
+                                        <span>{{imageDetailBind.v_description}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

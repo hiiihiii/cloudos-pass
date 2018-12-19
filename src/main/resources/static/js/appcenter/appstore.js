@@ -16,9 +16,22 @@ define([
                 appType: "public",
                 showPublic: true,
                 showPrivate: false,
-                showDetail: false,
                 imageInfos: [],
-                templateInfos: []
+                templateInfos: [],
+                selectedImage: '',
+                selectedTemplate: '',
+                imageDetailBind: {
+                    sourceUrl:"",
+                    requests:{},
+                    limits :{},
+                    env :[],
+                    ports:[],
+                    volume:"",
+                    cmd:"",
+                    cmdParams:[],
+                    v_description:""
+                },
+                templateDetailBind: {}
             },
             mounted: function () {
                 var _self = this;
@@ -298,9 +311,49 @@ define([
                     });
                 },
 
-                showAppDetail: function () {
+                getInfoByVersion: function (imageInfo, version) {
                     var _self = this;
-                    _self.showDetail = true;
+                    var metadata = imageInfo.metadata[version];
+                    _self.imageDetailBind.sourceUrl = "docker pull " + imageInfo.source_url[version];
+                    _self.imageDetailBind.requests = "cpu(核):" + metadata.requests.cpu + ", 内存:" + metadata.requests.memory;
+                    _self.imageDetailBind.limits = "cpu(核):" + metadata.limits.cpu + ", 内存:" + metadata.limits.memory;
+                    _self.imageDetailBind.env = metadata.env;
+                    _self.imageDetailBind.ports = metadata.ports;
+                    _self.imageDetailBind.volume = metadata.volume;
+                    _self.imageDetailBind.cmd = metadata.cmd;
+                    _self.imageDetailBind.cmdParams = metadata.cmdParams;
+                    _self.imageDetailBind.v_description = imageInfo.v_description[version];
+                },
+
+                changeVersion: function (event) {
+                    debugger
+                    var _self = this;
+                    var version = $(event.target).text();
+                    $(event.target).parent().children(".version").each(function (i, element) {
+                        $(element).removeClass("version-selected");
+                    });
+                    $(event.target).addClass("version-selected");
+                    _self.getInfoByVersion(_self.selectedImage, version);
+                },
+
+                showAppDetail: function (event, id, type, index) {
+                    var _self = this;
+                    switch (type) {
+                        case 'image':
+                            _self.selectedImage = _self.imageInfos[index];
+                            _self.getInfoByVersion(_self.selectedImage, _self.selectedImage.version[0]);
+                            break;
+                        case 'template':
+                            _self.selectedTemplate = _self.templateInfos[index];
+                            break;
+                    }
+                    Vue.nextTick(function () {
+                        $("#appstore .app-detail").css("display", "block");
+                    });
+                },
+
+                closeAppDetail: function () {
+                    $("#appstore .app-detail").css("display", "none");
                 }
             }
         });

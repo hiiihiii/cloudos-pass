@@ -259,7 +259,7 @@ span.checkbox+a{
     position: absolute;
     left: 230px;
     top: 8px;
-    color: #767b80;
+    color: #ec670b;
 }
 .app-img {
     position: absolute;
@@ -366,13 +366,86 @@ span.checkbox+a{
 }
 #appstore .app-detail {
     flex: 3;
-    /*display: none;*/
+    display: none;
     border: 1px solid #ccc;
     border-right: none;
     margin: 10px 0;
     box-shadow: 0px 2px 5px #ccc;
     height: 475px;
     overflow: auto;
+}
+#appstore .detail-title {
+    position: relative;
+}
+#appstore .operation-box {
+    position: absolute;
+    top: 14px;
+    right: 100px;
+}
+#appstore .detail-title .close-box {
+    position: absolute;
+    top: 14px;
+    right: 30px;
+}
+#appstore .detail-title .close-box > button {
+    color: #ec670b;
+    opacity: 1 !important;
+    outline: none;
+}
+#appstore .detail-title .nav-tabs {
+    border-bottom: 1px solid #ec670b;
+    padding-top: 5px;
+}
+#appstore .detail-title .operation-box>span {
+    margin-right: 20px;
+    font-size: 0.75em;
+}
+#appstore .detail-title .operation-box > span > i {
+    padding-right: 4px;
+    color: #767b80;
+}
+#appstore .detail-title .operation-box > span > i.fa-toggle-right {
+    color: #ec670b !important;
+}
+#appstore .app-detail .version-box {
+    margin: 5px;
+    padding: 5px;
+    border-bottom: 1px solid #cccccc;
+}
+#appstore .app-detail .version-box .version {
+    padding: 3px 15px;
+    margin: 0px 5px;
+    font-size: 0.75em;
+    cursor: pointer;
+}
+#appstore .app-detail .version-box .version-selected {
+    background-color: #ec670b;
+    color: white;
+}
+#appstore .app-detail .version-detail-box .group-box {
+    margin-bottom: 10px;
+}
+#appstore .app-detail .version-detail-box .group-title {
+    font-size: 0.75em;
+    display: inline-block;
+    width: 90px;
+    margin-left: 10px;
+    background-color: #f0f0f3;
+    text-align: center;
+    padding: 2px;
+}
+#appstore .app-detail .version-detail-box .no-text {
+    padding: 0px;
+}
+#appstore .app-detail .version-detail-box .group {
+    display: inline-block;
+    font-size: 0.75em;
+    margin-left: 20px;
+}
+#appstore .app-detail .version-detail-box .sub-title {
+    display: inline-block;
+    width: 60px;
+    text-align: right;
 }
 /*展示应用结束*/
 /*上传镜像开始*/
@@ -704,6 +777,16 @@ span.checkbox+a{
 .nav-tabs > li.active > a:hover,
 .nav-tabs > li.active > a:focus {
     color: #ec670b !important;
+    border: 1px solid #ec670b !important;
+    border-bottom-color: transparent !important;
+}
+.nav > li > a {
+    padding: 12px 15px;
+}
+.nav > li > a:hover,
+.nav > li > a:focus{
+    border: none;
+    background-color: transparent;
 }
 /*部署模板结束*/
 /*模板详情开始*/
