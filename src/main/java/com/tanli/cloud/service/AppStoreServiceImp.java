@@ -113,7 +113,7 @@ public class AppStoreServiceImp implements AppStoreService {
                             imageInfo.setV_description(JSONObject.fromObject(tem_map).toString());
 
                             tem_map.clear();
-                            tem_map.put(imageInfo.getVersion(), EnvConst.docker_api_ip + "/"+repository.getRepo_name() + "/" + repository.getRepo_name() + ":" + imageInfo.getVersion());
+                            tem_map.put(imageInfo.getVersion(), EnvConst.docker_api_ip + "/"+repository.getRepo_name() + "/" + imageInfo.getAppName() + ":" + imageInfo.getVersion());
                             imageInfo.setSource_url(JSONObject.fromObject(tem_map).toString());
 
                             tem_map.clear();
@@ -144,7 +144,7 @@ public class AppStoreServiceImp implements AppStoreService {
                             imageInfo.setV_description(JSONObject.fromObject(tem_map).toString());
 
                             tem_map = JSONObject.fromObject(exist.getSource_url());
-                            tem_map.put(imageInfo.getVersion(), EnvConst.docker_api_ip + "/"+repository.getRepo_name() + "/" + repository.getRepo_name() + ":" + imageInfo.getVersion());
+                            tem_map.put(imageInfo.getVersion(), EnvConst.docker_api_ip + "/"+repository.getRepo_name() + "/" + imageInfo.getAppName() + ":" + imageInfo.getVersion());
                             imageInfo.setSource_url(JSONObject.fromObject(tem_map).toString());
 
                             tem_map = JSONObject.fromObject(exist.getMetadata());
