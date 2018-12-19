@@ -116,6 +116,7 @@
                 </div>
                 <!--应用详情-->
                 <div class="app-detail" v-cloak="">
+                    <!--镜像-->
                     <div class="detail-title">
                         <ul id="detailTab" class="nav nav-tabs">
                             <li class="active">
@@ -142,8 +143,8 @@
                         <div id="versionDetail" class="tab-pane fade">
                             <div class="version-box">
                                 <span>《</span>
-                                <span class="version" v-bind:class="index == 0 ? 'version-selected' : ''"
-                                      v-for="(item,index) in selectedImage.version"
+                                <span class="version" v-for="(item,index) in selectedImage.version"
+                                      v-bind:class="index == 0 ? 'version-selected' : ''"
                                       v-on:click="changeVersion($event)" v-cloak="">{{item}}</span>
                                 <span>》</span>
                             </div>
@@ -225,6 +226,7 @@
                             </div>
                         </div>
                     </div>
+                    <!--模板-->
                 </div>
             </div>
         </div>
