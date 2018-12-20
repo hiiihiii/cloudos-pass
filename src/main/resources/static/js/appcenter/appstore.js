@@ -384,6 +384,7 @@ define([
                 },
 
                 // 展示应用详情
+                // todo 展示还有一点小bug
                 showAppDetail: function (event, id, type, index) {
                     var _self = this;
                     $(event.target).parents("ul").find("li").each(function (index, element) {
