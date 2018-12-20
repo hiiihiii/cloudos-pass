@@ -400,6 +400,7 @@ span.checkbox+a{
 #appstore .detail-title .operation-box>span {
     margin-right: 20px;
     font-size: 0.75em;
+    cursor: pointer;
 }
 #appstore .detail-title .operation-box > span > i {
     padding-right: 4px;
@@ -426,12 +427,10 @@ span.checkbox+a{
     background-color: #ec670b;
     color: white;
 }
-#appstore .app-detail .version-detail-box .group-box,
-#appstore .app-detail .config-detail-box .group-box {
+#appstore .app-detail .group-box {
     margin-bottom: 10px;
 }
-#appstore .app-detail .version-detail-box .group-title,
-#appstore .app-detail .config-detail-box .group-title {
+#appstore .app-detail .group-title {
     font-size: 0.75em;
     display: inline-block;
     width: 90px;
@@ -440,21 +439,42 @@ span.checkbox+a{
     text-align: center;
     padding: 2px;
 }
-#appstore .app-detail .version-detail-box .no-text,
-#appstore .app-detail .config-detail-box .no-text {
+#appstore .app-detail .no-text {
     padding: 0px;
 }
-#appstore .app-detail .version-detail-box .group,
-#appstore .app-detail .config-detail-box .group {
+#appstore .app-detail .group {
     display: inline-block;
     font-size: 0.75em;
     margin-left: 20px;
 }
-#appstore .app-detail .version-detail-box .sub-title,
-#appstore .app-detail .config-detail-box .sub-title {
+#appstore .app-detail .sub-title {
     display: inline-block;
     width: 60px;
     text-align: right;
+}
+#appstore .app-detail .upper {
+    position: relative;
+    border-bottom: 1px solid #ccc;
+    margin: 5px;
+    padding-bottom: 12px;
+}
+#appstore .app-detail .upper > span,
+#appstore .app-detail .upper > img,
+#appstore .app-detail .upper > p {
+    /*position: absolute;*/
+    font-size: 0.75em;
+}
+#appstore .app-detail .upper > span {
+    display: block;
+    margin: 10px;
+}
+#appstore .app-detail .upper > img {
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+}
+#appstore .app-detail .upper > p {
+    display: inline-block;
 }
 /*展示应用结束*/
 /*上传镜像开始*/

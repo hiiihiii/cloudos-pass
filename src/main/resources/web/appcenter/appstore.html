@@ -118,7 +118,7 @@
                 <div class="app-detail" v-cloak="">
                     <div class="detail-title">
                         <ul id="detailTab" class="nav nav-tabs">
-                            <li class="active" v-if="imageDetail" v-cloak="">
+                            <li class="active" v-if="imageDetail" v-cloak="" >
                                 <a data-toggle="tab" href="#imageBaseInfo">基本信息</a>
                             </li>
                             <li class="active" v-if="templateDetail" v-cloak="">
@@ -144,7 +144,41 @@
                         <div class="detail-content tab-content" v-bind:id="selectedImage.app_id">
                             <!--基本信息-->
                             <div id="imageBaseInfo" class="tab-pane fade in active">
-
+                                <div class="upper">
+                                    <span v-cloak="">{{selectedImage.appName}}</span>
+                                    <img v-bind:src="selectedImage.logo_url" v-on:error="setDefault($event)" v-cloak=""/>
+                                    <p v-cloak="">{{selectedImage.description}}</p>
+                                </div>
+                                <div class="floor">
+                                    <!--应用类型-->
+                                    <div class="group-box">
+                                        <span class="group-title">应用类型</span>
+                                        <div class="group">
+                                            <span v-text="selectedImage.appType" v-cloak=""></span>
+                                        </div>
+                                    </div>
+                                    <!--标签-->
+                                    <div class="group-box">
+                                        <span class="group-title">标签</span>
+                                        <div class="group">
+                                            <span v-text="selectedImage.appTag" v-cloak=""></span>
+                                        </div>
+                                    </div>
+                                    <!--创建时间-->
+                                    <div class="group-box">
+                                        <span class="group-title">创建时间</span>
+                                        <div class="group">
+                                            <span v-text="selectedImage.create_time" v-cloak=""></span>
+                                        </div>
+                                    </div>
+                                    <!--更新时间-->
+                                    <div class="group-box">
+                                        <span class="group-title">最近更新</span>
+                                        <div class="group">
+                                            <span v-text="selectedImage.update_time" v-cloak=""></span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <!--版本信息-->
                             <div id="versionDetail" class="tab-pane fade">
@@ -239,7 +273,41 @@
                         <div class="detail-content tab-content" v-bind:id="selectedTemplate.uuid">
                             <!--基本信息-->
                             <div id="templateBaseInfo" class="tab-pane fade in active">
-
+                                <div class="upper">
+                                    <span v-cloak="">{{selectedTemplate.templateName}}</span>
+                                    <img v-bind:src="selectedTemplate.temp_logo_url" v-on:error="setDefault($event)" v-cloak=""/>
+                                    <p v-cloak="">{{selectedTemplate.description}}</p>
+                                </div>
+                                <div class="floor">
+                                    <!--应用类型-->
+                                    <div class="group-box">
+                                        <span class="group-title">应用类型</span>
+                                        <div class="group">
+                                            <span v-text="selectedTemplate.appType" v-cloak=""></span>
+                                        </div>
+                                    </div>
+                                    <!--标签-->
+                                    <div class="group-box">
+                                        <span class="group-title">是否已发布</span>
+                                        <div class="group">
+                                            <span v-text="selectedTemplate.isPublish=='1'? '已发布' : '未发布'" v-cloak=""></span>
+                                        </div>
+                                    </div>
+                                    <!--创建时间-->
+                                    <div class="group-box">
+                                        <span class="group-title">创建时间</span>
+                                        <div class="group">
+                                            <span v-text="selectedTemplate.create_time" v-cloak=""></span>
+                                        </div>
+                                    </div>
+                                    <!--更新时间-->
+                                    <div class="group-box">
+                                        <span class="group-title">最近更新</span>
+                                        <div class="group">
+                                            <span v-text="selectedTemplate.update_time" v-cloak=""></span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <!--配置-->
                             <div id="templateConfig" class="tab-pane fade">

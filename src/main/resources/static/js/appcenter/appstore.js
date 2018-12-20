@@ -228,6 +228,7 @@ define([
                 //切换仓库
                 changeRepo: function (repoType, event) {
                     var _self = this;
+                    $("#appstore .app-detail").css("display", "none");
                     _self.appType = repoType;
                     $(event.target).next().find("input").each(function (i, element) {
                         $(element).prop("checked",true);
@@ -248,6 +249,7 @@ define([
                     });
                 },
 
+                // 全选或反选
                 checkAll: function (event, type) {
                     var _self = this;
                     var input = $(event.target);
@@ -312,8 +314,10 @@ define([
                     });
                 },
 
+                // 刷新
                 refreshRepo: function () {
                     var _self = this;
+                    $("#appstore .app-detail").css("display", "none");
                     _self.showPrivate = false;
                     _self.showPublic = true;
                     _self.getImageData("public");
@@ -379,6 +383,7 @@ define([
                     _self.getInfoByAppName(_self.selectedTemplate, appname);
                 },
 
+                // 展示应用详情
                 showAppDetail: function (event, id, type, index) {
                     var _self = this;
                     $(event.target).parents("ul").find("li").each(function (index, element) {
