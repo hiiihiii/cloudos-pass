@@ -116,14 +116,19 @@
                 </div>
                 <!--应用详情-->
                 <div class="app-detail" v-cloak="">
-                    <!--镜像-->
                     <div class="detail-title">
                         <ul id="detailTab" class="nav nav-tabs">
-                            <li class="active">
-                                <a data-toggle="tab" href="#baseInfo">基本信息</a>
+                            <li class="active" v-if="imageDetail" v-cloak="">
+                                <a data-toggle="tab" href="#imageBaseInfo">基本信息</a>
                             </li>
-                            <li>
+                            <li class="active" v-if="templateDetail" v-cloak="">
+                                <a data-toggle="tab" href="#templateBaseInfo">基本信息</a>
+                            </li>
+                            <li v-if="imageDetail" v-cloak="">
                                 <a data-toggle="tab" href="#versionDetail">版本</a>
+                            </li>
+                            <li v-if="templateDetail" v-cloak="">
+                                <a data-toggle="tab" href="#templateConfig">配置信息</a>
                             </li>
                         </ul>
                         <div class="operation-box">
@@ -134,99 +139,195 @@
                             <button type="button" class="close" v-on:click="closeAppDetail">&times;</button>
                         </div>
                     </div>
-                    <div class="detail-content tab-content" v-bind:id="selectedImage.app_id">
-                        <!--基本信息-->
-                        <div id="baseInfo" class="tab-pane fade in active">
+                    <!--镜像详情-->
+                    <div class="image-detail" v-if="imageDetail" v-cloak="">
+                        <div class="detail-content tab-content" v-bind:id="selectedImage.app_id">
+                            <!--基本信息-->
+                            <div id="imageBaseInfo" class="tab-pane fade in active">
 
-                        </div>
-                        <!--版本信息-->
-                        <div id="versionDetail" class="tab-pane fade">
-                            <div class="version-box">
-                                <span>《</span>
-                                <span class="version" v-for="(item,index) in selectedImage.version"
-                                      v-bind:class="index == 0 ? 'version-selected' : ''"
-                                      v-on:click="changeVersion($event)" v-cloak="">{{item}}</span>
-                                <span>》</span>
                             </div>
-                            <div class="version-detail-box">
-                                <!--文件-->
-                                <div class="group-box">
-                                    <span class="group-title">文件</span>
-                                    <div class="group">
-                                        <span class="sub-title">下载地址:</span>
-                                        <span v-text="imageDetailBind.sourceUrl" v-cloak=""></span>
-                                    </div>
+                            <!--版本信息-->
+                            <div id="versionDetail" class="tab-pane fade">
+                                <div class="version-box">
+                                    <span>《</span>
+                                    <span class="version" v-for="(item,index) in selectedImage.version"
+                                          v-bind:class="index == 0 ? 'version-selected' : ''"
+                                          v-on:click="changeVersion($event)" v-cloak="">{{item}}</span>
+                                    <span>》</span>
                                 </div>
-                                <!--运行环境-->
-                                <div class="group-box">
-                                    <span class="group-title">运行环境</span>
-                                    <div class="group">
-                                        <span class="sub-title">启动限制:</span>
-                                        <span v-text="imageDetailBind.requests" v-cloak=""></span>
+                                <div class="version-detail-box">
+                                    <!--文件-->
+                                    <div class="group-box">
+                                        <span class="group-title">文件</span>
+                                        <div class="group">
+                                            <span class="sub-title">下载地址:</span>
+                                            <span v-text="imageDetailBind.sourceUrl" v-cloak=""></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="group-box">
-                                    <span class="group-title no-text"></span>
-                                    <div class="group">
-                                        <span class="sub-title">运行限制:</span>
-                                        <span v-text="imageDetailBind.limits" v-cloak=""></span>
+                                    <!--运行环境-->
+                                    <div class="group-box">
+                                        <span class="group-title">运行环境</span>
+                                        <div class="group">
+                                            <span class="sub-title">启动限制:</span>
+                                            <span v-text="imageDetailBind.requests" v-cloak=""></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <!--目录映射-->
-                                <div class="group-box">
-                                    <span class="group-title">目录映射</span>
-                                    <div class="group">
-                                        <span class="sub-title">路径:</span>
-                                        <span v-text="imageDetailBind.volume" v-cloak=""></span>
+                                    <div class="group-box">
+                                        <span class="group-title no-text"></span>
+                                        <div class="group">
+                                            <span class="sub-title">运行限制:</span>
+                                            <span v-text="imageDetailBind.limits" v-cloak=""></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <!--运行命令-->
-                                <div class="group-box">
-                                    <span class="group-title">运行命令</span>
-                                    <div class="group">
-                                        <span class="sub-title">命令:</span>
-                                        <span v-text="imageDetailBind.cmd" v-cloak=""></span>
+                                    <!--目录映射-->
+                                    <div class="group-box">
+                                        <span class="group-title">目录映射</span>
+                                        <div class="group">
+                                            <span class="sub-title">路径:</span>
+                                            <span v-text="imageDetailBind.volume" v-cloak=""></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <!--命令参数-->
-                                <div class="group-box" v-for="(param, index) in imageDetailBind.cmdParams" v-cloak="">
-                                    <span class="group-title" v-if="index==0">命令参数</span>
-                                    <span class="group-title no-text" v-if="index!=0"></span>
-                                    <div class="group">
-                                        <span class="sub-title">参数{{index+1}}:</span>
-                                        <span v-text="param" v-cloak=""></span>
+                                    <!--运行命令-->
+                                    <div class="group-box">
+                                        <span class="group-title">运行命令</span>
+                                        <div class="group">
+                                            <span class="sub-title">命令:</span>
+                                            <span v-text="imageDetailBind.cmd" v-cloak=""></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <!--环境变量-->
-                                <div class="group-box" v-for="(item, index) in imageDetailBind.env" v-cloak="">
-                                    <span class="group-title" v-if="index==0">环境变量</span>
-                                    <span class="group-title no-text" v-if="index!=0"></span>
-                                    <div class="group">
-                                        <span class="sub-title" v-cloak="">{{item.name}}:</span>
-                                        <span v-text="item.value" v-cloak=""></span>
+                                    <!--命令参数-->
+                                    <div class="group-box" v-for="(param, index) in imageDetailBind.cmdParams" v-cloak="">
+                                        <span class="group-title" v-if="index==0">命令参数</span>
+                                        <span class="group-title no-text" v-if="index!=0"></span>
+                                        <div class="group">
+                                            <span class="sub-title">参数{{index+1}}:</span>
+                                            <span v-text="param" v-cloak=""></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <!--端口映射-->
-                                <div class="group-box" v-for="(item, index) in imageDetailBind.ports" v-cloak="">
-                                    <span class="group-title" v-if="index==0">端口映射</span>
-                                    <span class="group-title no-text" v-if="index!=0"></span>
-                                    <div class="group">
-                                        <span class="sub-title" v-cloak="">{{item.portName}}:</span>
-                                        <span v-cloak="">容器端口:{{item.containerPort}}, 集群内端口:{{item.port}}, 集群外端口:{{item.nodePort}}, 协议:{{item.protocol}}</span>
+                                    <!--环境变量-->
+                                    <div class="group-box" v-for="(item, index) in imageDetailBind.env" v-cloak="">
+                                        <span class="group-title" v-if="index==0">环境变量</span>
+                                        <span class="group-title no-text" v-if="index!=0"></span>
+                                        <div class="group">
+                                            <span class="sub-title" v-cloak="">{{item.name}}:</span>
+                                            <span v-text="item.value" v-cloak=""></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <!--版本特性-->
-                                <div class="group-box">
-                                    <span class="group-title">版本特性</span>
-                                    <div class="group">
-                                        <span class="sub-title">特性:</span>
-                                        <span>{{imageDetailBind.v_description}}</span>
+                                    <!--端口映射-->
+                                    <div class="group-box" v-for="(item, index) in imageDetailBind.ports" v-cloak="">
+                                        <span class="group-title" v-if="index==0">端口映射</span>
+                                        <span class="group-title no-text" v-if="index!=0"></span>
+                                        <div class="group">
+                                            <span class="sub-title" v-cloak="">{{item.portName}}:</span>
+                                            <span v-cloak="">容器端口:{{item.containerPort}}, 集群内端口:{{item.port}}, 集群外端口:{{item.nodePort}}, 协议:{{item.protocol}}</span>
+                                        </div>
+                                    </div>
+                                    <!--版本特性-->
+                                    <div class="group-box">
+                                        <span class="group-title">版本特性</span>
+                                        <div class="group">
+                                            <span class="sub-title">特性:</span>
+                                            <span>{{imageDetailBind.v_description}}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!--模板-->
+                    <!--模板详情-->
+                    <div class="template-detail" v-if="templateDetail" v-cloak="">
+                        <div class="detail-content tab-content" v-bind:id="selectedTemplate.uuid">
+                            <!--基本信息-->
+                            <div id="templateBaseInfo" class="tab-pane fade in active">
+
+                            </div>
+                            <!--配置-->
+                            <div id="templateConfig" class="tab-pane fade">
+                                <div class="config-box">
+                                    <span>《</span>
+                                    <span class="config" v-for="(item,index) in selectedTemplate.config"
+                                          v-bind:class="index == 0 ? 'config-selected' : ''"
+                                          v-on:click="changeAppName($event)" v-cloak="">{{item.appName}}</span>
+                                    <span>》</span>
+                                </div>
+                                <div class="config-detail-box">
+                                    <!--文件-->
+                                    <div class="group-box">
+                                        <span class="group-title">文件</span>
+                                        <div class="group">
+                                            <span class="sub-title">版本:</span>
+                                            <span v-text="templateDetailBind.appVersion" v-cloak=""></span>
+                                        </div>
+                                    </div>
+                                    <div class="group-box">
+                                        <span class="group-title no-text"></span>
+                                        <div class="group">
+                                            <span class="sub-title">下载地址:</span>
+                                            <span v-text="templateDetailBind.sourceUrl" v-cloak=""></span>
+                                        </div>
+                                    </div>
+                                    <!--运行环境-->
+                                    <div class="group-box">
+                                        <span class="group-title">运行环境</span>
+                                        <div class="group">
+                                            <span class="sub-title">启动限制:</span>
+                                            <span v-text="templateDetailBind.requests" v-cloak=""></span>
+                                        </div>
+                                    </div>
+                                    <div class="group-box">
+                                        <span class="group-title no-text"></span>
+                                        <div class="group">
+                                            <span class="sub-title">运行限制:</span>
+                                            <span v-text="templateDetailBind.limits" v-cloak=""></span>
+                                        </div>
+                                    </div>
+                                    <!--目录映射-->
+                                    <div class="group-box">
+                                        <span class="group-title">目录映射</span>
+                                        <div class="group">
+                                            <span class="sub-title">路径:</span>
+                                            <span v-text="templateDetailBind.volume" v-cloak=""></span>
+                                        </div>
+                                    </div>
+                                    <!--运行命令-->
+                                    <div class="group-box">
+                                        <span class="group-title">运行命令</span>
+                                        <div class="group">
+                                            <span class="sub-title">命令:</span>
+                                            <span v-text="templateDetailBind.cmd" v-cloak=""></span>
+                                        </div>
+                                    </div>
+                                    <!--命令参数-->
+                                    <div class="group-box" v-for="(param, index) in templateDetailBind.cmdParams" v-cloak="">
+                                        <span class="group-title" v-if="index == 0">命令参数</span>
+                                        <span class="group-title no-text" v-if="index != 0"></span>
+                                        <div class="group">
+                                            <span class="sub-title">参数{{index+1}}:</span>
+                                            <span>{{param}}</span>
+                                        </div>
+                                    </div>
+                                    <!--环境变量-->
+                                    <div class="group-box" v-for="(item, index) in templateDetailBind.env" v-cloak="">
+                                        <span class="group-title" v-if="index == 0">环境变量</span>
+                                        <span class="group-title no-text" v-if="index != 0"></span>
+                                        <div class="group">
+                                            <span class="sub-title">{{item.name}}:</span>
+                                            <span>{{item.value}}</span>
+                                        </div>
+                                    </div>
+                                    <!--端口映射-->
+                                    <div class="group-box" v-for="(port, index) in templateDetailBind.ports" v-cloak="">
+                                        <span class="group-title" v-if="index == 0">端口映射</span>
+                                        <span class="group-title no-text" v-if="index != 0"></span>
+                                        <div class="group">
+                                            <span class="sub-title">{{port.portName}}:</span>
+                                            <span>容器端口:{{port.containerPort}}, 集群内端口:{{port.port}}, 集群外端口:{{port.nodePort}}, 协议:{{port.protocol}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

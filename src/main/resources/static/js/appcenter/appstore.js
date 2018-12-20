@@ -31,7 +31,19 @@ define([
                     cmdParams:[],
                     v_description:""
                 },
-                templateDetailBind: {}
+                templateDetailBind: {
+                    appVersion :"",
+                    sourceUrl:'',
+                    requests:'',
+                    limits:'',
+                    volume:'',
+                    cmd:'',
+                    cmdParams:[],
+                    env:[],
+                    ports:[]
+                },
+                imageDetail: false,
+                templateDetail: false
             },
             mounted: function () {
                 var _self = this;
@@ -325,6 +337,27 @@ define([
                     _self.imageDetailBind.v_description = imageInfo.v_description[version];
                 },
 
+                getInfoByAppName: function (templateInfo, appname) {
+                    var _self = this;
+                    var config = [];
+                    for(var i = 0; i < templateInfo.config.length; i++) {
+                        if(templateInfo.config[i].appName === appname){
+                            config = templateInfo.config[i];
+                            break;
+                        }
+                    }
+                    var metadata = config["metadata"];
+                    _self.templateDetailBind.appVersion = config["version"];
+                    _self.templateDetailBind.sourceUrl = "docker pull " + config["source_url"];
+                    _self.templateDetailBind.requests = "cpu(核):" + metadata["requests"].cpu + ", 内存:" + metadata["requests"].memory;
+                    _self.templateDetailBind.limits = "cpu(核):" + metadata["limits"].cpu + ", 内存:" + metadata["limits"].memory;
+                    _self.templateDetailBind.volume = metadata["volume"];
+                    _self.templateDetailBind.cmd = metadata["cmd"];
+                    _self.templateDetailBind.cmdParams = metadata['cmdParams'];
+                    _self.templateDetailBind.env = metadata['env'];
+                    _self.templateDetailBind.ports = metadata["ports"];
+                },
+
                 changeVersion: function (event) {
                     debugger
                     var _self = this;
@@ -336,15 +369,35 @@ define([
                     _self.getInfoByVersion(_self.selectedImage, version);
                 },
 
+                changeAppName: function (event) {
+                    var _self = this;
+                    var appname = $(event.target).text();
+                    $(event.target).parent().children(".config").each(function (i, element) {
+                        $(element).removeClass("config-selected");
+                    });
+                    $(event.target).addClass("config-selected");
+                    _self.getInfoByAppName(_self.selectedTemplate, appname);
+                },
+
                 showAppDetail: function (event, id, type, index) {
                     var _self = this;
+                    $(event.target).parents("ul").find("li").each(function (index, element) {
+                        $(element).removeClass("li-selected");
+                    });
+                    var li = $(event.target).parents("li") || $(event.target);
+                    $(li).addClass("li-selected");
                     switch (type) {
                         case 'image':
+                            _self.imageDetail = true;
+                            _self.templateDetail = false;
                             _self.selectedImage = _self.imageInfos[index];
                             _self.getInfoByVersion(_self.selectedImage, _self.selectedImage.version[0]);
                             break;
                         case 'template':
+                            _self.imageDetail = false;
+                            _self.templateDetail = true;
                             _self.selectedTemplate = _self.templateInfos[index];
+                            _self.getInfoByAppName(_self.selectedTemplate, _self.selectedTemplate.config[0].appName);
                             break;
                     }
                     Vue.nextTick(function () {

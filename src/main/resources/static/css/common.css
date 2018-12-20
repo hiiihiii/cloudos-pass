@@ -233,7 +233,8 @@ span.checkbox+a{
     cursor: pointer;
     float: left; /*为了使li按行显示*/
 }
-#appcontainer li:hover {
+#appcontainer li:hover,
+#appcontainer .li-selected {
     border: solid 2px rgb(236,103,11);
 }
 .app-box .applogo {
@@ -407,25 +408,30 @@ span.checkbox+a{
 #appstore .detail-title .operation-box > span > i.fa-toggle-right {
     color: #ec670b !important;
 }
-#appstore .app-detail .version-box {
+#appstore .app-detail .version-box,
+#appstore .app-detail .config-box {
     margin: 5px;
     padding: 5px;
     border-bottom: 1px solid #cccccc;
 }
-#appstore .app-detail .version-box .version {
+#appstore .app-detail .version-box .version,
+#appstore .app-detail .config-box .config {
     padding: 3px 15px;
     margin: 0px 5px;
     font-size: 0.75em;
     cursor: pointer;
 }
-#appstore .app-detail .version-box .version-selected {
+#appstore .app-detail .version-box .version-selected,
+#appstore .app-detail .config-box .config-selected {
     background-color: #ec670b;
     color: white;
 }
-#appstore .app-detail .version-detail-box .group-box {
+#appstore .app-detail .version-detail-box .group-box,
+#appstore .app-detail .config-detail-box .group-box {
     margin-bottom: 10px;
 }
-#appstore .app-detail .version-detail-box .group-title {
+#appstore .app-detail .version-detail-box .group-title,
+#appstore .app-detail .config-detail-box .group-title {
     font-size: 0.75em;
     display: inline-block;
     width: 90px;
@@ -434,15 +440,18 @@ span.checkbox+a{
     text-align: center;
     padding: 2px;
 }
-#appstore .app-detail .version-detail-box .no-text {
+#appstore .app-detail .version-detail-box .no-text,
+#appstore .app-detail .config-detail-box .no-text {
     padding: 0px;
 }
-#appstore .app-detail .version-detail-box .group {
+#appstore .app-detail .version-detail-box .group,
+#appstore .app-detail .config-detail-box .group {
     display: inline-block;
     font-size: 0.75em;
     margin-left: 20px;
 }
-#appstore .app-detail .version-detail-box .sub-title {
+#appstore .app-detail .version-detail-box .sub-title,
+#appstore .app-detail .config-detail-box .sub-title {
     display: inline-block;
     width: 60px;
     text-align: right;
