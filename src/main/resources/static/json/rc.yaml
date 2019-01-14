@@ -1,0 +1,261 @@
+{
+  "apiVersion": "v1",
+  "kind": "ReplicationController",
+  "metadata": {
+    "labels": { #给rc打上key: value形式的标签
+      "target": "test"
+    },
+    "name": "tomcat-rc", #rc的名称
+    "namespace": "default" #rc所在的命名空间
+  },
+  "spec": {
+    "replicas": 2,
+    "selector": { #RC通过spec.selector来筛选要控制的Pod，与template.metadata.labels相同
+      "app": "tomcat"
+    },
+    "template": {
+      "metadata": {
+        "labels": { #给pod模版打上key: value这样的标签，供spec.selector选择
+          "app": "tomcat"
+        },
+        "name": "tomcat",
+        "namespace": "default"
+      },
+      "spec": {
+        "containers": [
+          {
+            "args": ["string"],
+            "command": ["string"],
+            "env": [
+              {
+                "name": "string",
+                "value": "string"
+              }
+            ],
+            "image": "docker.io/tomcat",
+            "imagePullPolicy": "IfNotPresent",
+            "name": "tomcat",
+            "ports": [
+              {
+                "containerPort": 0,
+                "name": "string",
+                "protocol": "string"
+              }
+            ],
+            "resources": {
+              "limits": {
+                "additionalProp1": "string",
+                "additionalProp2": "string",
+                "additionalProp3": "string"
+              },
+              "requests": {
+                "additionalProp1": "string",
+                "additionalProp2": "string",
+                "additionalProp3": "string"
+              }
+            },
+            "workingDir": "string"
+          }
+        ],
+        "nodeName": "string",
+        "nodeSelector": {
+          "additionalProp1": "string",
+          "additionalProp2": "string",
+          "additionalProp3": "string"
+        },
+        "restartPolicy": "string",
+        "securityContext": {
+          "fsGroup": 0,
+          "runAsNonRoot": true,
+          "runAsUser": 0,
+          "seLinuxOptions": {
+            "level": "string",
+            "role": "string",
+            "type": "string",
+            "user": "string"
+          },
+          "supplementalGroups": [
+            0
+          ]
+        },
+        "serviceAccount": "string",
+        "serviceAccountName": "string",
+        "subdomain": "string",
+        "terminationGracePeriodSeconds": 0,
+        "volumes": [
+          {
+            "awsElasticBlockStore": {
+              "fsType": "string",
+              "partition": 0,
+              "readOnly": true,
+              "volumeID": "string"
+            },
+            "azureDisk": {
+              "cachingMode": "string",
+              "diskName": "string",
+              "diskURI": "string",
+              "fsType": "string",
+              "readOnly": true
+            },
+            "azureFile": {
+              "readOnly": true,
+              "secretName": "string",
+              "shareName": "string"
+            },
+            "cephfs": {
+              "monitors": [
+                "string"
+              ],
+              "path": "string",
+              "readOnly": true,
+              "secretFile": "string",
+              "secretRef": {
+                "name": "string"
+              },
+              "user": "string"
+            },
+            "cinder": {
+              "fsType": "string",
+              "readOnly": true,
+              "volumeID": "string"
+            },
+            "configMap": {
+              "defaultMode": 0,
+              "items": [
+                {
+                  "key": "string",
+                  "mode": 0,
+                  "path": "string"
+                }
+              ],
+              "name": "string"
+            },
+            "downwardAPI": {
+              "defaultMode": 0,
+              "items": [
+                {
+                  "fieldRef": {
+                    "apiVersion": "string",
+                    "fieldPath": "string"
+                  },
+                  "mode": 0,
+                  "path": "string",
+                  "resourceFieldRef": {
+                    "containerName": "string",
+                    "divisor": "string",
+                    "resource": "string"
+                  }
+                }
+              ]
+            },
+            "emptyDir": {
+              "medium": "string"
+            },
+            "fc": {
+              "fsType": "string",
+              "lun": 0,
+              "readOnly": true,
+              "targetWWNs": [
+                "string"
+              ]
+            },
+            "flexVolume": {
+              "driver": "string",
+              "fsType": "string",
+              "options": {
+                "additionalProp1": "string",
+                "additionalProp2": "string",
+                "additionalProp3": "string"
+              },
+              "readOnly": true,
+              "secretRef": {
+                "name": "string"
+              }
+            },
+            "flocker": {
+              "datasetName": "string",
+              "datasetUUID": "string"
+            },
+            "gcePersistentDisk": {
+              "fsType": "string",
+              "partition": 0,
+              "pdName": "string",
+              "readOnly": true
+            },
+            "gitRepo": {
+              "directory": "string",
+              "repository": "string",
+              "revision": "string"
+            },
+            "glusterfs": {
+              "endpoints": "string",
+              "path": "string",
+              "readOnly": true
+            },
+            "hostPath": {
+              "path": "string"
+            },
+            "iscsi": {
+              "fsType": "string",
+              "iqn": "string",
+              "iscsiInterface": "string",
+              "lun": 0,
+              "readOnly": true,
+              "targetPortal": "string"
+            },
+            "name": "string",
+            "nfs": {
+              "path": "string",
+              "readOnly": true,
+              "server": "string"
+            },
+            "persistentVolumeClaim": {
+              "claimName": "string",
+              "readOnly": true
+            },
+            "photonPersistentDisk": {
+              "fsType": "string",
+              "pdID": "string"
+            },
+            "quobyte": {
+              "group": "string",
+              "readOnly": true,
+              "registry": "string",
+              "user": "string",
+              "volume": "string"
+            },
+            "rbd": {
+              "fsType": "string",
+              "image": "string",
+              "keyring": "string",
+              "monitors": [
+                "string"
+              ],
+              "pool": "string",
+              "readOnly": true,
+              "secretRef": {
+                "name": "string"
+              },
+              "user": "string"
+            },
+            "secret": {
+              "defaultMode": 0,
+              "items": [
+                {
+                  "key": "string",
+                  "mode": 0,
+                  "path": "string"
+                }
+              ],
+              "secretName": "string"
+            },
+            "vsphereVolume": {
+              "fsType": "string",
+              "volumePath": "string"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
