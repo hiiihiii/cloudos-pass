@@ -173,6 +173,22 @@ define([
                             $(this).parents("tr").remove();
                         });
                     }
+                },
+
+                submitDeployTemplate: function (event) {
+                    var _self = this;
+                    var formdata = new FormData();
+                    var template = JSON.parse(sessionStorage.getItem("deployTemplate"));
+                    //公有字段
+                    formdata.append("deployName", $("#deploy_template_form input[name='deployName']").val());
+                    formdata.append("deployType", "template");
+                    formdata.append("description", $("#deploy_template_form textarea[name='description']").val());
+                    formdata.append("appId", template.uuid);
+                    formdata = _self.generateMetadata(formdata);
+                },
+                generateMetadata: function (formdata) {
+
+                    return formdata;
                 }
             }
         });
