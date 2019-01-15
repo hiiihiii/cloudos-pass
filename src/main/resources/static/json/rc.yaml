@@ -2,9 +2,6 @@
   "apiVersion": "v1",
   "kind": "ReplicationController",
   "metadata": {
-    "labels": { #给rc打上key: value形式的标签
-      "target": "test"
-    },
     "name": "tomcat-rc", #rc的名称
     "namespace": "default" #rc所在的命名空间
   },

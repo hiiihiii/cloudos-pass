@@ -3,6 +3,7 @@ package com.tanli.cloud.service;
 import com.tanli.cloud.dao.DeploymentDao;
 import com.tanli.cloud.model.DeployedImage;
 import com.tanli.cloud.model.Deployment;
+import com.tanli.cloud.model.K8s_Rc;
 import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.utils.APIResponse;
 import com.tanli.cloud.utils.UuidUtil;
@@ -12,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
 
 @Service
 public class AppDeployServiceImp implements AppDeployService {
@@ -37,6 +37,7 @@ public class AppDeployServiceImp implements AppDeployService {
         deployment.setCreate_time(nowStr);
         deployment.setUser_uuid(nowStr);
         try {
+            LOGGE.info("[AppDeployServiceImp Info]: " + "向tl_deployment表中增加数据");
             if(deploymentDao.addDeployment(deployment) == 1) {
 
             } else {
@@ -48,5 +49,18 @@ public class AppDeployServiceImp implements AppDeployService {
             return APIResponse.fail("向tl_deployment表中增加数据失败");
         }
         return null;
+    }
+
+    private boolean createRc(Deployment deployment, DeployedImage deployedImage) {
+        boolean result = false;
+        K8s_Rc k8s_rc = new K8s_Rc();
+
+        return result;
+    }
+
+    private boolean createService(Deployment deployment, DeployedImage deployedImage) {
+        boolean result = false;
+
+        return result;
     }
 }
