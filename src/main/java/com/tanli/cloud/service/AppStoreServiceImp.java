@@ -266,14 +266,6 @@ public class AppStoreServiceImp implements AppStoreService {
     }
 
     @Override
-    public void deployImage(){
-
-        LOGGE.info("[AppStoreServiceImp Info]: " + "GET " + EnvConst.k8s_api_prefix);
-        ResponseEntity<String> test  = restTemplate.getForEntity(EnvConst.k8s_api_prefix, String.class);
-        test.getStatusCode();
-    }
-
-    @Override
     public APIResponse checkAppExist(User user, String appName, String version, String repoType){
         Repository repository = repositoryService.getRepoByUserid(user.getUser_uuid())
                 .stream()

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tanli.cloud.dao.DeploymentDao">
+
+    <insert id="addDeployment" parameterType="com.tanli.cloud.model.Deployment">
+        INSERT INTO tl_deployment (deploy_uuid, deploy_name, user_uuid, deploy_type, template_id, image_uuid, description, create_time, update_time)
+        VALUES (#{deploy_uuid}, #{deploy_name}, #{user_uuid}, #{deploy_type}, #{template_uuid},#{image_uuid}, #{description}, #{create_time},#{update_time})
+    </insert>
+
+</mapper>

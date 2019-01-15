@@ -1,7 +1,10 @@
 package com.tanli.cloud.controller.appcenter;
 
+import com.tanli.cloud.model.DeployedImage;
+import com.tanli.cloud.model.DeployedTemplate;
 import com.tanli.cloud.model.ImageInfo;
 import com.tanli.cloud.model.response.User;
+import com.tanli.cloud.service.AppDeployService;
 import com.tanli.cloud.service.AppStoreService;
 import com.tanli.cloud.service.ImageInfoService;
 import com.tanli.cloud.service.TemplateService;
@@ -28,7 +31,7 @@ public class AppstoreController {
     @Autowired
     private ImageInfoService imageInfoService;
     @Autowired
-    private TemplateService templateService;
+    private AppDeployService appDeployService;
 
 
     @RequestMapping(value = {"/",""})
@@ -77,5 +80,20 @@ public class AppstoreController {
     public APIResponse checkAppExist(HttpServletRequest request, String appName, String version, String repoType){
         User user = (User) request.getSession().getAttribute("login_user");
         return appStoreService.checkAppExist(user, appName, version, repoType);
+    }
+
+    @PostMapping("image/deploy")
+    @ResponseBody
+    public APIResponse deployImage (HttpServletRequest request, DeployedImage deployedImage){
+        User user = (User) request.getSession().getAttribute("login_user");
+        appDeployService.deployImage(user, deployedImage);
+        return null;
+    }
+
+    @PostMapping("template/deploy")
+    @ResponseBody
+    public APIResponse deployTemplate (HttpServletRequest request, DeployedTemplate deployedTemplate) {
+        User user = (User) request.getSession().getAttribute("login_user");
+        return null;
     }
 }

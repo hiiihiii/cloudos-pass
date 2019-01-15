@@ -180,14 +180,29 @@ define([
                     var formdata = new FormData();
                     var template = JSON.parse(sessionStorage.getItem("deployTemplate"));
                     //公有字段
-                    formdata.append("deployName", $("#deploy_template_form input[name='deployName']").val());
-                    formdata.append("deployType", "template");
+                    formdata.append("deploy_name", $("#deploy_template_form input[name='deployName']").val());
+                    formdata.append("deploy_type", "template");
                     formdata.append("description", $("#deploy_template_form textarea[name='description']").val());
-                    formdata.append("appId", template.uuid);
+                    formdata.append("app_id", template.uuid);
                     formdata = _self.generateMetadata(formdata, template);
+
+                    $.ajax({
+                        type: "post",
+                        url: "../appcenter/template/deploy",
+                        data: formdata,
+                        dataType: "json",
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+
+                        },
+                        error: function () {
+
+                        }
+                    });
                 },
+
                 generateMetadata: function (formdata, template) {
-                    var _self = this;
                     var containers = [];
                     for(var i = 0; i < template.config.length; i++) {
                         var container = {};
@@ -196,12 +211,12 @@ define([
                         container.image_source_url = template.config[i].source_url;
                         container.resources = {
                             limits: {
-                                "cpu":$("#" + tabId + " input[name='maxCpu']").val(),
-                                "memory":""
+                                "cpu": $("#" + tabId + " input[name='maxcpu']").val(),
+                                "memory": $("#" + tabId + " input[name='maxMemory']").val() + $("#" + tabId + " select[name='maxMemoryUnit']").val()
                             },
                             requests : {
-                                "cpu":$("#" + tabId + " input[name='minCpu']").val(),
-                                "memory":""
+                                "cpu": $("#" + tabId + " input[name='mincpu']").val(),
+                                "memory": $("#" + tabId + " input[name='minMemory']").val() + $("#" + tabId + " select[name='minMemoryUnit']").val()
                             }
                         };
                         container.serviceName = $("#" + tabId + " input[name='serviceName']").val();
@@ -209,32 +224,33 @@ define([
                         container.workingDir = $("#" + tabId + " input[name='volumeDir']").val();
                         container.command = $("#" + tabId + " input[name='cmd']").val().split(",");
                         container.args = [];
-                        $("#" + tabId).find("input[name='cmdParam']").each(function (ele) {
+                        $("#" + tabId).find("input[name='cmdParam']").each(function (index, ele) {
                             var value = $(ele).val();
                             if(value){
                                 container.args.push(value);
                             }
                         });
                         container.env = [];
-                        $("#" + tabId + " #" + imageName + "env_table").find("tr").each(function (ele) {
+                        $("#" + tabId + " #" + imageName + "env_table").find("tr").each(function (index, ele) {
                             var temp = {};
-                            temp.name = $(ele).find("input[name='envKey']")[0].val();
-                            temp.value = $(ele).find("input[name='envValue']")[0].val();
+                            temp.name = $($(ele).find("input[name='envKey']")[0]).val();
+                            temp.value = $($(ele).find("input[name='envValue']")[0]).val();
                             container.env.push(temp);
                         });
                         container.ports = [];
-                        $("#" + tabId + " #" + imageName + "port_table").find("tr").each(function (ele) {
+                        $("#" + tabId + " #" + imageName + "port_table").find("tr").each(function (index, ele) {
                             var port = {};
-                            port.name = $(ele).find("input[name='portName']")[0].val();
-                            port.nodePort = $(ele).find("select[name='nodePort']")[0].val();
-                            port.port = $(ele).find("input[name='port']")[0].val();
-                            port.protocol = $(ele).find("input[name='protocol']")[0].val();
-                            port.targetPort = $(ele).find("input[name='containerPort']")[0].val();
+                            port.name = $($(ele).find("input[name='portName']")[0]).val();
+                            port.nodePort = $($(ele).find("select[name='nodePort']")[0]).val();
+                            port.port = $($(ele).find("input[name='port']")[0]).val();
+                            port.protocol = $($(ele).find("input[name='protocol']")[0]).val();
+                            port.targetPort = $($(ele).find("input[name='containerPort']")[0]).val();
                             container.ports.push(port);
                         });
                         containers.push(container);
                     }
-                    formdata.append("containers", containers);
+                    debugger
+                    formdata.append("containers", JSON.stringify(containers));
                     return formdata;
                 }
             }

@@ -198,7 +198,7 @@
                             v-on:click="toPrevious" v-cloak="">上一步</button>
                     <button type="button" class="btn cloud-btn" v-show="nextStep"
                             v-on:click="toNext" v-cloak="">下一步</button>
-                    <button type="button" class="btn cloud-btn" v-on:click="" v-show="submitTag" v-cloak="">确定</button>
+                    <button type="button" class="btn cloud-btn" v-on:click="submitDeployTemplate($event)" v-show="submitTag" v-cloak="">确定</button>
                     <button type="button" class="btn cloud-btn" data-dismiss="modal" v-cloak="">取消</button>
                 </div>
             </div>

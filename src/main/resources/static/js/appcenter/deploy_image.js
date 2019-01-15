@@ -179,67 +179,88 @@ define([
                 },
 
                 submitDeployImage: function (event) {
+                    debugger
                     var _self = this;
                     var formdata = new FormData();
                     var image = JSON.parse(sessionStorage.getItem("deployImage"));
                     //公有字段
-                    formdata.append("deployName", $("#deploy_image_form input[name='deployName']").val());
-                    formdata.append("deployType", "docker");
+                    formdata.append("deploy_name", $("#deploy_image_form input[name='deployName']").val());
+                    formdata.append("deploy_type", "docker");
                     formdata.append("description", $("#deploy_image_form textarea[name='description']").val());
-                    formdata.append("appId", image.app_id);
-                    var version = $("#deploy_image_form select[name='version']").val();
-                    formdata.append("image_source_url", image.source_url[version]);
-                    formdata = _self.generateMetadata(formdata);
+                    formdata.append("app_id", image.app_id);
+                    formdata = _self.generateMetadata(formdata, image);
+
+                    $.ajax({
+                        type: "post",
+                        url: "../appcenter/image/deploy",
+                        data: formdata,
+                        processData: false,
+                        contentType: false,
+                        dataType: "json",
+                        success: function (data) {
+
+                        },
+                        error: function () {
+
+                        }
+                    });
                 },
-                generateMetadata: function(formdata){
+
+                generateMetadata: function(formdata, image){
+                    var container = {};
+
                     //resources
                     var resources = {
-                        limits: "",
-                        requests: "",
+                        limits: {},
+                        requests: {},
                     };
-                    resources.limits.cpu = $("#deploy_image_form input[name='minCpu']").val() + "";
-                    resources.limits.memory = $("#deploy_image_form input[name='minMemory']").val() + "";
-                    resources.requests.cpu = $("#deploy_image_form input[name='maxCpu']").val();
-                    resources.requests.memory = $("#deploy_image_form input[name='maxMemory']").val() + "";
+                    resources.limits.cpu = $("#deploy_image_form input[name='maxcpu']").val();
+                    resources.limits.memory = $("#deploy_image_form input[name='maxMemory']").val() + $("#deploy_image_form select[name='maxMemoryUnit']").val();
+                    resources.requests.cpu = $("#deploy_image_form input[name='mincpu']").val();
+                    resources.requests.memory = $("#deploy_image_form input[name='minMemory']").val() + $("#deploy_image_form select[name='minMemoryUnit']").val();
 
                     //command
                     var command = $("#deploy_image_form input[name='cmd']").val().split(",");
 
                     //args
                     var args = [];
-                    $("#deploy_image_form").find("input[name='cmdParam']").each(function (element) {
+                    $("#deploy_image_form").find("input[name='cmdParam']").each(function (index, element) {
                         args.push($(element).val());
                     });
 
                     //env
                     var envs = [];
-                    $("#deploy_image_form #env_table").find("tr").each(function (element) {
+                    $("#deploy_image_form #env_table tbody").find("tr").each(function (index, element) {
                         var temp = {};
-                        temp.name = $(element).find("input[name='envKey']")[0].val();
-                        temp.value = $(element).find("input[name='envValue']")[0].val();
+                        temp.name = $($(element).find("input[name='envKey']")[0]).val();
+                        temp.value = $($(element).find("input[name='envValue']")[0]).val();
                         envs.push(temp);
                     });
 
                     //ports
                     var ports = [];
-                    $("#deploy_image_form #port_table").find("tr").each(function (element) {
+                    $("#deploy_image_form #port_table tbody").find("tr").each(function (index, element) {
                         var port = {};
-                        port.name = $(element).find("input[name='portName']")[0].val();
-                        port.nodePort = $(element).find("input[name='nodePort']")[0].val();
-                        port.port = $(element).find("input[name='port']")[0].val();
-                        port.protocol = $(element).find("select[name='protocol']")[0].val();
-                        port.targetPort = $(element).find("input[name='containerPort']")[0].val();
+                        port.name = $($(element).find("input[name='portName']")[0]).val();
+                        port.nodePort = $($(element).find("input[name='nodePort']")[0]).val();
+                        port.port = $($(element).find("input[name='port']")[0]).val();
+                        port.protocol = $($(element).find("select[name='protocol']")[0]).val();
+                        port.targetPort = $($(element).find("input[name='containerPort']")[0]).val();
                         ports.push(port);
                     });
 
-                    formdata.append("serviceName", $("#deploy_image_form input[name='serviceName']")).val();
-                    formdata.append("replicas", $("#deploy_image_form input[name='instanceCount']").val());
-                    formdata.append("workingDir", $("#deploy_image_form input[name='volumeDir']").val());
-                    formdata.append("resources", resources);
-                    formdata.append("command", command);
-                    formdata.append("args", args);
-                    formdata.append("env", envs);
-                    formdata.append("ports", ports);
+                    var version = $("#deploy_image_form select[name='version']").val();
+
+                    container.image_source_url = image.source_url[version];
+                    container.serviceName = $("#deploy_image_form input[name='serviceName']").val();
+                    container.replicas = $("#deploy_image_form input[name='instanceCount']").val();
+                    container.workingDir = $("#deploy_image_form input[name='volumeDir']").val()
+                    container.resources = resources;
+                    container.command = command;
+                    container.args = args;
+                    container.env = envs;
+                    container.ports = ports;
+                    formdata.append("container", JSON.stringify(container));
                     return formdata;
                 }
             }

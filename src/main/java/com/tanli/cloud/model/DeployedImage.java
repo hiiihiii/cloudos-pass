@@ -1,6 +1,14 @@
 package com.tanli.cloud.model;
 
 public class DeployedImage extends DeployedApp {
-    private String image_source_url;
 
+    private String container;
+
+    public String getContainer() {
+        return container;
+    }
+
+    public void setContainer(String container) {
+        this.container = container;
+    }
 }
