@@ -335,8 +335,8 @@ define([
 
             $("#upload_image_form input[type='text']").val("");
             $("#upload_image_form select[name='protocol']").val("TCP");
-            $("#upload_image_form select[name='minMemoryUnit']").val("MB");
-            $("#upload_image_form select[name='maxMemoryUnit']").val("MB");
+            $("#upload_image_form select[name='minMemoryUnit']").val("Mi");
+            $("#upload_image_form select[name='maxMemoryUnit']").val("Mi");
             $("#upload_image_form textarea").val("");
         });
 
