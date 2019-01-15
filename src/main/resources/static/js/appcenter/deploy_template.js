@@ -184,10 +184,57 @@ define([
                     formdata.append("deployType", "template");
                     formdata.append("description", $("#deploy_template_form textarea[name='description']").val());
                     formdata.append("appId", template.uuid);
-                    formdata = _self.generateMetadata(formdata);
+                    formdata = _self.generateMetadata(formdata, template);
                 },
-                generateMetadata: function (formdata) {
-
+                generateMetadata: function (formdata, template) {
+                    var _self = this;
+                    var containers = [];
+                    for(var i = 0; i < template.config.length; i++) {
+                        var container = {};
+                        var imageName = template.config[i].appName;
+                        var tabId = "config" + imageName;
+                        container.image_source_url = template.config[i].source_url;
+                        container.resources = {
+                            limits: {
+                                "cpu":$("#" + tabId + " input[name='maxCpu']").val(),
+                                "memory":""
+                            },
+                            requests : {
+                                "cpu":$("#" + tabId + " input[name='minCpu']").val(),
+                                "memory":""
+                            }
+                        };
+                        container.serviceName = $("#" + tabId + " input[name='serviceName']").val();
+                        container.replicas = $("#" + tabId + " input[name='instanceCount']").val();
+                        container.workingDir = $("#" + tabId + " input[name='volumeDir']").val();
+                        container.command = $("#" + tabId + " input[name='cmd']").val().split(",");
+                        container.args = [];
+                        $("#" + tabId).find("input[name='cmdParam']").each(function (ele) {
+                            var value = $(ele).val();
+                            if(value){
+                                container.args.push(value);
+                            }
+                        });
+                        container.env = [];
+                        $("#" + tabId + " #" + imageName + "env_table").find("tr").each(function (ele) {
+                            var temp = {};
+                            temp.name = $(ele).find("input[name='envKey']")[0].val();
+                            temp.value = $(ele).find("input[name='envValue']")[0].val();
+                            container.env.push(temp);
+                        });
+                        container.ports = [];
+                        $("#" + tabId + " #" + imageName + "port_table").find("tr").each(function (ele) {
+                            var port = {};
+                            port.name = $(ele).find("input[name='portName']")[0].val();
+                            port.nodePort = $(ele).find("select[name='nodePort']")[0].val();
+                            port.port = $(ele).find("input[name='port']")[0].val();
+                            port.protocol = $(ele).find("input[name='protocol']")[0].val();
+                            port.targetPort = $(ele).find("input[name='containerPort']")[0].val();
+                            container.ports.push(port);
+                        });
+                        containers.push(container);
+                    }
+                    formdata.append("containers", containers);
                     return formdata;
                 }
             }
