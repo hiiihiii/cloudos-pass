@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : mysql56
-Source Server Version : 50634
+Source Server Version : 50641
 Source Host           : localhost:3306
 Source Database       : db_cloud_pass
 
 Target Server Type    : MYSQL
-Target Server Version : 50634
+Target Server Version : 50641
 File Encoding         : 65001
 
-Date: 2019-01-14 16:25:12
+Date: 2019-01-15 11:23:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -57,8 +57,8 @@ CREATE TABLE `tl_image` (
 -- ----------------------------
 -- Records of tl_image
 -- ----------------------------
-INSERT INTO `tl_image` VALUES ('73c1f3a7-a016-4dba-b150-96d2fe02959f', '66908423-e29b-41d4-a716-446655440000', '780e8400-e19b-41d4-a716-446655440000', 'busybox', 'Application', '[\"2.0\",\"3.0\"]', 'busybox是一个命令工具', '{\"2.0\":\"busybox2.0\",\"3.0\":\"busybox3.0\"}', '132.232.140.33/logo/busybox-3.0.PNG', '{\"2.0\":\"132.232.140.33/library/busybox:2.0\",\"3.0\":\"132.232.140.33/library/busybox:3.0\"}', '{\"2.0\":{\"volume\":\"/data\",\"cmd\":\"ifconfig\",\"cmdParams\":[\"\"],\"env\":[{\"name\":\"port\",\"value\":\"1234\"}],\"ports\":[{\"portName\":\"busybox\",\"protocol\":\"TCP\",\"containerPort\":\"10081\",\"port\":\"10082\",\"nodePort\":\"10083\"}],\"requests\":{\"cpu\":\"0.1\",\"memory\":\"10MB\"},\"limits\":{\"cpu\":\"0.1\",\"memory\":\"10MB\"}},\"3.0\":{\"volume\":\"\",\"cmd\":\"ifconfig\",\"cmdParams\":[\"\"],\"env\":[],\"ports\":[{\"portName\":\"busybox\",\"protocol\":\"TCP\",\"containerPort\":\"10081\",\"port\":\"10082\",\"nodePort\":\"10083\"}],\"requests\":{\"cpu\":\"0.1\",\"memory\":\"10MB\"},\"limits\":{\"cpu\":\"0.1\",\"memory\":\"20MB\"}}}', '{\"2.0\":\"upload\",\"3.0\":\"upload\"}', '2018-12-19 20:47:03', '2018-12-19 20:47:03');
-INSERT INTO `tl_image` VALUES ('469e2eb4-eee0-4e8f-a449-fb33a292af43', '66908423-e29b-41d4-a716-446655440000', '780e8400-e19b-41d4-a716-446655440000', 'hello-world', 'WebServer', '[\"1.0\"]', 'hello-world是一个测试镜像，它很小很小', '{\"1.0\":\"这是1.0版本，没什么特点\"}', '132.232.140.33/logo/hello-world-1.0.PNG', '{\"1.0\":\"132.232.140.33/library/hello-world:1.0\"}', '{\"1.0\":{\"volume\":\"/data\",\"cmd\":\"\",\"cmdParams\":[\"\"],\"env\":[],\"ports\":[{\"portName\":\"hello\",\"protocol\":\"TCP\",\"containerPort\":\"8089\",\"port\":\"8089\",\"nodePort\":\"8080\"}],\"requests\":{\"cpu\":\"0.2\",\"memory\":\"10MB\"},\"limits\":{\"cpu\":\"0.2\",\"memory\":\"20MB\"}}}', '{\"1.0\":\"upload\"}', '2018-12-19 20:47:25', '2018-12-19 20:47:25');
+INSERT INTO `tl_image` VALUES ('73c1f3a7-a016-4dba-b150-96d2fe02959f', '66908423-e29b-41d4-a716-446655440000', '780e8400-e19b-41d4-a716-446655440000', 'busybox', 'Application', '[\"2.0\",\"3.0\"]', 'busybox是一个命令工具', '{\"2.0\":\"busybox2.0\",\"3.0\":\"busybox3.0\"}', '132.232.140.33/logo/busybox-3.0.PNG', '{\"2.0\":\"132.232.140.33/library/library:2.0\",\"3.0\":\"132.232.140.33/library/library:3.0\"}', '{\"2.0\":{\"volume\":\"/data\",\"cmd\":\"ifconfig\",\"cmdParams\":[\"\"],\"env\":[{\"name\":\"port\",\"value\":\"1234\"}],\"ports\":[{\"portName\":\"busybox\",\"protocol\":\"TCP\",\"containerPort\":\"10081\",\"port\":\"10082\",\"nodePort\":\"10083\"}],\"requests\":{\"cpu\":\"0.1\",\"memory\":\"10Mi\"},\"limits\":{\"cpu\":\"0.1\",\"memory\":\"10Mi\"}},\"3.0\":{\"volume\":\"\",\"cmd\":\"ifconfig\",\"cmdParams\":[\"\"],\"env\":[],\"ports\":[{\"portName\":\"busybox\",\"protocol\":\"TCP\",\"containerPort\":\"10081\",\"port\":\"10082\",\"nodePort\":\"10083\"}],\"requests\":{\"cpu\":\"0.1\",\"memory\":\"10Mi\"},\"limits\":{\"cpu\":\"0.1\",\"memory\":\"20Mi\"}}}', '{\"2.0\":\"upload\",\"3.0\":\"upload\"}', '2019-01-15 11:18:41', '2019-01-15 11:18:41');
+INSERT INTO `tl_image` VALUES ('469e2eb4-eee0-4e8f-a449-fb33a292af43', '66908423-e29b-41d4-a716-446655440000', '780e8400-e19b-41d4-a716-446655440000', 'hello-world', 'WebServer', '[\"1.0\"]', 'hello-world是一个测试镜像，它很小很小', '{\"1.0\":\"这是1.0版本，没什么特点\"}', '132.232.140.33/logo/hello-world-1.0.PNG', '{\"1.0\":\"132.232.140.33/library/library:1.0\"}', '{\"1.0\":{\"volume\":\"/data\",\"cmd\":\"\",\"cmdParams\":[\"\"],\"env\":[],\"ports\":[{\"portName\":\"hello\",\"protocol\":\"TCP\",\"containerPort\":\"8089\",\"port\":\"8089\",\"nodePort\":\"8080\"}],\"requests\":{\"cpu\":\"0.2\",\"memory\":\"10Mi\"},\"limits\":{\"cpu\":\"0.2\",\"memory\":\"20Mi\"}}}', '{\"1.0\":\"upload\"}', '2019-01-15 11:16:31', '2019-01-15 11:16:31');
 
 -- ----------------------------
 -- Table structure for tl_pod
@@ -176,7 +176,7 @@ CREATE TABLE `tl_template` (
 -- ----------------------------
 -- Records of tl_template
 -- ----------------------------
-INSERT INTO `tl_template` VALUES ('457499d0-3f01-446a-8490-61d2e940eded', '780e8400-e19b-41d4-a716-446655440000', 'test-template', '132.232.140.33/templatelogo/test-template.jpg', '测试删除模板', '{}', '[{\"appName\":\"hello-world\",\"version\":\"1.0\",\"logo_url\":\"132.232.140.33/logo/hello-world-1.0.PNG\",\"source_url\":\"132.232.140.33/library/library:1.0\",\"metadata\":{\"volume\":\"/data\",\"cmd\":\"\",\"cmdParams\":[\"\"],\"env\":[],\"ports\":[{\"portName\":\"hello\",\"protocol\":\"TCP\",\"containerPort\":\"8089\",\"port\":\"8089\",\"nodePort\":\"8080\"}],\"requests\":{\"cpu\":\"0.2\",\"memory\":\"10MB\"},\"limits\":{\"cpu\":\"0.2\",\"memory\":\"20MB\"}}},{\"appName\":\"busybox\",\"version\":\"2.0\",\"logo_url\":\"132.232.140.33/logo/busybox-3.0.PNG\",\"source_url\":\"132.232.140.33/library/library:2.0\",\"metadata\":{\"volume\":\"/data\",\"cmd\":\"ifconfig\",\"cmdParams\":[\"\"],\"env\":[{\"name\":\"port\",\"value\":\"1234\"}],\"ports\":[{\"portName\":\"busybox\",\"protocol\":\"TCP\",\"containerPort\":\"10081\",\"port\":\"10082\",\"nodePort\":\"10083\"}],\"requests\":{\"cpu\":\"0.1\",\"memory\":\"10MB\"},\"limits\":{\"cpu\":\"0.1\",\"memory\":\"10MB\"}}}]', '2018-12-18 19:36:25', '2018-12-18 19:36:25', '1');
+INSERT INTO `tl_template` VALUES ('e1b8f39f-34f4-44b0-a8e5-07811b778ec8', '780e8400-e19b-41d4-a716-446655440000', 'template-test', '132.232.140.33/templatelogo/template-test.jpg', '测试添加镜像模板', '{\"hello-world\":{\"busybox\":\"test\"}}', '[{\"appName\":\"hello-world\",\"version\":\"1.0\",\"logo_url\":\"132.232.140.33/logo/hello-world-1.0.PNG\",\"source_url\":\"132.232.140.33/library/library:1.0\",\"metadata\":{\"volume\":\"/data\",\"cmd\":\"\",\"cmdParams\":[\"\"],\"env\":[],\"ports\":[{\"portName\":\"hello\",\"protocol\":\"TCP\",\"containerPort\":\"8089\",\"port\":\"8089\",\"nodePort\":\"8080\"}],\"requests\":{\"cpu\":\"0.2\",\"memory\":\"10Mi\"},\"limits\":{\"cpu\":\"0.2\",\"memory\":\"20Mi\"}}},{\"appName\":\"busybox\",\"version\":\"2.0\",\"logo_url\":\"132.232.140.33/logo/busybox-3.0.PNG\",\"source_url\":\"132.232.140.33/library/library:2.0\",\"metadata\":{\"volume\":\"/data\",\"cmd\":\"ifconfig\",\"cmdParams\":[\"\"],\"env\":[{\"name\":\"port\",\"value\":\"1234\"}],\"ports\":[{\"portName\":\"busybox\",\"protocol\":\"TCP\",\"containerPort\":\"10081\",\"port\":\"10082\",\"nodePort\":\"10083\"}],\"requests\":{\"cpu\":\"0.1\",\"memory\":\"10Mi\"},\"limits\":{\"cpu\":\"0.1\",\"memory\":\"10Mi\"}}}]', '2019-01-15 11:20:51', '2019-01-15 11:20:51', '1');
 
 -- ----------------------------
 -- Table structure for tl_user
@@ -197,5 +197,6 @@ CREATE TABLE `tl_user` (
 -- Records of tl_user
 -- ----------------------------
 INSERT INTO `tl_user` VALUES ('780e8400-e19b-41d4-a716-446655440000', '550e8400-e19b-41d4-a716-446655440000', 'admin', 'cloud', '1@1.com', '15708207554', '2018-12-11 13:56:18', '2018-12-11 13:56:18');
-INSERT INTO `tl_user` VALUES ('6e42d0d6-eb79-4cb9-accb-9e88a854e9f4', '550e8400-e19b-41d4-a716-446655441111', 'test7', '123456', '1@1.com', '12345678901', '2018-12-11 16:39:34', '2018-12-11 16:39:34');
+INSERT INTO `tl_user` VALUES ('59d15c3a-acc9-4f18-a671-8f3810483440', '550e8400-e19b-41d4-a716-446655440000', 'test1', '12345', '1@1.com', '1234567890', '2018-12-11 16:37:13', '2018-12-11 16:37:13');
 INSERT INTO `tl_user` VALUES ('6579cc5e-8999-41a5-85eb-df632e45a5b3', '550e8400-e19b-41d4-a716-446655441111', 'test8', '12345', '1@1.com', '12345678901', '2018-12-11 16:39:54', '2018-12-11 16:39:54');
+INSERT INTO `tl_user` VALUES ('7380825e-0bef-4907-bbe8-aae68c064e1b', '550e8400-e19b-41d4-a716-446655441111', 'test9', '12345', '1@1.com', '12345678901', '2018-12-11 16:40:19', '2018-12-11 16:40:19');
