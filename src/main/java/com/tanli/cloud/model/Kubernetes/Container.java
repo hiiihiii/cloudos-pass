@@ -1,5 +1,9 @@
 package com.tanli.cloud.model.Kubernetes;
 
+import com.tanli.cloud.model.DeployContainer;
+
+import java.util.Map;
+
 public class Container {
     private String[] args;
     private String[] command;
@@ -10,6 +14,28 @@ public class Container {
     private ContainerPort[] ports;
     private ResourcesRequirements resources;
     private String workingDir;
+
+    public Container() { }
+
+    public Container( String[] args,
+                      String[] cmd,
+                      EnvVar[] env,
+                      String image,
+                      String imagePullPolicy,
+                      String name,
+                      ContainerPort[] ports,
+                      ResourcesRequirements resources,
+                      String workingDir ) {
+        this.args = args;
+        this.command = cmd;
+        this.env = env;
+        this.image = image;
+        this.imagePullPolicy = imagePullPolicy;
+        this.name = name;
+        this.ports = ports;
+        this.resources = resources;
+        this.workingDir = workingDir;
+    }
 
     public String[] getArgs() {
         return args;

@@ -4,6 +4,12 @@ public class PodSpec {
     private Container[] containers;
     private String restartPolicy;
 
+    public PodSpec() {}
+    public PodSpec(Container[] containers, String restartPolicy) {
+        this.containers = containers;
+        this.restartPolicy = restartPolicy;
+    }
+
     public Container[] getContainers() {
         return containers;
     }

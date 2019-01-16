@@ -7,6 +7,14 @@ public class ReplicationControllerSpec {
     private Map<String, String> selector;
     private PodTemplateSpec template;
 
+    public ReplicationControllerSpec () {}
+
+    public ReplicationControllerSpec (int replicas, Map<String, String> selector, PodTemplateSpec pod) {
+        this.replicas = replicas;
+        this.selector = selector;
+        this.template = pod;
+    }
+
     public int getReplicas() {
         return replicas;
     }

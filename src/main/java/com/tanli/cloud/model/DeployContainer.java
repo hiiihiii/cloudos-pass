@@ -9,9 +9,20 @@ public class DeployContainer {
     private String image_source_url;
     private Map<String, Object>[] ports;
     private int replicas;
-    private Map<String, Object> resources;
+//    private Map<String, Object> resources;
+    private Map<String, String> limits;
+    private Map<String, String> requests;
     private String serviceName;
     private String workingDir;
+    private String imageName;
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
 
     public String[] getArgs() {
         return args;
@@ -61,12 +72,29 @@ public class DeployContainer {
         this.replicas = replicas;
     }
 
-    public Map<String, Object> getResources() {
-        return resources;
+//    public Map<String, Object> getResources() {
+//        return resources;
+//    }
+//
+//    public void setResources(Map<String, Object> resources) {
+//        this.resources = resources;
+//    }
+
+
+    public Map<String, String> getLimits() {
+        return limits;
     }
 
-    public void setResources(Map<String, Object> resources) {
-        this.resources = resources;
+    public void setLimits(Map<String, String> limits) {
+        this.limits = limits;
+    }
+
+    public Map<String, String> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(Map<String, String> requests) {
+        this.requests = requests;
     }
 
     public String getServiceName() {

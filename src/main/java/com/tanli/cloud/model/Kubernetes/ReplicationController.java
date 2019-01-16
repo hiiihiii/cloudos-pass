@@ -6,6 +6,17 @@ public class ReplicationController {
     private ObjectMeta metadata;
     private ReplicationControllerSpec spec;
 
+    public ReplicationController() {
+
+    }
+
+    public ReplicationController(String version, String kind, ObjectMeta metadata, ReplicationControllerSpec spec) {
+        this.apiVersion = version;
+        this.kind = kind;
+        this.metadata = metadata;
+        this.spec = spec;
+    }
+
     public String getApiVersion() {
         return apiVersion;
     }

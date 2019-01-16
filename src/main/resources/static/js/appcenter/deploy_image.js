@@ -251,11 +251,14 @@ define([
 
                     var version = $("#deploy_image_form select[name='version']").val();
 
+                    container.imageName = image.appName;
                     container.image_source_url = image.source_url[version];
                     container.serviceName = $("#deploy_image_form input[name='serviceName']").val();
                     container.replicas = $("#deploy_image_form input[name='instanceCount']").val();
                     container.workingDir = $("#deploy_image_form input[name='volumeDir']").val()
-                    container.resources = resources;
+                    // container.resources = resources;
+                    container.limits = resources.limits;
+                    container.requests = resources.requests;
                     container.command = command;
                     container.args = args;
                     container.env = envs;

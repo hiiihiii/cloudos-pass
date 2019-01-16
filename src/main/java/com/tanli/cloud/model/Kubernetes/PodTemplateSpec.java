@@ -4,6 +4,14 @@ public class PodTemplateSpec {
     private ObjectMeta metadata;
     private PodSpec spec;
 
+    public PodTemplateSpec(ObjectMeta metadata, PodSpec spec) {
+        this.metadata = metadata;
+        this.spec = spec;
+    }
+
+    public PodTemplateSpec() {
+    }
+
     public ObjectMeta getMetadata() {
         return metadata;
     }
