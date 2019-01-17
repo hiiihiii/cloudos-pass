@@ -1,6 +1,6 @@
 package com.tanli.cloud.model.Kubernetes;
 
-public class Service {
+public class KService {
     private String apiVersion;
     private String kind;
     private ObjectMeta metadata;

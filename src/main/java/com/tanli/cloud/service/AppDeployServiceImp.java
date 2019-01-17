@@ -4,7 +4,6 @@ import com.tanli.cloud.dao.DeploymentDao;
 import com.tanli.cloud.model.DeployContainer;
 import com.tanli.cloud.model.DeployedImage;
 import com.tanli.cloud.model.Deployment;
-import com.tanli.cloud.model.K8s_Rc;
 import com.tanli.cloud.model.Kubernetes.*;
 import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.utils.APIResponse;
@@ -16,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -128,6 +126,11 @@ public class AppDeployServiceImp implements AppDeployService {
 
         return new Container(args, cmd, envVars, image, imagePullPolicy,
                 imageName, ports, requirements, workingDir);
+    }
+
+    //构建SVC
+    private KService buildSVC(DeployedImage deployedImage) {
+        return new KService();
     }
 
 }
