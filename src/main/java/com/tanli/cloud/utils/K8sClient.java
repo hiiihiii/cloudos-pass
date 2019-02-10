@@ -21,30 +21,24 @@ public class K8sClient {
 
     private static final String k8s_api_address = "132.232.99.189:8080";
 
-    public K8sClient() {}
+    private KubernetesClient client;
 
-    /**
-     * 构建Kubernetes Client
-     * @return
-     */
-    public KubernetesClient buildClient(){
+    public K8sClient() {
         Config config = new ConfigBuilder().withMasterUrl(k8s_api_address).build();
-        KubernetesClient client = new DefaultKubernetesClient(config);
-        return client;
+        this.client = new DefaultKubernetesClient(config);
     }
 
     /**
      * 测试创建namespace
      */
     public void testCreateNamespace() {
-        KubernetesClient kube = buildClient();
         Namespace ns = new Namespace();
         ns.setApiVersion("v1");
         ns.setKind("Namespace");
         ObjectMeta objectMeta = new ObjectMeta();
         objectMeta.setName("ns-namespace");
         ns.setMetadata(objectMeta);
-        kube.namespaces().create(ns);
+        this.client.namespaces().create(ns);
     }
 
     /**
@@ -52,7 +46,6 @@ public class K8sClient {
      * @param deployedImage
      */
     public void createService(DeployedImage deployedImage) {
-        KubernetesClient _kube = buildClient();
 
         JSONObject jsonObject=JSONObject.fromObject(deployedImage.getContainer());
         DeployContainer deployContainer = (DeployContainer) JSONObject.toBean(jsonObject, DeployContainer.class);
@@ -71,10 +64,11 @@ public class K8sClient {
         for(int i = 0; i < deployContainer.getPorts().length; i++) {
             ServicePort port = new ServicePort();
             Map<String, Object> temp = deployContainer.getPorts()[i];
-            port.setName((String) temp.get("name"));
-            port.setNodePort((int) temp.get("nodePort"));
-            port.setPort((int) temp.get("port"));
-            port.setTargetPort((IntOrString) temp.get("targetPort"));
+            port.setName(temp.get("name").toString());
+            port.setNodePort(Integer.parseInt(temp.get("nodePort").toString()));
+            port.setPort(Integer.parseInt(temp.get("port").toString()));
+            IntOrString target = new IntOrString(Integer.parseInt(temp.get("targetPort").toString()));
+            port.setTargetPort(target);
             port.setProtocol((String) temp.get("protocol"));
             servicePorts.add(port);
         }
@@ -85,7 +79,7 @@ public class K8sClient {
         svcSpec.setType("NodePort");
         service.setSpec(svcSpec);
 
-        _kube.services().create(service);
+        this.client.services().create(service);
     }
 
     /**
@@ -93,7 +87,6 @@ public class K8sClient {
      * @param deployedImage
      */
     public void createRC(DeployedImage deployedImage) {
-        KubernetesClient _kube = buildClient();
 
         JSONObject jsonObject=JSONObject.fromObject(deployedImage.getContainer());
         DeployContainer deployContainer = (DeployContainer) JSONObject.toBean(jsonObject, DeployContainer.class);
@@ -124,11 +117,22 @@ public class K8sClient {
         List<ContainerPort> tempPorts = new ArrayList<>();
         for(int i = 0; i < deployContainer.getPorts().length; i++) {
             ContainerPort port = new ContainerPort();
-            port.setContainerPort((int) deployContainer.getPorts()[i].get("targetPort"));
+            int portNum = Integer.parseInt(deployContainer.getPorts()[i].get("targetPort").toString());
+            port.setContainerPort(portNum);
             port.setName((String) deployContainer.getPorts()[i].get("name"));
             tempPorts.add(port);
         }
         container.setPorts(tempPorts);
+        ResourceRequirements resource = new ResourceRequirements();
+        Map<String, Quantity> limits = new HashMap<>();
+        Map<String, Quantity> requests = new HashMap<>();
+        limits.put("cpu", new Quantity(deployContainer.getLimits().get("cpu")));
+        limits.put("memory", new Quantity(deployContainer.getLimits().get("memory")));
+        requests.put("cpu", new Quantity(deployContainer.getRequests().get("cpu")));
+        requests.put("memory", new Quantity(deployContainer.getRequests().get("memory")));
+        resource.setLimits(limits);
+        resource.setRequests(requests);
+        container.setResources(resource);
         containerList.add(container);
 
         ReplicationController rc = new ReplicationController();
@@ -160,6 +164,6 @@ public class K8sClient {
         rcSpec.setTemplate(podTemplateSpec);
         rc.setSpec(rcSpec);
 
-        _kube.replicationControllers().create(rc);
+        this.client.replicationControllers().create(rc);
     }
 }
