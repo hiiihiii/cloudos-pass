@@ -41,37 +41,25 @@ public class AppDeployServiceImp implements AppDeployService {
         String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
         deployment.setCreate_time(nowStr);
         deployment.setUser_uuid(nowStr);
-        createRc(deployment, deployedImage);
-//        try {
-//            LOGGE.info("[AppDeployServiceImp Info]: " + "向tl_deployment表中增加数据");
-//            if(deploymentDao.addDeployment(deployment) == 1) {
-//
-//            } else {
-//                LOGGE.info("[AppDeployServiceImp Info]: " + "向tl_deployment表中增加数据失败");
-//                return APIResponse.fail("向tl_deployment表中增加数据失败");
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return APIResponse.fail("向tl_deployment表中增加数据失败");
-//        }
+        try {
+            LOGGE.info("[AppDeployServiceImp Info]: " + "向tl_deployment表中增加数据");
+            // 向tl_deployment表中增加数据
+            if(deploymentDao.addDeployment(deployment) == 1) {
+                // 创建RC
+
+                // 创建Service
+            } else {
+                LOGGE.info("[AppDeployServiceImp Info]: " + "向tl_deployment表中增加数据失败");
+                return APIResponse.fail("向tl_deployment表中增加数据失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return APIResponse.fail("向tl_deployment表中增加数据失败");
+        }
+
         return null;
     }
 
-    private boolean createRc(Deployment deployment, DeployedImage deployedImage) {
-        boolean result = false;
-        //构建RC
-        ReplicationController rc = buildRc(deployedImage);
-        //调用Kubernetes API
-
-        return result;
-    }
-
-    private boolean createService(Deployment deployment, DeployedImage deployedImage) {
-        boolean result = false;
-        return result;
-    }
-
-    //构建RC
     private ReplicationController buildRc(DeployedImage deployedImage){
         JSONObject jsonObject=JSONObject.fromObject(deployedImage.getContainer());
         DeployContainer deployContainer = (DeployContainer) JSONObject.toBean(jsonObject, DeployContainer.class);

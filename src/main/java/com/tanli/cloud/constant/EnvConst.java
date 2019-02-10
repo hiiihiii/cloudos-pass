@@ -27,8 +27,8 @@ public class EnvConst {
      * kubernetes api配置
      */
     public static final String k8s_api_protocol = "http";
-    public static final String k8s_api_ip = "132.232.66.145";
+    public static final String k8s_api_ip = "132.232.99.189";
     public static final String k8s_api_port = "8080";
-    public static final String k8s_api_prefix = "http://132.232.66.145:8080/api/v1/";
+    public static final String k8s_api_prefix = "http://132.232.99.189:8080/api/v1/";
 
 }
