@@ -45,7 +45,7 @@ public class K8sClient {
      * 创建service
      * @param deployedImage
      */
-    public void createService(DeployedImage deployedImage) {
+    public Service createService(DeployedImage deployedImage) {
 
         JSONObject jsonObject=JSONObject.fromObject(deployedImage.getContainer());
         DeployContainer deployContainer = (DeployContainer) JSONObject.toBean(jsonObject, DeployContainer.class);
@@ -55,7 +55,7 @@ public class K8sClient {
         service.setKind("Service");
 
         ObjectMeta svcMeta = new ObjectMeta();
-        svcMeta.setName(deployContainer.getImageName() + "-svc");
+        svcMeta.setName(deployedImage.getDeploy_name() + "-svc");
         svcMeta.setNamespace("default");
         service.setMetadata(svcMeta);
 
@@ -79,14 +79,15 @@ public class K8sClient {
         svcSpec.setType("NodePort");
         service.setSpec(svcSpec);
 
-        this.client.services().create(service);
+//        this.client.services().create(service);
+        return service;
     }
 
     /**
      * 创建RC
      * @param deployedImage
      */
-    public void createRC(DeployedImage deployedImage) {
+    public ReplicationController createRC(DeployedImage deployedImage) {
 
         JSONObject jsonObject=JSONObject.fromObject(deployedImage.getContainer());
         DeployContainer deployContainer = (DeployContainer) JSONObject.toBean(jsonObject, DeployContainer.class);
@@ -144,7 +145,7 @@ public class K8sClient {
         rc.setApiVersion("v1");
 
         ObjectMeta rcMeta = new ObjectMeta();
-        rcMeta.setName(deployContainer.getImageName() + "-rc");
+        rcMeta.setName(deployedImage.getDeploy_name() + "-rc");
         //rcMeta.setLabels(rcLabels);
         rcMeta.setNamespace("default");
         rc.setMetadata(rcMeta);
@@ -164,6 +165,7 @@ public class K8sClient {
         rcSpec.setTemplate(podTemplateSpec);
         rc.setSpec(rcSpec);
 
-        this.client.replicationControllers().create(rc);
+//        this.client.replicationControllers().create(rc);
+        return rc;
     }
 }
