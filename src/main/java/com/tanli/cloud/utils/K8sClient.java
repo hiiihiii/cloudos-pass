@@ -1,13 +1,12 @@
 package com.tanli.cloud.utils;
 
 import com.tanli.cloud.model.DeployContainer;
-import com.tanli.cloud.model.DeployedImage;
+import com.tanli.cloud.model.DeployedApp;
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.ConfigBuilder;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import net.sf.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,19 +42,18 @@ public class K8sClient {
 
     /**
      * 创建service
-     * @param deployedImage
+     * @param deployedApp
+     * @param deployContainer
      */
-    public Service createService(DeployedImage deployedImage) {
-
-        JSONObject jsonObject=JSONObject.fromObject(deployedImage.getContainer());
-        DeployContainer deployContainer = (DeployContainer) JSONObject.toBean(jsonObject, DeployContainer.class);
+    public Service createService( DeployedApp deployedApp, DeployContainer deployContainer) {
         Service service = new Service();
 
         service.setApiVersion("v1");
         service.setKind("Service");
 
         ObjectMeta svcMeta = new ObjectMeta();
-        svcMeta.setName(deployedImage.getDeploy_name() + "-svc");
+        svcMeta.setName(deployContainer.getServiceName());
+//        svcMeta.setName(deployedApp.getDeploy_name() + "-svc");
         svcMeta.setNamespace("default");
         service.setMetadata(svcMeta);
 
@@ -85,12 +83,10 @@ public class K8sClient {
 
     /**
      * 创建RC
-     * @param deployedImage
+     * @param deployedApp
+     * @param deployContainer
      */
-    public ReplicationController createRC(DeployedImage deployedImage) {
-
-        JSONObject jsonObject=JSONObject.fromObject(deployedImage.getContainer());
-        DeployContainer deployContainer = (DeployContainer) JSONObject.toBean(jsonObject, DeployContainer.class);
+    public ReplicationController createRC(DeployedApp deployedApp, DeployContainer deployContainer) {
 
         List<Container> containerList = new ArrayList<Container>();
         Container container = new Container();
@@ -145,7 +141,7 @@ public class K8sClient {
         rc.setApiVersion("v1");
 
         ObjectMeta rcMeta = new ObjectMeta();
-        rcMeta.setName(deployedImage.getDeploy_name() + "-rc");
+        rcMeta.setName(deployedApp.getDeploy_name() + "-rc");
         //rcMeta.setLabels(rcLabels);
         rcMeta.setNamespace("default");
         rc.setMetadata(rcMeta);
@@ -167,5 +163,21 @@ public class K8sClient {
 
 //        this.client.replicationControllers().create(rc);
         return rc;
+    }
+
+    /**
+     * 根据selector获取pod
+     * @param selectors
+     * @return
+     */
+    public List<Pod> getPod(Map<String, String> selectors) {
+        List<Pod> targetPods = this.client.pods().list().getItems();
+        for(int i = 0; i < targetPods.size(); i++) {
+            Pod temp = targetPods.get(i);
+            if( ! selectors.equals(temp.getMetadata().getLabels())) {
+                targetPods.remove(i);
+            }
+        }
+        return targetPods;
     }
 }

@@ -1,6 +1,7 @@
 package com.tanli.cloud.service;
 
 import com.tanli.cloud.dao.DeploymentDao;
+import com.tanli.cloud.dao.K8sPodDao;
 import com.tanli.cloud.dao.K8sRcDao;
 import com.tanli.cloud.dao.K8sServiceDao;
 import com.tanli.cloud.model.*;
@@ -8,6 +9,7 @@ import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.utils.APIResponse;
 import com.tanli.cloud.utils.K8sClient;
 import com.tanli.cloud.utils.UuidUtil;
+import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.ReplicationController;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -30,6 +33,8 @@ public class AppDeployServiceImp implements AppDeployService {
     private K8sRcDao k8sRcDao;
     @Autowired
     private K8sServiceDao k8sServiceDao;
+    @Autowired
+    private K8sPodDao k8sPodDao;
 
     private static final Logger LOGGE = LoggerFactory.getLogger(AppDeployServiceImp.class);
 
@@ -37,69 +42,170 @@ public class AppDeployServiceImp implements AppDeployService {
     public APIResponse deployImage(User user, DeployedImage deployedImage) {
         JSONObject jsonObject=JSONObject.fromObject(deployedImage.getContainer());
         DeployContainer deployContainer = (DeployContainer) JSONObject.toBean(jsonObject, DeployContainer.class);
+        //将数据保存进tl_deployment表中
+        Deployment deployment = saveDeployment(deployedImage, user.getUser_uuid());
+        if(deployment != null) {
+            K8sClient k8sClient = new K8sClient();
+            // 创建RC
+            ReplicationController replicationController = k8sClient.createRC(deployedImage, deployContainer);
+            // 创建Service
+            io.fabric8.kubernetes.api.model.Service service = k8sClient.createService(deployedImage, deployContainer);
+            if(saveRc(deployedImage, deployment, service, replicationController) > 0 &&
+                    saveService(deployedImage, deployment, service) > 0) {
+                LOGGE.info("[AppDeployServiceImp Info]: " + "部署" + deployedImage.getDeploy_name() + "成功");
+                return APIResponse.success();
+            }
+        }
+        LOGGE.info("[AppDeployServiceImp Info]: " + "部署" + deployedImage.getDeploy_name() + "失败");
+        return APIResponse.fail("部署镜像"+deployedImage.getDeploy_name()+"失败");
+    }
 
+    @Override
+    public APIResponse deployTemplate(User user, DeployedTemplate deployedTemplate) {
+        List<DeployContainer> deployContainerList = JSONArray.fromObject(deployedTemplate.getContainers());
+        for(int i = 0; i < deployContainerList.size(); i++) {
+            Deployment deployment = saveDeployment(deployedTemplate, user.getUser_uuid());
+            if(deployment != null) {
+                K8sClient k8sClient = new K8sClient();
+                // 创建RC
+                ReplicationController replicationController = k8sClient.createRC(deployedTemplate, deployContainerList.get(i));
+                // 创建Service
+                io.fabric8.kubernetes.api.model.Service service = k8sClient.createService(deployedTemplate, deployContainerList.get(i));
+                int rcCount = saveRc(deployedTemplate, deployment, service, replicationController);
+                int svcCount = saveService(deployedTemplate ,deployment,service );
+                if(rcCount <= 0 || svcCount <= 0) {
+                    return APIResponse.fail("部署模板" + deployedTemplate.getDeploy_name() + "失败");
+                }
+            }
+        }
+        return APIResponse.success();
+    }
+
+    /**
+     * 想tl_pod表中保存数据
+     * @param pod
+     * @param rc
+     * @param service
+     * @return
+     */
+    private int savePod(Pod pod, ReplicationController rc, io.fabric8.kubernetes.api.model.Service service) {
+        K8s_Pod temp = new K8s_Pod();
+        temp.setUuid(UuidUtil.getUUID());
+        temp.setName(pod.getMetadata().getName());
+        temp.setNamespace(pod.getMetadata().getNamespace());
+        temp.setUpdate_time("");
+        temp.setHostIP("");
+        temp.setPodIP("");
+        temp.setSvc_uuid("");
+        temp.setRc_uuid("");
+        temp.setRestartCount(0);
+        temp.setStatus("");
+        temp.setImage("");
+        try {
+            return k8sPodDao.addPod(temp);
+        } catch (Exception e) {
+            LOGGE.info("[AppDeployServiceImp Info]: " + "向tl_pod表中增加数据失败");
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * 想tl_deployment表中保存数据
+     * @param deployedApp
+     * @param userId
+     * @return
+     */
+    private Deployment saveDeployment(DeployedApp deployedApp, String userId){
         Deployment deployment = new Deployment();
         deployment.setDeploy_uuid(UuidUtil.getUUID());
-        deployment.setDeploy_name(deployedImage.getDeploy_name());
-        deployment.setDeploy_type(deployedImage.getDeploy_type());
-        deployment.setDescription(deployedImage.getDescription());
-        deployment.setUser_uuid(user.getUser_uuid());
-        deployment.setImage_uuid(deployedImage.getApp_id());
-        deployment.setTemplate_uuid("");
+        deployment.setDeploy_name(deployedApp.getDeploy_name());
+        deployment.setDeploy_type(deployedApp.getDeploy_type());
+        deployment.setDescription(deployedApp.getDescription());
+        deployment.setUser_uuid(userId);
+        if(deployedApp.getDeploy_type().equals("docker")) {
+            deployment.setImage_uuid(deployedApp.getApp_id());
+            deployment.setTemplate_uuid("");
+        } else {
+            deployment.setImage_uuid("");
+            deployment.setTemplate_uuid(deployedApp.getApp_id());
+        }
         DateTime now = DateTime.now();
         String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
         deployment.setCreate_time(nowStr);
         deployment.setUser_uuid(nowStr);
         try {
             LOGGE.info("[AppDeployServiceImp Info]: " + "向tl_deployment表中增加数据");
-            // 向tl_deployment表中增加数据
-            if(deploymentDao.addDeployment(deployment) == 1) {
-                K8sClient k8sClient = new K8sClient();
-                // 创建RC
-                ReplicationController replicationController = k8sClient.createRC(deployedImage);
-                // 创建Service
-                io.fabric8.kubernetes.api.model.Service service = k8sClient.createService(deployedImage);
-                // 将RC和Service数据保存进数据库中
-                K8s_Rc rc = new K8s_Rc();
-                K8s_Service svc = new K8s_Service();
-                rc.setUuid(UuidUtil.getUUID());
-                rc.setDeployment_uuid(deployment.getDeploy_uuid());
-                rc.setName(deployedImage.getDeploy_name() + "-rc");
-                rc.setNamespace("default");
-                rc.setReplicas(String.valueOf(deployContainer.getReplicas()));
-                Map<String, String> selectors = service.getSpec().getSelector();
-                rc.setSelector(JSONObject.fromObject(selectors).toString());
-                Map<String, String> template = new HashMap<>();
-//                template.put("metadata", JSONObject.fromObject(replicationController.getMetadata()).toString());
-//                template.put("spec",JSONObject.fromObject(replicationController.getSpec()).toString());
-                rc.setTemplate(JSONObject.fromObject(replicationController.getSpec().getTemplate()).toString());
-                rc.setCreate_time(nowStr);
-                rc.setUpdate_time(nowStr);
-                svc.setUuid(UuidUtil.getUUID());
-                svc.setDeployment_uuid(deployment.getDeploy_uuid());
-                svc.setName(deployedImage.getDeploy_name() + "-svc");
-                svc.setNamespace("default");
-                svc.setPorts(JSONArray.fromObject(deployContainer.getPorts()).toString());
-                svc.setType("NodeType");
-                svc.setSelector(JSONObject.fromObject(selectors).toString());
-                svc.setCreate_time(nowStr);
-                svc.setUpdate_time(nowStr);
-                LOGGE.info("[AppDeployServiceImp Error]: " + "向tl_rc和tl_svc表中增加数据");
-                if (k8sRcDao.addRc(rc)>0 && k8sServiceDao.addService(svc) > 0) {
-
-                } else {
-                    LOGGE.info("[AppDeployServiceImp Error]: " + "向tl_rc和tl_svc表中增加数据");
-                    return APIResponse.fail("向tl_rc和tl_svc表中增加数据");
-                }
-            } else {
-                LOGGE.info("[AppDeployServiceImp Error]: " + "向tl_deployment表中增加数据失败");
-                return APIResponse.fail("向tl_deployment表中增加数据失败");
+            if(deploymentDao.addDeployment(deployment)>0) {
+                return deployment;
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
+            LOGGE.info("[AppDeployServiceImp Info]: " + "向tl_deployment表中增加数据失败");
             e.printStackTrace();
-            return APIResponse.fail("向tl_deployment表中增加数据失败");
         }
         return null;
     }
 
+    /**
+     * 向tl_rc表中保存数据
+     * @param deployedApp
+     * @param deployment
+     * @param service
+     * @param replicationController
+     * @return
+     */
+    private int saveRc(DeployedApp deployedApp, Deployment deployment, io.fabric8.kubernetes.api.model.Service service, ReplicationController replicationController) {
+        K8s_Rc rc = new K8s_Rc();
+        K8s_Service svc = new K8s_Service();
+        rc.setUuid(UuidUtil.getUUID());
+        rc.setDeployment_uuid(deployment.getDeploy_uuid());
+        rc.setName(deployedApp.getDeploy_name() + "-rc");
+        rc.setNamespace("default");
+        rc.setReplicas(rc.getReplicas());
+        Map<String, String> selectors = service.getSpec().getSelector();
+        rc.setSelector(JSONObject.fromObject(selectors).toString());
+        Map<String, String> template = new HashMap<>();
+        //template.put("metadata", JSONObject.fromObject(replicationController.getMetadata()).toString());
+        //template.put("spec",JSONObject.fromObject(replicationController.getSpec()).toString());
+        rc.setTemplate(JSONObject.fromObject(replicationController.getSpec().getTemplate()).toString());
+        rc.setCreate_time(deployment.getCreate_time());
+        rc.setUpdate_time(deployment.getUpdate_time());
+        try {
+            LOGGE.info("[AppDeployServiceImp Info]: " + "向tl_rc表中增加数据");
+            return k8sRcDao.addRc(rc);
+        } catch (Exception e) {
+            LOGGE.info("[AppDeployServiceImp Info]: " + "向tl_rc表中增加数据失败");
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * 向tl_svc表中保存数据
+     * @param deployedApp
+     * @param deployment
+     * @param service
+     * @return
+     */
+    private int saveService( DeployedApp deployedApp, Deployment deployment, io.fabric8.kubernetes.api.model.Service service) {
+        K8s_Service svc = new K8s_Service();
+        svc.setUuid(UuidUtil.getUUID());
+        svc.setDeployment_uuid(deployment.getDeploy_uuid());
+        svc.setName(deployedApp.getDeploy_name() + "-svc");
+        svc.setNamespace("default");
+        svc.setPorts(JSONArray.fromObject(service.getSpec().getPorts()).toString());
+        svc.setType("NodeType");
+        svc.setSelector(JSONObject.fromObject(service.getSpec().getSelector()).toString());
+        svc.setCreate_time(deployment.getCreate_time());
+        svc.setUpdate_time(deployment.getUpdate_time());
+        try {
+            LOGGE.info("[AppDeployServiceImp Info]: " + "向tl_svc表中增加数据");
+            return k8sServiceDao.addService(svc);
+        } catch (Exception e) {
+            LOGGE.info("[AppDeployServiceImp Info]: " + "向tl_deployment表中增加数据失败");
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

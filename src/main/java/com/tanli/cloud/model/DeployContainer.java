@@ -9,7 +9,6 @@ public class DeployContainer {
     private String image_source_url;
     private Map<String, Object>[] ports;
     private int replicas;
-//    private Map<String, Object> resources;
     private Map<String, String> limits;
     private Map<String, String> requests;
     private String serviceName;
@@ -71,15 +70,6 @@ public class DeployContainer {
     public void setReplicas(int replicas) {
         this.replicas = replicas;
     }
-
-//    public Map<String, Object> getResources() {
-//        return resources;
-//    }
-//
-//    public void setResources(Map<String, Object> resources) {
-//        this.resources = resources;
-//    }
-
 
     public Map<String, String> getLimits() {
         return limits;

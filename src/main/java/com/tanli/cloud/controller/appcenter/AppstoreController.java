@@ -7,7 +7,6 @@ import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.service.AppDeployService;
 import com.tanli.cloud.service.AppStoreService;
 import com.tanli.cloud.service.ImageInfoService;
-import com.tanli.cloud.service.TemplateService;
 import com.tanli.cloud.utils.APIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -94,6 +93,7 @@ public class AppstoreController {
     @ResponseBody
     public APIResponse deployTemplate (HttpServletRequest request, DeployedTemplate deployedTemplate) {
         User user = (User) request.getSession().getAttribute("login_user");
+        appDeployService.deployTemplate(user, deployedTemplate);
         return null;
     }
 }

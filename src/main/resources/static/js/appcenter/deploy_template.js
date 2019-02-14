@@ -80,7 +80,6 @@ define([
                             memory: limits.memory.slice(0, limits.memory.length - 2),
                             memoryUnit: limits.memory.slice(limits.memory.length - 2, limits.memory.length)
                         };
-                        debugger
                         var name = _self.deployTemplateObj.config[i].appName;
                         $("#deploy_template #" + name + "cmdParam-box" + " .cmdParam-item").remove();
                         $("#deploy_template #" + name + "env_table tbody tr").remove();
@@ -96,7 +95,6 @@ define([
 
                 //增加命令参数
                 addCmdParam: function (appName, cmdParamArray) {
-                    debugger
                     cmdParamArray = cmdParamArray || [''];
                     for(var i = 0; i < cmdParamArray.length; i++) {
                         var cmdParam = cmdParamArray[i];
@@ -117,7 +115,6 @@ define([
 
                 //增加环境变量
                 addEnv: function (appName, envObj) {
-                    debugger
                     if(envObj.length==0){
                         envObj = [{name:'', value: ''}];
                     }
@@ -141,7 +138,6 @@ define([
 
                 //增加端口映射
                 addPort: function (appName, portObj, source) {
-                    debugger
                     if(portObj.length == 0 ){
                         portObj = [{portName:'', protocol:'TCP',containerPort:'',port:'',nodePort:''}];
                     }
@@ -207,49 +203,48 @@ define([
                     for(var i = 0; i < template.config.length; i++) {
                         var container = {};
                         var imageName = template.config[i].appName;
-                        var tabId = "config" + imageName;
+                        var configTabId = "config" + imageName;
+                        var resourceTab = "resource" + imageName;
+                        container.imageName = imageName;
                         container.image_source_url = template.config[i].source_url;
-                        container.resources = {
-                            limits: {
-                                "cpu": $("#" + tabId + " input[name='maxcpu']").val(),
-                                "memory": $("#" + tabId + " input[name='maxMemory']").val() + $("#" + tabId + " select[name='maxMemoryUnit']").val()
-                            },
-                            requests : {
-                                "cpu": $("#" + tabId + " input[name='mincpu']").val(),
-                                "memory": $("#" + tabId + " input[name='minMemory']").val() + $("#" + tabId + " select[name='minMemoryUnit']").val()
-                            }
+                        container.limits = {
+                            "cpu": $("#" + resourceTab + " input[name='maxcpu']").val(),
+                            "memory": $("#" + resourceTab + " input[name='maxMemory']").val() + $("#" + resourceTab + " select[name='maxMemoryUnit']").val()
                         };
-                        container.serviceName = $("#" + tabId + " input[name='serviceName']").val();
-                        container.replicas = $("#" + tabId + " input[name='instanceCount']").val();
-                        container.workingDir = $("#" + tabId + " input[name='volumeDir']").val();
-                        container.command = $("#" + tabId + " input[name='cmd']").val().split(",");
+                        container.requests = {
+                                "cpu": $("#" + resourceTab + " input[name='mincpu']").val(),
+                                "memory": $("#" + resourceTab + " input[name='minMemory']").val() + $("#" + resourceTab + " select[name='minMemoryUnit']").val()
+                            };
+                        container.serviceName = $("#" + configTabId + " input[name='serviceName']").val();
+                        container.replicas = $("#" + configTabId + " input[name='instanceCount']").val();
+                        container.workingDir = $("#" + configTabId + " input[name='volumeDir']").val();
+                        container.command = $("#" + configTabId + " input[name='cmd']").val().split(",");
                         container.args = [];
-                        $("#" + tabId).find("input[name='cmdParam']").each(function (index, ele) {
+                        $("#" + configTabId).find("input[name='cmdParam']").each(function (index, ele) {
                             var value = $(ele).val();
                             if(value){
                                 container.args.push(value);
                             }
                         });
                         container.env = [];
-                        $("#" + tabId + " #" + imageName + "env_table").find("tr").each(function (index, ele) {
+                        $("#" + configTabId + " #" + imageName + "env_table tbody").find("tr").each(function (index, ele) {
                             var temp = {};
                             temp.name = $($(ele).find("input[name='envKey']")[0]).val();
                             temp.value = $($(ele).find("input[name='envValue']")[0]).val();
                             container.env.push(temp);
                         });
                         container.ports = [];
-                        $("#" + tabId + " #" + imageName + "port_table").find("tr").each(function (index, ele) {
+                        $("#" + configTabId + " #" + imageName + "port_table tbody").find("tr").each(function (index, ele) {
                             var port = {};
                             port.name = $($(ele).find("input[name='portName']")[0]).val();
-                            port.nodePort = $($(ele).find("select[name='nodePort']")[0]).val();
+                            port.nodePort = $($(ele).find("input[name='nodePort']")[0]).val();
                             port.port = $($(ele).find("input[name='port']")[0]).val();
-                            port.protocol = $($(ele).find("input[name='protocol']")[0]).val();
+                            port.protocol = $($(ele).find("select[name='protocol']")[0]).val();
                             port.targetPort = $($(ele).find("input[name='containerPort']")[0]).val();
                             container.ports.push(port);
                         });
                         containers.push(container);
                     }
-                    debugger
                     formdata.append("containers", JSON.stringify(containers));
                     return formdata;
                 }
