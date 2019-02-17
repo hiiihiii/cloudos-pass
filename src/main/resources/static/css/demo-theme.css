@@ -108,7 +108,8 @@ label.error{
 #system_role,
 #system_user,
 #apporch,
-#k8s_node {
+#k8s_node,
+#application {
     padding-top: 100px;
 }
 .dataTables_info{

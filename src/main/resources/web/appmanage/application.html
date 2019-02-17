@@ -6,7 +6,47 @@
 </head>
 <body>
 <div th:replace="common/nav::menu"></div>
-<div id="application"></div>
+<div id="application">
+    <div class="operate-box col-md-12 col-sm-12 col-xs-12">
+        <div class="btn cloud-btn" v-cloak="" v-on:click=""><i class="fa fa-plus"></i>增加</div>
+        <div class="btn cloud-btn" v-cloak="" v-on:click=""><i class="fa fa-trash"></i>删除</div>
+        <div class="btn cloud-btn" v-cloak="" v-on:click=""><i class="fa fa-refresh"></i>刷新</div>
+    </div>
+    <table class="table" id="app_table">
+        <thead class="">
+        <tr>
+            <th>
+                <div class="checkbox-container table-checkbox-box" v-on:click="checkAll($event)">
+                    <input class="cloud-checkbox" type="checkbox"/>
+                </div>
+            </th>
+            <th>用户名</th>
+            <th>用户类型</th>
+            <th>邮箱</th>
+            <th>联系方式</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--<tr v-for="user in userInfos" v-cloak="" v-bind:id="user.user_uuid">-->
+            <!--<td>-->
+                <!--<div class="checkbox-container table-checkbox-box" v-cloak="" v-on:click="checkOne($event)">-->
+                    <!--<input class="cloud-checkbox" type="checkbox"/>-->
+                <!--</div>-->
+            <!--</td>-->
+            <!--<td v-cloak="">{{user.userName}}</td>-->
+            <!--<td v-cloak="">{{user.role_name}}</td>-->
+            <!--<td v-cloak="">{{user.email}}</td>-->
+            <!--<td v-cloak="">{{user.telephone}}</td>-->
+            <!--<td v-cloak="">-->
+                <!--<span class="operate-btn" title="编辑"><i class="fa fa-pencil"></i></span>-->
+                <!--<span class="operate-btn" title="删除" v-cloak=""-->
+                      <!--v-on:click="deleteByIds($event, 'one')"><i class="fa fa-trash-o"></i></span>-->
+            <!--</td>-->
+        <!--</tr>-->
+        </tbody>
+    </table>
+</div>
 <div th:replace="common/footer::footer"></div>
 <script type="text/javascript">
     require(["../js/require-config"],function (require_config) {

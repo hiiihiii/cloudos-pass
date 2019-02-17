@@ -30,6 +30,10 @@ define([
                 $("#system-menu").addClass("parent-menu-selected");
                 $("#kubernetes-node").addClass("child-menu-selected");
                 break;
+            case "/application":
+                $("#service-menu").addClass("parent-menu-selected");
+                $("#application-menu").addClass("child-menu-selected");
+                break;
         }
     }
     //头部菜单的事件
@@ -57,7 +61,7 @@ define([
         $(this).addClass("child-menu-selected");
         $(this).parents(".parent-menu").addClass("parent-menu-selected");
         var id = this.getAttribute("id");
-        switch(id){
+        switch(id){//id是<a>标签的id
             case "appstore-menu":
                 sessionStorage.currentMenu = "应用仓库";
                 sessionStorage.href = "/appcenter";
@@ -78,6 +82,9 @@ define([
                 sessionStorage.currentMenu = "节点";
                 sessionStorage.href = "/kubernetes";
                 break;
+            case "application-menu":
+                sessionStorage.currentMenu = "应用实例";
+                sessionStorage.href = "/application";
         }
     });
 
