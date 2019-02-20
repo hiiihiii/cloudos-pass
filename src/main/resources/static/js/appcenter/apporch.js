@@ -50,11 +50,11 @@ define([
                                 console.log(_self.templateList);
                                 common_module.notify("[应用编排]", "获取模板信息成功","success");
                             } else{
-                                common_module.notify("[应用编排]", "获取模板信息成功","success");
+                                common_module.notify("[应用编排]", "获取模板信息失败","danger");
                             }
                         },
                         error: function () {
-                            common_module.notify("[应用编排]", "获取模板信息成功","success");
+                            common_module.notify("[应用编排]", "获取模板信息失败","danger");
                         }
                     });
                 },

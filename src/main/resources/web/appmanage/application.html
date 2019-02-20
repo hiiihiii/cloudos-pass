@@ -20,32 +20,38 @@
                     <input class="cloud-checkbox" type="checkbox"/>
                 </div>
             </th>
-            <th>用户名</th>
-            <th>用户类型</th>
-            <th>邮箱</th>
-            <th>联系方式</th>
+            <th>部署名称</th>
+            <th>运行状态</th>
+            <th>部署来源</th>
+            <th>来源名称</th>
+            <th>更新时间</th>
             <th>操作</th>
         </tr>
         </thead>
         <tbody>
-        <!--<tr v-for="user in userInfos" v-cloak="" v-bind:id="user.user_uuid">-->
-            <!--<td>-->
-                <!--<div class="checkbox-container table-checkbox-box" v-cloak="" v-on:click="checkOne($event)">-->
-                    <!--<input class="cloud-checkbox" type="checkbox"/>-->
-                <!--</div>-->
-            <!--</td>-->
-            <!--<td v-cloak="">{{user.userName}}</td>-->
-            <!--<td v-cloak="">{{user.role_name}}</td>-->
-            <!--<td v-cloak="">{{user.email}}</td>-->
-            <!--<td v-cloak="">{{user.telephone}}</td>-->
-            <!--<td v-cloak="">-->
-                <!--<span class="operate-btn" title="编辑"><i class="fa fa-pencil"></i></span>-->
-                <!--<span class="operate-btn" title="删除" v-cloak=""-->
-                      <!--v-on:click="deleteByIds($event, 'one')"><i class="fa fa-trash-o"></i></span>-->
-            <!--</td>-->
-        <!--</tr>-->
+        <tr v-for="app in appInsInfos" v-cloak="" v-bind:id="app.deploy_uuid">
+            <td>
+                <div class="checkbox-container table-checkbox-box" v-cloak="" v-on:click="checkOne($event)">
+                    <input class="cloud-checkbox" type="checkbox"/>
+                </div>
+            </td>
+            <td v-cloak="">{{app.deploy_name}}</td>
+            <td v-cloak="">{{app.status}}</td>
+            <td v-cloak="">{{app.source_type}}</td>
+            <td v-cloak="">{{app.source_name}}</td>
+            <td v-cloak="">{{app.update_time}}</td>
+            <td v-cloak="">
+                <span class="operate-btn" title="启动"><i class="fa fa-pencil"></i></span>
+                <span class="operate-btn" title="停止"><i class="fa fa-pencil"></i></span>
+                <span class="operate-btn" title="删除" v-cloak=""
+                      v-on:click=""><i class="fa fa-trash-o"></i></span>
+            </td>
+        </tr>
         </tbody>
     </table>
+    <div id="serviceDetail">
+
+    </div>
 </div>
 <div th:replace="common/footer::footer"></div>
 <script type="text/javascript">

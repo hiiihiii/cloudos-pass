@@ -5,4 +5,20 @@
         INSERT INTO tl_svc (uuid, deployment_uuid, name, namespace, ports, selector, type, create_time, update_time)
         VALUES (#{uuid}, #{deployment_uuid}, #{name}, #{namespace}, #{ports}, #{selector}, #{type}, #{create_time}, #{update_time})
     </insert>
+
+    <resultMap id="services" type="com.tanli.cloud.model.K8s_Service">
+        <id column="uuid" property="uuid"></id>
+        <result column="deployment_uuid" property="deployment_uuid"></result>
+        <result column="name" property="name"></result>
+        <result column="namespace" property="namespace"></result>
+        <result column="ports" property="ports"></result>
+        <result column="selector" property="selector"></result>
+        <result column="type" property="type"></result>
+        <result column="create_time" property="create_time"></result>
+        <result column="update_time" property="update_time"></result>
+    </resultMap>
+
+    <select id="getAllService" resultMap="services">
+        SELECT * FROM tl_svc
+    </select>
 </mapper>

@@ -31,4 +31,6 @@ public class EnvConst {
     public static final String k8s_api_port = "8080";
     public static final String k8s_api_prefix = "http://132.232.99.189:8080/api/v1/";
 
+    public static final String vip = "132.232.56.2";//虚ip，最好是可以动态获取
+
 }
