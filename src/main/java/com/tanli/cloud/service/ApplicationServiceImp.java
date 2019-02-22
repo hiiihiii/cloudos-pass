@@ -66,6 +66,7 @@ public class ApplicationServiceImp implements ApplicationService{
                             .orElse(null);
                     r_deployment.setSource_name(template.getTemplateName());
                 }
+                //根据相关的所有pod设置status
                 r_deployments.add(r_deployment);
             });
             return APIResponse.success(r_deployments);
