@@ -33,4 +33,11 @@ public class ApplicationController {
         User user = (User) request.getSession().getAttribute("login_user");
         return applicationService.getApplications(user);
     }
+
+    @RequestMapping(value = "serviceInfo")
+    @ResponseBody
+    public APIResponse getServiceInfo(HttpServletRequest request, String deployId) {
+        User user = (User) request.getSession().getAttribute("login_user");
+        return applicationService.getServiceInfo(user, deployId);
+    }
 }

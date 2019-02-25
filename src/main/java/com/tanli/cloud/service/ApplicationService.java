@@ -8,4 +8,5 @@ import com.tanli.cloud.utils.APIResponse;
  */
 public interface ApplicationService {
     public APIResponse getApplications(User user);
+    public APIResponse getServiceInfo(User user, String deployid);
 }

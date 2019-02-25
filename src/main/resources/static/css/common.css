@@ -612,7 +612,8 @@ span.checkbox+a{
 #system_role .operate-box,
 #system_user .operate-box,
 #apporch .operate-box,
-#k8s_node .operate-box{
+#k8s_node .operate-box,
+#application .operate-box {
     background-color: #eeeeee;
     margin-bottom: 10px;
     padding: 5px 15px;
@@ -870,3 +871,27 @@ span.checkbox+a{
     height: 310px;
 }
 /*增加用户结束*/
+/*应用实例开始*/
+#application #serviceDetail {
+    position: absolute;
+    width: 700px;
+    height:82%;
+    right: 0;
+    top: 102px;
+    background: white;
+    border: 1px solid #ddd;
+    box-shadow: 0px 0px 8px #ddd;
+}
+#application #serviceDetail .operate-box {
+    background: white;
+    box-shadow: none;
+    cursor: pointer;
+    padding: 9px 15px;
+}
+#application #service_table {
+    /*margin: 5px;*/
+}
+#application #serviceDetail #detailTab {
+    border-bottom: 1px solid #ec670b;
+}
+/*应用实例结束*/

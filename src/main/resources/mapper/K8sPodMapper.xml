@@ -4,7 +4,7 @@
 
     <insert id="addPod" parameterType="com.tanli.cloud.model.K8s_Pod">
         INSERT INTO tl_pod (uuid, rc_uuid, svc_uuid, name, namespace, hostIP, podIP, restartCount, image, status, create_time, update_time)
-        VALUES (#{uuid}, #{rc_uuid}, #{svc_uuid}, #{name}, #{namespace}, #{hostIP}, #{podIP}, #{restartCount}, #{image}, #{status}, #{update_time})
+        VALUES (#{uuid}, #{rc_uuid}, #{svc_uuid}, #{name}, #{namespace}, #{hostIP}, #{podIP}, #{restartCount}, #{image}, #{status},#{create_time}, #{update_time})
     </insert>
 
 </mapper>

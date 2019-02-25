@@ -46,6 +46,7 @@ define([
                         dataType: "json",
                         success: function(data){
                             if(data.code === "success"){
+                                debugger
                                 _self.templateList = _self.convertData(data.data);
                                 console.log(_self.templateList);
                                 common_module.notify("[应用编排]", "获取模板信息成功","success");

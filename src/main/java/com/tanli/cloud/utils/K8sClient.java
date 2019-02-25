@@ -77,7 +77,7 @@ public class K8sClient {
         svcSpec.setType("NodePort");
         service.setSpec(svcSpec);
 
-//        this.client.services().create(service);
+        this.client.services().create(service);
         return service;
     }
 
@@ -161,7 +161,7 @@ public class K8sClient {
         rcSpec.setTemplate(podTemplateSpec);
         rc.setSpec(rcSpec);
 
-//        this.client.replicationControllers().create(rc);
+        this.client.replicationControllers().create(rc);
         return rc;
     }
 
@@ -179,5 +179,9 @@ public class K8sClient {
             }
         }
         return targetPods;
+    }
+
+    public List<Node> getNode() {
+        return this.client.nodes().list().getItems();
     }
 }

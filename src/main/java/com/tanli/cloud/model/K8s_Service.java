@@ -5,11 +5,20 @@ public class K8s_Service {
     private String deployment_uuid;
     private String name;
     private String namespace;
+    private String ip;
     private String ports;
     private String selector;
     private String type;
     private String create_time;
     private String update_time;
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
 
     public String getUuid() {
         return uuid;

@@ -8,7 +8,7 @@
 <div th:replace="common/nav::menu"></div>
 <div id="application">
     <div class="operate-box col-md-12 col-sm-12 col-xs-12">
-        <div class="btn cloud-btn" v-cloak="" v-on:click=""><i class="fa fa-plus"></i>增加</div>
+        <!--<div class="btn cloud-btn" v-cloak="" v-on:click=""><i class="fa fa-plus"></i>增加</div>-->
         <div class="btn cloud-btn" v-cloak="" v-on:click=""><i class="fa fa-trash"></i>删除</div>
         <div class="btn cloud-btn" v-cloak="" v-on:click=""><i class="fa fa-refresh"></i>刷新</div>
     </div>
@@ -22,6 +22,7 @@
             </th>
             <th>部署名称</th>
             <th>运行状态</th>
+            <th>描述</th>
             <th>部署来源</th>
             <th>来源名称</th>
             <th>更新时间</th>
@@ -35,14 +36,16 @@
                     <input class="cloud-checkbox" type="checkbox"/>
                 </div>
             </td>
-            <td v-cloak="">{{app.deploy_name}}</td>
-            <td v-cloak="">{{app.status}}</td>
-            <td v-cloak="">{{app.source_type}}</td>
-            <td v-cloak="">{{app.source_name}}</td>
-            <td v-cloak="">{{app.update_time}}</td>
+            <td v-cloak="" v-on:click="getServiceDetail($event, app.deploy_uuid)"
+                title="app.deploy_name" style="color: blue; cursor: pointer;">{{app.deploy_name}}</td>
+            <td v-cloak="" title="app.status">{{app.status}}</td>
+            <td v-cloak="" title="app.description">{{app.description}}</td>
+            <td v-cloak="" title="app.source_type">{{app.source_type}}</td>
+            <td v-cloak="" title="app.source_name">{{app.source_name}}</td>
+            <td v-cloak="" title="app.update_time">{{app.update_time}}</td>
             <td v-cloak="">
-                <span class="operate-btn" title="启动"><i class="fa fa-pencil"></i></span>
-                <span class="operate-btn" title="停止"><i class="fa fa-pencil"></i></span>
+                <span class="operate-btn" title="启动"><i class="fa fa-play-circle-o"></i></span>
+                <span class="operate-btn" title="停止"><i class="fa fa-stop-circle-o"></i></span>
                 <span class="operate-btn" title="删除" v-cloak=""
                       v-on:click=""><i class="fa fa-trash-o"></i></span>
             </td>
@@ -50,7 +53,43 @@
         </tbody>
     </table>
     <div id="serviceDetail">
-
+        <div class="operate-box">
+            <span title="关闭"><i class="fa fa-angle-right"></i></span>
+        </div>
+        <ul id="detailTab" class="nav nav-tabs">
+            <li class="active" v-cloak="" >
+                <a data-toggle="tab" href="#serviceInfo-box">服务</a>
+            </li>
+            <li v-cloak="">
+                <a data-toggle="tab" href="#pod-box">Pod</a>
+            </li>
+        </ul>
+        <div class="service-detail-content tab-content">
+            <div id="serviceInfo-box" class="tab-pane fade in active">
+                <table id="service_table" class="table">
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>状态</th>
+                        <th>访问IP</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="service in serviceInfos">
+                        <td v-cloak="">{{service.name}}</td>
+                        <td v-cloak=""><i class="fa fa-check-circle"></i>{{service.status}}</td>
+                        <td v-cloak="">{{service.ips}}</td>
+                        <td v-cloak="">
+                            <span title=""><i class=""></i></span>
+                            <!--<span title=""><i class=""></i></span>-->
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="pod-box" class="tab-pane fade"></div>
+        </div>
     </div>
 </div>
 <div th:replace="common/footer::footer"></div>

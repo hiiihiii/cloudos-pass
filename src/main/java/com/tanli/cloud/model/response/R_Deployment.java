@@ -11,6 +11,15 @@ public class R_Deployment {
     private String update_time;
     private String deploy_uuid;
     private String user_uuid;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getUser_uuid() {
         return user_uuid;

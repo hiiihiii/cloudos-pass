@@ -9,8 +9,7 @@ import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.utils.APIResponse;
 import com.tanli.cloud.utils.K8sClient;
 import com.tanli.cloud.utils.UuidUtil;
-import io.fabric8.kubernetes.api.model.Pod;
-import io.fabric8.kubernetes.api.model.ReplicationController;
+import io.fabric8.kubernetes.api.model.*;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.joda.time.DateTime;
@@ -144,7 +143,7 @@ public class AppDeployServiceImp implements AppDeployService {
         DateTime now = DateTime.now();
         String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
         deployment.setCreate_time(nowStr);
-        deployment.setUser_uuid(nowStr);
+        deployment.setUpdate_time(nowStr);
         try {
             LOGGE.info("[AppDeployServiceImp Info]: " + "向tl_deployment表中增加数据");
             if(deploymentDao.addDeployment(deployment)>0) {
@@ -212,6 +211,14 @@ public class AppDeployServiceImp implements AppDeployService {
         svc.setSelector(JSONObject.fromObject(service.getSpec().getSelector()).toString());
         svc.setCreate_time(deployment.getCreate_time());
         svc.setUpdate_time(deployment.getUpdate_time());
+        K8sClient k8sClient = new K8sClient();
+        List<NodeAddress> ips = k8sClient.getNode().get(0).getStatus().getAddresses();
+        for(int i = 0 ; i < ips.size(); i++) {
+            if(ips.get(i).getType().equals("LegacyHostIP")) {
+                svc.setIp(ips.get(i).getAddress());
+                break;
+            }
+        }
         try {
             LOGGE.info("[AppDeployServiceImp Info]: " + "向tl_svc表中增加数据");
             if( k8sServiceDao.addService(svc) > 0 ){
