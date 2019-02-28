@@ -21,28 +21,28 @@
                                 <li class="info-item"
                                     v-bind:class="infoTag == 'configInfo' ? 'info-item-selected' : ''">配置信息</li>
                                 <li class="info-item"
-                                    v-bind:class="infoTag == 'runtimeInfo' ? 'info-item-selected' : ''">环境要求</li>
+                                    v-bind:class="infoTag == 'runtimeInfo' ? 'info-item-selected' : ''">资源要求</li>
                             </ul>
                         </div>
                         <div class="modal-body-right">
                             <div class="base-info" v-show="infoTag == 'baseInfo'" v-cloak="">
                                 <!--应用名称-->
                                 <div class="form-group">
-                                    <label>名称</label>
+                                    <label><span class="cloud-required">  *</span>名称</label>
                                     <div>
                                         <input type="text" class="form-control" id="appName" name="appName" placeholder="请输入名称" maxlength="64"/>
                                     </div>
                                 </div>
                                 <!--是否公有-->
                                 <div class="form-group">
-                                    <label>是否公有</label>
+                                    <label><span class="cloud-required">  *</span>是否公有</label>
                                     <div id="isPublic" class="switch">
                                         <input type="checkbox" class="form-control" />
                                     </div>
                                 </div>
                                 <!--图标-->
                                 <div class="form-group">
-                                    <label>图标</label>
+                                    <label><span class="cloud-required">  *</span>图标</label>
                                     <div class="file-container">
                                         <input class="form-control file-input" type="text" name="logoFileName"
                                                v-model="bindData.logoFileName" readonly="readonly" />
@@ -52,14 +52,14 @@
                                 </div>
                                 <!--版本-->
                                 <div class="form-group">
-                                    <label >版本</label>
+                                    <label><span class="cloud-required">  *</span>版本</label>
                                     <div>
                                         <input class="form-control" type="text" name="version" id="version"/>
                                     </div>
                                 </div>
                                 <!--标签-->
                                 <div class="form-group">
-                                    <label >标签</label>
+                                    <label><span class="cloud-required">  *</span>标签</label>
                                     <div>
                                         <select class="select2" name="appTag"  v-on:change="tagChange">
                                             <option v-for="(val, key) in definedAppTag" v-bind:value="key">{{key}}</option>
@@ -86,7 +86,7 @@
                             <div class="config-info" v-show="infoTag == 'configInfo'" v-cloak="">
                                 <!--源文件-->
                                 <div class="form-group">
-                                    <label>源文件</label>
+                                    <label><span class="cloud-required">  *</span>源文件</label>
                                     <div class="file-container">
                                         <input class="form-control file-input" type="text" name="sourceFileName"
                                                v-model="bindData.sourceFileName" readonly="readonly" />
@@ -140,7 +140,7 @@
                                 </div>
                                 <!--端口映射-->
                                 <div class="form-group port-form-group" >
-                                    <label>端口映射</label>
+                                    <label><span class="cloud-required">  *</span>端口映射</label>
                                     <span v-on:click="addPort"><i class="fa fa-plus"></i></span>
                                     <div class="modal-table-box">
                                         <table class="table cloud-modal-table" id="port_table">
@@ -178,13 +178,13 @@
                                     <label >启动限制</label>
                                 </div>
                                 <div class="form-group">
-                                    <label >CPU</label>
+                                    <label ><span class="cloud-required">  *</span>CPU</label>
                                     <div>
                                         <input class="form-control" type="text" name="mincpu"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label >内存</label>
+                                    <label><span class="cloud-required">  *</span>内存</label>
                                     <div>
                                         <input class="form-control runtime-input" type="text" name="minMemory"/>
                                         <select class="form-control runtime-select" name="minMemoryUnit">
@@ -197,13 +197,13 @@
                                     <label >运行限制</label>
                                 </div>
                                 <div class="form-group">
-                                    <label >CPU</label>
+                                    <label><span class="cloud-required">  *</span>CPU</label>
                                     <div>
                                         <input class="form-control" type="text" name="maxcpu"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label >内存</label>
+                                    <label><span class="cloud-required">  *</span>内存</label>
                                     <div>
                                         <input class="form-control runtime-input" type="text" name="maxMemory"/>
                                         <select class="form-control runtime-select" name="maxMemoryUnit">

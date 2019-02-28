@@ -218,3 +218,6 @@ table.dataTable.no-footer {
     background: #eeeeee;
     border: none;
 }
+.cloud-required {
+    color: red;
+}

@@ -895,3 +895,14 @@ span.checkbox+a{
     border-bottom: 1px solid #ec670b;
 }
 /*应用实例结束*/
+/*删除镜像开始*/
+#imageVersion .cloud-modal-body {
+    height: 150px;
+}
+#imageVersion .version-item {
+    display: inline-block;
+}
+#imageVersion .cloud-checkbox {
+    margin: 0 5px;
+}
+/*删除镜像结束*/

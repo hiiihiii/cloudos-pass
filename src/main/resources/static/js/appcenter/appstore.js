@@ -411,6 +411,24 @@ define([
                     });
                 },
 
+                showImageVersions: function () {
+                    debugger;
+                    var _self = this;
+                    var image = _self.selectedImage;
+                    console.log(image);
+                    var versionStr = "";
+                    for(var i = 0; i< image.version.length; i++ ) {
+                        versionStr +=
+                            "<div class='version-item'>" +
+                                "<input type='checkbox' class='cloud-checkbox' value='" + image.version[i] + "'/>"+
+                                "<span>" + image.version[i] + "</span>" +
+                            "</div>";
+                    }
+                    $("#imageVersion .version-box").append(versionStr);
+                    $("#imageVersion").modal({backdrop: 'static', keyboard: false});
+
+                },
+
                 closeAppDetail: function () {
                     $("#appstore .app-detail").css("display", "none");
                 }

@@ -59,7 +59,7 @@
             <div class="tool-box col-lg-12">
                 <div class="col-lg-8 operation">
                     <div class="btn cloud-btn" v-on:click="showUploadDialog" v-cloak=""><i class="fa fa-plus"></i>上传镜像</div>
-                    <div class="btn cloud-btn">构建镜像</div>
+                    <!--<div class="btn cloud-btn">构建镜像</div>-->
                     <div class="btn cloud-btn" v-on:click="refreshRepo" v-cloak=""><i class="fa fa-refresh"></i>刷新</div>
                 </div>
                 <div class="col-lg-4"></div>
@@ -84,6 +84,7 @@
                                 <div class="app-deploy" title="部署" v-on:click="showDeployImage(imageInfo.app_id)">
                                     <i class="fa fa-toggle-right"></i>
                                 </div>
+                                <!--<div class="app-delete" title="删除"></div>-->
                                 <div class="app-img">
                                     <img v-bind:src="imageInfo.logo_url" v-on:error="setDefault($event)" v-cloak=""/>
                                 </div>
@@ -131,9 +132,19 @@
                                 <a data-toggle="tab" href="#templateConfig">配置信息</a>
                             </li>
                         </ul>
-                        <div class="operation-box">
-                            <span><i class="fa fa-toggle-right"></i>部署</span>
-                            <span><i class="fa fa-trash-o"></i>删除</span>
+                        <!--应用详情页面 镜像 部署和删除-->
+                        <div v-show="imageDetail">
+                            <div class="operation-box">
+                                <span><i class="fa fa-toggle-right"></i>部署</span>
+                                <span v-on:click="showImageVersions"><i class="fa fa-trash-o"></i>删除</span>
+                            </div>
+                        </div>
+                        <!--应用详情页面 模板 部署和删除-->
+                        <div v-show="templateDetail">
+                            <div class="operation-box">
+                                <span><i class="fa fa-toggle-right"></i>部署</span>
+                                <span><i class="fa fa-trash-o"></i>删除</span>
+                            </div>
                         </div>
                         <div class="close-box">
                             <button type="button" class="close" v-on:click="closeAppDetail">&times;</button>
@@ -394,6 +405,25 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--显示镜像版本的对话框-->
+        <div id="imageVersion_dialog">
+            <div class="modal fade" id="imageVersion" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <div class="cloud-modal-title">
+                                <i class="fa fa-plus"></i>
+                                <h4 class="modal-title">删除镜像</h4>
+                            </div>
+                        </div>
+                        <div class="modal-body cloud-modal-body">
+                            <div class="version-box"></div>
                         </div>
                     </div>
                 </div>
