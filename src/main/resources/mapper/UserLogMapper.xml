@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tanli.cloud.dao.UserLogDao">
+
+    <insert id="addUserLog" parameterType="com.tanli.cloud.model.UserLog">
+        INSERT INTO tl_log(uuid, user_uuid, username, resource, operation, create_time)
+        VALUES (#{uuid}, #{user_id}, #{username}, #{resoureType}, #{operation}, #{create_time})
+    </insert>
+
+    <resultMap id="userLogs" type="com.tanli.cloud.model.UserLog">
+        <id column="uuid" property="uuid"></id>
+        <result column="user_uuid" property="user_id"></result>
+        <result column="username" property="username"></result>
+        <result column="resource" property="resoureType"></result>
+        <result column="operation" property="operation"></result>
+        <result column="create_time" property="create_time"></result>
+    </resultMap>
+
+    <select id="getUserLogs" resultMap="userLogs">
+        SELECT * from tl_log
+    </select>
+</mapper>
