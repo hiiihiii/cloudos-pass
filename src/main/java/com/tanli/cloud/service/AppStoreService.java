@@ -14,4 +14,6 @@ public interface AppStoreService {
     public APIResponse checkAppExist(User user, String appName, String version, String repoType);
 
     public APIResponse getTemplates(User user, String repoType);
+
+    public APIResponse deleteImageInfo(User user, String[] versions, String imageId);
 }

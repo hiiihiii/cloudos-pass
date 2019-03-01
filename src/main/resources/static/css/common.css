@@ -897,7 +897,7 @@ span.checkbox+a{
 /*应用实例结束*/
 /*删除镜像开始*/
 #imageVersion .cloud-modal-body {
-    height: 150px;
+    height: 110px;
 }
 #imageVersion .version-item {
     display: inline-block;

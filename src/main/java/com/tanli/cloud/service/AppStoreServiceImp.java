@@ -16,10 +16,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -182,7 +179,7 @@ public class AppStoreServiceImp implements AppStoreService {
      * @param sourceFile 待load的镜像文件
      * @return 加载到的镜像文件名称或镜像ID
      */
-    public String loadImage(String url, MultipartFile sourceFile){
+    private String loadImage(String url, MultipartFile sourceFile){
         String image = "";
         try {
             LOGGE.info("[AppStoreServiceImp Info]: POST " + url);
@@ -214,7 +211,7 @@ public class AppStoreServiceImp implements AppStoreService {
      * @param repoName
      * @return
      */
-    public Boolean tagImage(String url, ImageInfo imageInfo, String repoName){
+    private Boolean tagImage(String url, ImageInfo imageInfo, String repoName){
         Boolean result = false;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -237,12 +234,12 @@ public class AppStoreServiceImp implements AppStoreService {
      * @param tag 标签tag
      * @return
      */
-    public Boolean pushImage(String url, String tag){
+    private Boolean pushImage(String url, String tag){
         Boolean result = false;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         try {
-            String authStr = "{ \"username\": \"admin\", \"password\": \"Harbor12345\", \"serveraddress\": \"132.232.140.33\" }";
+            String authStr = "{ \"username\": \"admin\", \"password\": \"Harbor12345\", \"serveraddress\": \"132.232.93.3\" }";
             String authStr_base64 = Base64.getEncoder().encodeToString(authStr.getBytes("utf-8"));
             headers.set("X-Registry-Auth", authStr_base64);
             MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
@@ -260,6 +257,49 @@ public class AppStoreServiceImp implements AppStoreService {
             e.printStackTrace();
         } catch (HttpClientErrorException e){
             LOGGE.info("[AppStoreServiceImp Error]: " + "tag镜像失败");
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * 删除镜像指定tag
+     * @param url
+     * @return
+     */
+    private Boolean deleteImage(String url) {
+        Boolean result = false;
+        try {
+            LOGGE.info("[AppStoreServiceImp Info]: DELETE " + url);
+            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE,null, String.class);
+            if(responseEntity.getStatusCode().toString().equals("200")) {
+                result = true;
+            } else {
+                result = false;
+            }
+        } catch (Exception e) {
+            result = false;
+            LOGGE.info("[AppStoreServiceImp Error]: " + "删除镜像失败, Url: " + url);
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private Boolean deleteImageTag_harbor(String repo_name, String tag) {
+        Boolean result = false;
+        String url = EnvConst.harbor_api_prefix + "repositories?repo_name" + repo_name + "&tag=" + tag;
+        HttpHeaders headers = new HttpHeaders();
+        String authBase_origin = (EnvConst.harbor_username+ ":"+EnvConst.harbor_password);
+        try {
+            String authStr_base64 = Base64.getEncoder().encodeToString(authBase_origin.getBytes("utf-8"));
+            headers.set("Authorization", authStr_base64);
+            HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(null, headers);
+            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, httpEntity,String.class);
+            if(responseEntity.getStatusCode().toString().equals("200")) {
+                result = true;
+            }
+        } catch (UnsupportedEncodingException e) {
+            LOGGE.info("[AppStoreServiceImp Error]: " + "认证失败，删除失败");
             e.printStackTrace();
         }
         return result;
@@ -308,5 +348,55 @@ public class AppStoreServiceImp implements AppStoreService {
             }
         }
         return APIResponse.success(templateList);
+    }
+
+    @Override
+    public APIResponse deleteImageInfo(User user, String[] versions, String imageId) {
+        //整合数据库
+        ImageInfo exist = imageInfoDao.getImagesAll(user.getUser_uuid())
+                .stream()
+                .filter(imageInfo -> imageInfo.getApp_id().equals(imageId))
+                .findFirst()
+                .orElse(null);
+        if(exist != null) {
+            List<String> existVersoins = JSONArray.toList(JSONArray.fromObject(exist.getVersion()), String.class);
+            Map<String, String> v_desc = JSONObject.fromObject(exist.getV_description());
+            Map<String, String> metadata = JSONObject.fromObject(exist.getMetadata());
+            Map<String, String> create_type = JSONObject.fromObject(exist.getCreateType());
+            Map<String, String> source_urls= JSONObject.fromObject(exist.getSource_url());
+            if (existVersoins.size() == versions.length) {
+                //int count = imageInfoDao.deleteImageById(imageId);
+            } else {
+                for(int i = 0; i <versions.length; i++) {
+                    v_desc.remove(versions[i]);
+                    metadata.remove(versions[i]);
+                    create_type.remove(versions[i]);
+                    existVersoins.remove(versions[i]);
+                    source_urls.remove(versions[i]);
+                }
+                exist.setV_description(JSONObject.fromObject(v_desc).toString());
+                exist.setMetadata(JSONObject.fromObject(metadata).toString());
+                exist.setCreateType(JSONObject.fromObject(create_type).toString());
+                exist.setVersion(JSONArray.fromObject(existVersoins).toString());
+                DateTime now = DateTime.now();
+                String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+                exist.setUpdate_time(nowStr);
+                //int count = imageInfoDao.updateImageInfo(exist);
+            }
+            //调用Docker API, Harbor API
+            for(int i = 0; i<versions.length; i++) {
+                // docker remove api
+                deleteImage(EnvConst.docker_images_prefix + source_urls.get(versions[i]));
+                // harbor api
+                String temp_source_url = source_urls.get(versions[i]);
+                String[] temps= temp_source_url.split("/");
+                String repo_name = temps[1] + "/" + temps[2].split(":")[0];
+                deleteImageTag_harbor( repo_name, versions[i]);
+            }
+        } else {
+            LOGGE.info("[AppStoreServiceImp Info]: "+ "待删除的镜像不存在");
+            return APIResponse.fail("待删除的镜像不存在");
+        }
+        return null;
     }
 }

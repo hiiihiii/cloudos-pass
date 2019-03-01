@@ -52,4 +52,8 @@
         WHERE uuid = #{userid}
     </select>
 
+    <delete id="deleteImageById" parameterType="java.lang.String">
+        delete from tl_image WHERE image_uuid = #{imageid}
+    </delete>
+
 </mapper>

@@ -96,4 +96,13 @@ public class AppstoreController {
         appDeployService.deployTemplate(user, deployedTemplate);
         return null;
     }
+
+    @PostMapping("imageInfo/delete")
+    @ResponseBody
+    public APIResponse deleteImage(HttpServletRequest request,
+                                   @RequestParam(value = "versions[]") String[] versions,
+                                   @RequestParam(value = "imageId") String id){
+        User user = (User) request.getSession().getAttribute("login_user");
+        return null;
+    }
 }

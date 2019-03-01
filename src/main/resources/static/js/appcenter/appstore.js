@@ -412,7 +412,6 @@ define([
                 },
 
                 showImageVersions: function () {
-                    debugger;
                     var _self = this;
                     var image = _self.selectedImage;
                     console.log(image);
@@ -429,11 +428,45 @@ define([
 
                 },
 
+                submitDelete: function (){
+                    var _self = this;
+                    var versions = [];
+                    $("#imageVersion .version-item").each(function (index, item) {
+                        debugger
+                        var input = $(item).find("input")[0];
+                        if($(input).prop("checked")){
+                            versions.push($(input).val());
+                        }
+                    });
+                    $.ajax({
+                        type: "post",
+                        url: "../appcenter/imageInfo/delete",
+                        data: {
+                            imageId: _self.selectedImage.app_id,
+                            versions: versions
+                        },
+                        dataType: "json",
+                        success: function (result) {
+                            if(result.code == "success"){
+
+                            } else {
+
+                            }
+                        },
+                        error: function () {
+
+                        }
+                    })
+                },
+
                 closeAppDetail: function () {
                     $("#appstore .app-detail").css("display", "none");
                 }
             }
         });
 
+        $("#imageVersion_dialog").on("hidden.bs.modal", function () {
+            $("#imageVersion .version-box").empty();
+        });
     }
 });

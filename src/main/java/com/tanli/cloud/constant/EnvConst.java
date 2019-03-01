@@ -20,6 +20,15 @@ public class EnvConst {
     public static final String docker_api_ip = "132.232.93.3";
     public static final String docker_api_port = "2375";
     public static final String docker_images_prefix = "http://132.232.93.3:2375/images/";
+
+
+    /**
+     * harbor remote api配置
+     */
+    public static final String harbor_api_protocol = "http";
+    public static final String harbor_api_ip = "132.232.93.3";
+    public static final String harbor_api_port = "80";
+    public static final String harbor_api_prefix = "http:132.232.93.3:80/api/";
     public static final String harbor_username = "admin";
     public static final String harbor_password = "Harbor12345";
 
