@@ -28,7 +28,8 @@ require.config({
         "application": "js/appcenter/application",
         "login": "js/login",
         "role": "js/system/role",
-        "user": "js/system/user"
+        "user": "js/system/user",
+        "userlog": "js/system/userlog"
     },
     shim:{
         "bootstrap": ["jquery"],

@@ -34,16 +34,17 @@ public class UserManageServiceImp implements UserManageService {
         String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
         UserLog userLog = new UserLog();
         userLog.setUuid(UuidUtil.getUUID());
-        userLog.setUser_id(user.getUser_uuid());
         userLog.setUsername(user.getUserName());
         userLog.setResoureType("User");
-        userLog.setResourceId(user.getUser_uuid());
         userLog.setOperation("登录");
         userLog.setIsDeleted("0");
         userLog.setCreate_time(nowStr);
-        userLogDao.addUserLog(userLog);
 
-        return userDao.loginVefiry(user);
+        User login_user = userDao.loginVefiry(user);
+        userLog.setUser_id(login_user.getUser_uuid());
+        userLog.setResourceId(login_user.getUser_uuid());
+        userLogDao.addUserLog(userLog);
+        return login_user;
     }
 
     @Override

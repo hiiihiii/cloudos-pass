@@ -613,7 +613,7 @@ span.checkbox+a{
 #system_user .operate-box,
 #apporch .operate-box,
 #k8s_node .operate-box,
-#application .operate-box {
+#application .operate-box, #userlog .operate-box {
     background-color: #eeeeee;
     margin-bottom: 10px;
     padding: 5px 15px;

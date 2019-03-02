@@ -21,4 +21,8 @@
     <select id="getUserLogs" resultMap="userLogs">
         SELECT * from tl_log
     </select>
+
+    <update id="deleteLogById">
+        UPDATE tl_log SET isDeleted = 1 WHERE uuid=#{id}
+    </update>
 </mapper>

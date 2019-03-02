@@ -109,7 +109,8 @@ label.error{
 #system_user,
 #apporch,
 #k8s_node,
-#application {
+#application,
+#userlog {
     padding-top: 100px;
 }
 .dataTables_info{

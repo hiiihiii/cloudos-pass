@@ -2,6 +2,7 @@ package com.tanli.cloud.dao;
 
 import com.tanli.cloud.model.UserLog;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -11,5 +12,6 @@ import java.util.List;
 @Mapper
 public interface UserLogDao {
     public int addUserLog(UserLog userLog);
-    public List<UserDao> getUserLogs();
+    public List<UserLog> getUserLogs();
+    public int deleteLogById(@Param("id")String id);
 }
