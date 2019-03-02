@@ -28,7 +28,7 @@
                             <div class="base-info" v-show="infoTag == 'baseInfo'" v-cloak="">
                                 <!--部署名称-->
                                 <div class="form-group">
-                                    <label>名称</label>
+                                    <label><span class="cloud-required">  *</span>名称</label>
                                     <div>
                                         <input type="text" class="form-control" id="deployName" name="deployName" placeholder="请输入名称" maxlength="64"/>
                                     </div>
@@ -42,7 +42,7 @@
                                 </div>
                                 <!--版本-->
                                 <div class="form-group">
-                                    <label >版本</label>
+                                    <label ><span class="cloud-required">  *</span>版本</label>
                                     <div>
                                         <select class="form-control" name="version" id="version" v-on:change="changeRepo($event)">
                                             <option v-for="item in deployImageObj.version"
@@ -63,14 +63,14 @@
                                     <label >启动限制</label>
                                 </div>
                                 <div class="form-group">
-                                    <label >CPU</label>
+                                    <label ><span class="cloud-required">  *</span>CPU</label>
                                     <div>
                                         <input class="form-control" type="text" name="mincpu"
                                             v-bind:value="selectedVersion.requests.cpu" v-cloak=""/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label >内存</label>
+                                    <label ><span class="cloud-required">  *</span>内存</label>
                                     <div>
                                         <input class="form-control runtime-input" type="text" name="minMemory"
                                                v-bind:value="selectedVersion.requests.memory"/>
@@ -85,14 +85,14 @@
                                     <label >运行限制</label>
                                 </div>
                                 <div class="form-group">
-                                    <label >CPU</label>
+                                    <label ><span class="cloud-required">  *</span>CPU</label>
                                     <div>
                                         <input class="form-control" type="text" name="maxcpu"
                                                v-bind:value="selectedVersion.limits.cpu" v-cloak=""/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label >内存</label>
+                                    <label ><span class="cloud-required">  *</span>内存</label>
                                     <div>
                                         <input class="form-control runtime-input" type="text" name="maxMemory"
                                                v-bind:value="selectedVersion.limits.memory" v-cloak=""/>
@@ -107,14 +107,14 @@
                             <div class="config-info" v-show="infoTag == 'configInfo'" v-cloak="">
                                 <!--服务名称-->
                                 <div class="form-group">
-                                    <label>服务名称</label>
+                                    <label><span class="cloud-required">  *</span>服务名称</label>
                                     <div>
                                         <input class="form-control" type="text" name="serviceName" />
                                     </div>
                                 </div>
                                 <!--副本数-->
                                 <div class="form-group">
-                                    <label>实例个数</label>
+                                    <label><span class="cloud-required">  *</span>实例个数</label>
                                     <div>
                                         <input class="form-control" type="number" name="instanceCount" />
                                     </div>
@@ -160,7 +160,7 @@
                                 </div>
                                 <!--端口映射-->
                                 <div class="form-group port-form-group" >
-                                    <label>端口映射</label>
+                                    <label><span class="cloud-required">  *</span>端口映射</label>
                                     <span v-on:click="addPort('', true)"><i class="fa fa-plus"></i></span>
                                     <div class="modal-table-box">
                                         <table class="table cloud-modal-table" id="port_table">

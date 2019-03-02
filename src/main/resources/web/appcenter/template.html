@@ -116,7 +116,7 @@
                         <span v-cloak="" v-text="selected.appName"></span>
                     </div>
                     <div class="form-group">
-                        <label>版本： </label>
+                        <label><span class="cloud-required">  *</span>版本： </label>
                         <select name="version" id="version" v-on:change="changeVersion($event)" v-model="selected.version">
                             <option v-for="(item, index) in twaverObj.selectedApp.version"
                                     v-bind:value="item" v-cloak="">{{item}}</option>
@@ -134,11 +134,11 @@
                 <label class="info-title">启动限制</label>
                 <div class="app-info-box">
                     <div class="form-group">
-                        <label>CPU(核)： </label>
+                        <label><span class="cloud-required">  *</span>CPU(核)： </label>
                         <input class="template-form-control" type="text" v-model="selected.requests.cpu" name="minCpu" id="minCpu" />
                     </div>
                     <div class="form-group">
-                        <label>内存： </label>
+                        <label><span class="cloud-required">  *</span>内存： </label>
                         <input class="runtime-input" type="text"
                                v-model="selected.requests.memory" name="minMemory" id="minMemory" />
                         <select class="runtime-select" v-model="selected.requests.memoryUnit"
@@ -151,11 +151,11 @@
                 <label class="info-title">运行限制</label>
                 <div class="app-info-box">
                     <div class="form-group">
-                        <label>CPU(核)： </label>
+                        <label><span class="cloud-required">  *</span>CPU(核)： </label>
                         <input class="template-form-control" type="text" v-model="selected.limits.cpu" name="maxCpu" id="maxCpu" />
                     </div>
                     <div class="form-group">
-                        <label>内存： </label>
+                        <label><span class="cloud-required">  *</span>内存： </label>
                         <input class="runtime-input" type="text"
                                v-model="selected.limits.memory" name="maxMemory" id="maxMemory" />
                         <select class="runtime-select"
@@ -196,23 +196,23 @@
                 <div class="app-info-box" >
                     <div v-for="(item) in selected.ports">
                         <div class="form-group">
-                            <label>名称： </label>
+                            <label><span class="cloud-required">  *</span>名称： </label>
                             <input class="template-form-control" type="text" v-model="item.portName" v-cloak=""/>
                         </div>
                         <div class="form-group">
-                            <label>容器端口： </label>
+                            <label><span class="cloud-required">  *</span>容器端口： </label>
                             <input class="template-form-control" type="text" v-model="item.containerPort" v-cloak=""/>
                         </div>
                         <div class="form-group">
-                            <label>集群内端口： </label>
+                            <label><span class="cloud-required">  *</span>集群内端口： </label>
                             <input class="template-form-control" type="text" v-model="item.port" v-cloak=""/>
                         </div>
                         <div class="form-group">
-                            <label>集群外端口： </label>
+                            <label><span class="cloud-required">  *</span>集群外端口： </label>
                             <input class="template-form-control" type="text" v-model="item.nodePort" v-cloak=""/>
                         </div>
                         <div class="form-group">
-                            <label>协议： </label>
+                            <label><span class="cloud-required">  *</span>协议： </label>
                             <select class="protocol-select" v-model="item.protocol" v-cloak="">
                                 <option value="TCP">TCP</option>
                                 <option value="UDP">UDP</option>

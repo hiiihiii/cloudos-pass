@@ -28,7 +28,7 @@
                             <div class="base-info" v-show="infoTag == 'baseInfo'" v-cloak="">
                                 <!--部署名称-->
                                 <div class="form-group">
-                                    <label>名称</label>
+                                    <label><span class="cloud-required">  *</span>名称</label>
                                     <div>
                                         <input type="text" class="form-control" name="deployName" placeholder="请输入部署名称" maxlength="64"/>
                                     </div>
@@ -61,14 +61,14 @@
                                             <label >启动限制</label>
                                         </div>
                                         <div class="form-group">
-                                            <label >CPU</label>
+                                            <label ><span class="cloud-required">  *</span>CPU</label>
                                             <div>
                                                 <input class="form-control" type="text" name="mincpu"
                                                        v-bind:value="appInfo.metadata.requests.cpu" v-cloak=""/>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label >内存</label>
+                                            <label ><span class="cloud-required">  *</span>内存</label>
                                             <div>
                                                 <input class="form-control runtime-input" type="text" name="minMemory"
                                                        v-bind:value="appInfo.metadata.requests.memory"/>
@@ -83,14 +83,14 @@
                                             <label >运行限制</label>
                                         </div>
                                         <div class="form-group">
-                                            <label >CPU</label>
+                                            <label ><span class="cloud-required">  *</span>CPU</label>
                                             <div>
                                                 <input class="form-control" type="text" name="maxcpu"
                                                        v-bind:value="appInfo.metadata.limits.cpu" v-cloak=""/>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label >内存</label>
+                                            <label ><span class="cloud-required">  *</span>内存</label>
                                             <div>
                                                 <input class="form-control runtime-input" type="text" name="maxMemory"
                                                        v-bind:value="appInfo.metadata.limits.memory" v-cloak=""/>
@@ -115,14 +115,14 @@
                                          v-bind:id="'config'+appInfo.appName" v-bind:class="{active: index==0, in: index == 0}">
                                         <!--服务名称-->
                                         <div class="form-group">
-                                            <label>服务名称</label>
+                                            <label><span class="cloud-required">  *</span>服务名称</label>
                                             <div>
                                                 <input class="form-control" type="text" name="serviceName" />
                                             </div>
                                         </div>
                                         <!--副本数-->
                                         <div class="form-group">
-                                            <label>实例个数</label>
+                                            <label><span class="cloud-required">  *</span>实例个数</label>
                                             <div>
                                                 <input class="form-control" type="number" name="instanceCount" />
                                             </div>
@@ -168,7 +168,7 @@
                                         </div>
                                         <!--端口映射-->
                                         <div class="form-group port-form-group" >
-                                            <label>端口映射</label>
+                                            <label><span class="cloud-required">  *</span>端口映射</label>
                                             <span v-on:click="addPort(appInfo.appName, [], 'html')"><i class="fa fa-plus"></i></span>
                                             <div class="modal-table-box">
                                                 <table class="table cloud-modal-table" v-bind:id="appInfo.appName+'port_table'">
