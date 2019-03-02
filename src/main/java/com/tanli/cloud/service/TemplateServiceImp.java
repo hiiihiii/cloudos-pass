@@ -1,9 +1,13 @@
 package com.tanli.cloud.service;
 
 import com.tanli.cloud.dao.TemplateDao;
+import com.tanli.cloud.dao.UserLogDao;
 import com.tanli.cloud.model.Template;
+import com.tanli.cloud.model.UserLog;
 import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.utils.APIResponse;
+import com.tanli.cloud.utils.UuidUtil;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,8 @@ public class TemplateServiceImp implements TemplateService{
     private static final Logger LOGGE = LoggerFactory.getLogger(AppStoreServiceImp.class);
     @Autowired
     private TemplateDao templateDao;
+    @Autowired
+    private UserLogDao userLogDao;
 
     @Override
     public APIResponse getTemplate(User user) {
@@ -71,6 +77,19 @@ public class TemplateServiceImp implements TemplateService{
     @Override
     public APIResponse publishTemplate(User user, String templateId) {
         try {
+            //操作日志
+            DateTime now = DateTime.now();
+            String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+            UserLog userLog = new UserLog();
+            userLog.setUuid(UuidUtil.getUUID());
+            userLog.setUser_id(user.getUser_uuid());
+            userLog.setUsername(user.getUserName());
+            userLog.setResoureType("Template");
+            userLog.setResourceId(templateId);
+            userLog.setOperation("发布应用模板");
+            userLog.setIsDeleted("0");
+            userLog.setCreate_time(nowStr);
+            userLogDao.addUserLog(userLog);
             int count = templateDao.publishTemplate(templateId);
             if(count > 0) {
                 return APIResponse.success();
@@ -90,6 +109,19 @@ public class TemplateServiceImp implements TemplateService{
         int success = 0, fail = 0;
         for(int i = 0; i < ids.length; i++) {
             try {
+                //操作日志
+                DateTime now = DateTime.now();
+                String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+                UserLog userLog = new UserLog();
+                userLog.setUuid(UuidUtil.getUUID());
+                userLog.setUser_id(user.getUser_uuid());
+                userLog.setUsername(user.getUserName());
+                userLog.setResoureType("Template");
+                userLog.setResourceId(ids[0]);
+                userLog.setOperation("删除应用模板");
+                userLog.setIsDeleted("0");
+                userLog.setCreate_time(nowStr);
+                userLogDao.addUserLog(userLog);
                 int count = templateDao.deleteById(ids[i]);
                 if(count > 0) {
                     success += 1;

@@ -3,8 +3,10 @@ package com.tanli.cloud.service;
 import com.tanli.cloud.dao.ImageInfoDao;
 import com.tanli.cloud.dao.RepositoryDao;
 import com.tanli.cloud.dao.TemplateDao;
+import com.tanli.cloud.dao.UserLogDao;
 import com.tanli.cloud.model.ImageInfo;
 import com.tanli.cloud.model.Template;
+import com.tanli.cloud.model.UserLog;
 import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.model.response.Repository;
 import com.tanli.cloud.utils.APIResponse;
@@ -35,6 +37,8 @@ public class AppOrchServiceImp implements AppOrchService{
     private RepositoryDao repositoryDao;
     @Autowired
     private TemplateDao templateDao;
+    @Autowired
+    private UserLogDao userLogDao;
 
     private static final Logger LOGGE = LoggerFactory.getLogger(AppOrchServiceImp.class);
 
@@ -69,6 +73,17 @@ public class AppOrchServiceImp implements AppOrchService{
             String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
             template.setCreate_time(nowStr);
             template.setUpdate_time(nowStr);
+            //操作日志
+            UserLog userLog = new UserLog();
+            userLog.setUuid(UuidUtil.getUUID());
+            userLog.setUser_id(user.getUser_uuid());
+            userLog.setUsername(user.getUserName());
+            userLog.setResoureType("Template");
+            userLog.setResourceId(template.getUuid());
+            userLog.setOperation("增加应用模板");
+            userLog.setIsDeleted("0");
+            userLog.setCreate_time(nowStr);
+            userLogDao.addUserLog(userLog);
             int count = templateDao.addTemplate(template);
             if(count > 0){
                 return APIResponse.success();

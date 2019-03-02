@@ -8,8 +8,26 @@ public class UserLog {
     private String user_id;
     private String username;
     private String resoureType;
+    private String resourceId;
     private String operation;
+    private String isDeleted;
     private String create_time;
+
+    public String getResourceId() {
+        return resourceId;
+    }
+
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
+    }
+
+    public String getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(String isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
     public String getUuid() {
         return uuid;

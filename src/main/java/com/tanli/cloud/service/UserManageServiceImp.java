@@ -1,6 +1,8 @@
 package com.tanli.cloud.service;
 
 import com.tanli.cloud.dao.UserDao;
+import com.tanli.cloud.dao.UserLogDao;
+import com.tanli.cloud.model.UserLog;
 import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.utils.APIResponse;
 import com.tanli.cloud.utils.UuidUtil;
@@ -20,11 +22,27 @@ public class UserManageServiceImp implements UserManageService {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private UserLogDao userLogDao;
 
     private static final org.slf4j.Logger LOGGE = org.slf4j.LoggerFactory.getLogger(UserManageServiceImp.class);
 
     @Override
     public User loginVerify(User user) {
+        //操作日志
+        DateTime now = DateTime.now();
+        String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+        UserLog userLog = new UserLog();
+        userLog.setUuid(UuidUtil.getUUID());
+        userLog.setUser_id(user.getUser_uuid());
+        userLog.setUsername(user.getUserName());
+        userLog.setResoureType("User");
+        userLog.setResourceId(user.getUser_uuid());
+        userLog.setOperation("登录");
+        userLog.setIsDeleted("0");
+        userLog.setCreate_time(nowStr);
+        userLogDao.addUserLog(userLog);
+
         return userDao.loginVefiry(user);
     }
 
@@ -47,6 +65,17 @@ public class UserManageServiceImp implements UserManageService {
         user.setCreate_time(nowStr);
         user.setUpdate_time(nowStr);
         try {
+            //操作日志
+            UserLog userLog = new UserLog();
+            userLog.setUuid(UuidUtil.getUUID());
+            userLog.setUser_id(user.getUser_uuid());
+            userLog.setUsername(user.getUserName());
+            userLog.setResoureType("User");
+            userLog.setResourceId(user.getUser_uuid());
+            userLog.setOperation("增加用户");
+            userLog.setIsDeleted("0");
+            userLog.setCreate_time(nowStr);
+            userLogDao.addUserLog(userLog);
             int count = userDao.addUser(user);
             if(count > 0){
                 return APIResponse.success();
@@ -66,6 +95,20 @@ public class UserManageServiceImp implements UserManageService {
         int success = 0, fail = 0;
         for(int i = 0 ; i < ids.length; i++){
             try {
+                //操作日志
+                DateTime now = DateTime.now();
+                String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+                UserLog userLog = new UserLog();
+                userLog.setUuid(UuidUtil.getUUID());
+                userLog.setUser_id(user.getUser_uuid());
+                userLog.setUsername(user.getUserName());
+                userLog.setResoureType("User");
+                userLog.setResourceId(ids[i]);
+                userLog.setOperation("删除用户");
+                userLog.setIsDeleted("0");
+                userLog.setCreate_time(nowStr);
+                userLogDao.addUserLog(userLog);
+
                 int count = userDao.deleteById(ids[i]);
                 if(count > 0){
                     success += 1;

@@ -3,10 +3,12 @@ package com.tanli.cloud.service;
 import com.tanli.cloud.constant.EnvConst;
 import com.tanli.cloud.dao.ImageInfoDao;
 import com.tanli.cloud.dao.TemplateDao;
+import com.tanli.cloud.dao.UserLogDao;
 import com.tanli.cloud.model.ImageInfo;
 import com.tanli.cloud.model.Template;
-import com.tanli.cloud.model.response.User;
+import com.tanli.cloud.model.UserLog;
 import com.tanli.cloud.model.response.Repository;
+import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.utils.APIResponse;
 import com.tanli.cloud.utils.FtpUtil;
 import com.tanli.cloud.utils.UuidUtil;
@@ -44,6 +46,8 @@ public class AppStoreServiceImp implements AppStoreService {
     private ImageInfoDao imageInfoDao;
     @Autowired
     private TemplateDao templateDao;
+    @Autowired
+    private UserLogDao userLogDao;
 
     private static final Logger LOGGE = LoggerFactory.getLogger(AppStoreServiceImp.class);
 
@@ -158,6 +162,17 @@ public class AppStoreServiceImp implements AppStoreService {
 
                             imageInfo.setUpdate_time(nowStr);
                             LOGGE.info("[AppStoreServiceImp Info]: Update ImageInfo" + imageInfo.toString());
+                            //操作日志
+                            UserLog userLog = new UserLog();
+                            userLog.setUuid(UuidUtil.getUUID());
+                            userLog.setUser_id(user.getUser_uuid());
+                            userLog.setUsername(user.getUserName());
+                            userLog.setResoureType("Image");
+                            userLog.setResourceId(imageInfo.getApp_id());
+                            userLog.setOperation("上传镜像");
+                            userLog.setIsDeleted("0");
+                            userLog.setCreate_time(nowStr);
+                            userLogDao.addUserLog(userLog);
                             int count = imageInfoDao.updateImageInfo(imageInfo);
                             if(count > 0){
                                 return APIResponse.success();
