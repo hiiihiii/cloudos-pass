@@ -530,6 +530,12 @@ define([
                         config.push(temp);
                     }
                     return config;
+                },
+
+                //判断图中是否有环路
+                hasLoop: function () {
+                    var result = false;
+                    return result;
                 }
             }
         });
