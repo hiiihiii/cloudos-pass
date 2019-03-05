@@ -2,6 +2,7 @@ package com.tanli.cloud.utils;
 
 import com.tanli.cloud.model.DeployContainer;
 import com.tanli.cloud.model.DeployedApp;
+import com.tanli.cloud.model.K8s_Rc;
 import io.fabric8.kubernetes.api.model.*;
 import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.ConfigBuilder;
@@ -163,6 +164,15 @@ public class K8sClient {
 
         this.client.replicationControllers().create(rc);
         return rc;
+    }
+
+    public void updateReplicas(K8s_Rc rc, String replicas){
+        ReplicationController replicationController = this.client
+                .replicationControllers()
+                .withName(rc.getName()).get();
+        ReplicationControllerSpec rcSpec =  replicationController.getSpec();
+        rcSpec.setReplicas(Integer.parseInt(replicas));
+        this.client.replicationControllers().createOrReplace(replicationController);
     }
 
     /**

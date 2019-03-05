@@ -5,11 +5,29 @@ public class K8s_Rc {
     private String deployment_uuid;
     private String name;
     private String namespace;
-    private String replicas;
+    private String replicas;// 实时的实例个数，是可变的
+    private String desiredCount;// 期望的实例个数，不变
     private String selector;
     private String template;
+    private String content;
     private String create_time;
     private String update_time;
+
+    public String getDesiredCount() {
+        return desiredCount;
+    }
+
+    public void setDesiredCount(String desiredCount) {
+        this.desiredCount = desiredCount;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     public String getUuid() {
         return uuid;

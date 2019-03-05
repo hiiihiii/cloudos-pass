@@ -340,6 +340,7 @@ span.checkbox+a{
     display: flex;
     padding: 10px 0;
     border-bottom: 1px solid rgba(0,0,0,0.2);
+    cursor: pointer;
 }
 .exception-app img {
     flex: 1;
@@ -894,6 +895,13 @@ span.checkbox+a{
 }
 #application #serviceDetail #detailTab {
     border-bottom: 1px solid #ec670b;
+}
+#application #serviceDetail .close-btn {
+    padding: 7px;
+}
+#application #app_table a {
+    text-decoration: none;
+    color: blue;
 }
 /*应用实例结束*/
 /*删除镜像开始*/

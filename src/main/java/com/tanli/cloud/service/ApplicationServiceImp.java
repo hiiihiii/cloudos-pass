@@ -1,13 +1,8 @@
 package com.tanli.cloud.service;
 
-import com.tanli.cloud.dao.DeploymentDao;
-import com.tanli.cloud.dao.ImageInfoDao;
-import com.tanli.cloud.dao.K8sServiceDao;
-import com.tanli.cloud.dao.TemplateDao;
-import com.tanli.cloud.model.Deployment;
-import com.tanli.cloud.model.ImageInfo;
-import com.tanli.cloud.model.K8s_Service;
-import com.tanli.cloud.model.Template;
+import com.tanli.cloud.constant.SystemConst;
+import com.tanli.cloud.dao.*;
+import com.tanli.cloud.model.*;
 import com.tanli.cloud.model.response.R_Deployment;
 import com.tanli.cloud.model.response.R_Service;
 import com.tanli.cloud.model.response.User;
@@ -21,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,9 +34,16 @@ public class ApplicationServiceImp implements ApplicationService{
     private TemplateDao templateDao;
     @Autowired
     private K8sServiceDao k8sServiceDao;
+    @Autowired
+    private K8sRcDao k8sRcDao;
 
     private static final org.slf4j.Logger LOGGE = LoggerFactory.getLogger(ApplicationServiceImp.class);
 
+    /**
+     * 获取部署记录
+     * @param user
+     * @return
+     */
     @Override
     public APIResponse getApplications(User user) {
         String userid = user.getUser_uuid();
@@ -76,8 +77,8 @@ public class ApplicationServiceImp implements ApplicationService{
                             .orElse(null);
                     r_deployment.setSource_name(template.getTemplateName());
                 }
-                //根据相关的所有pod设置status
-                r_deployment.setStatus(setStatus(deployment));
+                //根据相关的所有Service设置status
+                r_deployment.setStatus(getAppStatus(deployment));
                 r_deployments.add(r_deployment);
             });
             return APIResponse.success(r_deployments);
@@ -106,37 +107,82 @@ public class ApplicationServiceImp implements ApplicationService{
             }
             service.setIps(ips);
             // 根据相关Pod设置Status
-            K8sClient k8sClient = new K8sClient();
-            Map<String, String> selectors = JSONObject.fromObject(k8s_service.getSelector());
-            List<Pod> pods = k8sClient.getPod(selectors);
-            service.setStatus("Running");
+            service.setStatus(getSvcStatus(k8s_service));
             r_services.add(service);
         });
         return APIResponse.success(r_services);
     }
 
-    //设置deployment的状态
-    private String setStatus(Deployment deployment){
-        Map<String, String> selectors = new HashMap<>();
-        K8s_Service svc = k8sServiceDao.getAllService()
+    /**
+     * 设置应用状态
+     * @param deployment
+     * @return
+     */
+    private String getAppStatus(Deployment deployment){
+        String statusResult = "";
+        List<K8s_Service> svc = k8sServiceDao.getAllService()
                 .stream()
                 .filter(k8s_service -> k8s_service.getDeployment_uuid().equals(deployment.getDeploy_uuid()))
-                .findFirst()
-                .orElse(null);
-        selectors = JSONObject.fromObject(svc.getSelector());
-        K8sClient k8sClient = new K8sClient();
-        List<Pod> pods = k8sClient.getPod(selectors);
-        String status = "";
-        for(int i = 0; i < pods.size(); i++) {
-            String temp = pods.get(i).getStatus().getPhase();
-            if(temp.equals("")) {
-
-            } else if(temp.equals("")) {
-
-            } else {
-
+                .collect(Collectors.toList());
+        int pendingCount = 0;
+        int stopCount = 0;
+        for(int i = 0; i < svc.size(); i++) {
+            K8s_Service k8s_service = svc.get(i);
+            String svcStatus = getSvcStatus(k8s_service);
+            switch (svcStatus) {
+                case SystemConst.SVC_RUNNING_STATUS: {
+                    statusResult = SystemConst.SVC_RUNNING_STATUS;
+                    return statusResult;
+                }
+                case SystemConst.SVC_STOP_STATUS: {
+                    stopCount += 1;
+                    break;
+                }
+                case SystemConst.SVC_CREATING_STATUS: {
+                    pendingCount += 1;
+                    break;
+                }
             }
         }
-        return "";
+        if(pendingCount == svc.size()) {
+            statusResult = SystemConst.SVC_CREATING_STATUS;
+        } else if(stopCount == svc.size()) {
+            statusResult = SystemConst.SVC_STOP_STATUS;
+        } else {
+            statusResult = SystemConst.SVC_UNKNOWN_STATUS;
+        }
+        return statusResult;
+    }
+
+    /**
+     * 设置Svc的状态
+     * @param svc
+     * @return
+     */
+    private String getSvcStatus(K8s_Service svc) {
+        String result = "";
+        Map<String, String>selectors = JSONObject.fromObject(svc.getSelector());
+        K8sClient k8sClient = new K8sClient();
+        List<Pod> pods = k8sClient.getPod(selectors);
+        int pendingCount = 0;
+        if(0 == pods.size()) {
+            result = SystemConst.SVC_STOP_STATUS;
+        } else {
+            for(int i = 0; i < pods.size(); i++) {
+                String temp = pods.get(i).getStatus().getPhase();
+                if(temp.equals("Running")) {
+                    result = SystemConst.SVC_RUNNING_STATUS;
+                    return result;
+                } else if(temp.equals("Pending")) {
+                    pendingCount += 1;
+                }
+            }
+            if(pendingCount == pods.size()) {
+                result = SystemConst.SVC_CREATING_STATUS;
+            } else {
+                result = SystemConst.SVC_UNKNOWN_STATUS;
+            }
+        }
+        return result;
     }
 }

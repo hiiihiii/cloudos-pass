@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -56,8 +57,7 @@ public class AppDeployServiceImp implements AppDeployService {
             if( rc != null && svc !=null) {
                 // 更新pod到数据库中
                 List<Pod> pods = k8sClient.getPod(service.getSpec().getSelector());
-                pods.stream()
-                        .forEach(pod -> {
+                pods.stream().forEach(pod -> {
                             savePod(pod, rc, svc);
                         });
                 LOGGE.info("[AppDeployServiceImp Info]: " + "部署" + deployedImage.getDeploy_name() + "成功");
@@ -110,6 +110,58 @@ public class AppDeployServiceImp implements AppDeployService {
             return APIResponse.success();
         }
         return APIResponse.fail("部署失败，被部署的模板不存在");
+    }
+
+    /**
+     * 停止应用
+     * @param user
+     * @param deploymentId
+     * @return
+     */
+    @Override
+    public APIResponse stopApp(User user, String deploymentId) {
+        try{
+            List<K8s_Rc> rcs = k8sRcDao.getAllRc()
+                    .stream()
+                    .filter(k8s_rc -> k8s_rc.getDeployment_uuid().equals(deploymentId))
+                    .collect(Collectors.toList());
+            k8sRcDao.updateReplicas(deploymentId, "0");
+            K8sClient k8sClient = new K8sClient();
+            for(int i = 0; i< rcs.size(); i++) {
+                k8sClient.updateReplicas(rcs.get(i),"0");
+            }
+            return APIResponse.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGE.info("[AppDeployServiceImp Info]: " + "停止应用失败");
+        }
+        return APIResponse.fail("停止应用失败");
+    }
+
+    /**
+     * 启动已停止的应用
+     * @param user
+     * @param deploymentId
+     * @return
+     */
+    @Override
+    public APIResponse startApp(User user, String deploymentId) {
+        try {
+            List<K8s_Rc> rcs = k8sRcDao.getAllRc()
+                    .stream()
+                    .filter(k8s_rc -> k8s_rc.getDeployment_uuid().equals(deploymentId))
+                    .collect(Collectors.toList());
+            K8sClient k8sClient = new K8sClient();
+            for(int i = 0; i< rcs.size(); i++) {
+                K8s_Rc rc = rcs.get(i);
+                k8sRcDao.updateReplicas(deploymentId, rc.getDesiredCount());
+                k8sClient.updateReplicas(rc, rc.getDesiredCount());
+            }
+            return APIResponse.success();
+        } catch (Exception e) {
+            LOGGE.info("[AppDeployServiceImp Info]: " + "启动应用失败");
+        }
+        return APIResponse.fail("启动应用失败");
     }
 
     /**
@@ -197,6 +249,7 @@ public class AppDeployServiceImp implements AppDeployService {
         rc.setName(deployedApp.getDeploy_name() + "-rc");
         rc.setNamespace("default");
         rc.setReplicas(rc.getReplicas());
+        rc.setDesiredCount(rc.getReplicas());
         Map<String, String> selectors = service.getSpec().getSelector();
         rc.setSelector(JSONObject.fromObject(selectors).toString());
         Map<String, String> template = new HashMap<>();

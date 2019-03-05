@@ -9,8 +9,17 @@ public class K8s_Service {
     private String ports;
     private String selector;
     private String type;
+    private String content;
     private String create_time;
     private String update_time;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     public String getIp() {
         return ip;

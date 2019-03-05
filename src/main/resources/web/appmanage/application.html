@@ -37,24 +37,31 @@
                 </div>
             </td>
             <td v-cloak="" v-on:click="getServiceDetail($event, app.deploy_uuid)"
-                title="app.deploy_name" style="color: blue; cursor: pointer;">{{app.deploy_name}}</td>
-            <td v-cloak="" title="app.status">{{app.status}}</td>
-            <td v-cloak="" title="app.description">{{app.description}}</td>
-            <td v-cloak="" title="app.source_type">{{app.source_type}}</td>
-            <td v-cloak="" title="app.source_name">{{app.source_name}}</td>
-            <td v-cloak="" title="app.update_time">{{app.update_time}}</td>
+                v-bind:title="app.deploy_name"><a>{{app.deploy_name}}</a></td>
+            <td v-cloak="" v-bind:title="app.status">
+                <i class="fa fa-spin fa-spinner" v-if="creating(app.status)"></i>
+                <i class="fa fa-check-circle" v-if="running(app.status)"></i>
+                <i class="fa fa-warning" v-if="unknown(app.status)"></i>
+                <i class="fa fa-stop-circle" v-if="stop(app.status)"></i>
+                {{app.status}}</td>
+            <td v-cloak="" v-bind:title="app.description">{{app.description}}</td>
+            <td v-cloak="" v-bind:title="app.source_type">{{app.source_type}}</td>
+            <td v-cloak="" v-bind:title="app.source_name">{{app.source_name}}</td>
+            <td v-cloak="" v-bind:title="app.update_time">{{app.update_time}}</td>
             <td v-cloak="">
-                <span class="operate-btn" title="启动"><i class="fa fa-play-circle-o"></i></span>
-                <span class="operate-btn" title="停止"><i class="fa fa-stop-circle-o"></i></span>
+                <span class="operate-btn" title="启动" v-if="stop(app.status)"
+                      v-on:click="stopOrStart($event, app.deploy_uuid, 'start')"><i class="fa fa-play-circle-o"></i></span>
+                <span class="operate-btn" title="停止" v-if="running(app.status)"
+                      v-on:click="stopOrStart($event, app.deploy_uuid, 'stop')"><i class="fa fa-stop-circle-o"></i></span>
                 <span class="operate-btn" title="删除" v-cloak=""
                       v-on:click=""><i class="fa fa-trash-o"></i></span>
             </td>
         </tr>
         </tbody>
     </table>
-    <div id="serviceDetail">
+    <div id="serviceDetail" v-show="serviceDetailFlag">
         <div class="operate-box">
-            <span title="关闭"><i class="fa fa-angle-right"></i></span>
+            <span class="close-btn" title="关闭" v-on:click="hideServiceDetail"><i class="fa fa-angle-right"></i></span>
         </div>
         <ul id="detailTab" class="nav nav-tabs">
             <li class="active" v-cloak="" >
