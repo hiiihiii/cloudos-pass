@@ -1,9 +1,6 @@
 package com.tanli.cloud.service;
 
-import com.tanli.cloud.dao.DeploymentDao;
-import com.tanli.cloud.dao.K8sPodDao;
-import com.tanli.cloud.dao.K8sRcDao;
-import com.tanli.cloud.dao.K8sServiceDao;
+import com.tanli.cloud.dao.*;
 import com.tanli.cloud.model.*;
 import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.utils.APIResponse;
@@ -34,6 +31,10 @@ public class AppDeployServiceImp implements AppDeployService {
     private K8sServiceDao k8sServiceDao;
     @Autowired
     private K8sPodDao k8sPodDao;
+    @Autowired
+    private TemplateDao templateDao;
+    @Autowired
+    private ImageInfoDao imageInfoDao;
 
     private static final Logger LOGGE = LoggerFactory.getLogger(AppDeployServiceImp.class);
 
@@ -70,22 +71,45 @@ public class AppDeployServiceImp implements AppDeployService {
     @Override
     public APIResponse deployTemplate(User user, DeployedTemplate deployedTemplate) {
         List<DeployContainer> deployContainerList = JSONArray.fromObject(deployedTemplate.getContainers());
-        for(int i = 0; i < deployContainerList.size(); i++) {
-            Deployment deployment = saveDeployment(deployedTemplate, user.getUser_uuid());
-            if(deployment != null) {
-                K8sClient k8sClient = new K8sClient();
-                // 创建RC
-                ReplicationController replicationController = k8sClient.createRC(deployedTemplate, deployContainerList.get(i));
-                // 创建Service
-                io.fabric8.kubernetes.api.model.Service service = k8sClient.createService(deployedTemplate, deployContainerList.get(i));
-                K8s_Rc rc = saveRc(deployedTemplate, deployment, service, replicationController);
-                K8s_Service svc = saveService(deployedTemplate ,deployment,service );
-                if(rc == null || svc == null) {
-                    return APIResponse.fail("部署模板" + deployedTemplate.getDeploy_name() + "失败");
+        String id = deployedTemplate.getApp_id();
+        Template template = templateDao.getAllTemplate()
+                .stream()
+                .filter(template1 -> id.equals(template1.getUuid()))
+                .findFirst()
+                .orElse(null);
+        if(template != null) {
+            //判断模板中的镜像是否存在
+            List<Map<String, String>> config = JSONArray.fromObject(template.getConfig());
+            for(int i = 0; i < config.size(); i++) {
+                String imageName = config.get(i).get("");
+                ImageInfo imageInfo = imageInfoDao.getImagesAll(user.getUser_uuid())
+                        .stream()
+                        .filter(imageInfo1 -> imageName.equals(imageInfo1.getAppName()))
+                        .findFirst().orElse(null);
+                if(imageInfo == null) {
+                    return APIResponse.fail("部署失败，该模板中的配置信息不存在");
                 }
             }
+            Map<String, String> relation = JSONObject.fromObject(template.getRelation());
+            //分别部署模板中的镜像
+            for(int i = 0; i < deployContainerList.size(); i++) {
+                Deployment deployment = saveDeployment(deployedTemplate, user.getUser_uuid());
+                if(deployment != null) {
+                    K8sClient k8sClient = new K8sClient();
+                    // 创建RC
+                    ReplicationController replicationController = k8sClient.createRC(deployedTemplate, deployContainerList.get(i));
+                    // 创建Service
+                    io.fabric8.kubernetes.api.model.Service service = k8sClient.createService(deployedTemplate, deployContainerList.get(i));
+                    K8s_Rc rc = saveRc(deployedTemplate, deployment, service, replicationController);
+                    K8s_Service svc = saveService(deployedTemplate ,deployment,service );
+                    if(rc == null || svc == null) {
+                        return APIResponse.fail("部署模板" + deployedTemplate.getDeploy_name() + "失败");
+                    }
+                }
+            }
+            return APIResponse.success();
         }
-        return APIResponse.success();
+        return APIResponse.fail("部署失败，被部署的模板不存在");
     }
 
     /**

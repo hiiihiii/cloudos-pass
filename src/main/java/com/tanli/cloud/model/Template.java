@@ -10,10 +10,19 @@ public class Template {
     private String logo_url;
     private String relation;
     private String config;
+    private String topSort;
     private String description;
     private String isPublish;
     private String create_time;
     private String update_time;
+
+    public String getTopSort() {
+        return topSort;
+    }
+
+    public void setTopSort(String topSort) {
+        this.topSort = topSort;
+    }
 
     public String getLogo_url() {
         return logo_url;

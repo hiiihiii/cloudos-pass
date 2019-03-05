@@ -3,9 +3,9 @@
 <mapper namespace="com.tanli.cloud.dao.TemplateDao">
     <insert id="addTemplate" parameterType="com.tanli.cloud.model.Template">
         INSERT INTO tl_template
-        (uuid, user_uuid, name, logo_url, description, relation, config, isPublish, create_time, update_time)
+        (uuid, user_uuid, name, logo_url, description, relation, config, topSort, isPublish, create_time, update_time)
         VALUES
-        (#{uuid}, #{userId}, #{templateName},#{logo_url}, #{description}, #{relation}, #{config}, #{isPublish}, #{create_time},#{update_time})
+        (#{uuid}, #{userId}, #{templateName},#{logo_url}, #{description}, #{relation}, #{config}, #{topSort}, #{isPublish}, #{create_time},#{update_time})
     </insert>
 
     <resultMap id="templates" type="com.tanli.cloud.model.Template">
@@ -16,6 +16,7 @@
         <result column="description" property="description"></result>
         <result column="relation" property="relation"></result>
         <result column="config" property="config"></result>
+        <result column="topSort" property="topSort"></result>
         <result column="create_time" property="create_time"></result>
         <result column="update_time" property="update_time"></result>
         <result column="isPublish" property="isPublish"></result>
