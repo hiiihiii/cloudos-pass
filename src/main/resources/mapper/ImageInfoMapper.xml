@@ -5,9 +5,9 @@
     <insert id="addImageInfo" parameterType="com.tanli.cloud.model.ImageInfo"
             keyProperty="app_id">
         INSERT INTO tl_image (image_uuid, repo_uuid, uuid, name, tag, version, description, v_description, logo_url, source_url,
-                              metadata, create_type, create_time, update_time)
+                              metadata, create_type, create_time, update_time, deploycount)
         VALUES (#{app_id}, #{repo_id}, #{user_id}, #{appName}, #{appTag}, #{version}, #{description}, #{v_description}, #{logo_url},
-                #{source_url}, #{metadata}, #{createType}, #{create_time}, #{update_time})
+                #{source_url}, #{metadata}, #{createType}, #{create_time}, #{update_time}, #{deploycount})
     </insert>
 
     <update id="updateImageInfo" parameterType="com.tanli.cloud.model.ImageInfo">
@@ -20,7 +20,8 @@
             source_url = #{source_url},
             metadata = #{metadata},
             create_type = #{createType},
-            update_time = #{update_time}
+            update_time = #{update_time},
+            deploycount = #{deploycount}
         WHERE image_uuid = #{app_id}
     </update>
 
@@ -56,4 +57,9 @@
         delete from tl_image WHERE image_uuid = #{imageid}
     </delete>
 
+    <update id="updateDeployCount">
+        UPDATE tl_image
+        SET deploycount = #{count}
+        WHERE uuid = #{imageid}
+    </update>
 </mapper>

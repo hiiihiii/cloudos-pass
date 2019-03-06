@@ -16,4 +16,5 @@ public interface ImageInfoDao {
     public List<ImageInfo> getImages(@Param("repoid") String repoid, @Param("userid") String userid);
     public List<ImageInfo> getImagesAll(@Param("userid") String userid);
     public int deleteImageById(@Param("imageid") String imageid);
+    public int updateDeployCount(@Param("imageid") String imageid, @Param("count")int count);
 }

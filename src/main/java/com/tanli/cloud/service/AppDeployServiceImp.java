@@ -46,6 +46,13 @@ public class AppDeployServiceImp implements AppDeployService {
     public APIResponse deployImage(User user, DeployedImage deployedImage) {
         JSONObject jsonObject=JSONObject.fromObject(deployedImage.getContainer());
         DeployContainer deployContainer = (DeployContainer) JSONObject.toBean(jsonObject, DeployContainer.class);
+        ImageInfo imageInfo = imageInfoDao.getImagesAll(user.getUser_uuid())
+                .stream()
+                .filter(imageInfo1 -> imageInfo1.getApp_id().equals(deployedImage.getApp_id()))
+                .findFirst().orElse(null);
+        //修改镜像部署次数
+        int deploycount = imageInfo.getDeploycount()+1;
+        imageInfoDao.updateDeployCount(imageInfo.getApp_id(), deploycount);
         //将数据保存进tl_deployment表中
         Deployment deployment = saveDeployment(deployedImage, user.getUser_uuid());
         if(deployment != null) {
@@ -109,6 +116,9 @@ public class AppDeployServiceImp implements AppDeployService {
                         return APIResponse.fail("部署模板" + deployedTemplate.getDeploy_name() + "失败");
                     }
                 }
+                //修改模板部署次数
+                int count = template.getDeploy_count() + 1;
+                templateDao.updateDeployCount(template.getUuid(), count);
                 //添加用户日志
                 DateTime now = DateTime.now();
                 String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();

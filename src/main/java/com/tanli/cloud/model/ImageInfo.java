@@ -14,8 +14,17 @@ public class ImageInfo {
     private String source_url;
     private String metadata;
     private String createType;
+    private int deploycount;
     private String create_time;
     private String update_time;
+
+    public int getDeploycount() {
+        return deploycount;
+    }
+
+    public void setDeploycount(int deploycount) {
+        this.deploycount = deploycount;
+    }
 
     public String getApp_id() {
         return app_id;

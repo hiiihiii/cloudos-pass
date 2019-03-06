@@ -3,9 +3,9 @@
 <mapper namespace="com.tanli.cloud.dao.TemplateDao">
     <insert id="addTemplate" parameterType="com.tanli.cloud.model.Template">
         INSERT INTO tl_template
-        (uuid, user_uuid, name, logo_url, description, relation, config, topSort, isPublish, create_time, update_time)
+        (uuid, user_uuid, name, logo_url, description, relation, config, topSort, isPublish, create_time, update_time, deploy_count)
         VALUES
-        (#{uuid}, #{userId}, #{templateName},#{logo_url}, #{description}, #{relation}, #{config}, #{topSort}, #{isPublish}, #{create_time},#{update_time})
+        (#{uuid}, #{userId}, #{templateName},#{logo_url}, #{description}, #{relation}, #{config}, #{topSort}, #{isPublish}, #{create_time},#{update_time}, #{deploy_count})
     </insert>
 
     <resultMap id="templates" type="com.tanli.cloud.model.Template">
@@ -20,6 +20,7 @@
         <result column="create_time" property="create_time"></result>
         <result column="update_time" property="update_time"></result>
         <result column="isPublish" property="isPublish"></result>
+        <result column="deploy_count" property="deploy_count"></result>
     </resultMap>
 
     <select id="getAllTemplate" resultMap="templates">
@@ -36,4 +37,10 @@
         DELETE FROM tl_template
         WHERE uuid = #{templateId}
     </delete>
+
+    <update id="updateDeployCount">
+        UPDATE tl_template
+        SET deploy_count = #{count}
+        WHERE uuid = #{templateId}
+    </update>
 </mapper>

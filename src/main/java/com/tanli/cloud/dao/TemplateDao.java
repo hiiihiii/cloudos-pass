@@ -15,4 +15,5 @@ public interface TemplateDao {
     public List<Template> getAllTemplate();
     public int publishTemplate(@Param("templateId")String templateId);
     public int deleteById(@Param("templateId")String templateId);
+    public int updateDeployCount(@Param("templateId") String templateId, @Param("count") int count);
 }
