@@ -2,15 +2,19 @@
 define([
     'jquery',
     "vue",
-    "echarts"
-],function ($, Vue, echarts) {
+    "echarts",
+    "common-module"
+],function ($, Vue, echarts, common_module) {
     if($("#overview")[0]){
         var adminhomepage = new Vue({
             el: "#overview",
-            data: {},
+            data: {
+                logs: []
+            },
             mounted: function () {
                 var _self = this;
                 _self.initEcharts();
+                _self.getLogs();
             },
 
             methods: {
@@ -55,6 +59,30 @@ define([
 
                     };
                     echartsObj.setOption(option);
+                },
+                getLogs: function () {
+                    var _self = this;
+                    $.ajax({
+                        type:"get",
+                        url:"../userlog/info",
+                        dataType: "json",
+                        success: function (result) {
+                            if(result.code =="success") {
+                                _self.logs = result.data; 
+                            } else {
+                                common_module.notify("[日志]","获取日志数据成功", "danger");
+                            }
+                        },
+                        error: function () {
+                            common_module.notify("[日志]","获取日志数据成功", "danger");
+                        }
+                    })
+                },
+                getImages: function () {
+                    
+                },
+                getTemplates: function () {
+                    
                 }
             }
         });

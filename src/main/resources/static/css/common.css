@@ -299,6 +299,10 @@ span.checkbox+a{
     flex: 1;
     background-color: rgb(232, 235, 238);
 }
+#overview .middle-content {
+    flex: 8;
+    background-color: rgb(232, 235, 238);
+}
 #overview .right-content {
     flex: 4;
     background-color: rgb(232, 235, 238);
@@ -312,13 +316,23 @@ span.checkbox+a{
     padding-top: 10px;
     padding-left: 10px;
 }
+.middle-top {
+    padding-top: 10px;
+    padding-left: 10px;
+}
+.right-all {
+    padding-top: 10px;
+    padding-left: 10px;
+}
 .left-bottom {
     flex: 3;
     padding-top: 5px;
     padding-left: 10px;
 }
 #overview .left-top .content-box,
-#overview .left-bottom .content-box{
+#overview .left-bottom .content-box,
+#overview .middle-top .content-box,
+#overview .right-all .content-box{
     font-size: 14px;
     background-color: rgb(255,255,255);
     padding-top: 5px;
