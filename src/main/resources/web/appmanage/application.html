@@ -88,14 +88,44 @@
                         <td v-cloak=""><i class="fa fa-check-circle"></i>{{service.status}}</td>
                         <td v-cloak="">{{service.ips}}</td>
                         <td v-cloak="">
-                            <span title=""><i class=""></i></span>
-                            <!--<span title=""><i class=""></i></span>-->
+                            <span class="operate-btn" v-on:click="showManualScaleDialog($event, service)" title="手动伸缩">
+                                <i class="fa fa-arrows-h"></i></span>
                         </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
             <div id="pod-box" class="tab-pane fade"></div>
+        </div>
+    </div>
+    <!--手动伸缩框-->
+    <div id="manualScale_dialog">
+        <div class="modal fade" id="manualScale" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <div class="cloud-modal-title">
+                            <i class="fa fa-plus"></i>
+                            <h4 class="modal-title">手动伸缩</h4>
+                        </div>
+                    </div>
+                    <div class="modal-body cloud-modal-body">
+                        <!--实例个数-->
+                        <div class="form-group">
+                            <label><span class="cloud-required">  *</span>实例数</label>
+                            <!--<div>-->
+                                <input type="number" class="form-control" id="insNum" name="insNum" maxlength="64"/>
+                            <!--</div>-->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn cloud-btn"
+                                v-on:click="submitScale" v-cloak="">确定</button>
+                        <button type="button" class="btn cloud-btn" data-dismiss="modal" v-cloak="">取消</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -2,8 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tanli.cloud.dao.K8sRcDao">
     <insert id="addRc" parameterType="com.tanli.cloud.model.K8s_Rc">
-        INSERT INTO tl_rc (uuid, deployment_uuid, name, namespace, replicas, desiredCount,selector, template,content, create_time, update_time)
-        VALUES (#{uuid}, #{deployment_uuid}, #{name}, #{namespace}, #{replicas},#{desiredCount}, #{selector}, #{template},#{content} #{create_time}, #{update_time})
+        INSERT INTO tl_rc (uuid, deployment_uuid, name, namespace, replicas,
+        desiredCount,selector, template, content, scaleType,create_time, update_time)
+        VALUES (#{uuid}, #{deployment_uuid}, #{name}, #{namespace}, #{replicas},
+        #{desiredCount}, #{selector}, #{template},#{content},#{scaleType} #{create_time}, #{update_time})
     </insert>
 
     <resultMap id="RCs" type="com.tanli.cloud.model.K8s_Rc">
@@ -16,6 +18,7 @@
         <result column="selector" property="selector"></result>
         <result column="template" property="template"></result>
         <result column="content" property="content"></result>
+        <result column="scaleType" property="scaleType"></result>
         <result column="create_time" property="create_time"></result>
         <result column="update_time" property="update_time"></result>
     </resultMap>

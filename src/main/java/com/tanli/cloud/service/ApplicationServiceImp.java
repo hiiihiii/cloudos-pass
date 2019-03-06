@@ -98,6 +98,7 @@ public class ApplicationServiceImp implements ApplicationService{
                 .collect(Collectors.toList());
         services.stream().forEach(k8s_service -> {
             R_Service service = new R_Service();
+            service.setUuid(k8s_service.getUuid());
             service.setName(k8s_service.getName());
             List<String> ips = new ArrayList<>();
             List<Map<String, Object>> port = JSONArray.fromObject(k8s_service.getPorts());

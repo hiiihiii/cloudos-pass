@@ -903,6 +903,19 @@ span.checkbox+a{
     text-decoration: none;
     color: blue;
 }
+#manualScale_dialog .cloud-modal-body {
+    height: 110px;
+}
+#manualScale_dialog .modal-dialog {
+    width: 444px;
+}
+#manualScale_dialog .form-group {
+    margin-top: 25px;
+}
+#manualScale_dialog .form-control {
+    display: inline-block;
+    width: 66%;
+}
 /*应用实例结束*/
 /*删除镜像开始*/
 #imageVersion .cloud-modal-body {

@@ -57,4 +57,11 @@ public class ApplicationController {
         User user = (User) request.getSession().getAttribute("login_user");
         return appDeployService.startApp(user, deploymentId);
     }
+
+    @RequestMapping(value = "scale")
+    @ResponseBody
+    public APIResponse scale(HttpServletRequest request, String serviceName, String instanceNum) {
+        User user = (User) request.getSession().getAttribute("login_user");
+        return appDeployService.scaleService(user, serviceName, instanceNum);
+    }
 }

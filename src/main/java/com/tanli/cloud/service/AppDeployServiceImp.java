@@ -165,6 +165,30 @@ public class AppDeployServiceImp implements AppDeployService {
     }
 
     /**
+     * 服务伸缩
+     * @param user
+     * @param serviceName
+     * @param instanceNum
+     * @return
+     */
+    @Override
+    public APIResponse scaleService(User user, String serviceName, String instanceNum) {
+        try {
+            K8s_Rc rc = k8sRcDao.getAllRc()
+                    .stream()
+                    .filter(rc1 -> rc1.getName().equals(serviceName))
+                    .findFirst().orElse(null);
+            K8sClient k8sClient =new K8sClient();
+            k8sClient.updateReplicas(rc, instanceNum);
+            return APIResponse.success("伸缩"+serviceName + "成功");
+        } catch (Exception e){
+            e.printStackTrace();
+            LOGGE.info("[AppDeployServiceImp Info]: " + "伸缩服务"+serviceName+"失败");
+        }
+        return APIResponse.fail("伸缩"+serviceName + "失败");
+    }
+
+    /**
      * 想tl_pod表中保存数据
      * @param pod
      * @param rc
@@ -246,7 +270,7 @@ public class AppDeployServiceImp implements AppDeployService {
         K8s_Service svc = new K8s_Service();
         rc.setUuid(UuidUtil.getUUID());
         rc.setDeployment_uuid(deployment.getDeploy_uuid());
-        rc.setName(deployedApp.getDeploy_name() + "-rc");
+        rc.setName(service.getMetadata().getName());
         rc.setNamespace("default");
         rc.setReplicas(rc.getReplicas());
         rc.setDesiredCount(rc.getReplicas());
@@ -281,7 +305,7 @@ public class AppDeployServiceImp implements AppDeployService {
         K8s_Service svc = new K8s_Service();
         svc.setUuid(UuidUtil.getUUID());
         svc.setDeployment_uuid(deployment.getDeploy_uuid());
-        svc.setName(deployedApp.getDeploy_name() + "-svc");
+        svc.setName(service.getMetadata().getName());
         svc.setNamespace("default");
         svc.setPorts(JSONArray.fromObject(service.getSpec().getPorts()).toString());
         svc.setType("NodeType");

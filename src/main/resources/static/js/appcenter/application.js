@@ -17,6 +17,7 @@ define([
                 appInsTableObj: null,
                 serviceInfos: [],
                 serviceTableObj: null,
+                serviceScaleObj: ""
             },
             mounted: function () {
                 var _self = this;
@@ -137,7 +138,34 @@ define([
 
                         }
                     })
+                },
+
+                showManualScaleDialog: function (event, serviceObj) {
+                    var _self = this;
+                    _self.serviceScaleObj = serviceObj;
+                    $("#manualScale").modal({backdrop: 'static', keyboard: false});
+                },
+
+                submitScale: function () {
+                    var _self = this;
+                    var insNum = $("#manualScale #insNum").val();
+                    $.ajax({
+                        type: "post",
+                        url: "../application/scale",
+                        data: {
+                            serviceName:_self.serviceTableObj.name,
+                            instanceNum: insNum
+                        },
+                        dataType: "json",
+                        success: function (result) {
+                            
+                        },
+                        error: function () {
+
+                        }
+                    });
                 }
+
             }
         });
     }

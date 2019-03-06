@@ -10,8 +10,17 @@ public class K8s_Rc {
     private String selector;
     private String template;
     private String content;
+    private String scaleType;// 伸缩方式，auto代表自动，manual代表手动
     private String create_time;
     private String update_time;
+
+    public String getScaleType() {
+        return scaleType;
+    }
+
+    public void setScaleType(String scaleType) {
+        this.scaleType = scaleType;
+    }
 
     public String getDesiredCount() {
         return desiredCount;

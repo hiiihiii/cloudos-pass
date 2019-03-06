@@ -11,4 +11,5 @@ public interface AppDeployService {
     public APIResponse deployTemplate(User user, DeployedTemplate deployedTemplate);
     public APIResponse stopApp(User user, String deploymentId);
     public APIResponse startApp(User user, String deploymentId);
+    public APIResponse scaleService(User user, String serviceName, String instanceNum);
 }
