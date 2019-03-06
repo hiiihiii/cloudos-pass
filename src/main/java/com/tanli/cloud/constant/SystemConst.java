@@ -9,6 +9,9 @@ public class SystemConst {
     public static final String USER = "用户";
     public static final String ROLE = "角色";
     public static final String LOG = "日志";
+    public static final String K8S_SERVICE = "服务";
+    public static final String K8S_RC= "ReplicationController";
+    public static final String APPLICATION="应用";
 
     public static final String SVC_RUNNING_STATUS = "运行中";
     public static final String SVC_STOP_STATUS = "停止";

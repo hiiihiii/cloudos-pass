@@ -1,12 +1,15 @@
 package com.tanli.cloud.service;
 
+import com.tanli.cloud.constant.SystemConst;
 import com.tanli.cloud.dao.*;
 import com.tanli.cloud.model.*;
 import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.utils.APIResponse;
 import com.tanli.cloud.utils.K8sClient;
 import com.tanli.cloud.utils.UuidUtil;
-import io.fabric8.kubernetes.api.model.*;
+import io.fabric8.kubernetes.api.model.NodeAddress;
+import io.fabric8.kubernetes.api.model.Pod;
+import io.fabric8.kubernetes.api.model.ReplicationController;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.joda.time.DateTime;
@@ -14,12 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 
 @Service
 public class AppDeployServiceImp implements AppDeployService {
@@ -36,6 +37,8 @@ public class AppDeployServiceImp implements AppDeployService {
     private TemplateDao templateDao;
     @Autowired
     private ImageInfoDao imageInfoDao;
+    @Autowired
+    private UserLogDao userLogDao;
 
     private static final Logger LOGGE = LoggerFactory.getLogger(AppDeployServiceImp.class);
 
@@ -91,10 +94,10 @@ public class AppDeployServiceImp implements AppDeployService {
                 }
             }
             Map<String, String> relation = JSONObject.fromObject(template.getRelation());
-            //分别部署模板中的镜像
-            for(int i = 0; i < deployContainerList.size(); i++) {
-                Deployment deployment = saveDeployment(deployedTemplate, user.getUser_uuid());
-                if(deployment != null) {
+            Deployment deployment = saveDeployment(deployedTemplate, user.getUser_uuid());
+            if(deployment != null) {
+                //分别部署模板中的镜像
+                for(int i = 0; i < deployContainerList.size(); i++) {
                     K8sClient k8sClient = new K8sClient();
                     // 创建RC
                     ReplicationController replicationController = k8sClient.createRC(deployedTemplate, deployContainerList.get(i));
@@ -106,8 +109,21 @@ public class AppDeployServiceImp implements AppDeployService {
                         return APIResponse.fail("部署模板" + deployedTemplate.getDeploy_name() + "失败");
                     }
                 }
+                //添加用户日志
+                DateTime now = DateTime.now();
+                String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+                UserLog userLog = new UserLog (
+                        UuidUtil.getUUID(),
+                        user.getUser_uuid(),
+                        user.getUserName(),
+                        SystemConst.APPLICATION,
+                        deployment.getDeploy_uuid(),
+                        "创建应用" + deployment.getDeploy_name(),
+                        "0",
+                        nowStr );
+                userLogDao.addUserLog(userLog);
+                return APIResponse.success();
             }
-            return APIResponse.success();
         }
         return APIResponse.fail("部署失败，被部署的模板不存在");
     }
@@ -125,11 +141,28 @@ public class AppDeployServiceImp implements AppDeployService {
                     .stream()
                     .filter(k8s_rc -> k8s_rc.getDeployment_uuid().equals(deploymentId))
                     .collect(Collectors.toList());
+            Deployment deployment = deploymentDao.getDeployments(user.getUser_uuid())
+                    .stream()
+                    .filter(deployment1 -> deployment1.getDeploy_uuid().equals(deploymentId))
+                    .findFirst().orElse(null);
             k8sRcDao.updateReplicas(deploymentId, "0");
             K8sClient k8sClient = new K8sClient();
             for(int i = 0; i< rcs.size(); i++) {
                 k8sClient.updateReplicas(rcs.get(i),"0");
             }
+            //添加用户日志
+            DateTime now = DateTime.now();
+            String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+            UserLog userLog = new UserLog (
+                    UuidUtil.getUUID(),
+                    user.getUser_uuid(),
+                    user.getUserName(),
+                    SystemConst.APPLICATION,
+                    deploymentId,
+                    "停止应用" + deployment.getDeploy_name(),
+                    "0",
+                    nowStr );
+            userLogDao.addUserLog(userLog);
             return APIResponse.success();
         } catch (Exception e) {
             e.printStackTrace();
@@ -151,12 +184,29 @@ public class AppDeployServiceImp implements AppDeployService {
                     .stream()
                     .filter(k8s_rc -> k8s_rc.getDeployment_uuid().equals(deploymentId))
                     .collect(Collectors.toList());
+            Deployment deployment = deploymentDao.getDeployments(user.getUser_uuid())
+                    .stream()
+                    .filter(deployment1 -> deployment1.getDeploy_uuid().equals(deploymentId))
+                    .findFirst().orElse(null);
             K8sClient k8sClient = new K8sClient();
             for(int i = 0; i< rcs.size(); i++) {
                 K8s_Rc rc = rcs.get(i);
                 k8sRcDao.updateReplicas(deploymentId, rc.getDesiredCount());
                 k8sClient.updateReplicas(rc, rc.getDesiredCount());
             }
+            //添加用户日志
+            DateTime now = DateTime.now();
+            String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+            UserLog userLog = new UserLog (
+                    UuidUtil.getUUID(),
+                    user.getUser_uuid(),
+                    user.getUserName(),
+                    SystemConst.APPLICATION,
+                    deploymentId,
+                    "启动应用" + deployment.getDeploy_name(),
+                    "0",
+                    nowStr );
+            userLogDao.addUserLog(userLog);
             return APIResponse.success();
         } catch (Exception e) {
             LOGGE.info("[AppDeployServiceImp Info]: " + "启动应用失败");
@@ -178,8 +228,25 @@ public class AppDeployServiceImp implements AppDeployService {
                     .stream()
                     .filter(rc1 -> rc1.getName().equals(serviceName))
                     .findFirst().orElse(null);
+            K8s_Service service = k8sServiceDao.getAllService()
+                    .stream()
+                    .filter(k8s_service -> k8s_service.getName().equals(serviceName))
+                    .findFirst().orElse(null);
             K8sClient k8sClient =new K8sClient();
             k8sClient.updateReplicas(rc, instanceNum);
+            //添加用户日志
+            DateTime now = DateTime.now();
+            String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+            UserLog userLog = new UserLog (
+                    UuidUtil.getUUID(),
+                    user.getUser_uuid(),
+                    user.getUserName(),
+                    SystemConst.K8S_SERVICE,
+                    service.getUuid(),
+                    "修改服务实例数为"+instanceNum,
+                    "0",
+                    nowStr );
+            userLogDao.addUserLog(userLog);
             return APIResponse.success("伸缩"+serviceName + "成功");
         } catch (Exception e){
             e.printStackTrace();

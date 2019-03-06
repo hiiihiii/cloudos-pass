@@ -73,7 +73,7 @@ public class K8sClient {
         }
         svcSpec.setPorts(servicePorts);
         Map<String, String> selectors = new HashMap<>();
-        selectors.put("deployment", deployedApp.getDeploy_name());
+        selectors.put("service", deployContainer.getServiceName());
         svcSpec.setSelector(selectors);
         svcSpec.setType("NodePort");
         service.setSpec(svcSpec);
@@ -136,13 +136,13 @@ public class K8sClient {
         ReplicationController rc = new ReplicationController();
         //Map<String, String> rcLabels = new HashMap<String, String>();
         Map<String, String> selectors = new HashMap<String, String>();
-        selectors.put("deployment", deployedApp.getDeploy_name());
+        selectors.put("service", deployContainer.getServiceName());
 
         rc.setKind("ReplicationController");
         rc.setApiVersion("v1");
 
         ObjectMeta rcMeta = new ObjectMeta();
-        rcMeta.setName(deployedApp.getDeploy_name() + "-rc");
+        rcMeta.setName(deployContainer.getServiceName());
         //rcMeta.setLabels(rcLabels);
         rcMeta.setNamespace("default");
         rc.setMetadata(rcMeta);

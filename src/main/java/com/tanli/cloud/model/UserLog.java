@@ -13,6 +13,20 @@ public class UserLog {
     private String isDeleted;
     private String create_time;
 
+    public UserLog(String uuid, String user_id, String username, String resoureType, String resourceId, String operation, String isDeleted, String create_time) {
+        this.uuid = uuid;
+        this.user_id = user_id;
+        this.username = username;
+        this.resoureType = resoureType;
+        this.resourceId = resourceId;
+        this.operation = operation;
+        this.isDeleted = isDeleted;
+        this.create_time = create_time;
+    }
+
+    public UserLog() {
+    }
+
     public String getResourceId() {
         return resourceId;
     }
