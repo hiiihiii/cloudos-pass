@@ -41,7 +41,7 @@ define([
                         $this.attr("src", "../images/docker-unselected.png");
                         for(var i = 0; i < _self.allApps.length;i++) {
                             if(_self.allApps[i].appType != 'docker'){
-                                temp = temp.push(_self.allApps[i]);
+                                temp.push(_self.allApps[i]);
                             }
                         }
                         _self.allApps = temp;
@@ -53,6 +53,9 @@ define([
                         }
                     }
                     _self.allApps = _self.sort(_self.allApps);
+                    if(_self.allApps.length > 6){
+                        _self.allApps = _self.allApps.slice(0,6);
+                    }
                 },
                 toggleHotTemplate: function (event) {
                     var _self = this;
@@ -63,7 +66,7 @@ define([
                         $this.attr("src", "../images/template-unselected.png");
                         for(var i = 0; i < _self.allApps.length;i++) {
                             if(_self.allApps[i].appType == 'docker'){
-                                temp = temp.push(_self.allApps[i]);
+                                temp.push(_self.allApps[i]);
                             }
                         }
                         _self.allApps = temp;
@@ -75,6 +78,9 @@ define([
                         }
                     }
                     _self.allApps = _self.sort(_self.allApps);
+                    if(_self.allApps.length > 6){
+                        _self.allApps = _self.allApps.slice(0,6);
+                    }
                 },
                 convertData: function(dataArray, type){
                     if(type === 'image'){
@@ -103,6 +109,9 @@ define([
                     }
                     console.log(_self.allApps);
                     _self.allApps = _self.sort(_self.allApps);
+                    if(_self.allApps.length > 6){
+                        _self.allApps = _self.allApps.slice(0,6);
+                    }
                 },
                 initEcharts: function () {
                     var echartsObj = echarts.init(document.getElementById("app-statistics"));
