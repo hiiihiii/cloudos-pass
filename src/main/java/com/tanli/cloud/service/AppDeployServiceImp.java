@@ -117,7 +117,7 @@ public class AppDeployServiceImp implements AppDeployService {
                     }
                 }
                 //修改模板部署次数
-                int count = template.getDeploy_count() + 1;
+                int count = template.getDeploycount() + 1;
                 templateDao.updateDeployCount(template.getUuid(), count);
                 //添加用户日志
                 DateTime now = DateTime.now();

@@ -319,10 +319,19 @@ span.checkbox+a{
 .middle-top {
     padding-top: 10px;
     padding-left: 10px;
+    flex: 1;
+}
+.middle-bottom {
+    flex: 2;
 }
 .right-all {
     padding-top: 10px;
     padding-left: 10px;
+    padding-right: 10px;
+    height: 100%;
+}
+.right-all .content-box {
+    height: 100%;
 }
 .left-bottom {
     flex: 3;
@@ -338,9 +347,30 @@ span.checkbox+a{
     padding-top: 5px;
     padding-left: 5px;
 }
+#overview .middle-top .content-box {
+    height: 100%;
+}
+#overview .middle-top .box-title img {
+    position: absolute;
+    cursor: pointer;
+    height: 17px;
+}
+#overview .middle-top img.docker-icon {
+    right: 35px;
+}
+#overview .middle-top .icon-selected {
+    border: 1px solid #ec670b;
+}
+#overview .middle-top .icon-unselected {
+    border: 1px solid #bfbfbf;
+}
+#overview .middle-top img.template-icon {
+    right: 10px;
+}
 .content-box .box-title{
     padding-left: 5px;
     border-left: 4px solid rgb(130,121,114);
+    position: relative;
 }
 #overview #app-statistics{
     height: 180px;
@@ -367,6 +397,43 @@ span.checkbox+a{
 }
 .exception-app .info .time {
     color: rgba(0,0,0,0.5);
+}
+#hotApp .app-box {
+    display: inline-block;
+    margin-top: 10px;
+}
+#hotApp .app-type img {
+    height: 14px;
+}
+#hotApp .app-icon {
+    margin-top: 10px;
+}
+#hotApp .app-icon img {
+    height: 90px;
+}
+#hotApp .app-info {
+    font-size: 12px;
+    text-align: center;
+    margin-top: 5px;
+}
+#hotApp .deploy-info {
+    text-align: center;
+}
+#hotApp .deploy-info img {
+    height: 20px;
+}
+.right-all a {
+    position: absolute;
+    right: 10px;
+    color: #ec670b;
+}
+.right-all .log-item {
+    padding: 13px 0;
+    margin-left: 14px;
+}
+.right-all .log-item span:first-child {
+    display: inline-block;
+    width: 160px;
 }
 /*概览结束*/
 /*展示应用开始*/

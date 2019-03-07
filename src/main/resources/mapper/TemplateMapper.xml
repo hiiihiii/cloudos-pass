@@ -5,7 +5,7 @@
         INSERT INTO tl_template
         (uuid, user_uuid, name, logo_url, description, relation, config, topSort, isPublish, create_time, update_time, deploy_count)
         VALUES
-        (#{uuid}, #{userId}, #{templateName},#{logo_url}, #{description}, #{relation}, #{config}, #{topSort}, #{isPublish}, #{create_time},#{update_time}, #{deploy_count})
+        (#{uuid}, #{userId}, #{templateName},#{logo_url}, #{description}, #{relation}, #{config}, #{topSort}, #{isPublish}, #{create_time},#{update_time}, #{deploycount})
     </insert>
 
     <resultMap id="templates" type="com.tanli.cloud.model.Template">
@@ -20,7 +20,7 @@
         <result column="create_time" property="create_time"></result>
         <result column="update_time" property="update_time"></result>
         <result column="isPublish" property="isPublish"></result>
-        <result column="deploy_count" property="deploy_count"></result>
+        <result column="deploy_count" property="deploycount"></result>
     </resultMap>
 
     <select id="getAllTemplate" resultMap="templates">

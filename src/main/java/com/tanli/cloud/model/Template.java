@@ -13,16 +13,16 @@ public class Template {
     private String topSort;
     private String description;
     private String isPublish;
-    private int deploy_count;
+    private int deploycount;
     private String create_time;
     private String update_time;
 
-    public int getDeploy_count() {
-        return deploy_count;
+    public int getDeploycount() {
+        return deploycount;
     }
 
-    public void setDeploy_count(int deploy_count) {
-        this.deploy_count = deploy_count;
+    public void setDeploycount(int deploycount) {
+        this.deploycount = deploycount;
     }
 
     public String getTopSort() {

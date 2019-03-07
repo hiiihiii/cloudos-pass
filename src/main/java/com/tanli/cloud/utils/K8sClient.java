@@ -29,14 +29,15 @@ public class K8sClient {
     }
 
     /**
-     * 测试创建namespace
+     * 创建namespace
+     * @param name namespace的名称
      */
-    public void testCreateNamespace() {
+    public void createNamespace(String name) {
         Namespace ns = new Namespace();
         ns.setApiVersion("v1");
         ns.setKind("Namespace");
         ObjectMeta objectMeta = new ObjectMeta();
-        objectMeta.setName("ns-namespace");
+        objectMeta.setName(name);
         ns.setMetadata(objectMeta);
         this.client.namespaces().create(ns);
     }

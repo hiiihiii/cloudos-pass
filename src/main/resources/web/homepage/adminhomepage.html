@@ -11,14 +11,18 @@
         <!--应用实例统计-->
         <div class="left-top">
             <div class="content-box">
-                <div class="box-title">应用实例统计</div>
+                <div class="box-title">
+                    <span>应用实例统计</span>
+                </div>
                 <div id="app-statistics"></div>
             </div>
         </div>
         <!--异常应用列表-->
         <div class="left-bottom">
             <div class="content-box">
-                <div class="box-title">异常应用列表</div>
+                <div class="box-title">
+                    <span>异常应用列表</span>
+                </div>
                 <div class="exception-list">
                     <div class="exception-app">
                         <img src="../images/temp/tomcat.PNG" />
@@ -56,8 +60,50 @@
         <!--应用部署次数排序-->
         <div class="middle-top">
             <div class="content-box">
-                <div class="box-title">热门应用</div>
-                <div id="hotApp"></div>
+                <div class="box-title">
+                    <span>热门应用</span>
+                    <img src="../images/docker-selected.png" class="docker-icon"
+                         v-bind:class="{'icon-selected': hotImage, 'icon-unselected': !hotImage}"
+                         v-on:click="toggleHotImage($event)"/>
+                    <img src="../images/template-selected.png" class="template-icon"
+                         v-on:click="toggleHotTemplate($event)"/>
+                </div>
+                <div id="hotApp">
+                    <div class="app-box" v-for="app in allApps">
+                        <!--镜像-->
+                        <div v-if="app.appType=='docker'" v-cloak="">
+                            <div class="app-type" v-cloak="">
+                                <img src="../images/docker-unselected.png" />
+                            </div>
+                            <div class="app-icon">
+                                <img v-bind:src="app.logo_url" v-on:error="setSrc($event)"/>
+                            </div>
+                            <div class="app-info">
+                                <span v-cloak="">{{app.appName}}</span>
+                            </div>
+                            <div class="deploy-info">
+                                <img src="../images/hot.png" />
+                                <span v-cloak="">{{app.deploycount}}</span>
+                            </div>
+                        </div>
+                        <!--模板-->
+                        <div v-if="app.appType=='template'" v-cloak="">
+                            <div class="app-type" v-cloak="">
+                                <img src="../images/template-unselected.png" />
+                            </div>
+                            <div class="app-icon">
+                                <img v-bind:src="app.temp_logo_url" v-on:error="setSrc($event)"/>
+                            </div>
+                            <div class="app-info">
+                                <span v-cloak="">{{app.templateName}}</span>
+                            </div>
+                            <div class="deploy-info">
+                                <img src="../images/hot.png" />
+                                <span v-cloak="">{{app.deploycount}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <!--异常应用详情-->
@@ -70,7 +116,16 @@
     <div class="right-content">
         <div class="right-all">
             <div class="content-box">
-                <div class="box-title">用户日志</div>
+                <div class="box-title">
+                    <span>用户日志</span>
+                    <a >更多</a>
+                </div>
+                <div id="userlogs">
+                    <div class="log-item" v-for="log in logs">
+                        <span v-cloak="">{{log.operation}}</span>
+                        <span v-cloak="">{{log.create_time}}</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

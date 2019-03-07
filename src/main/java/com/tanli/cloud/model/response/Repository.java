@@ -1,7 +1,5 @@
 package com.tanli.cloud.model.response;
 
-import java.sql.Timestamp;
-
 /**
  * Created by tanli on 2018/11/20 0020.
  */
@@ -11,10 +9,10 @@ public class Repository {
     private String repo_name;
     private String repo_type;
     private String url;
-    private Timestamp create_time;
-    private Timestamp update_time;
+    private String create_time;
+    private String update_time;
 
-    public Repository(String repo_uuid, String user_uuid, String repo_name, String repo_type, String url, Timestamp create_time, Timestamp update_time) {
+    public Repository(String repo_uuid, String user_uuid, String repo_name, String repo_type, String url, String create_time, String update_time) {
         this.repo_uuid = repo_uuid;
         this.user_uuid = user_uuid;
         this.repo_name = repo_name;
@@ -65,19 +63,19 @@ public class Repository {
         this.url = url;
     }
 
-    public Timestamp getCreate_time() {
+    public String getCreate_time() {
         return create_time;
     }
 
-    public void setCreate_time(Timestamp create_time) {
+    public void setCreate_time(String create_time) {
         this.create_time = create_time;
     }
 
-    public Timestamp getUpdate_time() {
+    public String getUpdate_time() {
         return update_time;
     }
 
-    public void setUpdate_time(Timestamp update_time) {
+    public void setUpdate_time(String update_time) {
         this.update_time = update_time;
     }
 }

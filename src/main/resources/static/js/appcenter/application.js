@@ -114,6 +114,7 @@ define([
                         _self.serviceTableObj = common_module.dataTables("#service_table");
                     });
                 },
+
                 hideServiceDetail: function () {
                     var _self = this;
                     _self.serviceDetailFlag = false;
@@ -158,7 +159,11 @@ define([
                         },
                         dataType: "json",
                         success: function (result) {
-                            
+                            if(result.code =='success') {
+
+                            } else {
+
+                            }
                         },
                         error: function () {
 

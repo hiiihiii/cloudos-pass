@@ -1,8 +1,11 @@
 package com.tanli.cloud.service;
 
+import com.tanli.cloud.constant.EnvConst;
+import com.tanli.cloud.dao.RepositoryDao;
 import com.tanli.cloud.dao.UserDao;
 import com.tanli.cloud.dao.UserLogDao;
 import com.tanli.cloud.model.UserLog;
+import com.tanli.cloud.model.response.Repository;
 import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.utils.APIResponse;
 import com.tanli.cloud.utils.UuidUtil;
@@ -24,6 +27,8 @@ public class UserManageServiceImp implements UserManageService {
     private UserDao userDao;
     @Autowired
     private UserLogDao userLogDao;
+    @Autowired
+    private RepositoryDao repositoryDao;
 
     private static final org.slf4j.Logger LOGGE = org.slf4j.LoggerFactory.getLogger(UserManageServiceImp.class);
 
@@ -65,6 +70,19 @@ public class UserManageServiceImp implements UserManageService {
         String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
         user.setCreate_time(nowStr);
         user.setUpdate_time(nowStr);
+        Repository repository =new Repository();
+        repository.setRepo_uuid(UuidUtil.getUUID());
+        repository.setUser_uuid(user.getUser_uuid());
+        repository.setRepo_name(user.getUserName()+"_project");
+        repository.setRepo_type("private");
+        repository.setUrl("http"+ EnvConst.harbor_api_ip);
+        //repository.set
+        repository.setCreate_time(nowStr);
+        repository.setUpdate_time(nowStr);
+
+        //调用Harbor API创建project
+        //在Kubernetes中为用户创建命名空间
+        //将仓库信息保存到数据库中
         try {
             //操作日志
             UserLog userLog = new UserLog();
@@ -129,5 +147,10 @@ public class UserManageServiceImp implements UserManageService {
             return APIResponse.fail("删除用户失败");
         }
         return APIResponse.success(result);
+    }
+
+    private Boolean addHarborProject(String projectName) {
+        Boolean result = false;
+        return result;
     }
 }
