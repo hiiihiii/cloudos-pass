@@ -10,4 +10,5 @@ import java.util.List;
 public interface DeploymentDao {
     public int addDeployment(Deployment deployment);
     public List<Deployment> getDeployments(@Param("id")String userid);
+    public List<Deployment> getAllDeployments();
 }

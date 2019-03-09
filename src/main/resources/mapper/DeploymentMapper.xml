@@ -22,4 +22,8 @@
     <select id="getDeployments" resultMap="deployments">
         SELECT * from tl_deployment WHERE user_uuid = #{id}
     </select>
+
+    <select id="getAllDeployments" resultMap="deployments">
+        SELECT * FROM tl_deployment
+    </select>
 </mapper>

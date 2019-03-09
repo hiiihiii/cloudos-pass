@@ -1,9 +1,11 @@
 package com.tanli.cloud.service;
 
 import com.tanli.cloud.constant.EnvConst;
+import com.tanli.cloud.dao.DeploymentDao;
 import com.tanli.cloud.dao.ImageInfoDao;
 import com.tanli.cloud.dao.TemplateDao;
 import com.tanli.cloud.dao.UserLogDao;
+import com.tanli.cloud.model.Deployment;
 import com.tanli.cloud.model.ImageInfo;
 import com.tanli.cloud.model.Template;
 import com.tanli.cloud.model.UserLog;
@@ -48,6 +50,8 @@ public class AppStoreServiceImp implements AppStoreService {
     private TemplateDao templateDao;
     @Autowired
     private UserLogDao userLogDao;
+    @Autowired
+    private DeploymentDao deploymentDao;
 
     private static final Logger LOGGE = LoggerFactory.getLogger(AppStoreServiceImp.class);
 
@@ -368,27 +372,64 @@ public class AppStoreServiceImp implements AppStoreService {
     @Override
     public APIResponse deleteImageInfo(User user, String[] versions, String imageId) {
         //整合数据库
+        Map<String, Integer> result = new HashMap<>();
+        int success = 0, fail = 0;
         ImageInfo exist = imageInfoDao.getImagesAll(user.getUser_uuid())
                 .stream()
                 .filter(imageInfo -> imageInfo.getApp_id().equals(imageId))
                 .findFirst()
                 .orElse(null);
         if(exist != null) {
+            List<Deployment> deployments = deploymentDao.getAllDeployments()
+                    .stream()
+                    .filter(deployment -> deployment.getImage_uuid().equals(exist.getApp_id()))
+                    .collect(Collectors.toList());
+            if(deployments.size()!=0) {
+                result.put("success", 0);
+                result.put("fail", versions.length);
+                return APIResponse.fail(result);
+            }
             List<String> existVersoins = JSONArray.toList(JSONArray.fromObject(exist.getVersion()), String.class);
             Map<String, String> v_desc = JSONObject.fromObject(exist.getV_description());
             Map<String, String> metadata = JSONObject.fromObject(exist.getMetadata());
             Map<String, String> create_type = JSONObject.fromObject(exist.getCreateType());
             Map<String, String> source_urls= JSONObject.fromObject(exist.getSource_url());
-            if (existVersoins.size() == versions.length) {
-                //int count = imageInfoDao.deleteImageById(imageId);
-            } else {
-                for(int i = 0; i <versions.length; i++) {
-                    v_desc.remove(versions[i]);
-                    metadata.remove(versions[i]);
-                    create_type.remove(versions[i]);
-                    existVersoins.remove(versions[i]);
-                    source_urls.remove(versions[i]);
+            for(int i = 0; i <versions.length; i++) {
+                List<Template> templates = templateDao.getAllTemplate()
+                        .stream()
+                        .filter(template -> {
+                            List<Map<String, String>> config = JSONArray.fromObject(JSONObject.fromObject(template.getConfig()));
+                            for(int j = 0; j<config.size();j++){
+                                Map<String,String> temp = config.get(j);
+                                if(temp.get("appName").equals(exist.getAppName()) &&
+                                        temp.get("version").equals(versions[j])){
+                                    return true;
+                                }
+                            }
+                            return false;
+                        }).collect(Collectors.toList());
+                if(templates.size()!=0){
+                    fail += 1;
+                    continue;
                 }
+                v_desc.remove(versions[i]);
+                metadata.remove(versions[i]);
+                create_type.remove(versions[i]);
+                existVersoins.remove(versions[i]);
+                source_urls.remove(versions[i]);
+                //调用Docker API, Harbor API
+                // docker remove api
+                deleteImage(EnvConst.docker_images_prefix + source_urls.get(versions[i]));
+                // harbor api
+                String temp_source_url = source_urls.get(versions[i]);
+                String[] temps= temp_source_url.split("/");
+                String repo_name = temps[1] + "/" + temps[2].split(":")[0];
+                deleteImageTag_harbor( repo_name, versions[i]);
+                success += 1;
+            }
+            if(success == existVersoins.size()) {
+                //int count = imageInfoDao.deleteImageById(exist.getApp_id());
+            } else {
                 exist.setV_description(JSONObject.fromObject(v_desc).toString());
                 exist.setMetadata(JSONObject.fromObject(metadata).toString());
                 exist.setCreateType(JSONObject.fromObject(create_type).toString());
@@ -398,20 +439,14 @@ public class AppStoreServiceImp implements AppStoreService {
                 exist.setUpdate_time(nowStr);
                 //int count = imageInfoDao.updateImageInfo(exist);
             }
-            //调用Docker API, Harbor API
-            for(int i = 0; i<versions.length; i++) {
-                // docker remove api
-                deleteImage(EnvConst.docker_images_prefix + source_urls.get(versions[i]));
-                // harbor api
-                String temp_source_url = source_urls.get(versions[i]);
-                String[] temps= temp_source_url.split("/");
-                String repo_name = temps[1] + "/" + temps[2].split(":")[0];
-                deleteImageTag_harbor( repo_name, versions[i]);
-            }
+            result.put("success", success);
+            result.put("fail", fail);
+            return APIResponse.success(result);
         } else {
+            result.put("success", 0);
+            result.put("fail", versions.length);
             LOGGE.info("[AppStoreServiceImp Info]: "+ "待删除的镜像不存在");
-            return APIResponse.fail("待删除的镜像不存在");
+            return APIResponse.fail(result);
         }
-        return null;
     }
 }

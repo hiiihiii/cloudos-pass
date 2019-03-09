@@ -44,6 +44,10 @@ public class APIResponse <T> {
         return new APIResponse(CODE_FAIL, msg);
     }
 
+    public static APIResponse fail(Object data) {
+        return  new APIResponse(CODE_FAIL, data);
+    }
+
     public static APIResponse widthCode(String errorCode) {
         return new APIResponse(errorCode);
     }
