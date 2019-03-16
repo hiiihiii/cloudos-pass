@@ -8,6 +8,7 @@ import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.ConfigBuilder;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import java.util.Map;
 /**
  * Created by tanli on 2019/2/9 0009.
  */
+@Component
 public class K8sClient {
 
     private static final String k8s_api_address = "132.232.99.189:8080";

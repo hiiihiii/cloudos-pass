@@ -64,15 +64,15 @@ public class AppDeployServiceImp implements AppDeployService {
 
             K8s_Rc rc = saveRc(deployedImage, deployment, service, replicationController);
             K8s_Service svc = saveService(deployedImage, deployment, service) ;
-            if( rc != null && svc !=null) {
-                // 更新pod到数据库中
-                List<Pod> pods = k8sClient.getPod(service.getSpec().getSelector());
-                pods.stream().forEach(pod -> {
-                            savePod(pod, rc, svc);
-                        });
+//            if( rc != null && svc !=null) {
+//                // 更新pod到数据库中
+//                List<Pod> pods = k8sClient.getPod(service.getSpec().getSelector());
+//                pods.stream().forEach(pod -> {
+//                            savePod(pod, rc, svc);
+//                        });
                 LOGGE.info("[AppDeployServiceImp Info]: " + "部署" + deployedImage.getDeploy_name() + "成功");
                 return APIResponse.success();
-            }
+//            }
         }
         LOGGE.info("[AppDeployServiceImp Info]: " + "部署" + deployedImage.getDeploy_name() + "失败");
         return APIResponse.fail("部署镜像"+deployedImage.getDeploy_name()+"失败");

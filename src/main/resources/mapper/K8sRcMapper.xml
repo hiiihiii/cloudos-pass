@@ -9,7 +9,7 @@
     </insert>
 
     <resultMap id="RCs" type="com.tanli.cloud.model.K8s_Rc">
-        <id column="uuid" property=""></id>
+        <id column="uuid" property="uuid"></id>
         <result column="deployment_uuid" property="deployment_uuid"></result>
         <result column="name" property="name"></result>
         <result column="namespace" property="namespace"></result>
