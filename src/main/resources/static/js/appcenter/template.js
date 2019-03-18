@@ -539,5 +539,17 @@ define([
                 }
             }
         });
+
+
+        var validator = $("#add_template_form").validate({
+            rules: {
+                templateName: {
+                    required: true,
+                    notEmpty: true
+                },
+                messages:{
+                }
+            }
+        });
     }
 });
