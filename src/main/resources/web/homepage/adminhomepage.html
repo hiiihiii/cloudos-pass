@@ -27,29 +27,22 @@
                     <div class="exception-app">
                         <img src="../images/temp/tomcat.PNG" />
                         <div class="info">
-                            <div class="">tomcat</div>
-                            <div class="time">2018-3-18 09:34:33</div>
+                            <div class="">tl-tomcat</div>
+                            <div class="time">2019-3-18 09:34:33</div>
+                        </div>
+                    </div>
+                    <div class="exception-app">
+                        <img src="../images/temp/mysql.png" />
+                        <div class="info">
+                            <div class="">mysql</div>
+                            <div class="time">2019-2-18 19:23:03</div>
                         </div>
                     </div>
                     <div class="exception-app">
                         <img src="../images/temp/tomcat.PNG" />
                         <div class="info">
                             <div class="">tomcat</div>
-                            <div class="time">2018-3-18 09:34:33</div>
-                        </div>
-                    </div>
-                    <div class="exception-app">
-                        <img src="../images/temp/tomcat.PNG" />
-                        <div class="info">
-                            <div class="">tomcat</div>
-                            <div class="time">2018-3-18 09:34:33</div>
-                        </div>
-                    </div>
-                    <div class="exception-app">
-                        <img src="../images/temp/tomcat.PNG" />
-                        <div class="info">
-                            <div class="">tomcat</div>
-                            <div class="time">2018-3-18 09:34:33</div>
+                            <div class="time">2019-3-17 21:01:45</div>
                         </div>
                     </div>
                 </div>
@@ -57,59 +50,200 @@
         </div>
     </div>
     <div class="middle-content flex-col">
-        <!--应用部署次数排序-->
+
+        <!--统一服务能力-->
         <div class="middle-top">
             <div class="content-box">
                 <div class="box-title">
-                    <span>热门应用</span>
-                    <img src="../images/docker-selected.png" class="docker-icon"
-                         v-bind:class="{'icon-selected': hotImage, 'icon-unselected': !hotImage}"
-                         v-on:click="toggleHotImage($event)"/>
-                    <img src="../images/template-selected.png" class="template-icon"
-                         v-on:click="toggleHotTemplate($event)"/>
+                    <span>服务能力</span>
                 </div>
-                <div id="hotApp">
-                    <div class="app-box" v-for="app in allApps">
-                        <!--镜像-->
-                        <div v-if="app.appType=='docker'" v-cloak="">
-                            <div class="app-type" v-cloak="">
-                                <img src="../images/docker-unselected.png" />
-                            </div>
-                            <div class="app-icon">
-                                <img v-bind:src="app.logo_url" v-on:error="setSrc($event)"/>
-                            </div>
+                <div class="" id="service">
+                    <!--用户统计-->
+                    <div class="service-box">
+                        <div class="service-info">
+                            <img src="../images/group.png" />
+                            <span>用户</span>
+                        </div>
+                        <div class="service-info">
+                            4
+                        </div>
+                    </div>
+                    <!--节点统计-->
+                    <div class="service-box">
+                        <div class="service-info">
+                            <img src="../images/tree.png" />
+                            <span>节点</span>
+                        </div>
+                        <div class="service-info">3</div>
+                    </div>
+                    <!--镜像统计-->
+                    <div class="app-statistics-box" id="image-statistics">
+                        <div class="app-statistics">
                             <div class="app-info">
-                                <span v-cloak="">{{app.appName}}</span>
+                                <img src="../images/docker-statistics.png" />
+                                <span>容器镜像</span>
                             </div>
-                            <div class="deploy-info">
-                                <img src="../images/hot.png" />
-                                <span v-cloak="">{{app.deploycount}}</span>
+                            <div class="app-info">3</div>
+                        </div>
+                        <div class="app-type">
+                            <div class="type-count clearfix">
+                                <div class="public">公有1</div>
+                                <div class="private">私有2</div>
+                            </div>
+                            <div class="type-classify">
+                                <span></span>
                             </div>
                         </div>
-                        <!--模板-->
-                        <div v-if="app.appType=='template'" v-cloak="">
-                            <div class="app-type" v-cloak="">
-                                <img src="../images/template-unselected.png" />
-                            </div>
-                            <div class="app-icon">
-                                <img v-bind:src="app.temp_logo_url" v-on:error="setSrc($event)"/>
-                            </div>
+                    </div>
+                    <!--模板统计-->
+                    <div class="app-statistics-box" id="template-statistics">
+                        <div class="app-statistics">
                             <div class="app-info">
-                                <span v-cloak="">{{app.templateName}}</span>
+                                <img src="../images/template-statistics.png" />
+                                <span>应用模板</span>
                             </div>
-                            <div class="deploy-info">
-                                <img src="../images/hot.png" />
-                                <span v-cloak="">{{app.deploycount}}</span>
+                            <div class="app-info">2</div>
+                        </div>
+                        <div class="app-type">
+                            <div class="type-count clearfix">
+                                <div class="public">公有2</div>
+                                <div class="private">私有0</div>
+                            </div>
+                            <div class="type-classify">
+                                <span></span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!--异常应用详情-->
+        <!--热门应用-->
         <div class="middle-bottom">
             <div class="content-box">
+                <div class="box-title">
+                    <span>热门应用</span>
+                    <div class="hot-title docker-title" v-on:click="toggleHotImage($event)">
+                        <img src="../images/docker-selected.png" class="docker-icon" />
+                        <span>按镜像</span>
+                    </div>
+                    <div class="hot-title" v-on:click="toggleHotTemplate($event)">
+                        <img src="../images/template-selected.png" class="template-icon" />
+                        <span>按模板</span>
+                    </div>
 
+                </div>
+                <div id="hotApp" class="clearfix">
+                    <!--最热门-->
+                    <div id="hotest">
+                        <!--镜像-->
+                        <div v-if="hotestApp.appType=='docker'" v-cloak="">
+                            <div class="app-type" v-cloak="">
+                                <img src="../images/docker-unselected.png" />
+                            </div>
+                            <div class="app-icon">
+                                <img v-bind:src="hotestApp.logo_url" v-on:error="setSrc($event)"/>
+                            </div>
+                            <div class="app-info">
+                                <span v-cloak="">{{hotestApp.appName}}</span>
+                            </div>
+                            <div class="deploy-info">
+                                <img src="../images/hot.png" />
+                                <span v-cloak="">{{hotestApp.deploycount}}</span>
+                            </div>
+                        </div>
+                        <!--模板-->
+                        <div v-if="hotestApp.appType=='template'" v-cloak="">
+                            <div class="app-type" v-cloak="">
+                                <img src="../images/template-unselected.png" />
+                            </div>
+                            <div class="app-icon">
+                                <img v-bind:src="hotestApp.temp_logo_url" v-on:error="setSrc($event)"/>
+                            </div>
+                            <div class="app-info">
+                                <span v-cloak="">{{hotestApp.templateName}}</span>
+                            </div>
+                            <div class="deploy-info">
+                                <img src="../images/hot.png" />
+                                <span v-cloak="">{{hotestApp.deploycount}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--其他-->
+                    <div class="hot-app">
+                        <div class="up">
+                            <div class="app-box" v-for="app in up">
+                                <!--镜像-->
+                                <div v-if="app.appType=='docker'" v-cloak="">
+                                    <div class="app-type" v-cloak="">
+                                        <img src="../images/docker-unselected.png" />
+                                    </div>
+                                    <div class="app-icon">
+                                        <img v-bind:src="app.logo_url" v-on:error="setSrc($event)"/>
+                                    </div>
+                                    <div class="app-info">
+                                        <span v-cloak="">{{app.appName}}</span>
+                                    </div>
+                                    <div class="deploy-info">
+                                        <img src="../images/hot.png" />
+                                        <span v-cloak="">{{app.deploycount}}</span>
+                                    </div>
+                                </div>
+                                <!--模板-->
+                                <div v-if="app.appType=='template'" v-cloak="">
+                                    <div class="app-type" v-cloak="">
+                                        <img src="../images/template-unselected.png" />
+                                    </div>
+                                    <div class="app-icon">
+                                        <img v-bind:src="app.temp_logo_url" v-on:error="setSrc($event)"/>
+                                    </div>
+                                    <div class="app-info">
+                                        <span v-cloak="">{{app.templateName}}</span>
+                                    </div>
+                                    <div class="deploy-info">
+                                        <img src="../images/hot.png" />
+                                        <span v-cloak="">{{app.deploycount}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="down">
+                            <div class="app-box" v-for="app in down">
+                                <!--镜像-->
+                                <div v-if="app.appType=='docker'" v-cloak="">
+                                    <div class="app-type" v-cloak="">
+                                        <img src="../images/docker-unselected.png" />
+                                    </div>
+                                    <div class="app-icon">
+                                        <img v-bind:src="app.logo_url" v-on:error="setSrc($event)"/>
+                                    </div>
+                                    <div class="app-info">
+                                        <span v-cloak="">{{app.appName}}</span>
+                                    </div>
+                                    <div class="deploy-info">
+                                        <img src="../images/hot.png" />
+                                        <span v-cloak="">{{app.deploycount}}</span>
+                                    </div>
+                                </div>
+                                <!--模板-->
+                                <div v-if="app.appType=='template'" v-cloak="">
+                                    <div class="app-type" v-cloak="">
+                                        <img src="../images/template-unselected.png" />
+                                    </div>
+                                    <div class="app-icon">
+                                        <img v-bind:src="app.temp_logo_url" v-on:error="setSrc($event)"/>
+                                    </div>
+                                    <div class="app-info">
+                                        <span v-cloak="">{{app.templateName}}</span>
+                                    </div>
+                                    <div class="deploy-info">
+                                        <img src="../images/hot.png" />
+                                        <span v-cloak="">{{app.deploycount}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

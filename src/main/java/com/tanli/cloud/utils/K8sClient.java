@@ -76,6 +76,7 @@ public class K8sClient {
         }
         svcSpec.setPorts(servicePorts);
         Map<String, String> selectors = new HashMap<>();
+        selectors.put("namespace", "default");
         selectors.put("service", deployContainer.getServiceName());
         svcSpec.setSelector(selectors);
         svcSpec.setType("NodePort");
@@ -139,6 +140,8 @@ public class K8sClient {
         ReplicationController rc = new ReplicationController();
         //Map<String, String> rcLabels = new HashMap<String, String>();
         Map<String, String> selectors = new HashMap<String, String>();
+        //todo 使用用户名设置命名空间
+        selectors.put("namespace", "default");
         selectors.put("service", deployContainer.getServiceName());
 
         rc.setKind("ReplicationController");

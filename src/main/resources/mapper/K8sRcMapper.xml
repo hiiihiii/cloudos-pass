@@ -3,9 +3,9 @@
 <mapper namespace="com.tanli.cloud.dao.K8sRcDao">
     <insert id="addRc" parameterType="com.tanli.cloud.model.K8s_Rc">
         INSERT INTO tl_rc (uuid, deployment_uuid, name, namespace, replicas,
-        desiredCount,selector, template, content, scaleType,create_time, update_time)
+        desiredCount,selector, template, content, scaleType, create_time, update_time)
         VALUES (#{uuid}, #{deployment_uuid}, #{name}, #{namespace}, #{replicas},
-        #{desiredCount}, #{selector}, #{template},#{content},#{scaleType} #{create_time}, #{update_time})
+        #{desiredCount}, #{selector}, #{template},#{content},#{scaleType}, #{create_time}, #{update_time})
     </insert>
 
     <resultMap id="RCs" type="com.tanli.cloud.model.K8s_Rc">

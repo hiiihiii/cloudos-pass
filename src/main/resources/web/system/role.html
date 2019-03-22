@@ -34,7 +34,10 @@
             </td>
             <td v-cloak="">{{role.name}}</td>
             <td v-cloak="">{{role.description}}</td>
-            <td>操作</td>
+            <td>
+                <span class="operate-btn" title="编辑"><i class="fa fa-pencil"></i></span>
+                <span class="operate-btn" title="删除" v-cloak=""><i class="fa fa-trash-o"></i></span>
+            </td>
         </tr>
         </tbody>
     </table>

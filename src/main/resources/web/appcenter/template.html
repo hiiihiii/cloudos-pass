@@ -241,14 +241,14 @@
                     <form id="add_template_form" role="form" class="form-horizontal" enctype="multipart/form-data">
                         <!--模板名称-->
                         <div class="form-group">
-                            <label>名称</label>
+                            <label><span class="cloud-required">  *</span>名称</label>
                             <div class="form-content">
                                 <input type="text" class="form-control" id="templateName" name="templateName" placeholder="请输入名称" maxlength="64"/>
                             </div>
                         </div>
                         <!--图标-->
                         <div class="form-group">
-                            <label>图标</label>
+                            <label><span class="cloud-required">  *</span>图标</label>
                             <div class="file-container">
                                 <input class="form-control file-input" type="text" name="logoFileName"
                                        v-model="logoFileName" readonly="readonly" />
@@ -265,7 +265,7 @@
                         </div>
                         <!--是否发布-->
                         <div class="form-group">
-                            <label>是否发布</label>
+                            <label><span class="cloud-required">  *</span>是否发布</label>
                             <div id="isPublish" class="switch">
                                 <input type="checkbox" class="form-control" />
                             </div>

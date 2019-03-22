@@ -220,6 +220,7 @@ define([
                                 break;
                             }
                         }
+                        //todo 好像不需要isExist也可以
                         if(!isExist){
                             var node = new twaver.Node();
                             _self.registerNormalImage(dragItem.temp_logo_url, dragItem.appName, 40, 40);
@@ -333,10 +334,12 @@ define([
                             _self.twaverObj.from = last;
                         } else if(!_self.twaverObj.to){
                             _self.twaverObj.to = last;
+                            // _self.showPortListDialog(_self.twaverObj.to);
                             /**
                              * 创建连线，
                              * 连线样式设置参考http://doc.servasoft.com/twaver-document-center/recommended/twaver-html5-guide/%E7%BD%91%E5%85%83%E6%A0%B7%E5%BC%8F%E8%A1%A8/#link
                              */
+
                             var link = new twaver.Link(_self.twaverObj.from, _self.twaverObj.to);
                             link.setName('test');
                             // link.setToolTip('<b>Hello!</b>');
@@ -350,6 +353,8 @@ define([
                             //完成一次连线就清空起始节点和终点
                             _self.twaverObj.from = null;
                             _self.twaverObj.to = null;
+                            // _self.twaverObj.isLinkMode = false;
+
                         }
                     }
                     // 保存当前节点的信息
@@ -366,6 +371,18 @@ define([
                         var imageName = last.getName();
                         console.log(imageName);
                         _self.showSelectedAppInfo(imageName);
+                    }
+                },
+
+                //
+                showPortListDialog: function (toNode) {
+                    var _self = this;
+                    var imageName = toNode.getName;
+                    var ports = [];
+                    for(var i = 0; i < _self.imageInfoList.length; i++) {
+                        if(_self.imageInfoList[i].appName == imageName) {
+                            ports = _self.imageInfoList[i].metadata
+                        }
                     }
                 },
 

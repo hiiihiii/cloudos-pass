@@ -91,6 +91,9 @@
                                 <div class="app-desc" v-bind:title="imageInfo.description" v-cloak="">
                                     {{imageInfo.description}}
                                 </div>
+                                <div class="app-deploy-count" v-bind:title="imageInfo.deploycount" v-cloak="">
+                                    <i class="fa fa-toggle-right"></i>{{imageInfo.deploycount}}
+                                </div>
                             </li>
                             <!--模板-->
                             <li v-for="(template, index) in templateInfos" v-bind:id="template.uuid"
@@ -109,6 +112,10 @@
                                 </div>
                                 <div class="app-desc" v-bind:title="template.description" v-cloak="">
                                     {{template.description}}
+                                </div>
+                                <!--部署次数-->
+                                <div class="app-deploy-count" v-bind:title="template.deploycount" v-cloak="">
+                                    <i class="fa fa-toggle-right"></i>{{template.deploycount}}
                                 </div>
                             </li>
                         </ul>
@@ -135,6 +142,7 @@
                         <!--应用详情页面 镜像 部署和删除-->
                         <div v-show="imageDetail">
                             <div class="operation-box">
+                                <span><i class="fa fa-pencil"></i>编辑</span>
                                 <span><i class="fa fa-toggle-right"></i>部署</span>
                                 <span v-on:click="showImageVersions"><i class="fa fa-trash-o"></i>删除</span>
                             </div>
@@ -142,6 +150,7 @@
                         <!--应用详情页面 模板 部署和删除-->
                         <div v-show="templateDetail">
                             <div class="operation-box">
+                                <span><i class="fa fa-pencil"></i>编辑</span>
                                 <span><i class="fa fa-toggle-right"></i>部署</span>
                                 <span><i class="fa fa-trash-o"></i>删除</span>
                             </div>
@@ -187,6 +196,13 @@
                                         <span class="group-title">最近更新</span>
                                         <div class="group">
                                             <span v-text="selectedImage.update_time" v-cloak=""></span>
+                                        </div>
+                                    </div>
+                                    <!--部署次数-->
+                                    <div class="group-box">
+                                        <span class="group-title">部署次数</span>
+                                        <div class="group">
+                                            <span v-text="selectedImage.deploycount" v-cloak=""></span>
                                         </div>
                                     </div>
                                 </div>
@@ -316,6 +332,13 @@
                                         <span class="group-title">最近更新</span>
                                         <div class="group">
                                             <span v-text="selectedTemplate.update_time" v-cloak=""></span>
+                                        </div>
+                                    </div>
+                                    <!--部署次数-->
+                                    <div class="group-box">
+                                        <span class="group-title">部署次数</span>
+                                        <div class="group">
+                                            <span v-text="selectedTemplate.deploycount" v-cloak=""></span>
                                         </div>
                                     </div>
                                 </div>

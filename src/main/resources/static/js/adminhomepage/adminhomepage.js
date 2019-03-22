@@ -18,7 +18,10 @@ define([
                 images:[],
                 templates:[],
                 hotImage: true,
-                hotTemplate: true
+                hotTemplate: true,
+                hotestApp: '',
+                up: [],
+                down: []
             },
             mounted: function () {
                 var _self = this;
@@ -29,16 +32,21 @@ define([
                 _self.getTemplates();
                 _self.getImages();
                 _self.setallApps();
+                _self.hotestApp = _self.images[0];
             },
 
             methods: {
                 toggleHotImage: function (event) {
                     var _self = this;
-                    var $this = $(event.target);
+                    _self.hotestApp = '';
+                    var div = $(event.target).parent('div.hot-title')|| $(event.target);
+                    var img = $(div).find("img")[0];
+                    var span = $(div).find('span')[0];
                     var temp = [];
                     if(_self.hotImage) {
                         _self.hotImage = false;
-                        $this.attr("src", "../images/docker-unselected.png");
+                        $(img).attr("src", "../images/docker-unselected.png");
+                        $(span).css('color', "#bfbfbf");
                         for(var i = 0; i < _self.allApps.length;i++) {
                             if(_self.allApps[i].appType != 'docker'){
                                 temp.push(_self.allApps[i]);
@@ -47,7 +55,8 @@ define([
                         _self.allApps = temp;
                     } else {
                         _self.hotImage = true;
-                        $this.attr("src", "../images/docker-selected.png");
+                        $(img).attr("src", "../images/docker-selected.png");
+                        $(span).css('color', "#ec670b");
                         for(var i = 0; i < _self.images.length; i++) {
                             _self.allApps.push(_self.images[i]);
                         }
@@ -56,14 +65,29 @@ define([
                     if(_self.allApps.length > 6){
                         _self.allApps = _self.allApps.slice(0,6);
                     }
+                    // 设置热门应用
+                    if(_self.allApps.length > 0) {
+                        _self.hotestApp = _self.allApps[0];
+                    }
+                    if(_self.allApps.length > 3) {
+                        _self.up = _self.allApps.slice(0,3);
+                        _self.down = _self.allApps.slice(3);
+                    } else {
+                        _self.up = _self.allApps;
+                        _self.down = [];
+                    }
                 },
                 toggleHotTemplate: function (event) {
                     var _self = this;
-                    var $this = $(event.target);
+                    _self.hotestApp = '';
+                    var div = $(event.target).parent('div.hot-title')|| $(event.target);
+                    var img = $(div).find('img')[0];
+                    var span = $(div).find('span')[0];
                     var temp = [];
                     if(_self.hotTemplate) {
                         _self.hotTemplate = false;
-                        $this.attr("src", "../images/template-unselected.png");
+                        $(img).attr("src", "../images/template-unselected.png");
+                        $(span).css("color", '#bfbfbf');
                         for(var i = 0; i < _self.allApps.length;i++) {
                             if(_self.allApps[i].appType == 'docker'){
                                 temp.push(_self.allApps[i]);
@@ -72,7 +96,8 @@ define([
                         _self.allApps = temp;
                     } else {
                         _self.hotTemplate = true;
-                        $this.attr("src", "../images/template-selected.png");
+                        $(img).attr("src", "../images/template-selected.png");
+                        $(span).css('color', '#ec670b');
                         for(var i = 0; i < _self.templates.length; i++) {
                             _self.allApps.push(_self.templates[i]);
                         }
@@ -80,6 +105,17 @@ define([
                     _self.allApps = _self.sort(_self.allApps);
                     if(_self.allApps.length > 6){
                         _self.allApps = _self.allApps.slice(0,6);
+                    }
+                    //设置热门应用
+                    if(_self.allApps.length > 0) {
+                        _self.hotestApp = _self.allApps[0];
+                    }
+                    if(_self.allApps.length > 3) {
+                        _self.up = _self.allApps.slice(0,3);
+                        _self.down = _self.allApps.slice(3);
+                    } else {
+                        _self.up = _self.allApps;
+                        _self.down = [];
                     }
                 },
                 convertData: function(dataArray, type){
@@ -104,13 +140,26 @@ define([
                 setallApps: function () {
                     var _self = this;
                     _self.allApps = _self.images;
-                    for(var i = 0; i< _self.templates; i++) {
+                    _self.hotestApp = '';
+                    for(var i = 0; i< _self.templates.length; i++) {
                         _self.allApps.push(_self.templates[i]);
                     }
+                    console.log("所有应用");
                     console.log(_self.allApps);
                     _self.allApps = _self.sort(_self.allApps);
                     if(_self.allApps.length > 6){
                         _self.allApps = _self.allApps.slice(0,6);
+                    }
+                    //设置最热门的应用
+                    if(_self.allApps.length > 0) {
+                        _self.hotestApp = _self.allApps[0];
+                    }
+                    if(_self.allApps.length > 3) {
+                        _self.up = _self.allApps.slice(0,3);
+                        _self.down = _self.allApps.slice(3);
+                    } else {
+                        _self.up = _self.allApps;
+                        _self.down = [];
                     }
                 },
                 initEcharts: function () {
@@ -124,6 +173,17 @@ define([
                             orient : 'vertical', // 图例方向
                             x : 'right',         // 水平放置位置
                             data: ["运行","停止","异常"]
+                        },
+                        graphic: {
+                            type: 'text',
+                            top: 'center',
+                            left: 'center',
+                            style: {
+                                text: '7',
+                                fill: '#000',           // 填充色。
+                                fontSize: 20,           // 字体大小
+                                fontWeight: 'bold'
+                            }
                         },
                         series:[{  //驱动图表生成的数据内容数组
                             name: "", //系列的名称
@@ -148,7 +208,7 @@ define([
                             }, {
                                 value: 2, name: "停止"
                             }, {
-                                value: 2, name: "异常"
+                                value: 3, name: "异常"
                             }]
                         }]
                     };

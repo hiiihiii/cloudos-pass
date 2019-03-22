@@ -1,6 +1,6 @@
 {
   "relations": {
-    "app1": {
+    "app1": {// app1需要访问app2，app1是from，app2是to
       "app2": {
         "name1": "value1",
         "name2": "value2"

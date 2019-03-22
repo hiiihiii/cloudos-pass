@@ -90,16 +90,16 @@ public class AppDeployServiceImp implements AppDeployService {
         if(template != null) {
             //判断模板中的镜像是否存在
             List<Map<String, String>> config = JSONArray.fromObject(template.getConfig());
-            for(int i = 0; i < config.size(); i++) {
-                String imageName = config.get(i).get("");
-                ImageInfo imageInfo = imageInfoDao.getImagesAll(user.getUser_uuid())
-                        .stream()
-                        .filter(imageInfo1 -> imageName.equals(imageInfo1.getAppName()))
-                        .findFirst().orElse(null);
-                if(imageInfo == null) {
-                    return APIResponse.fail("部署失败，该模板中的配置信息不存在");
-                }
-            }
+//            for(int i = 0; i < config.size(); i++) {
+//                String imageName = config.get(i).get("");
+//                ImageInfo imageInfo = imageInfoDao.getImagesAll(user.getUser_uuid())
+//                        .stream()
+//                        .filter(imageInfo1 -> imageName.equals(imageInfo1.getAppName()))
+//                        .findFirst().orElse(null);
+//                if(imageInfo == null) {
+//                    return APIResponse.fail("部署失败，该模板中的配置信息不存在");
+//                }
+//            }
             Map<String, String> relation = JSONObject.fromObject(template.getRelation());
             Deployment deployment = saveDeployment(deployedTemplate, user.getUser_uuid());
             if(deployment != null) {
