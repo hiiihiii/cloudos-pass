@@ -28,6 +28,6 @@ public class NodeController {
     @ResponseBody
     public APIResponse getNodes(HttpServletRequest request, HttpServletResponse response){
 
-        return null;
+        return nodeService.getNodes();
     }
 }

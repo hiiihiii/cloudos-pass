@@ -142,8 +142,6 @@ define([
                         },
                         dataType: "json",
                         async: false,
-                        // processData: false,
-                        // contentType: false,
                         success: function (data) {
                             _self.imageInfos = _self.convertData(data.data, 'image');
                             console.log(_self.imageInfos);

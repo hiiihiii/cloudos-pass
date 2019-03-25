@@ -3,15 +3,13 @@ package com.tanli.cloud.service;
 import com.tanli.cloud.constant.EnvConst;
 import com.tanli.cloud.model.K8s_Node;
 import com.tanli.cloud.model.K8s_Node_Metadata;
-
 import com.tanli.cloud.model.K8s_Node_Status;
+import com.tanli.cloud.utils.APIResponse;
 import com.tanli.cloud.utils.PropertyStrategyWrapper;
 import net.sf.json.JSONArray;
-import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 import net.sf.json.util.PropertySetStrategy;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +28,7 @@ public class NodeServiceImp implements NodeService {
     private static final Logger LOGGE = LoggerFactory.getLogger(NodeServiceImp.class);
 
     @Override
-    public void getNodes() {
+    public APIResponse getNodes() {
         String nodeUrl = EnvConst.k8s_api_prefix + "nodes";
         ResponseEntity<String> temp = restTemplate.getForEntity(nodeUrl, String.class);
         String jsonStr = temp.getBody();
@@ -49,5 +47,6 @@ public class NodeServiceImp implements NodeService {
 
             nodes.add(new K8s_Node(tem1, tem2));
         });
+        return APIResponse.success(nodes);
     }
 }

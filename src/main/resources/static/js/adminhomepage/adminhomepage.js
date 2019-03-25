@@ -21,18 +21,30 @@ define([
                 hotTemplate: true,
                 hotestApp: '',
                 up: [],
-                down: []
+                down: [],
+                userNum:0,
+                nodeNum:0,
+                imageNumAll: 0,
+                templateNumAll: 0,
+                imageNumPrivate: 0,
+                imageNumPublic: 0,
+                templateNumPrivate:0,
+                templateNumPublic:0
             },
             mounted: function () {
                 var _self = this;
+                _self.getUsers();
+                _self.getK8sNodes();
                 _self.allAppIns = _self.getApplications();
-                _self.classifyApp();
+                _self.classifyAppIns();
                 _self.initEcharts();
                 _self.getLogs();
-                _self.getTemplates();
-                _self.getImages();
-                _self.setallApps();
-                _self.hotestApp = _self.images[0];
+                _self.getImageData('public');
+                _self.getImageData('private');
+                _self.getTemplateData('public');
+                _self.getTemplateData('private');
+                _self.setAllApps();
+                _self.setPercent();
             },
 
             methods: {
@@ -132,12 +144,29 @@ define([
                     }
                     return dataArray;
                 },
-
+                //设置默认图标
                 setSrc: function (event) {
                     var $this = $(event.target);
                     $this.attr("src", "../images/app-default.png");
                 },
-                setallApps: function () {
+                //设置公私仓库的百分比
+                setPercent: function () {
+                    debugger
+                    var _self = this;
+                    var publicImagePer = (_self.imageNumPublic / _self.imageNumAll * 100) + "%";
+                    var publicTemplatePer = (_self.templateNumPublic / _self.templateNumAll * 100) + "%";
+                    var imageSpan = $("#image-statistics").find('.type-classify span');
+                    var templateSpan = $("#template-statistics").find('.type-classify span');
+                    $(imageSpan).css({
+                        'width': publicImagePer,
+                        'background':'#8ec035'
+                    });
+                    $(templateSpan).css({
+                        'width': publicTemplatePer,
+                        'background':'#17abe3'
+                    });
+                },
+                setAllApps: function () {
                     var _self = this;
                     _self.allApps = _self.images;
                     _self.hotestApp = '';
@@ -239,45 +268,68 @@ define([
                         }
                     })
                 },
-                getImages: function () {
+                getImageData: function (repoType) {
                     var _self = this;
                     $.ajax({
-                       url:"../adminhomepage/images",
-                        type:"get",
-                        dataType:"json",
+                        url: "../appcenter/imageinfo",
+                        type: "get",
+                        data: {
+                            repoType: repoType
+                        },
+                        dataType: "json",
                         async: false,
-                        success:function (result) {
-                            if(result.code == 'success') {
-                                _self.images = _self.sort(result.data);
-                                _self.images = _self.convertData(_self.images, 'image')
-                                console.log(result.data);
+                        success: function (data) {
+                            if(data.code=='success') {
+                                var count = data.data.length;
+                                if(repoType=='public') {
+                                    _self.imageNumPublic = count;
+                                } else {
+                                    _self.imageNumPrivate = count;
+                                }
+                                _self.imageNumAll += count;
+                                for(var i = 0 ; i < count; i++) {
+                                    _self.images.push(data.data[i]);
+                                }
+                                _self.images = _self.convertData(_self.images, 'image');
                             } else {
-
+                                common_module.notify("[应用中心]","获取镜像数据失败", "danger");
                             }
                         },
                         error: function () {
-                            
+                            common_module.notify("[应用中心]","获取镜像数据失败", "danger");
                         }
-                    });
+                    })
                 },
-                getTemplates: function () {
+                getTemplateData: function (repoType) {
                     var _self = this;
                     $.ajax({
-                        url:"../adminhomepage/templates",
-                        type:"get",
-                        dataType:"json",
+                        url: "../appcenter/templateinfo",
+                        type: 'get',
+                        dataType: 'json',
+                        data: {
+                            repoType: repoType
+                        },
                         async: false,
-                        success:function (result) {
-                            if(result.code == 'success') {
-                                _self.templates = _self.sort(result.data);
+                        success: function (data) {
+                            if(data.code === "success"){
+                                var count = data.data.length;
+                                if(repoType == 'public') {
+                                    _self.templateNumPublic = count;
+                                } else {
+                                    _self.templateNumPrivate = count;
+                                }
+                                for(var i = 0; i < count; i++) {
+                                    _self.templates.push(data.data[i]);
+                                }
+                                _self.templateNumAll += count;
                                 _self.templates = _self.convertData(_self.templates, 'template');
-                                console.log(result.data);
+                                console.log(_self.templates);
                             } else {
-
+                                common_module.notify('[应用中心]', '获取模板信息失败', 'fail');
                             }
                         },
                         error: function () {
-
+                            common_module.notify('[应用中心]', '获取模板信息失败', 'fail');
                         }
                     });
                 },
@@ -302,6 +354,44 @@ define([
                     });
                     return applications;
                 },
+                getUsers: function() {
+                    var _self = this;
+                    $.ajax({
+                        url: "../user/info",
+                        type: "get",
+                        dataType: "json",
+                        success: function (result) {
+                            if(result.code == "success") {
+                                _self.userNum = result.data.length;
+                                console.log("用户个数"+ _self.userNum);
+                            } else {
+                                common_module.notify("[用户]","获取用户数据失败", "danger");
+                            }
+                        },
+                        error: function () {
+                            common_module.notify("[用户]","获取用户数据失败", "danger");
+                        }
+                    });
+                },
+                getK8sNodes: function () {
+                    var _self = this;
+                    $.ajax({
+                        url: '../kubernetes/nodesinfo',
+                        type: 'get',
+                        dataType:"json",
+                        success:function (result) {
+                            if(result.code=="success") {
+                                _self.nodeNum = result.data.length;
+                                console.log('节点个数'+_self.nodeNum);
+                            } else {
+                                common_module.notify("[Kubernetes]","获取节点数据失败", "danger");
+                            }
+                        },
+                        error:function () {
+                            common_module.notify("[Kubernetes]","获取节点数据失败", "danger");
+                        }
+                    })
+                },
                 //冒泡排序
                 sort: function (appArray) {
                     var i = appArray.length, j;
@@ -320,8 +410,7 @@ define([
                     }
                     return appArray;
                 },
-
-                classifyApp: function () {
+                classifyAppIns: function () {
                     var _self = this;
                     _self.runningApps = _self.stopApps = _self.unknownApps = [];
                     for(var i = 0 ; i < _self.allAppIns.length; i++) {
@@ -338,6 +427,9 @@ define([
                                 break;
                         }
                     }
+                },
+                classifyApp: function (array, Type) {
+
                 }
             }
         });

@@ -64,9 +64,7 @@
                             <img src="../images/group.png" />
                             <span>用户</span>
                         </div>
-                        <div class="service-info">
-                            4
-                        </div>
+                        <div class="service-info" v-cloak="">{{userNum}}</div>
                     </div>
                     <!--节点统计-->
                     <div class="service-box">
@@ -74,7 +72,7 @@
                             <img src="../images/tree.png" />
                             <span>节点</span>
                         </div>
-                        <div class="service-info">3</div>
+                        <div class="service-info" v-cloak="">{{nodeNum}}</div>
                     </div>
                     <!--镜像统计-->
                     <div class="app-statistics-box" id="image-statistics">
@@ -83,12 +81,12 @@
                                 <img src="../images/docker-statistics.png" />
                                 <span>容器镜像</span>
                             </div>
-                            <div class="app-info">3</div>
+                            <div class="app-info" v-cloak="">{{imageNumAll}}</div>
                         </div>
                         <div class="app-type">
                             <div class="type-count clearfix">
-                                <div class="public">公有1</div>
-                                <div class="private">私有2</div>
+                                <div class="public" v-cloak="">公有{{imageNumPublic}}</div>
+                                <div class="private" v-cloak="">私有{{imageNumPrivate}}</div>
                             </div>
                             <div class="type-classify">
                                 <span></span>
@@ -102,12 +100,12 @@
                                 <img src="../images/template-statistics.png" />
                                 <span>应用模板</span>
                             </div>
-                            <div class="app-info">2</div>
+                            <div class="app-info" v-cloak="">{{templateNumAll}}</div>
                         </div>
                         <div class="app-type">
                             <div class="type-count clearfix">
-                                <div class="public">公有2</div>
-                                <div class="private">私有0</div>
+                                <div class="public" v-cloak="">公有{{templateNumPublic}}</div>
+                                <div class="private" v-cloak="">私有{{templateNumPrivate}}</div>
                             </div>
                             <div class="type-classify">
                                 <span></span>
