@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -281,6 +282,31 @@ public class AppStoreServiceImp implements AppStoreService {
         return result;
     }
 
+    private Boolean deleteHarborTag(String source_url){
+        Boolean result = false;
+        String url = EnvConst.harbor_api_prefix + "/repositories";
+        String repoInfo[] = source_url.split(":");
+        String temp[] =repoInfo[0].split("/");
+        String repo_name = temp[1]+"/"+temp[2];
+        String tag = repoInfo[1];
+        restTemplate.getInterceptors().add(new BasicAuthorizationInterceptor(EnvConst.harbor_username, EnvConst.harbor_password));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+        map.add("repo_name", repo_name);
+        map.add("tag", tag);
+        try {
+            HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(map, headers);
+            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, httpEntity,String.class);
+            if(responseEntity.getStatusCode().toString().equals("200")) {
+                result = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     /**
      * 删除镜像指定tag
      * @param url
@@ -299,26 +325,6 @@ public class AppStoreServiceImp implements AppStoreService {
         } catch (Exception e) {
             result = false;
             LOGGE.info("[AppStoreServiceImp Error]: " + "删除镜像失败, Url: " + url);
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    private Boolean deleteImageTag_harbor(String repo_name, String tag) {
-        Boolean result = false;
-        String url = EnvConst.harbor_api_prefix + "repositories?repo_name" + repo_name + "&tag=" + tag;
-        HttpHeaders headers = new HttpHeaders();
-        String authBase_origin = (EnvConst.harbor_username+ ":"+EnvConst.harbor_password);
-        try {
-            String authStr_base64 = Base64.getEncoder().encodeToString(authBase_origin.getBytes("utf-8"));
-            headers.set("Authorization", authStr_base64);
-            HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(null, headers);
-            ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, httpEntity,String.class);
-            if(responseEntity.getStatusCode().toString().equals("200")) {
-                result = true;
-            }
-        } catch (UnsupportedEncodingException e) {
-            LOGGE.info("[AppStoreServiceImp Error]: " + "认证失败，删除失败");
             e.printStackTrace();
         }
         return result;
@@ -416,15 +422,12 @@ public class AppStoreServiceImp implements AppStoreService {
                 metadata.remove(versions[i]);
                 create_type.remove(versions[i]);
                 existVersoins.remove(versions[i]);
-                source_urls.remove(versions[i]);
+                String source_url = source_urls.remove(versions[i]);
                 //调用Docker API, Harbor API
                 // docker remove api
                 deleteImage(EnvConst.docker_images_prefix + source_urls.get(versions[i]));
                 // harbor api
-                String temp_source_url = source_urls.get(versions[i]);
-                String[] temps= temp_source_url.split("/");
-                String repo_name = temps[1] + "/" + temps[2].split(":")[0];
-                deleteImageTag_harbor( repo_name, versions[i]);
+                deleteHarborTag(source_url);
                 success += 1;
             }
             if(success == existVersoins.size()) {

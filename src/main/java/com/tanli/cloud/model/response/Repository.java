@@ -8,11 +8,39 @@ public class Repository {
     private String user_uuid;
     private String repo_name;
     private String repo_type;
+    private String login_name;
+    private String login_psd;
+    private String project_name;
     private String url;
     private String create_time;
     private String update_time;
 
-    public Repository(String repo_uuid, String user_uuid, String repo_name, String repo_type, String url, String create_time, String update_time) {
+    public String getLogin_name() {
+        return login_name;
+    }
+
+    public void setLogin_name(String login_name) {
+        this.login_name = login_name;
+    }
+
+    public String getLogin_psd() {
+        return login_psd;
+    }
+
+    public void setLogin_psd(String login_psd) {
+        this.login_psd = login_psd;
+    }
+
+    public String getProject_name() {
+        return project_name;
+    }
+
+    public void setProject_name(String project_name) {
+        this.project_name = project_name;
+    }
+
+    public Repository(String repo_uuid, String user_uuid, String repo_name, String repo_type, String url, String create_time, String update_time,
+                      String login_name, String login_psd, String project_name) {
         this.repo_uuid = repo_uuid;
         this.user_uuid = user_uuid;
         this.repo_name = repo_name;
@@ -20,6 +48,9 @@ public class Repository {
         this.url = url;
         this.create_time = create_time;
         this.update_time = update_time;
+        this.login_name = login_name;
+        this.login_psd = login_psd;
+        this.project_name = project_name;
     }
     public Repository(){}
 

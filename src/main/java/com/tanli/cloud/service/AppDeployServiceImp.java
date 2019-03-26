@@ -8,7 +8,6 @@ import com.tanli.cloud.utils.APIResponse;
 import com.tanli.cloud.utils.K8sClient;
 import com.tanli.cloud.utils.UuidUtil;
 import io.fabric8.kubernetes.api.model.NodeAddress;
-import io.fabric8.kubernetes.api.model.Pod;
 import io.fabric8.kubernetes.api.model.ReplicationController;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -17,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +51,7 @@ public class AppDeployServiceImp implements AppDeployService {
                 .filter(imageInfo1 -> imageInfo1.getApp_id().equals(deployedImage.getApp_id()))
                 .findFirst().orElse(null);
         //修改镜像部署次数
-        int deploycount = imageInfo.getDeploycount()+1;
+        int deploycount = imageInfo.getDeploycount() + 1;
         imageInfoDao.updateDeployCount(imageInfo.getApp_id(), deploycount);
         //将数据保存进tl_deployment表中
         Deployment deployment = saveDeployment(deployedImage, user.getUser_uuid());
@@ -64,15 +64,22 @@ public class AppDeployServiceImp implements AppDeployService {
 
             K8s_Rc rc = saveRc(deployedImage, deployment, service, replicationController);
             K8s_Service svc = saveService(deployedImage, deployment, service) ;
-//            if( rc != null && svc !=null) {
-//                // 更新pod到数据库中
-//                List<Pod> pods = k8sClient.getPod(service.getSpec().getSelector());
-//                pods.stream().forEach(pod -> {
-//                            savePod(pod, rc, svc);
-//                        });
-                LOGGE.info("[AppDeployServiceImp Info]: " + "部署" + deployedImage.getDeploy_name() + "成功");
-                return APIResponse.success();
-//            }
+
+            //添加用户日志
+            DateTime now = DateTime.now();
+            String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+            UserLog userLog = new UserLog (
+                    UuidUtil.getUUID(),
+                    user.getUser_uuid(),
+                    user.getUserName(),
+                    SystemConst.APPLICATION,
+                    deployment.getDeploy_uuid(),
+                    "创建应用" + deployment.getDeploy_name(),
+                    "0",
+                    nowStr );
+            userLogDao.addUserLog(userLog);
+            LOGGE.info("[AppDeployServiceImp Info]: " + "部署" + deployedImage.getDeploy_name() + "成功");
+            return APIResponse.success();
         }
         LOGGE.info("[AppDeployServiceImp Info]: " + "部署" + deployedImage.getDeploy_name() + "失败");
         return APIResponse.fail("部署镜像"+deployedImage.getDeploy_name()+"失败");
@@ -263,38 +270,6 @@ public class AppDeployServiceImp implements AppDeployService {
             LOGGE.info("[AppDeployServiceImp Info]: " + "伸缩服务"+serviceName+"失败");
         }
         return APIResponse.fail("伸缩"+serviceName + "失败");
-    }
-
-    /**
-     * 想tl_pod表中保存数据
-     * @param pod
-     * @param rc
-     * @param svc
-     * @return
-     */
-    private int savePod(Pod pod, K8s_Rc rc, K8s_Service svc) {
-        K8s_Pod temp = new K8s_Pod();
-        temp.setUuid(UuidUtil.getUUID());
-        temp.setRc_uuid(rc.getUuid());
-        temp.setSvc_uuid(svc.getUuid());
-        temp.setName(pod.getMetadata().getName());
-        temp.setNamespace(pod.getMetadata().getNamespace());
-        //pod是单容器的
-        temp.setImage(pod.getSpec().getContainers().get(0).getImage());
-        temp.setRestartCount(pod.getStatus().getContainerStatuses().get(0).getRestartCount());
-        temp.setPodIP(pod.getStatus().getPodIP());
-        temp.setHostIP(pod.getStatus().getHostIP());
-        temp.setStatus(pod.getStatus().getPhase());
-        DateTime now = DateTime.now();
-        String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
-        temp.setUpdate_time(nowStr);
-        try {
-            return k8sPodDao.addPod(temp);
-        } catch (Exception e) {
-            LOGGE.info("[AppDeployServiceImp Info]: " + "向tl_pod表中增加数据失败");
-            e.printStackTrace();
-        }
-        return 0;
     }
 
     /**

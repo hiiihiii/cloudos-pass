@@ -48,6 +48,10 @@
         AND uuid = #{userid}
     </select>
 
+    <select id="getAllImages" resultMap="imageInfos">
+        SELECT * FROM tl_image
+    </select>
+
     <select id="getImagesAll" resultMap="imageInfos">
         SELECT * FROM tl_image
         WHERE uuid = #{userid}

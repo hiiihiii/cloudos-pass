@@ -33,6 +33,7 @@ define([
             },
             mounted: function () {
                 var _self = this;
+                $(".loading").css("display", "block");
                 _self.getUsers();
                 _self.getK8sNodes();
                 _self.allAppIns = _self.getApplications();
@@ -45,6 +46,9 @@ define([
                 _self.getTemplateData('private');
                 _self.setAllApps();
                 _self.setPercent();
+                setTimeout(function () {
+                    $(".loading").css("display", "none");
+                }, 1000);
             },
 
             methods: {

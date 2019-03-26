@@ -21,10 +21,14 @@ define([
             },
             mounted: function(){
                 var _self = this;
+                $(".loading").css("display", "block");
                 _self.getTemplate();
                 Vue.nextTick(function () {
                     _self.templateTableObj = common_module.dataTables("#template_table");
                 });
+                setTimeout(function () {
+                    $(".loading").css("display", "none");
+                }, 1000);
             },
             methods: {
                 //全选或反选
@@ -39,6 +43,7 @@ define([
                 //获取镜像模板信息
                 getTemplate: function () {
                     var _self = this;
+
                     $.ajax({
                         url: "../apporch/templateinfo",
                         type: "get",

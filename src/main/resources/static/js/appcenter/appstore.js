@@ -195,6 +195,11 @@ define([
                             dataArray[i].version = JSON.parse(dataArray[i].version);
                             dataArray[i].logo_url = "ftp://docker:dockerfile@" + dataArray[i].logo_url;
                             dataArray[i].appType = "docker";
+                            if(dataArray[i].appName.length > 6) {
+                                dataArray[i].temp_name = dataArray[i].appName.slice(0,6) + '...';
+                            } else {
+                                dataArray[i].temp_name = dataArray[i].appName;
+                            }
                         }
                     } else {
                         for(var i = 0; i < dataArray.length; i++) {
@@ -202,6 +207,11 @@ define([
                             dataArray[i].config = JSON.parse(dataArray[i].config);
                             dataArray[i].temp_logo_url = "ftp://docker:dockerfile@" + dataArray[i].logo_url;
                             dataArray[i].appType = 'template';
+                            if(dataArray[i].templateName.length > 6) {
+                                dataArray[i].temp_name = dataArray[i].templateName.slice(0,6) + '...';
+                            } else {
+                                dataArray[i].temp_name = dataArray[i].templateName;
+                            }
                         }
                     }
                     return dataArray;

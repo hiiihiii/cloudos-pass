@@ -9,10 +9,22 @@
         <result column="url" property="url" />
         <result column="create_time" property="create_time" />
         <result column="update_time" property="update_time" />
+        <result column="login_name" property="login_name"></result>
+        <result column="login_psd" property="login_psd"></result>
+        <result column="project_name" property="project_name"></result>
     </resultMap>
     <select id="getRepoByUserid" resultMap="repo">
-        SELECT t.repo_uuid, t.user_uuid, t.repo_name, t.repo_type, t.url, t.create_time, t.update_time
+        SELECT *
         FROM tl_repository t
         WHERE t.user_uuid = #{userid, jdbcType=VARCHAR}
     </select>
+
+    <insert id="addRepo" parameterType="com.tanli.cloud.model.response.Repository">
+        INSERT INTO tl_repository(repo_uuid, user_uuid, repo_name,repo_type, url, login_name, login_psd, project_name, create_time, update_time)
+        VALUES (#{repo_uuid}, #{user_uuid}, #{repo_name},#{repo_type}, #{url}, #{login_name}, #{login_psd}, #{project_name}, #{create_time}, #{update_time})
+    </insert>
+
+    <delete id="deleteRepo">
+        DELETE from tl_repository WHERE user_uuid = #{userid}
+    </delete>
 </mapper>

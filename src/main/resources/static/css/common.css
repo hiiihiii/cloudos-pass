@@ -224,7 +224,7 @@ span.checkbox+a{
 }
 #appcontainer li {
     display: inline-block ;
-    width: 250px;
+    width: 270px;
     height: 200px;
     position: relative;
     background-color: #f0f0f3;
@@ -247,18 +247,21 @@ span.checkbox+a{
 }
 .app-box .app-name{
     position: absolute;
-    top: 50px;
+    top: 33px;
     left: 18px;
+}
+.app-box .app-name h5 {
+    font-size: 20px;
 }
 .app-box .app-tag {
     position: absolute;
-    left: 165px;
+    left: 185px;
     top: 10px;
     font-size: 12px;
 }
 .app-box .app-deploy {
     position: absolute;
-    left: 230px;
+    right: 8px;
     top: 8px;
     color: #ec670b;
 }
@@ -287,7 +290,7 @@ span.checkbox+a{
     top: 50px;
     width: 125px;
     height: 130px;
-    left: 113px;
+    left: 135px;
     overflow: hidden;
     text-overflow:ellipsis;
     white-space: normal;
@@ -600,13 +603,13 @@ span.checkbox+a{
     width: 100%;
 }
 #appstore .app-overview {
-    flex: 1;
+    flex: 2;
     position: relative;
     overflow: auto;
     height: 490px;
 }
 #appstore .app-detail {
-    flex: 3;
+    flex: 5;
     display: none;
     border: 1px solid #ccc;
     border-right: none;
@@ -707,6 +710,7 @@ span.checkbox+a{
 #appstore .app-detail .upper > span {
     display: block;
     margin: 10px;
+    font-size: 20px;
 }
 #appstore .app-detail .upper > img {
     width: 100px;
@@ -715,6 +719,23 @@ span.checkbox+a{
 }
 #appstore .app-detail .upper > p {
     display: inline-block;
+    max-width: 665px;
+}
+#appcontainer {
+    margin-left: 5px;
+}
+.app-search {
+    margin-top: 5px;
+}
+.app-search span {
+    cursor: pointer;
+    border-radius: 0px;
+}
+.app-search input {
+    border-radius: 0px;
+}
+.app-search input:focus {
+    box-shadow: none;
 }
 /*展示应用结束*/
 /*上传镜像开始*/

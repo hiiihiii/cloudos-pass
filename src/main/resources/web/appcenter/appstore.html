@@ -62,7 +62,13 @@
                     <!--<div class="btn cloud-btn">构建镜像</div>-->
                     <div class="btn cloud-btn" v-on:click="refreshRepo" v-cloak=""><i class="fa fa-refresh"></i>刷新</div>
                 </div>
-                <div class="col-lg-4"></div>
+                <!--搜索区域-->
+                <div class="col-lg-4">
+                    <div class="input-group app-search">
+                        <input type="text" class="form-control" />
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
             </div>
             <div class="app">
                 <!--应用概览-->
@@ -76,7 +82,7 @@
                                     <img src="../images/docker-blue.png" v-cloak=""/>
                                 </div>
                                 <div class="app-name">
-                                    <h5 v-cloak="">{{imageInfo.appName}}</h5>
+                                    <h3 v-cloak="" v-bind:title="imageInfo.appName">{{imageInfo.temp_name}}</h3>
                                 </div>
                                 <div class="app-tag">
                                     <span v-cloak="">{{imageInfo.appTag}}</span>
@@ -102,7 +108,7 @@
                                     <img src="../images/template.png" v-cloak=""/>
                                 </div>
                                 <div class="app-name">
-                                    <h5 v-cloak="">{{template.templateName}}</h5>
+                                    <h3 v-cloak="" v-bind:title="template.templateName">{{template.temp_name}}</h3>
                                 </div>
                                 <div class="app-deploy" title="部署" v-on:click="showDeployTemplate(template.uuid)">
                                     <i class="fa fa-toggle-right"></i>

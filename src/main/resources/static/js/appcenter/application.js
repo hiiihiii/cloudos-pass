@@ -62,6 +62,7 @@ define([
 
                 getAppInfo: function () {
                     var _self = this;
+                    $(".loading").css("display", "block");
                     $.ajax({
                         type: "get",
                         url: "../application/info",
@@ -71,14 +72,19 @@ define([
                             if(data.code == "success") {
                                 debugger;
                                 _self.appInsInfos = data.data;
-
                                 common_module.notify("[应用实例]", "获取应用信息成功","success");
                             } else {
                                 common_module.notify("[应用实例]", "获取应用信息失败","success");
                             }
+                            setTimeout(function () {
+                                $(".loading").css("display", "none");
+                            }, 1000);
                         },
                         error: function () {
                             common_module.notify("[应用实例]", "获取应用信息失败","danger");
+                            setTimeout(function () {
+                                $(".loading").css("display", "none");
+                            }, 1000);
                         }
                     });
                 },
