@@ -16,22 +16,22 @@
                     <form id="add_user_form" role="form" class="form-horizontal" enctype="multipart/form-data">
                         <!--用户名-->
                         <div class="form-group">
-                            <label class="cloud-modal-label">用户名：</label>
+                            <label class="cloud-modal-label">用户名<span class="cloud-required">  *</span>：</label>
                             <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名" maxlength="64"/>
                         </div>
                         <!--密码-->
                         <div class="form-group">
-                            <label class="cloud-modal-label">密码：</label>
+                            <label class="cloud-modal-label">密码<span class="cloud-required">  *</span>：</label>
                             <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码" maxlength="64"/>
                         </div>
                         <!--确认密码-->
                         <div class="form-group">
-                            <label class="cloud-modal-label">确认密码：</label>
+                            <label class="cloud-modal-label">确认密码<span class="cloud-required">  *</span>：</label>
                             <input type="password" class="form-control" id="passwordAgain" name="passwordAgain" placeholder="请再次输入密码" maxlength="64"/>
                         </div>
                         <!--用户角色-->
                         <div class="form-group">
-                            <label class="cloud-modal-label">用户角色：</label>
+                            <label class="cloud-modal-label">用户角色<span class="cloud-required">  *</span>：</label>
                             <select class="form-control">
                                 <option v-for="role in roleInfos" v-cloak="" v-bind:value="role.uuid">
                                     {{role.name}}
@@ -40,13 +40,13 @@
                         </div>
                         <!--邮箱-->
                         <div class="form-group">
-                            <label class="cloud-modal-label">邮箱：</label>
+                            <label class="cloud-modal-label">邮箱<span class="cloud-required">  *</span>：</label>
                             <input type="text" class="form-control" id="email" name="email" placeholder="1@1.com"/>
                         </div>
                         <!--联系方式-->
                         <div class="form-group">
-                            <label class="cloud-modal-label">联系方式：</label>
-                            <input type="text" class="form-control" id="telephone" name="telephone" placeholder=""/>
+                            <label class="cloud-modal-label">联系方式<span class="cloud-required">  *</span>：</label>
+                            <input type="text" class="form-control" id="telephone" name="telephone" placeholder="请输入联系方式"/>
                         </div>
                     </form>
                 </div>

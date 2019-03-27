@@ -343,13 +343,13 @@ public class AppStoreServiceImp implements AppStoreService {
                 .findFirst()
                 .orElse(null);
         if(null == exist){
-            return APIResponse.success("not existed");
+            return APIResponse.success(true);
         } else {
             List<String> verisons = JSONArray.toList(JSONArray.fromObject(exist.getVersion()),String.class);
             if(verisons.contains(version)){
-                return  APIResponse.success("existed");
+                return  APIResponse.success(false);
             } else {
-                return APIResponse.success("not existed");
+                return APIResponse.success(true);
             }
         }
     }

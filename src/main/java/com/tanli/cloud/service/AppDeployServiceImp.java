@@ -272,6 +272,25 @@ public class AppDeployServiceImp implements AppDeployService {
         return APIResponse.fail("伸缩"+serviceName + "失败");
     }
 
+    @Override
+    public APIResponse checkDeployName(User user, String deployName) {
+        LOGGE.info("[AppDeployServiceImp Info]: " + "检查部署名称+"+deployName+"是否唯一");
+        Deployment deployment = new Deployment();
+        try {
+            deployment = deploymentDao.getAllDeployments().stream()
+                    .filter(deployment1 -> deployment1.getDeploy_name().equals(deployName))
+                    .findFirst().orElse(null);
+            if(deployment == null) {
+                return APIResponse.success(true);
+            } else {
+                return APIResponse.success(false);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return APIResponse.fail("检查失败");
+    }
+
     /**
      * 想tl_deployment表中保存数据
      * @param deployedApp

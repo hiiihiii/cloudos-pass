@@ -178,6 +178,24 @@ public class UserManageServiceImp implements UserManageService {
         return APIResponse.success(result);
     }
 
+    @Override
+    public APIResponse checkUserName(String username) {
+        try {
+            User user = userDao.getAllUser().stream()
+                    .filter(user1 -> user1.getUserName().equals(username))
+                    .findFirst().orElse(null);
+            if(user == null) {
+                return APIResponse.success(true);
+            } else {
+                return APIResponse.success(false);
+            }
+        } catch (Exception e) {
+            LOGGE.info("[UserManageServiceImp Info]: " + "验证用户名" + username + "失败");
+            e.printStackTrace();
+        }
+        return APIResponse.fail(false);
+    }
+
     /**
      * 使用restTemplate调用harbor API创建project
      * @param projectName

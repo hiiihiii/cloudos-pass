@@ -36,4 +36,9 @@ public class UserManageController {
         return userManageService.getUsers(user);
     }
 
+    @RequestMapping("checkUserName")
+    @ResponseBody
+    public APIResponse checkUserName(HttpServletRequest request, String username) {
+        return userManageService.checkUserName(username);
+    }
 }

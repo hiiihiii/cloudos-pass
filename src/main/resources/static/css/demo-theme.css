@@ -222,3 +222,11 @@ table.dataTable.no-footer {
 .cloud-required {
     color: red;
 }
+div.error {
+    font-weight: normal;
+    color: rgb(255, 0, 0);
+    font-size: 12px;
+    margin-bottom: 0;
+    margin-left: 85px;
+    margin-top: 2px;
+}

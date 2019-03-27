@@ -155,10 +155,15 @@ define([
                 },
                 //设置公私仓库的百分比
                 setPercent: function () {
-                    debugger
                     var _self = this;
-                    var publicImagePer = (_self.imageNumPublic / _self.imageNumAll * 100) + "%";
-                    var publicTemplatePer = (_self.templateNumPublic / _self.templateNumAll * 100) + "%";
+                    var publicImagePer = "0";
+                    var publicTemplatePer = "0";
+                    if(_self.imageNumAll != 0) {
+                        publicImagePer = (_self.imageNumPublic / _self.imageNumAll * 100) + "%";
+                    }
+                    if(_self.templateNumAll !=0) {
+                        publicTemplatePer = (_self.templateNumPublic / _self.templateNumAll * 100) + "%";
+                    }
                     var imageSpan = $("#image-statistics").find('.type-classify span');
                     var templateSpan = $("#template-statistics").find('.type-classify span');
                     $(imageSpan).css({

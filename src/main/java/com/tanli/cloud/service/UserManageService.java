@@ -11,4 +11,5 @@ public interface UserManageService {
     public APIResponse getUsers(User user);
     public APIResponse addUser(User user);
     public APIResponse deleteByIds(User user, String[] ids);
+    public APIResponse checkUserName(String username);
 }

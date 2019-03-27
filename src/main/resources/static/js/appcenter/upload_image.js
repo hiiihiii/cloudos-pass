@@ -174,9 +174,12 @@ define([
 
                 //提交上传
                 submitUpload: function () {
-                    // if(!$("#upload_image_form").valid()){
-                    //     return;
-                    // }
+                    debugger
+                    var test = $("#upload_image_form").valid();
+                    if(!test){
+
+                        return;
+                    }
                     var _self = this;
                     var formData = new FormData();
                     formData.append("appName", $("#upload_image_form #appName").val());
@@ -266,9 +269,11 @@ define([
 
         // 上传镜像校验
         var validator = $("#upload_image_form").validate({
-            // submitHandler: function(form){
-                // upload_image.submitUpload();
-            // },
+            submitHandler: function(form){
+                debugger
+                upload_image.submitUpload();
+            },
+            ignore: "",
             rules: {
                 appName: {
                     required: true,
@@ -279,7 +284,8 @@ define([
                 },
                 version: {
                     required: true,
-                    notEmpty: true
+                    notEmpty: true,
+                    imageUnique: true
                 },
                 appTag_input: {
                     required: true,
@@ -307,12 +313,27 @@ define([
                 nodePort: {
                     required: true,
                     notEmpty: true
+                },
+                mincpu: {
+                    required: true
+                },
+                minMemory: {
+                    required: true
+                },
+                maxMemory: {
+                    required: true
+                },
+                maxcpu: {
+                    required: true
                 }
             },
             messages: {
                 appName: {
 
                 }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent());
             }
         });
 

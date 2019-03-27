@@ -178,9 +178,13 @@ define([
                     }
                 },
 
-                submitDeployImage: function (event) {
+                submitDeployImage: function () {
                     debugger
                     var _self = this;
+                    var test = $("#deploy_image_form").valid();
+                    if(!test){
+                        return;
+                    }
                     var formdata = new FormData();
                     var image = JSON.parse(sessionStorage.getItem("deployImage"));
                     //公有字段
@@ -266,6 +270,76 @@ define([
                     formdata.append("container", JSON.stringify(container));
                     return formdata;
                 }
+            }
+        });
+
+
+        var validator = $("#deploy_image_form").validate({
+            submitHandler: function(form){
+                if($(form).valid()){
+                    deploy_image.submitDeployImage();
+                }
+            },
+            ignore: "",
+            onkeyup: false,
+            rules: {
+                deployName: {
+                    required: true,
+                    notEmpty: true,
+                    deployUnique: true
+                },
+                version:{
+                    required: true,
+                    notEmpty: true
+                },
+                mincpu:{
+                    required: true,
+                    notEmpty: true
+                },
+                minMemory:{
+                    required: true,
+                    notEmpty: true
+                },
+                maxcpu:{
+                    required: true,
+                    notEmpty: true
+                },
+                maxMemory:{
+                    required: true,
+                    notEmpty: true
+                },
+                serviceName:{
+                    required: true,
+                    notEmpty: true
+                },
+                instanceCount:{
+                    required: true,
+                    notEmpty: true
+                },
+                portName:{
+                    required: true,
+                    notEmpty: true
+                },
+                containerPort:{
+                    required: true,
+                    notEmpty: true
+                },
+                port:{
+                    required: true,
+                    notEmpty: true
+                },
+                protocol:{
+                    required: true,
+                    notEmpty: true
+                },
+                nodePort:{
+                    required: true,
+                    notEmpty: true
+                }
+            },
+            messages: { },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent());
             }
         });
 

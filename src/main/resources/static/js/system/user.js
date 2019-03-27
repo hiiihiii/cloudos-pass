@@ -4,8 +4,10 @@ define([
     "vue",
     "datatables",
     "bootstrap",
-    "common-module"
-], function ($, Vue, DataTables, bootstrap, common_module) {
+    "common-module",
+    'jquery-validate',
+    'validate-extend'
+], function ($, Vue, DataTables, bootstrap, common_module, jquery_validate, validate_extend) {
     if($("#system_user")[0]){
         var userVue = new Vue({
             el:"#system_user",
@@ -92,6 +94,10 @@ define([
 
                 submitAdd: function () {
                     var _self = this;
+                    var test = $("#add_user_form").valid();
+                    if(!test) {
+                        return;
+                    }
                     var formdata = new FormData();
                     formdata.append("userName", $("#add_user_form input[name='username']").val());
                     formdata.append("role_uuid", $("#add_user_form select").val());
@@ -179,6 +185,50 @@ define([
                         }
                     })
                 }
+            }
+        });
+
+        var validator = $("#add_user_form").validate({
+            submitHandler: function(form){
+                debugger
+                // userVue.submitAdd();
+            },
+            ignore: "",
+            errorElement:'div',
+            onkeyup: false,
+            rules: {
+                username:{
+                    required: true,
+                    notEmpty: true,
+                    userNameUnique: true
+                },
+                password: {
+                    required: true,
+                    notEmpty: true
+                },
+                passwordAgain:{
+                    required: true,
+                    notEmpty: true,
+                    sameToPsd: true
+                },
+                email:{
+                    required: true,
+                    notEmpty: true,
+                    email: true
+                },
+                telephone:{
+                    required: true,
+                    notEmpty: true,
+                    phone: true
+                }
+            },
+            messages: {
+                email: {
+                    email:"邮箱格式不正确"
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent());
             }
         });
 

@@ -262,4 +262,69 @@ define([
             });
         });
     }
+
+    var validator = $("#deploy_template_form").validate({
+        submitHandler: function(form){
+            if($(form).valid()){
+                deploy_image.submitDeployImage();
+            }
+        },
+        ignore: "",
+        onkeyup: false,
+        rules: {
+            deployName: {
+                required: true,
+                notEmpty: true,
+                deployUnique: true
+            },
+            mincpu:{
+                required: true,
+                notEmpty: true
+            },
+            minMemory:{
+                required: true,
+                notEmpty: true
+            },
+            maxcpu:{
+                required: true,
+                notEmpty: true
+            },
+            maxMemory:{
+                required: true,
+                notEmpty: true
+            },
+            serviceName:{
+                required: true,
+                notEmpty: true
+            },
+            instanceCount:{
+                required: true,
+                notEmpty: true
+            },
+            portName:{
+                required: true,
+                notEmpty: true
+            },
+            containerPort:{
+                required: true,
+                notEmpty: true
+            },
+            port:{
+                required: true,
+                notEmpty: true
+            },
+            protocol:{
+                required: true,
+                notEmpty: true
+            },
+            nodePort:{
+                required: true,
+                notEmpty: true
+            }
+        },
+        messages: { },
+        errorPlacement: function (error, element) {
+            error.appendTo(element.parent());
+        }
+    });
 });

@@ -72,21 +72,27 @@ public class AppstoreController {
     @ResponseBody
     /**
      * 查询同名同版本的镜像是否已经存在
-     * appName: 镜像名称
+     * imageName: 镜像名称
      * version: 版本号
      * repoType: public/private
      */
-    public APIResponse checkAppExist(HttpServletRequest request, String appName, String version, String repoType){
+    public APIResponse checkAppExist(HttpServletRequest request, String imageName, String version, String repoType){
         User user = (User) request.getSession().getAttribute("login_user");
-        return appStoreService.checkAppExist(user, appName, version, repoType);
+        return appStoreService.checkAppExist(user, imageName, version, repoType);
+    }
+
+    @RequestMapping("checkDeployName")
+    @ResponseBody
+    public APIResponse checkDeployName(HttpServletRequest request, String deployName){
+        User user = (User) request.getSession().getAttribute("login_user");
+        return appDeployService.checkDeployName(user, deployName);
     }
 
     @PostMapping("image/deploy")
     @ResponseBody
     public APIResponse deployImage (HttpServletRequest request, DeployedImage deployedImage){
         User user = (User) request.getSession().getAttribute("login_user");
-        appDeployService.deployImage(user, deployedImage);
-        return null;
+        return appDeployService.deployImage(user, deployedImage);
     }
 
     @PostMapping("template/deploy")

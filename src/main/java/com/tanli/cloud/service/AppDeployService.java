@@ -16,4 +16,6 @@ public interface AppDeployService {
     public APIResponse startApp(User user, String deploymentId);
 
     public APIResponse scaleService(User user, String serviceName, String instanceNum);
+
+    public APIResponse checkDeployName(User user, String deployName);
 }
