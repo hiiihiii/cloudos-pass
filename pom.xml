@@ -78,11 +78,6 @@
 			<artifactId>jackson-module-parameter-names</artifactId>
 		</dependency>
 
-		<!--<dependency>-->
-			<!--<groupId>com.alibaba</groupId>-->
-			<!--<artifactId>fastjson</artifactId>-->
-			<!--<version>1.2.28</version>-->
-		<!--</dependency>-->
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
@@ -129,12 +124,6 @@
 			<version>3.3</version>
 		</dependency>
 
-		<!--Kubernetes Client-->
-		<dependency>
-			<groupId>io.fabric8</groupId>
-			<artifactId>kubernetes-client</artifactId>
-			<version>4.0.0</version>
-		</dependency>
 	</dependencies>
 
 	<build>

@@ -1,10 +1,7 @@
 package com.tanli.cloud.controller.appcenter;
 
-import com.tanli.cloud.model.DeployedImage;
-import com.tanli.cloud.model.DeployedTemplate;
 import com.tanli.cloud.model.ImageInfo;
 import com.tanli.cloud.model.response.User;
-import com.tanli.cloud.service.AppDeployService;
 import com.tanli.cloud.service.AppStoreService;
 import com.tanli.cloud.service.ImageInfoService;
 import com.tanli.cloud.utils.APIResponse;
@@ -29,8 +26,6 @@ public class AppstoreController {
     private AppStoreService appStoreService;
     @Autowired
     private ImageInfoService imageInfoService;
-    @Autowired
-    private AppDeployService appDeployService;
 
 
     @RequestMapping(value = {"/",""})
@@ -61,13 +56,6 @@ public class AppstoreController {
 
     }
 
-    @RequestMapping("templateinfo")
-    @ResponseBody
-    public APIResponse getTemplateInfo(HttpServletRequest request, String repoType){
-        User user = (User) request.getSession().getAttribute("login_user");
-         return appStoreService.getTemplates(user, repoType);
-    }
-
     @RequestMapping("checkexist")
     @ResponseBody
     /**
@@ -81,27 +69,6 @@ public class AppstoreController {
         return appStoreService.checkAppExist(user, imageName, version, repoType);
     }
 
-    @RequestMapping("checkDeployName")
-    @ResponseBody
-    public APIResponse checkDeployName(HttpServletRequest request, String deployName){
-        User user = (User) request.getSession().getAttribute("login_user");
-        return appDeployService.checkDeployName(user, deployName);
-    }
-
-    @PostMapping("image/deploy")
-    @ResponseBody
-    public APIResponse deployImage (HttpServletRequest request, DeployedImage deployedImage){
-        User user = (User) request.getSession().getAttribute("login_user");
-        return appDeployService.deployImage(user, deployedImage);
-    }
-
-    @PostMapping("template/deploy")
-    @ResponseBody
-    public APIResponse deployTemplate (HttpServletRequest request, DeployedTemplate deployedTemplate) {
-        User user = (User) request.getSession().getAttribute("login_user");
-        appDeployService.deployTemplate(user, deployedTemplate);
-        return null;
-    }
 
     @PostMapping("imageInfo/delete")
     @ResponseBody

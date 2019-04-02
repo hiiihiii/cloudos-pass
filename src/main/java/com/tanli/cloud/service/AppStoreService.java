@@ -12,8 +12,4 @@ public interface AppStoreService {
     public APIResponse uploadImage(ImageInfo imageInfo, MultipartFile logoFile, MultipartFile sourceFile, User user);
 
     public APIResponse checkAppExist(User user, String appName, String version, String repoType);
-
-    public APIResponse getTemplates(User user, String repoType);
-
-    public APIResponse deleteImageInfo(User user, String[] versions, String imageId);
 }

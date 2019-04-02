@@ -1,14 +1,7 @@
 package com.tanli.cloud.service;
 
-import com.tanli.cloud.constant.EnvConst;
-import com.tanli.cloud.dao.DeploymentDao;
 import com.tanli.cloud.dao.ImageInfoDao;
-import com.tanli.cloud.dao.TemplateDao;
-import com.tanli.cloud.dao.UserLogDao;
-import com.tanli.cloud.model.Deployment;
 import com.tanli.cloud.model.ImageInfo;
-import com.tanli.cloud.model.Template;
-import com.tanli.cloud.model.UserLog;
 import com.tanli.cloud.model.response.Repository;
 import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.utils.APIResponse;
@@ -34,7 +27,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class AppStoreServiceImp implements AppStoreService {
@@ -47,12 +39,12 @@ public class AppStoreServiceImp implements AppStoreService {
     private RepositoryService repositoryService;
     @Autowired
     private ImageInfoDao imageInfoDao;
-    @Autowired
-    private TemplateDao templateDao;
-    @Autowired
-    private UserLogDao userLogDao;
-    @Autowired
-    private DeploymentDao deploymentDao;
+
+    private String docker_images_prefix = "";
+    private String docker_api_ip = "";
+    private String harbor_api_prefix = "";
+    private String harbor_username = "";
+    private String harbor_password = "";
 
     private static final Logger LOGGE = LoggerFactory.getLogger(AppStoreServiceImp.class);
 
@@ -89,15 +81,15 @@ public class AppStoreServiceImp implements AppStoreService {
                     .get();
             LOGGE.info("[AppStoreServiceImp Info]: " + repository);
             //load镜像
-            String loadURL = EnvConst.docker_images_prefix + "load";
+            String loadURL = docker_images_prefix + "load";
             String image = loadImage(loadURL, sourceFile);
             if(!("".equals(image))){
                 //tag镜像
-                String tagURL = EnvConst.docker_images_prefix + image + "/tag";
+                String tagURL = docker_images_prefix + image + "/tag";
                 Boolean isTaged = tagImage(tagURL, imageInfo, repository.getRepo_name());
                 if(isTaged){
                     //push镜像
-                    String pushUrl = EnvConst.docker_images_prefix + EnvConst.docker_api_ip + "/" + repository.getRepo_name() +"/" + imageInfo.getAppName() + "/push" ;
+                    String pushUrl = docker_images_prefix + docker_api_ip + "/" + repository.getRepo_name() +"/" + imageInfo.getAppName() + "/push" ;
                     Boolean isPushed = pushImage(pushUrl, imageInfo.getVersion());
                     if(isPushed){
                         ImageInfo exist = imageInfoDao.getImages(repository.getRepo_uuid(), user.getUser_uuid())
@@ -119,7 +111,7 @@ public class AppStoreServiceImp implements AppStoreService {
                             imageInfo.setV_description(JSONObject.fromObject(tem_map).toString());
 
                             tem_map.clear();
-                            tem_map.put(imageInfo.getVersion(), EnvConst.docker_api_ip + "/"+repository.getRepo_name() + "/" + imageInfo.getAppName() + ":" + imageInfo.getVersion());
+                            tem_map.put(imageInfo.getVersion(), docker_api_ip + "/"+repository.getRepo_name() + "/" + imageInfo.getAppName() + ":" + imageInfo.getVersion());
                             imageInfo.setSource_url(JSONObject.fromObject(tem_map).toString());
 
                             tem_map.clear();
@@ -150,7 +142,7 @@ public class AppStoreServiceImp implements AppStoreService {
                             imageInfo.setV_description(JSONObject.fromObject(tem_map).toString());
 
                             tem_map = JSONObject.fromObject(exist.getSource_url());
-                            tem_map.put(imageInfo.getVersion(), EnvConst.docker_api_ip + "/"+repository.getRepo_name() + "/" + imageInfo.getAppName() + ":" + imageInfo.getVersion());
+                            tem_map.put(imageInfo.getVersion(), docker_api_ip + "/"+repository.getRepo_name() + "/" + imageInfo.getAppName() + ":" + imageInfo.getVersion());
                             imageInfo.setSource_url(JSONObject.fromObject(tem_map).toString());
 
                             tem_map = JSONObject.fromObject(exist.getMetadata());
@@ -167,17 +159,7 @@ public class AppStoreServiceImp implements AppStoreService {
 
                             imageInfo.setUpdate_time(nowStr);
                             LOGGE.info("[AppStoreServiceImp Info]: Update ImageInfo" + imageInfo.toString());
-                            //操作日志
-                            UserLog userLog = new UserLog();
-                            userLog.setUuid(UuidUtil.getUUID());
-                            userLog.setUser_id(user.getUser_uuid());
-                            userLog.setUsername(user.getUserName());
-                            userLog.setResoureType("Image");
-                            userLog.setResourceId(imageInfo.getApp_id());
-                            userLog.setOperation("上传镜像");
-                            userLog.setIsDeleted("0");
-                            userLog.setCreate_time(nowStr);
-                            userLogDao.addUserLog(userLog);
+
                             int count = imageInfoDao.updateImageInfo(imageInfo);
                             if(count > 0){
                                 return APIResponse.success();
@@ -236,7 +218,7 @@ public class AppStoreServiceImp implements AppStoreService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
-        map.add("repo",EnvConst.docker_api_ip + "/"+ repoName + "/" + imageInfo.getAppName());//根据用户的repo来代替demo
+        map.add("repo",docker_api_ip + "/"+ repoName + "/" + imageInfo.getAppName());//根据用户的repo来代替demo
         map.add("tag", imageInfo.getVersion());
         LOGGE.info("[AppStoreServiceImp Info]: POST " + url + "?repo=" + map.get("repo") + "&tag=" + map.get("tag"));
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
@@ -284,12 +266,12 @@ public class AppStoreServiceImp implements AppStoreService {
 
     private Boolean deleteHarborTag(String source_url){
         Boolean result = false;
-        String url = EnvConst.harbor_api_prefix + "/repositories";
+        String url = harbor_api_prefix + "/repositories";
         String repoInfo[] = source_url.split(":");
         String temp[] =repoInfo[0].split("/");
         String repo_name = temp[1]+"/"+temp[2];
         String tag = repoInfo[1];
-        restTemplate.getInterceptors().add(new BasicAuthorizationInterceptor(EnvConst.harbor_username, EnvConst.harbor_password));
+        restTemplate.getInterceptors().add(new BasicAuthorizationInterceptor(harbor_username, harbor_password));
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
@@ -351,105 +333,6 @@ public class AppStoreServiceImp implements AppStoreService {
             } else {
                 return APIResponse.success(true);
             }
-        }
-    }
-
-    @Override
-    public APIResponse getTemplates(User user, String repoType) {
-        List<Template> templateList = templateDao.getAllTemplate();
-        if(("public").equals(repoType)){ //公有仓库
-            templateList = templateList
-                    .stream()
-                    .filter(template -> ("1").equals(template.getIsPublish()))
-                    .collect(Collectors.toList());
-        } else {                         //私有仓库
-            if(("admin_user").equals(user.getRole_name())){
-                templateList = templateList
-                        .stream()
-                        .filter(template -> user.getUser_uuid().equals(template.getUserId()))
-                        .collect(Collectors.toList());
-            } else {
-                templateList.clear();
-            }
-        }
-        return APIResponse.success(templateList);
-    }
-
-    @Override
-    public APIResponse deleteImageInfo(User user, String[] versions, String imageId) {
-        //整合数据库
-        Map<String, Integer> result = new HashMap<>();
-        int success = 0, fail = 0;
-        ImageInfo exist = imageInfoDao.getImagesAll(user.getUser_uuid())
-                .stream()
-                .filter(imageInfo -> imageInfo.getApp_id().equals(imageId))
-                .findFirst()
-                .orElse(null);
-        if(exist != null) {
-            List<Deployment> deployments = deploymentDao.getAllDeployments()
-                    .stream()
-                    .filter(deployment -> deployment.getImage_uuid().equals(exist.getApp_id()))
-                    .collect(Collectors.toList());
-            if(deployments.size()!=0) {
-                result.put("success", 0);
-                result.put("fail", versions.length);
-                return APIResponse.fail(result);
-            }
-            List<String> existVersoins = JSONArray.toList(JSONArray.fromObject(exist.getVersion()), String.class);
-            Map<String, String> v_desc = JSONObject.fromObject(exist.getV_description());
-            Map<String, String> metadata = JSONObject.fromObject(exist.getMetadata());
-            Map<String, String> create_type = JSONObject.fromObject(exist.getCreateType());
-            Map<String, String> source_urls= JSONObject.fromObject(exist.getSource_url());
-            for(int i = 0; i <versions.length; i++) {
-                List<Template> templates = templateDao.getAllTemplate()
-                        .stream()
-                        .filter(template -> {
-                            List<Map<String, String>> config = JSONArray.fromObject(JSONObject.fromObject(template.getConfig()));
-                            for(int j = 0; j<config.size();j++){
-                                Map<String,String> temp = config.get(j);
-                                if(temp.get("appName").equals(exist.getAppName()) &&
-                                        temp.get("version").equals(versions[j])){
-                                    return true;
-                                }
-                            }
-                            return false;
-                        }).collect(Collectors.toList());
-                if(templates.size()!=0){
-                    fail += 1;
-                    continue;
-                }
-                v_desc.remove(versions[i]);
-                metadata.remove(versions[i]);
-                create_type.remove(versions[i]);
-                existVersoins.remove(versions[i]);
-                String source_url = source_urls.remove(versions[i]);
-                //调用Docker API, Harbor API
-                // docker remove api
-                deleteImage(EnvConst.docker_images_prefix + source_urls.get(versions[i]));
-                // harbor api
-                deleteHarborTag(source_url);
-                success += 1;
-            }
-            if(success == existVersoins.size()) {
-                //int count = imageInfoDao.deleteImageById(exist.getApp_id());
-            } else {
-                exist.setV_description(JSONObject.fromObject(v_desc).toString());
-                exist.setMetadata(JSONObject.fromObject(metadata).toString());
-                exist.setCreateType(JSONObject.fromObject(create_type).toString());
-                exist.setVersion(JSONArray.fromObject(existVersoins).toString());
-                DateTime now = DateTime.now();
-                String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
-                exist.setUpdate_time(nowStr);
-                //int count = imageInfoDao.updateImageInfo(exist);
-            }
-            result.put("success", success);
-            result.put("fail", fail);
-            return APIResponse.success(result);
-        } else {
-            result.put("success", 0);
-            result.put("fail", versions.length);
-            LOGGE.info("[AppStoreServiceImp Info]: "+ "待删除的镜像不存在");
-            return APIResponse.fail(result);
         }
     }
 }

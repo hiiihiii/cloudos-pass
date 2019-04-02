@@ -39,11 +39,8 @@ define([
                 _self.allAppIns = _self.getApplications();
                 _self.classifyAppIns();
                 _self.initEcharts();
-                _self.getLogs();
                 _self.getImageData('public');
                 _self.getImageData('private');
-                _self.getTemplateData('public');
-                _self.getTemplateData('private');
                 _self.setAllApps();
                 _self.setPercent();
                 setTimeout(function () {
@@ -252,31 +249,6 @@ define([
                     };
                     echartsObj.setOption(option);
                 },
-                getLogs: function () {
-                    var _self = this;
-                    $.ajax({
-                        type:"get",
-                        url:"../userlog/info",
-                        dataType: "json",
-                        async:false,
-                        success: function (result) {
-                            if(result.code =="success") {
-                                var logsCount = result.data.length;
-                                if(logsCount > 10) {
-                                    _self.logs = result.data.slice(logsCount-10, logsCount);
-                                } else {
-                                    _self.logs = result.data;
-                                }
-                                console.log(_self.logs);
-                            } else {
-                                common_module.notify("[日志]","获取日志数据失败", "danger");
-                            }
-                        },
-                        error: function () {
-                            common_module.notify("[日志]","获取日志数据失败", "danger");
-                        }
-                    })
-                },
                 getImageData: function (repoType) {
                     var _self = this;
                     $.ajax({
@@ -311,57 +283,10 @@ define([
                 },
                 getTemplateData: function (repoType) {
                     var _self = this;
-                    $.ajax({
-                        url: "../appcenter/templateinfo",
-                        type: 'get',
-                        dataType: 'json',
-                        data: {
-                            repoType: repoType
-                        },
-                        async: false,
-                        success: function (data) {
-                            if(data.code === "success"){
-                                var count = data.data.length;
-                                if(repoType == 'public') {
-                                    _self.templateNumPublic = count;
-                                } else {
-                                    _self.templateNumPrivate = count;
-                                }
-                                for(var i = 0; i < count; i++) {
-                                    _self.templates.push(data.data[i]);
-                                }
-                                _self.templateNumAll += count;
-                                _self.templates = _self.convertData(_self.templates, 'template');
-                                console.log(_self.templates);
-                            } else {
-                                common_module.notify('[应用中心]', '获取模板信息失败', 'fail');
-                            }
-                        },
-                        error: function () {
-                            common_module.notify('[应用中心]', '获取模板信息失败', 'fail');
-                        }
-                    });
+
                 },
                 getApplications: function () {
                     var _self = this;
-                    var applications = [];
-                    $.ajax({
-                        url: "../application/info",
-                        type: "get",
-                        dataType: "json",
-                        success: function (result) {
-                            if(result.code == "success") {
-                                applications = result.data;
-                                console.log(result.data);
-                            } else {
-                                common_module.notify("[应用实例]","获取应用数据失败", "danger");
-                            }
-                        },
-                        error: function () {
-                            common_module.notify("[应用实例]","获取应用数据失败", "danger");
-                        }
-                    });
-                    return applications;
                 },
                 getUsers: function() {
                     var _self = this;
@@ -381,25 +306,6 @@ define([
                             common_module.notify("[用户]","获取用户数据失败", "danger");
                         }
                     });
-                },
-                getK8sNodes: function () {
-                    var _self = this;
-                    $.ajax({
-                        url: '../kubernetes/nodesinfo',
-                        type: 'get',
-                        dataType:"json",
-                        success:function (result) {
-                            if(result.code=="success") {
-                                _self.nodeNum = result.data.length;
-                                console.log('节点个数'+_self.nodeNum);
-                            } else {
-                                common_module.notify("[Kubernetes]","获取节点数据失败", "danger");
-                            }
-                        },
-                        error:function () {
-                            common_module.notify("[Kubernetes]","获取节点数据失败", "danger");
-                        }
-                    })
                 },
                 //冒泡排序
                 sort: function (appArray) {

@@ -1,11 +1,9 @@
 package com.tanli.cloud.service;
 
-import com.tanli.cloud.constant.EnvConst;
-import com.tanli.cloud.dao.*;
-import com.tanli.cloud.model.ImageInfo;
+import com.tanli.cloud.dao.ImageInfoDao;
+import com.tanli.cloud.dao.RepositoryDao;
+import com.tanli.cloud.dao.UserDao;
 import com.tanli.cloud.model.Project;
-import com.tanli.cloud.model.Template;
-import com.tanli.cloud.model.UserLog;
 import com.tanli.cloud.model.response.HarborProject;
 import com.tanli.cloud.model.response.Repository;
 import com.tanli.cloud.model.response.User;
@@ -19,9 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by tanli on 2018/10/15 0015.
@@ -32,30 +28,22 @@ public class UserManageServiceImp implements UserManageService {
     @Autowired
     private UserDao userDao;
     @Autowired
-    private UserLogDao userLogDao;
-    @Autowired
     private RepositoryDao repositoryDao;
     @Resource
     private RestTemplate restTemplate;
     @Autowired
     private ImageInfoDao imageInfoDao;
-    @Autowired
-    private TemplateDao templateDao;
+
+    private String harbor_api_ip = "";
+    private String harbor_username = "";
+    private String harbor_password = "";
+    private String harbor_api_prefix = "";
 
     private static final org.slf4j.Logger LOGGE = org.slf4j.LoggerFactory.getLogger(UserManageServiceImp.class);
 
     @Override
     public User loginVerify(User user) {
-        //操作日志
-        DateTime now = DateTime.now();
-        String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
-        UserLog userLog = new UserLog(UuidUtil.getUUID(),user.getUser_uuid(),
-                user.getUserName(),"User", user.getUser_uuid(), "登录", "0", nowStr);
-
         User login_user = userDao.loginVefiry(user);
-        userLog.setUser_id(login_user.getUser_uuid());
-        userLog.setResourceId(login_user.getUser_uuid());
-        userLogDao.addUserLog(userLog);
         return login_user;
     }
 
@@ -82,9 +70,9 @@ public class UserManageServiceImp implements UserManageService {
         repository.setUser_uuid(user.getUser_uuid());
         repository.setRepo_name(user.getUserName()+"_project");
         repository.setRepo_type("private");
-        repository.setUrl("http://"+ EnvConst.harbor_api_ip);
-        repository.setLogin_name(EnvConst.harbor_username);
-        repository.setLogin_psd(EnvConst.harbor_password);
+        repository.setUrl("http://"+ harbor_api_ip);
+        repository.setLogin_name(harbor_username);
+        repository.setLogin_psd(harbor_password);
         repository.setProject_name(repository.getRepo_name());
         repository.setCreate_time(nowStr);
         repository.setUpdate_time(nowStr);
@@ -93,17 +81,6 @@ public class UserManageServiceImp implements UserManageService {
         Boolean result = addHarborProject(repository.getRepo_name());
         if(result) {
             try {
-                //操作日志
-                UserLog userLog = new UserLog();
-                userLog.setUuid(UuidUtil.getUUID());
-                userLog.setUser_id(user.getUser_uuid());
-                userLog.setUsername(user.getUserName());
-                userLog.setResoureType("User");
-                userLog.setResourceId(user.getUser_uuid());
-                userLog.setOperation("增加用户");
-                userLog.setIsDeleted("0");
-                userLog.setCreate_time(nowStr);
-                userLogDao.addUserLog(userLog);
                 int count = userDao.addUser(user);
                 repositoryDao.addRepo(repository);
                 if(count > 0){
@@ -121,61 +98,7 @@ public class UserManageServiceImp implements UserManageService {
 
     @Override
     public APIResponse deleteByIds(User user, String[] ids) {
-        Map<String, Integer> result = new HashMap<>();
-        List<ImageInfo> imageInfos = imageInfoDao.getAllImages();
-        List<Template> templateList = templateDao.getAllTemplate();
-
-        int success = 0, fail = 0;
-        for(int i = 0 ; i < ids.length; i++){
-            //判断用户是否拥有镜像、模板
-            String id = ids[i];
-            List<Repository> repositories = repositoryDao.getRepoByUserid(id);
-            ImageInfo tempImage = imageInfos.stream()
-                    .filter(imageInfo -> imageInfo.getUser_id().equals(id))
-                    .findFirst().orElse(null);
-            Template template = templateList.stream()
-                    .filter(template1 -> template1.getUuid().equals(id))
-                    .findFirst().orElse(null);
-            if(tempImage!=null || template!=null) {//用户id下有应用不能删除
-                fail += 1;
-                break;
-            }
-            try {
-                //删除数据库中数据
-                repositoryDao.deleteRepo(id);
-                //删除Harbor中的项目
-                repositories.stream().forEach(repository -> {
-                    deleteHarborProject(repository.getRepo_name());
-                });
-                //删除用户
-                int count = userDao.deleteById(ids[i]);
-                //操作日志
-                DateTime now = DateTime.now();
-                String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
-                UserLog userLog = new UserLog(UuidUtil.getUUID(),
-                        user.getUser_uuid(), user.getUserName(), "User", ids[i],
-                        "删除用户",
-                        "0",
-                        nowStr);
-                userLogDao.addUserLog(userLog);
-                if(count > 0){
-                    success += 1;
-                } else {
-                    fail += 1;
-                    LOGGE.info("[UserManageServiceImp Info]: " + "删除用户" + ids[i] + "失败");
-                }
-            } catch (Exception e) {
-                fail += 1;
-                LOGGE.info("[UserManageServiceImp Info]: " + "删除用户" + ids[i] + "失败");
-                e.printStackTrace();
-            }
-        }
-        result.put("success", success);
-        result.put("fail", fail);
-        if(fail == ids.length) {
-            return APIResponse.fail("删除用户失败");
-        }
-        return APIResponse.success(result);
+        return null;
     }
 
     @Override
@@ -203,11 +126,11 @@ public class UserManageServiceImp implements UserManageService {
      */
     private Boolean addHarborProject(String projectName) {
         Boolean result = false;
-        String url = EnvConst.harbor_api_prefix + "projects";
+        String url = harbor_api_prefix + "projects";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         try {
-            restTemplate.getInterceptors().add(new BasicAuthorizationInterceptor(EnvConst.harbor_username, EnvConst.harbor_password));
+            restTemplate.getInterceptors().add(new BasicAuthorizationInterceptor(harbor_username, harbor_password));
             Project project = new Project(projectName, 0);
             HttpEntity<Project> request = new HttpEntity<>(project);
             LOGGE.info("[UserManageServiceImp Info]: " + "POST "+url);
@@ -229,7 +152,7 @@ public class UserManageServiceImp implements UserManageService {
         HarborProject harborProject = getHarborProjects(project_name);
         if(harborProject != null) {
             try {
-                String url = EnvConst.harbor_api_prefix + "projects/" + harborProject.getProject_id();
+                String url = harbor_api_prefix + "projects/" + harborProject.getProject_id();
                 HttpEntity<String> httpEntity = new HttpEntity<String>("");
                 LOGGE.info("[UserManageServiceImp Info]: " + "DELETE " + url);
                 ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, httpEntity, String.class);
@@ -250,8 +173,8 @@ public class UserManageServiceImp implements UserManageService {
      */
     private HarborProject getHarborProjects(String project_name){
         HarborProject[] harborProjects = new HarborProject[0];
-        String url = EnvConst.harbor_api_prefix + "projects?project_name=" + project_name;
-        restTemplate.getInterceptors().add(new BasicAuthorizationInterceptor(EnvConst.harbor_username, EnvConst.harbor_password));
+        String url = harbor_api_prefix + "projects?project_name=" + project_name;
+        restTemplate.getInterceptors().add(new BasicAuthorizationInterceptor(harbor_username, harbor_password));
         try {
             LOGGE.info("[UserManageServiceImp Info]: " + "GET " + url);
             harborProjects = restTemplate.getForObject(url, HarborProject[].class);

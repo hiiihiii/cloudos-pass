@@ -19,7 +19,7 @@ img {
 * {
     box-sizing: border-box;
 }
-/*按钮*/
+
 .cloud-btn, .cloud-btn:hover {
     outline: none;
     font-size: 12px;
@@ -33,7 +33,7 @@ img {
 .cloud-btn i {
     padding-right: 5px;
 }
-/*模态框*/
+
 .modal-header .close {
     outline: none;
 }
@@ -58,7 +58,7 @@ img {
     text-align: center;
     box-shadow: 0px -1px 0px #f1e8e8;
 }
-/*开关按钮*/
+
 .bootstrap-switch {
     border-radius: 17px;
     height: 22px;
@@ -94,7 +94,7 @@ span.select2 {
     font-weight: normal;
     white-space: nowrap;
 }
-/*验证*/
+
 label.error{
     font-weight: normal;
     color: rgb(255, 0, 0);
@@ -107,10 +107,7 @@ label.error{
 }
 #system_role,
 #system_user,
-#apporch,
-#k8s_node,
-#application,
-#userlog {
+#apporch{
     padding-top: 100px;
 }
 .dataTables_info{

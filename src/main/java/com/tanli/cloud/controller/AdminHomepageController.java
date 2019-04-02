@@ -31,10 +31,4 @@ public class AdminHomepageController {
         return adminHomepageService.getAllImages(user);
     }
 
-    @RequestMapping("templates")
-    @ResponseBody
-    public APIResponse getAllTemplate(HttpServletRequest request) {
-        User user = (User) request.getSession().getAttribute("login_user");
-        return adminHomepageService.getAllTemplates(user);
-    }
 }

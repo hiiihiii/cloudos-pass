@@ -1,4 +1,4 @@
-/*头部导航开始*/
+
 .header {
     position: fixed;
     z-index: 1000;
@@ -73,8 +73,7 @@
     margin-top: -20px;
     margin-right: 30px;
 }
-/*头部导航结束*/
-/*面包屑开始*/
+
 .breadcrumbs {
     float: left;
     width: 100%;
@@ -93,9 +92,7 @@
 .breadcrumbs a:first-child {
     padding-left: 22px;
 }
-/*面包屑结束*/
 
-/*左侧导航开始*/
 .content {
     padding-top: 100px;
     display: flex;
@@ -187,9 +184,7 @@ span.checkbox+a{
     top: 14px;
     right: 50px;
 }
-/*左侧导航结束*/
 
-/*右侧内容开始*/
 .content-right{
     width: 85%;
     height: 535px;
@@ -301,9 +296,7 @@ span.checkbox+a{
     /*left: 710px;*/
     text-align: center;
 }
-/*右侧内容结束*/
 
-/*概览开始*/
 #overview {
     display: flex;
     padding-top: 100px;
@@ -371,14 +364,7 @@ span.checkbox+a{
 #overview .middle-bottom .content-box {
     height: 100%;
 }
-/*#overview .middle-bottom .box-title img {*/
-    /*position: absolute;*/
-    /*cursor: pointer;*/
-    /*height: 17px;*/
-/*}*/
-/*#overview .middle-bottom img.docker-icon {*/
-    /*right: 35px;*/
-/*}*/
+
 .middle-bottom .hot-title {
     position: absolute;
     cursor: pointer;
@@ -470,8 +456,6 @@ span.checkbox+a{
 .type-classify span {
     display: block;
     height: 8px;
-    /*width: 12%;*/
-    /*background: green;*/
 }
 .content-box .box-title{
     padding-left: 5px;
@@ -596,8 +580,7 @@ span.checkbox+a{
     display: inline-block;
     width: 160px;
 }
-/*概览结束*/
-/*展示应用开始*/
+
 #appstore .app {
     display: flex;
     width: 100%;
@@ -704,7 +687,6 @@ span.checkbox+a{
 #appstore .app-detail .upper > span,
 #appstore .app-detail .upper > img,
 #appstore .app-detail .upper > p {
-    /*position: absolute;*/
     font-size: 0.75em;
 }
 #appstore .app-detail .upper > span {
@@ -737,8 +719,7 @@ span.checkbox+a{
 .app-search input:focus {
     box-shadow: none;
 }
-/*展示应用结束*/
-/*上传镜像开始*/
+
 #upload_image_form .select2+input {
     position: relative;
     margin-top: -30px;
@@ -772,7 +753,6 @@ span.checkbox+a{
 #deploy_template_form .modal-body-left {
     display: inline-block;
     width: 135px;
-    /*position: absolute;*/
     position: fixed;
 }
 #upload_image_form .modal-body-right,
@@ -868,9 +848,7 @@ span.checkbox+a{
 #deploy_template .cmdParam-item:not(:last-child) {
     margin-bottom: 15px;
 }
-/*上传镜像结束*/
 
-/*角色开始*/
 #system_role .operate-box,
 #system_user .operate-box,
 #apporch .operate-box,
@@ -882,7 +860,7 @@ span.checkbox+a{
     border-bottom: 1px solid rgba(0,0,0,0.11);
     box-shadow: 0px -2px 5px rgba(0,0,0,0.5);
 }
-/*角色结束*/
+
 #role_table,
 #user_table,
 #template_table{
@@ -896,7 +874,7 @@ span.checkbox+a{
     cursor: pointer;
     color: #767b80;
 }
-/*新版应用编排开始*/
+
 #template .template-form-control {
     width: 174px;
 }
@@ -1056,8 +1034,7 @@ span.checkbox+a{
 #template_table td a{
     color: #003ce6;
 }
-/*新版应用编排结束*/
-/*部署模板开始*/
+
 #deploy_template_form .tab-pane {
     margin-left: 20px;
     margin-top: 10px;
@@ -1080,8 +1057,7 @@ span.checkbox+a{
     border: none;
     background-color: transparent;
 }
-/*部署模板结束*/
-/*模板详情开始*/
+
 #template_detail .content {
     display: flex;
 }
@@ -1115,8 +1091,7 @@ span.checkbox+a{
 #template_detail .form-group span {
     font-size: 12px;
 }
-/*模板详情结束*/
-/*增加用户开始*/
+
 #add_user_form .form-group {
     margin-left: 35px;
     margin-right: 0px;
@@ -1132,8 +1107,7 @@ span.checkbox+a{
 #add_user_dialog .cloud-modal-body {
     height: 310px;
 }
-/*增加用户结束*/
-/*应用实例开始*/
+
 #application #serviceDetail {
     position: absolute;
     width: 700px;
@@ -1150,9 +1124,7 @@ span.checkbox+a{
     cursor: pointer;
     padding: 9px 15px;
 }
-#application #service_table {
-    /*margin: 5px;*/
-}
+
 #application #serviceDetail #detailTab {
     border-bottom: 1px solid #ec670b;
 }
@@ -1176,8 +1148,7 @@ span.checkbox+a{
     display: inline-block;
     width: 66%;
 }
-/*应用实例结束*/
-/*删除镜像开始*/
+
 #imageVersion .cloud-modal-body {
     height: 110px;
 }
@@ -1187,4 +1158,3 @@ span.checkbox+a{
 #imageVersion .cloud-checkbox {
     margin: 0 5px;
 }
-/*删除镜像结束*/
