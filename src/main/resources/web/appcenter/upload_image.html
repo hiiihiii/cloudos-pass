@@ -29,9 +29,8 @@
                                 <!--应用名称-->
                                 <div class="form-group">
                                     <label><span class="cloud-required">  *</span>名称</label>
-                                    <div>
-                                        <input type="text" class="form-control" id="appName" name="appName" placeholder="请输入名称" maxlength="64"/>
-                                    </div>
+                                    <input type="text" class="form-control cloud-form-control" id="appName" name="appName" placeholder="请输入名称" maxlength="64"/>
+                                    <span class="input-tip">应用名称最多64个字符，字母、数字，首位不能为数字</span>
                                 </div>
                                 <!--是否公有-->
                                 <div class="form-group">
@@ -49,13 +48,13 @@
                                         <input type="file" class="file-input-btn" name="logo" id="logo" v-on:change="fileChange('logo')"/>
                                         <label class="btn cloud-btn"><i class="fa fa-upload"></i>选择文件</label>
                                     </div>
+                                    <span class="input-tip">选择镜像的图标文件，文件类型可以是png、jpg或jpeg</span>
                                 </div>
                                 <!--版本-->
                                 <div class="form-group">
                                     <label><span class="cloud-required">  *</span>版本</label>
-                                    <div>
-                                        <input class="form-control" type="text" name="version" id="version"/>
-                                    </div>
+                                    <input class="form-control cloud-form-control" type="text" name="version" id="version"/>
+                                    <span class="input-tip version-tip">请输入镜像版本，如v1.1</span>
                                 </div>
                                 <!--标签-->
                                 <div class="form-group">
@@ -67,20 +66,19 @@
                                         <input class="form-control input-select2" type="text"
                                                v-model="bindData.appTag_input" name="appTag_input"/>
                                     </div>
+                                    <span class="input-tip">可以选择系统内置标签，或者输入自定义标签</span>
                                 </div>
                                 <!--应用简介-->
                                 <div class="form-group">
                                     <label >应用简介</label>
-                                    <div>
-                                        <textarea class="form-control" name="description" maxlength="10000"></textarea>
-                                    </div>
+                                    <textarea class="form-control cloud-form-control" name="description" maxlength="10000"></textarea>
+                                    <span class="input-tip textarea-tip">对上传的镜像进行详细描述</span>
                                 </div>
                                 <!--版本特性-->
                                 <div class="form-group">
                                     <label >版本特性</label>
-                                    <div>
-                                        <textarea class="form-control" name="v_description" maxlength="1000"></textarea>
-                                    </div>
+                                    <textarea class="form-control cloud-form-control" name="v_description" maxlength="1000"></textarea>
+                                    <span class="input-tip textarea-tip">简要描述镜像版本的新特性</span>
                                 </div>
                             </div>
                             <div class="config-info" v-show="infoTag == 'configInfo'" v-cloak="">
@@ -93,32 +91,25 @@
                                         <input type="file" class="file-input-btn" name="sourceFile" id="source" v-on:change="fileChange('source')"/>
                                         <label class="btn cloud-btn"><i class="fa fa-upload"></i>选择文件</label>
                                     </div>
+                                    <span class="input-tip">选择需要上传的镜像包文件，文件类型为tar</span>
                                 </div>
                                 <!--目录映射-->
                                 <div class="form-group">
                                     <label >目录映射</label>
-                                    <div>
-                                        <input class="form-control" type="text" name="volumeDir"/>
-                                    </div>
+                                    <input class="form-control cloud-form-control" type="text" name="volumeDir"/>
+                                    <span class="input-tip">容器运行时挂载的目录</span>
                                 </div>
                                 <!--运行命令-->
                                 <div class="form-group">
                                     <label >运行命令</label>
-                                    <div>
-                                        <input class="form-control" type="text" name="cmd"/>
-                                    </div>
+                                    <input class="form-control cloud-form-control" type="text" name="cmd"/>
+                                    <span class="input-tip">多个命令使用英文逗号分割</span>
                                 </div>
                                 <!--命令参数-->
                                 <div class="form-group" id="cmdParam-box">
                                     <label >命令参数</label>
                                     <span v-on:click="addCmdParam"><i class="fa fa-plus"></i></span>
-                                    <!--<div class="cmdParam-item">-->
-                                        <!--<input class="form-control" type="text" name="cmdParam"/>-->
-                                    <!--</div>-->
-                                    <!--<div class="cmdParam-item">-->
-                                        <!--<input class="form-control" type="text" name="cmdParam"/>-->
-                                        <!--<span class="delete-cmd-btn"><i class="fa fa-trash-o"></i></span>-->
-                                    <!--</div>-->
+
                                 </div>
                                 <!--环境变量-->
                                 <div class="form-group">
@@ -140,7 +131,9 @@
                                 </div>
                                 <!--端口映射-->
                                 <div class="form-group port-form-group" >
-                                    <label><span class="cloud-required">  *</span>端口映射</label>
+                                    <label>
+                                        <span class="cloud-required">  *</span>端口映射
+                                    </label>
                                     <span v-on:click="addPort"><i class="fa fa-plus"></i></span>
                                     <div class="modal-table-box">
                                         <table class="table cloud-modal-table" id="port_table">
@@ -179,9 +172,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label ><span class="cloud-required">  *</span>CPU</label>
-                                    <div>
-                                        <input class="form-control" type="text" name="mincpu"/>
-                                    </div>
+                                    <input class="form-control cloud-form-control" type="text" name="mincpu"/>
+                                    <span class="input-tip">单位：核，不能大于运行限制的CPU</span>
                                 </div>
                                 <div class="form-group">
                                     <label><span class="cloud-required">  *</span>内存</label>
@@ -198,9 +190,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label><span class="cloud-required">  *</span>CPU</label>
-                                    <div>
-                                        <input class="form-control" type="text" name="maxcpu"/>
-                                    </div>
+                                    <input class="form-control cloud-form-control" type="text" name="maxcpu"/>
+                                    <span class="input-tip">单位：核，不能小于运行限制的CPU</span>
                                 </div>
                                 <div class="form-group">
                                     <label><span class="cloud-required">  *</span>内存</label>

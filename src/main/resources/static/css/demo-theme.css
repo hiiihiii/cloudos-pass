@@ -237,13 +237,17 @@ div.error {
     border-color: #faebcc;
 }
 .input-tip {
-    position: relative;
+    display: none;
+    position: absolute;
     background: rgb(236,103,11);
     font-size: 12px;
     color: white;
     padding: 5px;
     border-radius: 4px;
     box-shadow: 1px 1px 21px #ceccbf;
+    width: 150px;
+    right: -156px !important;
+    top: 10px !important;
 }
 .input-tip:after {
     right: 100%;
@@ -258,4 +262,13 @@ div.error {
     border-right-color: rgb(236,103,11);
     border-width: 4px;
     margin-top: -4px;
+}
+.textarea-tip,
+.version-tip {
+    top: 26px !important;
+}
+.cloud-question {
+    color: rgb(236,103,11);
+    cursor: pointer;
+    margin-left: 3px;
 }

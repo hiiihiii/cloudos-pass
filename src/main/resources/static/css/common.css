@@ -413,6 +413,7 @@ span.checkbox+a{
     padding: 7px;
     margin: 10px 5px;
     height: 140px;
+    width: 132px;
 }
 #overview #service .service-info {
     display: inline-block;
@@ -484,7 +485,8 @@ span.checkbox+a{
 }
 #overview .app-statistics-box {
     display: inline-block;
-    margin-right: 55px;
+    margin-right: 40px;
+    width: 155px;
 }
 .exception-list {
     height: 290px;

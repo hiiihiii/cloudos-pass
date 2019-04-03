@@ -88,6 +88,37 @@ define([
         }
     });
 
+    //显示提示信息
+    $("body").on("focus", "input.cloud-form-control, textarea", function () {
+
+        var parent = $(this).parent();
+        var span = $(parent).children(".input-tip");
+        if(span[0]) {
+            $(span[0]).show();
+        }
+    });
+    $("body").on("mouseover","input[type='file'], input.input-select2", function () {
+        var parent = $(this).parents("div.form-group");
+        var span = $(parent).children(".input-tip");
+        if(span[0]) {
+            $(span[0]).show();
+        }
+    });
+    //隐藏提示信息
+    $("body").on("blur", "input.cloud-form-control, textarea", function () {
+        var parent = $(this).parent();
+        var span = $(parent).children("span");
+        if(span[0]) {
+            $(span[0]).hide();
+        }
+    });
+    $("body").on("mouseleave","input[type='file'], input.input-select2", function () {
+        var parent = $(this).parents("div.form-group");
+        var span = $(parent).children("span");
+        if(span[0]) {
+            $(span[0]).hide();
+        }
+    });
     // 创建表格
     function tables(id, options) {
         var tableObj = $(id)
