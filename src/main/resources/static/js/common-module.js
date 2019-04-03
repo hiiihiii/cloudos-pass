@@ -9,30 +9,50 @@ define([
         switch (sessionStorage.href){
             case "/adminhomepage":
                 $("#overview-menu").addClass("parent-menu-selected");
+                $("#first-menu").text("概览");
+                $("#second-menu").text("");
                 break;
             case "/appcenter":
                 $("#service-menu").addClass("parent-menu-selected");
                 $("#appstore-menu").addClass("child-menu-selected");
+                $("#first-menu").text("服务");
+                $("#second-menu").text("应用仓库");
                 break;
             case "/role":
                 $("#setting-menu").addClass("parent-menu-selected");
                 $("#system-role-setting").addClass("child-menu-selected");
+                $("#first-menu").text("系统管理");
+                $("#second-menu").text("角色");
                 break;
             case "/user":
                 $("#setting-menu").addClass("parent-menu-selected");
                 $("#system-user-setting").addClass("child-menu-selected");
+                $("#first-menu").text("系统管理");
+                $("#second-menu").text("用户");
                 break;
             case "/apporch":
                 $("#service-menu").addClass("parent-menu-selected");
                 $("#apporch-menu").addClass("child-menu-selected");
+                $("#first-menu").text("服务");
+                $("#second-menu").text("应用编排");
                 break;
             case "/kubernetes":
                 $("#system-menu").addClass("parent-menu-selected");
                 $("#kubernetes-node").addClass("child-menu-selected");
+                $("#first-menu").text("配置");
+                $("#second-menu").text("节点");
                 break;
             case "/application":
                 $("#service-menu").addClass("parent-menu-selected");
                 $("#application-menu").addClass("child-menu-selected");
+                $("#first-menu").text("服务");
+                $("#second-menu").text("应用实例管理");
+                break;
+            case "/audit":
+                $("#audit-menu").addClass("parent-menu-selected");
+                $("#log-menu").addClass("child-menu-selected");
+                $("#first-menu").text("审计");
+                $("#second-menu").text("日志");
                 break;
         }
     }
@@ -85,6 +105,11 @@ define([
             case "application-menu":
                 sessionStorage.currentMenu = "应用实例";
                 sessionStorage.href = "/application";
+                break;
+            case "log-menu":
+                sessionStorage.currentMenu = "日志";
+                sessionStorage.href="/audit";
+                break;
         }
     });
 
