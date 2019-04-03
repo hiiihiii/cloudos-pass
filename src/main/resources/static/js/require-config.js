@@ -29,7 +29,8 @@ require.config({
         "login": "js/login",
         "role": "js/system/role",
         "user": "js/system/user",
-        "userlog": "js/system/userlog"
+        "userlog": "js/system/userlog",
+        'node':'js/kubernetes/node'
     },
     shim:{
         "bootstrap": ["jquery"],

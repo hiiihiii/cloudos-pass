@@ -20,33 +20,37 @@ public class K8sNode {
         this.name = name;
     }
 
-    public String isOutOfDisk() {
+    public String getOutOfDisk() {
         return outOfDisk;
     }
+
+    public String getMemoryPressure() {
+        return memoryPressure;
+    }
+
+    public String getDiskPressure() {
+        return diskPressure;
+    }
+
+    public String getReady() {
+        return ready;
+    }
+
 
     public void setOutOfDisk(String outOfDisk) {
         this.outOfDisk = outOfDisk;
     }
 
-    public String isMemoryPressure() {
-        return memoryPressure;
-    }
 
     public void setMemoryPressure(String memoryPressure) {
         this.memoryPressure = memoryPressure;
     }
 
-    public String isDiskPressure() {
-        return diskPressure;
-    }
 
     public void setDiskPressure(String diskPressure) {
         this.diskPressure = diskPressure;
     }
 
-    public String isReady() {
-        return ready;
-    }
 
     public void setReady(String ready) {
         this.ready = ready;

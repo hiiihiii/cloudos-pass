@@ -9,15 +9,53 @@
 <div th:replace="common/nav::menu"></div>
 <div id="k8s_node">
     <div class="operate-box col-md-12 col-sm-12 col-xs-12">
-        <div class="btn cloud-btn"><i class="fa fa-plus"></i>增加</div>
+        <div class="btn cloud-btn" v-cloak="" v-on:click="showAddDialog"><i class="fa fa-plus"></i>增加</div>
         <div class="btn cloud-btn"><i class="fa fa-trash"></i>删除</div>
-        <div class="btn cloud-btn"><i class="fa fa-refresh"></i>刷新</div>
+        <div class="btn cloud-btn" v-cloak="" v-on:click="refreshTable"><i class="fa fa-refresh"></i>刷新</div>
     </div>
+    <table class="table" id="node_table">
+        <thead class="">
+        <tr>
+            <th>
+                <div class="checkbox-container table-checkbox-box" v-on:click="checkAll($event)">
+                    <input class="cloud-checkbox" type="checkbox"/>
+                </div>
+            </th>
+            <th>节点名称</th>
+            <th>节点IP</th>
+            <th>节点状态</th>
+            <th>硬盘</th>
+            <th>内存压力</th>
+            <th>磁盘压力</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="node in nodes" v-cloak="" >
+            <td>
+                <div class="checkbox-container table-checkbox-box" v-cloak="" v-on:click="checkOne($event)">
+                    <input class="cloud-checkbox" type="checkbox"/>
+                </div>
+            </td>
+            <td v-cloak="">{{node.name}}</td>
+            <td v-cloak="">{{node.internalIP}}</td>
+            <td v-cloak="">{{node.ready}}</td>
+            <td v-cloak="">{{node.outOfDisk}}</td>
+            <td v-cloak="">{{node.memoryPressure}}</td>
+            <td v-cloak="">{{node.diskPressure}}</td>
+            <td v-cloak="">
+                <span class="operate-btn" title="删除" v-cloak=""
+                      v-on:click="deleteNode($event)"><i class="fa fa-trash-o"></i></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:replace="kubernetes/add_node::add_node"></div>
 </div>
 <div th:replace="common/footer::footer"></div>
 <script type="text/javascript">
     require(["../js/require-config"],function (require_config) {
-        require([]);
+        require(['node']);
     });
 </script>
 </body>

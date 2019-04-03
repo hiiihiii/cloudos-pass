@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div th:fragment="add_node" id="add_node_dialog">
+    <div class="modal fade" id="add_node" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <div class="cloud-modal-title">
+                        <i class="fa fa-plus"></i>
+                        <h4 class="modal-title">增加节点</h4>
+                    </div>
+                </div>
+                <div class="modal-body cloud-modal-body">
+                    <div class="alert alert-warning">
+                        <strong>提示！</strong>请提前配置好节点
+                    </div>
+                    <form id="add_node_form" role="form" class="form-horizontal" enctype="multipart/form-data">
+                        <!--节点名称-->
+                        <div class="form-group">
+                            <label class="cloud-modal-label">节点名称<span class="cloud-required">  *</span>：</label>
+                            <input type="text" class="form-control" id="nodename" name="nodename" placeholder="请输入用户名" maxlength="64"/>
+                            <span class="input-tip">请输入节点名称</span>
+                        </div>
+                        <!--IP-->
+                        <div class="form-group">
+                            <label class="cloud-modal-label">节点IP<span class="cloud-required">  *</span>：</label>
+                            <input type="password" class="form-control" id="nodeip" name="nodeip" placeholder="请输入密码" maxlength="64"/>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn cloud-btn" v-on:click="" v-cloak="">确定</button>
+                    <button type="button" class="btn cloud-btn" data-dismiss="modal" v-cloak="">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

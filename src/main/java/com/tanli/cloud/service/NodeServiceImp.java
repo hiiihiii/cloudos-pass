@@ -8,9 +8,7 @@ import io.fabric8.kubernetes.api.model.NodeAddress;
 import io.fabric8.kubernetes.api.model.NodeCondition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +16,6 @@ import java.util.List;
 
 @Service
 public class NodeServiceImp implements NodeService {
-    @Autowired
-    private RestTemplate restTemplate;
     private static final Logger LOGGE = LoggerFactory.getLogger(NodeServiceImp.class);
 
     @Override
@@ -62,6 +58,6 @@ public class NodeServiceImp implements NodeService {
             }
             k8sNodes.add(k8sNode);
         });
-    return APIResponse.success(k8sNodes);
+        return APIResponse.success(k8sNodes);
     }
 }

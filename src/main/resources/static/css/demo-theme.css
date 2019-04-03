@@ -230,3 +230,32 @@ div.error {
     margin-left: 85px;
     margin-top: 2px;
 }
+#add_node_dialog .alert-warning {
+    padding: 10px;
+    color: #d03f26;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+}
+.input-tip {
+    position: relative;
+    background: rgb(236,103,11);
+    font-size: 12px;
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+    box-shadow: 1px 1px 21px #ceccbf;
+}
+.input-tip:after {
+    right: 100%;
+    top: 50%;
+    border: solid rgb(236,103,11);
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: #e8e7de00;
+    border-right-color: rgb(236,103,11);
+    border-width: 4px;
+    margin-top: -4px;
+}

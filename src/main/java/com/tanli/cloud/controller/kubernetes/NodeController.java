@@ -27,7 +27,6 @@ public class NodeController {
     @RequestMapping("nodesinfo")
     @ResponseBody
     public APIResponse getNodes(HttpServletRequest request, HttpServletResponse response){
-
         return nodeService.getNodes();
     }
 }

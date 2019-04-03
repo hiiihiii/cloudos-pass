@@ -1117,15 +1117,18 @@ span.checkbox+a{
 }
 /*模板详情结束*/
 /*增加用户开始*/
-#add_user_form .form-group {
+#add_user_form .form-group,
+#add_node_form .form-group {
     margin-left: 35px;
     margin-right: 0px;
 }
-#add_user_form .form-control {
+#add_user_form .form-control,
+#add_node_form .form-control {
     display: inline-block;
     width: 65%;
 }
-#add_user_form .cloud-modal-label {
+#add_user_form .cloud-modal-label,
+#add_node_form .cloud-modal-label {
     width: 80px;
     text-align: right;
 }
@@ -1177,6 +1180,11 @@ span.checkbox+a{
     width: 66%;
 }
 /*应用实例结束*/
+/*增加节点开始*/
+#add_node_dialog .cloud-modal-body {
+    height: 185px;
+}
+/*增加节点结束*/
 /*删除镜像开始*/
 #imageVersion .cloud-modal-body {
     height: 110px;
