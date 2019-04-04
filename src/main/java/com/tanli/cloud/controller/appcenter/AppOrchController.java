@@ -37,7 +37,8 @@ public class AppOrchController {
 
     @RequestMapping("template")
     public ModelAndView toTemplate(){
-        return new ModelAndView("appcenter/template");
+//        return new ModelAndView("appcenter/template");
+        return new ModelAndView("appcenter/template_new");
     }
 
     @RequestMapping("appinfo")
