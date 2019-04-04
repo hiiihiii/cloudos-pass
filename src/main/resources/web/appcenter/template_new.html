@@ -97,8 +97,8 @@
         <div class="content-middle">
             <div id="canvas-box"></div>
             <div class="twaver-operation-box">
-                <img v-show="!twaverObj.isLinkMode" v-on:click="changeLinkMode('link')" src="../images/apporch/link.png" v-cloak=""/>
-                <img v-show="twaverObj.isLinkMode" v-on:click="changeLinkMode('unlink')" src="../images/apporch/unlink.png" v-cloak=""/>
+                <img v-show="!twaverObj.isLinkMode" v-on:click="setCreateLinkMode" src="../images/apporch/link.png" v-cloak=""/>
+                <img v-show="twaverObj.isLinkMode" v-on:click="closeCreateLinkMode" src="../images/apporch/unlink.png" v-cloak=""/>
             </div>
         </div>
         <div class="content-right">

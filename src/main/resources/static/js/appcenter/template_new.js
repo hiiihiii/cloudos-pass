@@ -30,8 +30,6 @@ define([
                     network: {},
                     box: {},
                     isLinkMode: false, //记录是否是连线模式
-                    from: null,
-                    to: null,
                     selectedImage: null  //记录画布中被选中的节点，格式与imageInfoList[i]一致
                 },
                 selectedImages:[],    //画布中的镜像信息，用于最后统计信息
@@ -72,20 +70,32 @@ define([
                     });
                     $("#add_template").modal({backdrop: 'static', keyboard: false});
                 },
-                //改变连线模式
-                changeLinkMode: function(type) {
-                    var _self = this;
-                    if(type === 'link'){
-                        _self.twaverObj.isLinkMode = true;
-                        // _self.twaverObj.network.setCreateLinkInteractions();
-                    } else {
-                        _self.twaverObj.isLinkMode = false;
-                        // _self.twaverObj.network.setDefaultInteractions();
-                    }
-                    //清空连线起点和终点
-                    _self.twaverObj.from = null;
-                    _self.twaverObj.to = null;
 
+                //进入连线模式并
+                setCreateLinkMode: function () {
+                    debugger
+                    var _self = this;
+                    _self.twaverObj.isLinkMode = true;
+                    //创建link
+                    _self.twaverObj.network.setCreateLinkInteractions(function (from, to) {
+                        debugger;
+                        var link = new twaver.Link(from, to);
+                        link.setName('test');
+                        link.setStyle('arrow.to', true);
+                        link.setStyle('arrow.to.shape', 'arrow.short');
+                        link.setStyle('arrow.to.color', '#ec670b');
+                        link.setStyle("link.type", "flexional");
+                        link.setStyle("link.width", "2");
+                        link.setStyle("link.color", "#ec670b");
+                        _self.twaverObj.box.add(link);
+                    });
+                },
+
+                //关闭连线模式，进入默认模式
+                closeCreateLinkMode: function () {
+                    var _self = this;
+                    _self.twaverObj.isLinkMode = false;
+                    _self.twaverObj.network.setDefaultInteractions(true);
                 },
 
                 //获取所有镜像
@@ -240,9 +250,6 @@ define([
                     });
                     //画布画网格
                     network.paintBottom = _self.drawGrid;
-                    /**
-                     * todo 可以考虑使用twaver自带的连线模式，但存在的问题是使用自带的连线模式时怎么设置link的样式
-                     */
                     box.getSelectionModel().addSelectionChangeListener(_self.nodeSelectionChangeHandler);
                     _self.popupMenuInit();
                 },
@@ -292,10 +299,10 @@ define([
                 drawGrid: function (ctx, dirtyRect){
                     var _self = this;
                     var rootCanvas = _self.twaverObj.network.getRootCanvas();
-                    ctx.fillStyle = '#ccc';
+                    ctx.fillStyle = '#fff';
                     ctx.fillRect(0,0,rootCanvas.width,rootCanvas.height);
                     ctx.lineWidth = 0.2;
-                    ctx.strokeStyle = '#fff';
+                    ctx.strokeStyle = '#aaa';
                     for (var i = 10; i < ctx.canvas.width; i += 10) {
                         ctx.beginPath();
                         ctx.moveTo(i, 0);
@@ -329,35 +336,6 @@ define([
                     var _self = this;
                     var selectionModel = _self.twaverObj.box.getSelectionModel();
                     var last = selectionModel.getLastData();
-                    // 判断是否是连线模式
-                    if(_self.twaverObj.isLinkMode && last!=null) {
-                        if(!_self.twaverObj.from){
-                            _self.twaverObj.from = last;
-                        } else if(!_self.twaverObj.to){
-                            _self.twaverObj.to = last;
-                            // _self.showPortListDialog(_self.twaverObj.to);
-                            /**
-                             * 创建连线，
-                             * 连线样式设置参考http://doc.servasoft.com/twaver-document-center/recommended/twaver-html5-guide/%E7%BD%91%E5%85%83%E6%A0%B7%E5%BC%8F%E8%A1%A8/#link
-                             */
-
-                            var link = new twaver.Link(_self.twaverObj.from, _self.twaverObj.to);
-                            link.setName('test');
-                            // link.setToolTip('<b>Hello!</b>');
-                            link.setStyle('arrow.to', true);
-                            link.setStyle('arrow.to.shape', 'arrow.short');
-                            link.setStyle('arrow.to.color', '#ffffff');
-                            link.setStyle("link.type", "flexional");
-                            link.setStyle("link.width", "2");
-                            link.setStyle("link.color", "#ffffff");
-                            _self.twaverObj.box.add(link);
-                            //完成一次连线就清空起始节点和终点
-                            _self.twaverObj.from = null;
-                            _self.twaverObj.to = null;
-                            // _self.twaverObj.isLinkMode = false;
-
-                        }
-                    }
                     // 保存当前节点的信息
                     if(_self.twaverObj.selectedImage != null){
                         for(var i = 0; i < _self.selectedImages.length; i++){
