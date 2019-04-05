@@ -10,8 +10,9 @@ define([
     'validate-extend',
     'common-module',
     'twaver',
-    "bootstrapSwitch"
-], function ($, Vue, bootstrap, jquery_validate, validate_extend, common_module, Twaver, bootstrapSwitch) {
+    "bootstrapSwitch",
+    "select2"
+], function ($, Vue, bootstrap, jquery_validate, validate_extend, common_module, Twaver, bootstrapSwitch, select2) {
     if($("#template")[0]){
         var template = new Vue({
             el: "#template",
@@ -30,7 +31,9 @@ define([
                     network: {},
                     box: {},
                     isLinkMode: false, //记录是否是连线模式
-                    selectedImage: null  //记录画布中被选中的节点，格式与imageInfoList[i]一致
+                    selectedImage: null,  //记录画布中被选中的节点，格式与imageInfoList[i]一致
+                    fromNode: null,
+                    toNode: null
                 },
                 selectedImages:[],    //画布中的镜像信息，用于最后统计信息
                 versions: [],         //用于最后统计信息，格式为{appName:'', version:''}
@@ -47,7 +50,8 @@ define([
                     env: [],
                     ports: []
                 },
-                logoFileName: ''
+                logoFileName: '',
+                ports:[]
             },
             mounted: function () {
                 var _self = this;
@@ -55,6 +59,8 @@ define([
                 _self.init();
             },
             methods: {
+
+                //打开填写模板基本信息的窗口
                 showTemplateDialog: function () {
                     //是否发布开关按钮初始化
                     $("#add_template_form input[type='checkbox']").bootstrapSwitch({
@@ -71,23 +77,28 @@ define([
                     $("#add_template").modal({backdrop: 'static', keyboard: false});
                 },
 
-                //进入连线模式并
+                //进入连线模式并设置创建连线处理程序
                 setCreateLinkMode: function () {
                     debugger
                     var _self = this;
                     _self.twaverObj.isLinkMode = true;
-                    //创建link
+                    //进入连线模式并设置创建连线处理程序
                     _self.twaverObj.network.setCreateLinkInteractions(function (from, to) {
                         debugger;
-                        var link = new twaver.Link(from, to);
-                        link.setName('test');
-                        link.setStyle('arrow.to', true);
-                        link.setStyle('arrow.to.shape', 'arrow.short');
-                        link.setStyle('arrow.to.color', '#ec670b');
-                        link.setStyle("link.type", "flexional");
-                        link.setStyle("link.width", "2");
-                        link.setStyle("link.color", "#ec670b");
-                        _self.twaverObj.box.add(link);
+                        //相同起始点和终点之间不允许有连线
+                        if(from === to) {
+                            common_module.notify("[增加模板]", "相同起始点和终点之间不允许有连线", "warning");
+                            return;
+                        }
+                        //判断from和to之间是否已存在连线，需要保证from和to之间只有一条连线
+                        var links = twaver.Util.getSharedLinks(from,to);
+                        if(!links || links.size()==0) {
+                            _self.twaverObj.fromNode = from;
+                            _self.twaverObj.toNode = to;
+                            _self.showPortListDialog(to);
+                        } else {
+                            common_module.notify("[增加模板]", "镜像之间已存在连线", "warning");
+                        }
                     });
                 },
 
@@ -95,7 +106,7 @@ define([
                 closeCreateLinkMode: function () {
                     var _self = this;
                     _self.twaverObj.isLinkMode = false;
-                    _self.twaverObj.network.setDefaultInteractions(true);
+                    _self.twaverObj.network.setDefaultInteractions(false);
                 },
 
                 //获取所有镜像
@@ -209,44 +220,40 @@ define([
                     };
                     _self.twaverObj.network = network;
                     _self.twaverObj.box = box;
+                    //给topcanvas注册dragover、drop事件
                     var rootCanvas = network.getRootCanvas();
                     var topCanvas = network.getTopCanvas();
-                    //给topcanvas注册dragover、drop事件
                     $(topCanvas).on("dragover", function(event){
                         //设置canvas允许放在拖动的元素
                         event.preventDefault();
                     });
                     $(topCanvas).on("drop", function (event) {
                         event.preventDefault();
-                        console.log("drop");
                         var dragItem = JSON.parse(event.originalEvent.dataTransfer.getData("text"));
-                        var isExist = false;
                         var data = _self.twaverObj.box.getDatas()._as;
                         for(var i = 0; i < data.length; i++){
                             if(data[i]._name == dragItem.appName){
-                                isExist = true;
+                                //镜像存在，提示用户，结束
                                 common_module.notify("[增加模板]", "该镜像已经存在，请重新选择", "warning");
+                                return;
+                            }
+                        }
+                        //镜像不存在，添加镜像
+                        var node = new twaver.Node();
+                        _self.registerNormalImage(dragItem.temp_logo_url, dragItem.appName, 40, 40);
+                        node.setName(dragItem.appName);
+                        node.setImage(dragItem.appName);
+                        node.setLocation(event.offsetX - 40 / 2, event.offsetY - 40 / 2);
+                        _self.twaverObj.box.add(node);
+                        for(var i = 0; i < _self.imageInfoList.length; i++){
+                            if(dragItem.appName === _self.imageInfoList[i].appName){
+                                _self.selectedImages.push(_self.imageInfoList[i]);
+                                    _self.versions.push({appName: dragItem.appName, version: dragItem.version[0]});
                                 break;
                             }
                         }
-                        //todo 好像不需要isExist也可以
-                        if(!isExist){
-                            var node = new twaver.Node();
-                            _self.registerNormalImage(dragItem.temp_logo_url, dragItem.appName, 40, 40);
-                            node.setName(dragItem.appName);
-                            node.setImage(dragItem.appName);
-                            node.setLocation(event.offsetX - 40 / 2, event.offsetY - 40 / 2);
-                            _self.twaverObj.box.add(node);
-                            for(var i = 0; i < _self.imageInfoList.length; i++){
-                                if(dragItem.appName === _self.imageInfoList[i].appName){
-                                    _self.selectedImages.push(_self.imageInfoList[i]);
-                                        _self.versions.push({appName: dragItem.appName, version: dragItem.version[0]});
-                                    break;
-                                }
-                            }
-                            //当前展示拖动到画布中镜像信息
-                            _self.showSelectedImageInfo(dragItem.appName);
-                        }
+                        //当前展示拖动到画布中镜像信息
+                        _self.showSelectedImageInfo(dragItem.appName);
                     });
                     //画布画网格
                     network.paintBottom = _self.drawGrid;
@@ -259,7 +266,8 @@ define([
                     var _self = this;
                     var popupmenu = new twaver.controls.PopupMenu(_self.twaverObj.network);
                     popupmenu.setMenuItems([
-                        {'label': "删除"}
+                        {'label': "删除"},
+                        {'label': "编辑"}
                     ]);
                     popupmenu.onMenuItemRendered = function (div, menuItem) {
                         div.parentElement.style.width = "100px";
@@ -290,7 +298,10 @@ define([
                                 _self.twaverObj.box.removeById(id);
                                 _self.twaverObj.box.selectedImage = null;
                             }
-                            console.log("删除");
+                        }
+                        //todo 连线编辑功能
+                        if(menuItem.label == '编辑'){
+
                         }
                     };
                 },
@@ -319,18 +330,6 @@ define([
                     }
                 },
 
-                // 在twaver中注册图片
-                registerNormalImage: function(url, name, width, height) {
-                    var _self = this;
-                    var image = new Image();
-                    image.src = url;
-                    image.onload = function() {
-                        twaver.Util.registerImage(name, image, width, height);
-                        image.onload = null;
-                        _self.twaverObj.network.invalidateElementUIs();
-                    };
-                },
-
                 //网元选中事件处理器
                 nodeSelectionChangeHandler: function(e){
                     var _self = this;
@@ -356,13 +355,46 @@ define([
                 //展示端口模态框
                 showPortListDialog: function (toNode) {
                     var _self = this;
-                    var imageName = toNode.getName;
+                    debugger
+                    var imageName = toNode.getName();
+                    var version = "";
                     var ports = [];
-                    for(var i = 0; i < _self.imageInfoList.length; i++) {
-                        if(_self.imageInfoList[i].appName == imageName) {
-                            ports = _self.imageInfoList[i].metadata
+                    for(var i = 0; i < _self.versions.length; i++) {
+                        if(_self.versions[i].appName == imageName) {
+                            version = _self.versions[i].version;
+                                break;
                         }
                     }
+                    for(var j = 0; j < _self.imageInfoList.length; j++) {
+                        if(_self.imageInfoList[j].appName == imageName) {
+                            ports = _self.imageInfoList[j].metadata[version]["ports"];
+                            break;
+                        }
+                    }
+                    _self.ports = ports;
+                    //初始化select2
+                    $("#portList_dialog select[name='portList']").select2();
+                    $("#portList_dialog").modal({backdrop: 'static', keyboard: false});
+                },
+                //确认端口
+                confirmPorts: function () {
+                    var _self = this;
+                    var portNames = $("#portList_dialog select[name='portList']").val();
+                    _self.createLink(_self.twaverObj.fromNode, _self.twaverObj.toNode, portNames.join(","));
+                    $("#portList_dialog").modal('hide');
+                },
+                //创建连线
+                createLink: function (from, to, linName) {
+                    var _self = this;
+                    var link = new twaver.Link(from, to);
+                    link.setName(linName);
+                    link.setStyle('arrow.to', true);
+                    link.setStyle('arrow.to.shape', 'arrow.short');
+                    link.setStyle('arrow.to.color', '#ec670b');
+                    link.setStyle("link.type", "flexional");
+                    link.setStyle("link.width", "2");
+                    link.setStyle("link.color", "#ec670b");
+                    _self.twaverObj.box.add(link);
                 },
 
                 //显示画布中选中的应用的信息
@@ -438,7 +470,6 @@ define([
 
                 //根据版本设置选中的镜像信息
                 setInfoByVersion: function (index, version) {
-                    debugger
                     var _self = this;
                     _self.selectedImages[index].metadata[version].requests = {
                         cpu: _self.selected.requests.cpu,
@@ -510,7 +541,6 @@ define([
                     formData.append("relation",JSON.stringify(relation));
                     var config = _self.createConfig();
                     formData.append("config", JSON.stringify(config));
-
                     $.ajax({
                         url: "../apporch/template/add",
                         type: "post",
@@ -571,7 +601,19 @@ define([
                 hasLoop: function () {
                     var result = false;
                     return result;
-                }
+                },
+
+                //在twaver中注册图片
+                registerNormalImage: function(url, name, width, height) {
+                    var _self = this;
+                    var image = new Image();
+                    image.src = url;
+                    image.onload = function() {
+                        twaver.Util.registerImage(name, image, width, height);
+                        image.onload = null;
+                        _self.twaverObj.network.invalidateElementUIs();
+                    };
+                },
             }
         });
 

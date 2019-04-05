@@ -1062,6 +1062,15 @@ span.checkbox+a{
 #template_table td a{
     color: #003ce6;
 }
+#portList_dialog span.select2 {
+    width: 81% !important;
+}
+#portList_dialog .cloud-modal-body {
+    height: 65px;
+}
+#portList_dialog .form-group {
+    margin-bottom: 0;
+}
 /*新版应用编排结束*/
 /*部署模板开始*/
 #deploy_template_form .tab-pane {

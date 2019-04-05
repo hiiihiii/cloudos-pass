@@ -97,8 +97,10 @@
         <div class="content-middle">
             <div id="canvas-box"></div>
             <div class="twaver-operation-box">
-                <img v-show="!twaverObj.isLinkMode" v-on:click="setCreateLinkMode" src="../images/apporch/link.png" v-cloak=""/>
-                <img v-show="twaverObj.isLinkMode" v-on:click="closeCreateLinkMode" src="../images/apporch/unlink.png" v-cloak=""/>
+                <img v-show="!twaverObj.isLinkMode" v-on:click="setCreateLinkMode" src="../images/apporch/link.png" v-cloak=""
+                     title="进入连线模式"/>
+                <img v-show="twaverObj.isLinkMode" v-on:click="closeCreateLinkMode" src="../images/apporch/unlink.png" v-cloak=""
+                     title="关闭连线模式"/>
             </div>
         </div>
         <div class="content-right">
@@ -286,6 +288,34 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn cloud-btn" v-on:click="submitAdd" v-cloak="">确定</button>
+                    <button type="button" class="btn cloud-btn" data-dismiss="modal" v-cloak="">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--端口模态框-->
+    <div class="modal fade" id="portList_dialog" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <div class="cloud-modal-title">
+                        <i class="fa fa-plus"></i>
+                        <h4 class="modal-title">选择端口</h4>
+                    </div>
+                </div>
+                <div class="modal-body cloud-modal-body">
+                    <form role="form" class="form-horizontal" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label>端口名称：</label>
+                            <select class="js-example-basic-multiple form-control" name="portList" multiple="multiple">
+                                <option v-for="port in ports" v-bind:value="port.portName" v-cloak="">{{port.portName}}</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn cloud-btn" v-on:click="confirmPorts" v-cloak="">确定</button>
                     <button type="button" class="btn cloud-btn" data-dismiss="modal" v-cloak="">取消</button>
                 </div>
             </div>
