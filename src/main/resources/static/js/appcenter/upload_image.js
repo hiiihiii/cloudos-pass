@@ -4,8 +4,9 @@ define([
     'vue',
     'bootstrap',
     'jquery-validate',
-    'validate-extend'
-], function ($, Vue, bootstrap, bootstrapSwitch, jquery_validate, validate_extend) {
+    'validate-extend',
+    "common-module",
+], function ($, Vue, bootstrap, bootstrapSwitch, jquery_validate, validate_extend,common_module) {
     if($("#upload_image_dialog")[0]){
         var upload_image = new Vue({
             el: "#upload_image",
@@ -32,7 +33,9 @@ define([
                     }],
                     envs:[]
                 },
-                uploadType: "private"
+                uploadType: "private",
+                imageInfos: [],
+                templateInfos: []
             },
             methods: {
                 //下一步
@@ -177,7 +180,6 @@ define([
                     debugger
                     var test = $("#upload_image_form").valid();
                     if(!test){
-
                         return;
                     }
                     var _self = this;
@@ -200,7 +202,7 @@ define([
                     //构造metadata
                     var metadata = JSON.stringify(_self.createMetadata());
                     formData.append("metadata", metadata);
-
+                    $(".loading").css("display", "block");
                     $.ajax({
                         url: "../appcenter/upload",
                         type: "post",
@@ -209,9 +211,105 @@ define([
                         contentType: false,
                         success: function(data){
                             console.log(data);
+                            common_module.notify("[应用中心]","上传应用成功", "success");
+                            //获取镜像和模板信息
+                            if(isPublic) {
+                                _self.getImageData("public");
+                                _self.getTemplate("public");
+                            } else {
+                                _self.getImageData("private");
+                                _self.getTemplate("private");
+                            }
+                            Vue.nextTick(function(){
+                                _self.initJpages("#appholder", "appcontainer");
+                            });
+                            setTimeout(function () {
+                                $(".loading").css("display", "none");
+                            },1000);
                         },
-                        error: function(){}
+                        error: function(){
+                            common_module.notify("[应用中心]","上传应用失败", "danger");
+                            setTimeout(function () {
+                                $(".loading").css("display", "none");
+                            },1000);
+                        }
                     });
+                },
+
+                getImageData: function (type) {
+                    var _self = this;
+                    $.ajax({
+                        url: "../appcenter/imageinfo",
+                        type: "get",
+                        data: {
+                            repoType: type
+                        },
+                        dataType: "json",
+                        async: false,
+                        success: function (data) {
+                            _self.imageInfos = _self.convertData(data.data, 'image');
+                            console.log(_self.imageInfos);
+                            common_module.notify("[应用中心]","获取镜像数据成功", "success");
+                        },
+                        error: function () {
+                            common_module.notify("[应用中心]","获取镜像数据失败", "danger");
+                        }
+                    })
+                },
+                getTemplateData: function (type) {
+                    var _self = this;
+                    $.ajax({
+                        url: "../appcenter/templateinfo",
+                        type: 'get',
+                        dataType: 'json',
+                        data: {
+                            repoType: type
+                        },
+                        async: false,
+                        success: function (data) {
+                            if(data.code === "success"){
+                                _self.templateInfos = _self.convertData(data.data, 'template');
+                                console.log(_self.templateInfos);
+                                common_module.notify('[应用中心]', '获取模板信息成功', 'success');
+                            } else {
+                                common_module.notify('[应用中心]', '获取模板信息失败', 'fail');
+                            }
+                        },
+                        error: function () {
+                            common_module.notify('[应用中心]', '获取模板信息失败', 'fail');
+                        }
+                    });
+                },
+                convertData: function(dataArray, type){
+                    if(type === 'image'){
+                        for(var i = 0; i < dataArray.length; i++){
+                            dataArray[i].createType = JSON.parse(dataArray[i].createType);
+                            dataArray[i].metadata = JSON.parse(dataArray[i].metadata);
+                            dataArray[i].source_url = JSON.parse(dataArray[i].source_url);
+                            dataArray[i].v_description = JSON.parse(dataArray[i].v_description);
+                            dataArray[i].version = JSON.parse(dataArray[i].version);
+                            dataArray[i].logo_url = "ftp://docker:dockerfile@" + dataArray[i].logo_url;
+                            dataArray[i].appType = "docker";
+                            if(dataArray[i].appName.length > 6) {
+                                dataArray[i].temp_name = dataArray[i].appName.slice(0,6) + '...';
+                            } else {
+                                dataArray[i].temp_name = dataArray[i].appName;
+                            }
+                        }
+                    } else {
+                        for(var i = 0; i < dataArray.length; i++) {
+                            dataArray[i].relation = JSON.parse(dataArray[i].relation);
+                            dataArray[i].config = JSON.parse(dataArray[i].config);
+                            dataArray[i].temp_logo_url = "ftp://docker:dockerfile@" + dataArray[i].logo_url;
+                            dataArray[i].appType = 'template';
+                            if(dataArray[i].templateName.length > 6) {
+                                dataArray[i].temp_name = dataArray[i].templateName.slice(0,6) + '...';
+                            } else {
+                                dataArray[i].temp_name = dataArray[i].templateName;
+                            }
+                        }
+                    }
+                    return dataArray;
                 },
 
                 //构造上传时的metadata, 数据格式见static/json/metadata.json

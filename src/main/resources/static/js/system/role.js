@@ -14,10 +14,14 @@ define([
             },
             mounted: function () {
                 var _self = this;
+                $(".loading").css('display','block');
                 _self.getRoleData();
                 Vue.nextTick(function () {
                     _self.roleTableObj = common_module.dataTables("#role_table");
                 });
+                setTimeout(function () {
+                    $(".loading").css('display','none');
+                }, 1000);
             },
             methods: {
                 checkAll: function (event) {
@@ -50,6 +54,7 @@ define([
                 },
                 refreshTable: function () {
                     var _self = this;
+                    $(".loading").css('display','block');
                     if(_self.roleTableObj != null) {
                         _self.roleTableObj.destroy();
                     }
@@ -57,6 +62,9 @@ define([
                     Vue.nextTick(function () {
                         _self.roleTableObj = common_module.dataTables("#role_table");
                     });
+                    setTimeout(function () {
+                        $(".loading").css('display','none');
+                    },1000);
                 }
             }
         });

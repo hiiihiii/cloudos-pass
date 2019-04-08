@@ -17,11 +17,15 @@ define([
                 userTableObj: null
             },
             mounted: function () {
+                $(".loading").css('display','block');
                 var _self = this;
                 _self.getUserData();
                 Vue.nextTick(function () {
                     _self.userTableObj = common_module.dataTables("#user_table");
                 });
+                setTimeout(function () {
+                    $(".loading").css('display','none');
+                }, 1000);
             },
             methods: {
                 checkAll: function (event) {
@@ -77,6 +81,7 @@ define([
 
                 refreshTable: function () {
                     var _self = this;
+                    $(".loading").css('display','block');
                     if(_self.userTableObj != null) {
                         _self.userTableObj.destroy();
                     }
@@ -84,6 +89,9 @@ define([
                     Vue.nextTick(function () {
                         _self.userTableObj = common_module.dataTables("#user_table");
                     });
+                    setTimeout(function () {
+                        $(".loading").css('display','none');
+                    },1000);
                 },
 
                 showAddDialog: function () {
@@ -104,6 +112,7 @@ define([
                     formdata.append("password", $("#add_user_form input[name='password']").val());
                     formdata.append("email",$("#add_user_form input[name='email']").val());
                     formdata.append("telephone",$("#add_user_form input[name='telephone']").val());
+                    $(".loading").css('display','block');
                     $.ajax({
                         url: '../user/add',
                         type: 'post',
@@ -126,9 +135,15 @@ define([
                             } else {
                                 common_module.notify('[用户]', '添加用户失败', 'danger');
                             }
+                            setTimeout(function () {
+                                $(".loading").css('display','none');
+                            },1000);
                         },
                         error: function () {
                             common_module.notify('[用户]', '添加用户失败', 'danger');
+                            setTimeout(function () {
+                                $(".loading").css('display','none');
+                            },1000);
                         }
                     });
                 },
@@ -151,6 +166,7 @@ define([
                         common_module.notify('[用户]', '请选择要删除的用户', 'danger');
                         return;
                     }
+                    $(".loading").css('display','block');
                     $.ajax({
                         url: '../user/delete',
                         type: 'post',
@@ -179,9 +195,15 @@ define([
                             } else {
                                 common_module.notify('[用户]',"删除用户失败", 'danger');
                             }
+                            setTimeout(function () {
+                                $(".loading").css('display','none');
+                            },1000);
                         },
                         error: function () {
                             common_module.notify('[用户]',"删除用户失败", 'danger');
+                            setTimeout(function () {
+                                $(".loading").css('display','none');
+                            },1000);
                         }
                     })
                 }
