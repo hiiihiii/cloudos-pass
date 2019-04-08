@@ -995,7 +995,8 @@ span.checkbox+a{
     padding: 2px 7px;
     margin-left: 5px;
 }
-#template .content-right .app-info-container {
+#template .content-right .app-info-container,
+#template .content-right .template-info-container {
     height: 100%;
     padding-top: 3px;
     overflow: auto;
@@ -1118,12 +1119,12 @@ span.checkbox+a{
     padding: 2px 7px;
 }
 #template_detail .content-right .app-info-box {
-    padding-left: 15px;
+    padding-left: 5px;
     margin-left: 5px;
     border-bottom: 1px solid #cccccc;
 }
 #template_detail .form-group label {
-    width: 80px;
+    width: 85px;
     text-align: right;
     font-size: 12px;
 }

@@ -13,6 +13,39 @@
             <div id="canvas-box"></div>
         </div>
         <div class="content-right">
+            <div class="template-info-container" v-if="twaverObj.selectedApp==null" v-cloak="">
+                <label class="info-title">基本信息</label>
+                <div class="app-info-box">
+                    <div class="form-group">
+                        <label>模板名称： </label>
+                        <span v-cloak="" >{{templateDetail.templateName}}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>描述：</label>
+                        <span v-cloak="">{{templateDetail.description}}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>发布情况：</label>
+                        <span v-show="templateDetail.isPublish=='1'">已发布</span>
+                        <span v-show="templateDetail.isPublish=='0'">未发布</span>
+                    </div>
+                    <div class="form-group">
+                        <label>部署次数：</label>
+                        <span>{{templateDetail.deploycount}}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>创建时间：</label>
+                        <span>{{templateDetail.create_time}}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>最近更新时间：</label>
+                        <span>{{templateDetail.update_time}}</span>
+                    </div>
+                </div>
+                <label class="info-title">依赖关系</label>
+                <div class="app-info-box" v-for="">
+                </div>
+            </div>
             <div class="app-info-container" v-if="twaverObj.selectedApp != null" v-cloak="">
                 <label class="info-title">基本信息</label>
                 <div class="app-info-box">

@@ -118,15 +118,14 @@ define([
                 drawTopology: function () {
                     var _self = this;
                     var startX = 200, startY = 100;
-                    _self.registerNormalImage('../images/app-default.png', 'default', 40, 40);
+                    // _self.registerNormalImage('../images/app-default.png', 'default', 40, 40);
                     //画应用node
                     for(var i = 0; i < _self.templateDetail.config.length; i++){
                         var app = _self.templateDetail.config[i];
                         _self.registerNormalImage(app.temp_logo_url, app.appName, 40, 40);
                         var node = new twaver.Node();
                         node.setName(app.appName);
-                        //todo 后期要换成真实的图标
-                        node.setImage('default');
+                        node.setImage(app.appName);
                         node.setLocation(startX, startY);
                         startX += 150;
                         _self.twaverObj.box.add(node);
