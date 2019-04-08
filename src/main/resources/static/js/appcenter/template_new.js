@@ -549,6 +549,7 @@ define([
                         contentType: false,
                         success: function(data){
                             console.log(data);
+                            window.location.href="../apporch/templateinfo";
                         },
                         error: function(){}
                     });
@@ -563,10 +564,10 @@ define([
                             var fromName = data[i]._fromNode.getName();
                             var toName = data[i]._toNode.getName();
                             if(relation.hasOwnProperty(fromName)){
-                                relation[fromName][toName] = 'test';
+                                relation[fromName][toName] = data[i].getName();
                             } else {
                                 relation[fromName] = {};
-                                relation[fromName][toName] = 'test';
+                                relation[fromName][toName] = data[i].getName();
                             }
                         }
                     }
