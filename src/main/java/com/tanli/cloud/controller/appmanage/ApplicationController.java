@@ -30,6 +30,9 @@ public class ApplicationController {
         return new ModelAndView("appmanage/application");
     }
 
+    /**
+     * 获取应用实例
+     */
     @RequestMapping(value = "info")
     @ResponseBody
     public APIResponse getApplications(HttpServletRequest request){
@@ -37,6 +40,12 @@ public class ApplicationController {
         return applicationService.getApplications(user);
     }
 
+    /**
+     * 获取服务详情
+     * @param request
+     * @param deployId
+     * @return
+     */
     @RequestMapping(value = "serviceInfo")
     @ResponseBody
     public APIResponse getServiceInfo(HttpServletRequest request, String deployId) {
@@ -44,6 +53,12 @@ public class ApplicationController {
         return applicationService.getServiceInfo(user, deployId);
     }
 
+    /**
+     * 停止应用
+     * @param request
+     * @param deploymentId
+     * @return
+     */
     @RequestMapping(value = "stop")
     @ResponseBody
     public APIResponse stop(HttpServletRequest request, String deploymentId){
@@ -51,6 +66,12 @@ public class ApplicationController {
         return appDeployService.stopApp(user, deploymentId);
     }
 
+    /**
+     * 启动应用
+     * @param request
+     * @param deploymentId
+     * @return
+     */
     @RequestMapping(value = "start")
     @ResponseBody
     public APIResponse start(HttpServletRequest request, String deploymentId) {
@@ -58,6 +79,13 @@ public class ApplicationController {
         return appDeployService.startApp(user, deploymentId);
     }
 
+    /**
+     * 手工伸缩
+     * @param request
+     * @param serviceName
+     * @param instanceNum
+     * @return
+     */
     @RequestMapping(value = "scale")
     @ResponseBody
     public APIResponse scale(HttpServletRequest request, String serviceName, String instanceNum) {

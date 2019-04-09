@@ -21,10 +21,14 @@ define([
             },
             mounted: function () {
                 var _self = this;
+                $(".loading").css("display", "block");
                 _self.getAppInfo();
                 Vue.nextTick(function () {
                     _self.appInsTableObj = common_module.dataTables("#app_table");
                 });
+                setTimeout(function () {
+                    $(".loading").css("display", "none");
+                }, 1000);
             },
             methods:{
                 creating: function (status) {
@@ -60,9 +64,9 @@ define([
                     common_module.checkOne(event);
                 },
 
+                // 获取应用实例
                 getAppInfo: function () {
                     var _self = this;
-                    $(".loading").css("display", "block");
                     $.ajax({
                         type: "get",
                         url: "../application/info",
@@ -76,19 +80,14 @@ define([
                             } else {
                                 common_module.notify("[应用实例]", "获取应用信息失败","success");
                             }
-                            setTimeout(function () {
-                                $(".loading").css("display", "none");
-                            }, 1000);
                         },
                         error: function () {
                             common_module.notify("[应用实例]", "获取应用信息失败","danger");
-                            setTimeout(function () {
-                                $(".loading").css("display", "none");
-                            }, 1000);
                         }
                     });
                 },
 
+                // 获取服务详情
                 getServiceDetail: function (event, deployid) {
                     debugger
                     var _self = this;
@@ -121,6 +120,7 @@ define([
                     });
                 },
 
+                // 隐藏详情框
                 hideServiceDetail: function () {
                     var _self = this;
                     _self.serviceDetailFlag = false;
@@ -128,6 +128,8 @@ define([
                         _self.serviceTableObj.destroy();
                     }
                 },
+
+                // 应用启停
                 stopOrStart: function (event, deploymentid, type) {
                     var _self = this;
                     var url = "../application/" + type;
@@ -147,6 +149,7 @@ define([
                     })
                 },
 
+                // 打开手动伸缩模态框
                 showManualScaleDialog: function (event, serviceObj) {
                     var _self = this;
                     _self.serviceScaleObj = serviceObj;
