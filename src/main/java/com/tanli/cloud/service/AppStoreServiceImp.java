@@ -1,6 +1,7 @@
 package com.tanli.cloud.service;
 
 import com.tanli.cloud.constant.EnvConst;
+import com.tanli.cloud.constant.SystemConst;
 import com.tanli.cloud.dao.DeploymentDao;
 import com.tanli.cloud.dao.ImageInfoDao;
 import com.tanli.cloud.dao.TemplateDao;
@@ -167,16 +168,16 @@ public class AppStoreServiceImp implements AppStoreService {
 
                             imageInfo.setUpdate_time(nowStr);
                             LOGGE.info("[AppStoreServiceImp Info]: Update ImageInfo" + imageInfo.toString());
-                            //操作日志
-                            UserLog userLog = new UserLog();
-                            userLog.setUuid(UuidUtil.getUUID());
-                            userLog.setUser_id(user.getUser_uuid());
-                            userLog.setUsername(user.getUserName());
-                            userLog.setResoureType("Image");
-                            userLog.setResourceId(imageInfo.getApp_id());
-                            userLog.setOperation("上传镜像");
-                            userLog.setIsDeleted("0");
-                            userLog.setCreate_time(nowStr);
+                            //增加用户日志
+                            UserLog userLog = new UserLog(UuidUtil.getUUID(),
+                                    user.getUser_uuid(),
+                                    user.getUserName(),
+                                    SystemConst.IMAGE,
+                                    imageInfo.getApp_id(),
+                                    "删除镜像",
+                                    "0",
+                                    nowStr);
+                            userLogDao.addUserLog(userLog);
                             userLogDao.addUserLog(userLog);
                             int count = imageInfoDao.updateImageInfo(imageInfo);
                             if(count > 0){
@@ -284,24 +285,26 @@ public class AppStoreServiceImp implements AppStoreService {
 
     private Boolean deleteHarborTag(String source_url){
         Boolean result = false;
-        String url = EnvConst.harbor_api_prefix + "/repositories";
+        String url = EnvConst.harbor_api_prefix + "repositories";
         String repoInfo[] = source_url.split(":");
         String temp[] =repoInfo[0].split("/");
         String repo_name = temp[1]+"/"+temp[2];
         String tag = repoInfo[1];
+        url += "/" + repo_name + "/tags/" + tag;
         restTemplate.getInterceptors().add(new BasicAuthorizationInterceptor(EnvConst.harbor_username, EnvConst.harbor_password));
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
-        map.add("repo_name", repo_name);
-        map.add("tag", tag);
         try {
+            LOGGE.info("[AppStoreServiceImp Info]: DELETE " + url);
             HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(map, headers);
             ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, httpEntity,String.class);
             if(responseEntity.getStatusCode().toString().equals("200")) {
                 result = true;
             }
         } catch (Exception e) {
+            result = false;
+            LOGGE.info("[AppStoreServiceImp Error]: " + "调用Harbor API删除tag失败");
             e.printStackTrace();
         }
         return result;
@@ -309,11 +312,12 @@ public class AppStoreServiceImp implements AppStoreService {
 
     /**
      * 删除镜像指定tag
-     * @param url
+     * @param source_url
      * @return
      */
-    private Boolean deleteImage(String url) {
+    private Boolean deleteImage(String source_url) {
         Boolean result = false;
+        String url = EnvConst.docker_images_prefix + source_url;
         try {
             LOGGE.info("[AppStoreServiceImp Info]: DELETE " + url);
             ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE,null, String.class);
@@ -377,7 +381,6 @@ public class AppStoreServiceImp implements AppStoreService {
 
     @Override
     public APIResponse deleteImageInfo(User user, String[] versions, String imageId) {
-        //整合数据库
         Map<String, Integer> result = new HashMap<>();
         int success = 0, fail = 0;
         ImageInfo exist = imageInfoDao.getImagesAll(user.getUser_uuid())
@@ -390,31 +393,36 @@ public class AppStoreServiceImp implements AppStoreService {
                     .stream()
                     .filter(deployment -> deployment.getImage_uuid().equals(exist.getApp_id()))
                     .collect(Collectors.toList());
-            if(deployments.size()!=0) {
+            if(deployments.size()!=0) { // 待删除的镜像已被部署
                 result.put("success", 0);
                 result.put("fail", versions.length);
                 return APIResponse.fail(result);
             }
             List<String> existVersoins = JSONArray.toList(JSONArray.fromObject(exist.getVersion()), String.class);
+            int versionCount = existVersoins.size();
             Map<String, String> v_desc = JSONObject.fromObject(exist.getV_description());
             Map<String, String> metadata = JSONObject.fromObject(exist.getMetadata());
             Map<String, String> create_type = JSONObject.fromObject(exist.getCreateType());
             Map<String, String> source_urls= JSONObject.fromObject(exist.getSource_url());
+            DateTime now = DateTime.now();
+            String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+            exist.setUpdate_time(nowStr);
             for(int i = 0; i <versions.length; i++) {
+                String currentVer = versions[i];
                 List<Template> templates = templateDao.getAllTemplate()
                         .stream()
                         .filter(template -> {
-                            List<Map<String, String>> config = JSONArray.fromObject(JSONObject.fromObject(template.getConfig()));
+                            List<Map<String, String>> config = JSONArray.fromObject(JSONArray.fromObject(template.getConfig()));
                             for(int j = 0; j<config.size();j++){
                                 Map<String,String> temp = config.get(j);
                                 if(temp.get("appName").equals(exist.getAppName()) &&
-                                        temp.get("version").equals(versions[j])){
+                                        temp.get("version").equals(currentVer)){
                                     return true;
                                 }
                             }
                             return false;
                         }).collect(Collectors.toList());
-                if(templates.size()!=0){
+                if(templates.size() != 0){
                     fail += 1;
                     continue;
                 }
@@ -422,30 +430,38 @@ public class AppStoreServiceImp implements AppStoreService {
                 metadata.remove(versions[i]);
                 create_type.remove(versions[i]);
                 existVersoins.remove(versions[i]);
-                String source_url = source_urls.remove(versions[i]);
+                String source_url = source_urls.get(versions[i]);
+                source_urls.remove(versions[i]);
                 //调用Docker API, Harbor API
-                // docker remove api
-                deleteImage(EnvConst.docker_images_prefix + source_urls.get(versions[i]));
-                // harbor api
+                deleteImage(source_url);
                 deleteHarborTag(source_url);
                 success += 1;
             }
-            if(success == existVersoins.size()) {
-                //int count = imageInfoDao.deleteImageById(exist.getApp_id());
+            //整合数据库
+            if(success == versionCount) {
+                int count = imageInfoDao.deleteImageById(exist.getApp_id());
             } else {
                 exist.setV_description(JSONObject.fromObject(v_desc).toString());
                 exist.setMetadata(JSONObject.fromObject(metadata).toString());
                 exist.setCreateType(JSONObject.fromObject(create_type).toString());
                 exist.setVersion(JSONArray.fromObject(existVersoins).toString());
-                DateTime now = DateTime.now();
-                String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
-                exist.setUpdate_time(nowStr);
-                //int count = imageInfoDao.updateImageInfo(exist);
+                int count = imageInfoDao.updateImageInfo(exist);
             }
+            //增加用户日志
+            UserLog userLog = new UserLog(UuidUtil.getUUID(),
+                    user.getUser_uuid(),
+                    user.getUserName(),
+                    SystemConst.IMAGE,
+                    imageId,
+                    "删除镜像",
+                    "0",
+                    nowStr);
+            userLogDao.addUserLog(userLog);
             result.put("success", success);
             result.put("fail", fail);
             return APIResponse.success(result);
         } else {
+            // 待删除的镜像不存在
             result.put("success", 0);
             result.put("fail", versions.length);
             LOGGE.info("[AppStoreServiceImp Info]: "+ "待删除的镜像不存在");

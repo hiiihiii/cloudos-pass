@@ -37,6 +37,7 @@ define([
         $.ajax({
             url: '../appcenter/checkexist',
             type: 'get',
+            async: false,
             data: {
                 imageName: name,
                 version: version,

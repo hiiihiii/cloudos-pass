@@ -109,6 +109,6 @@ public class AppstoreController {
                                    @RequestParam(value = "versions[]") String[] versions,
                                    @RequestParam(value = "imageId") String id){
         User user = (User) request.getSession().getAttribute("login_user");
-        return null;
+        return appStoreService.deleteImageInfo(user, versions, id);
     }
 }

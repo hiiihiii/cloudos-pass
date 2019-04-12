@@ -210,6 +210,7 @@ define([
                         processData: false,
                         contentType: false,
                         success: function(data){
+                            debugger
                             console.log(data);
                             common_module.notify("[应用中心]","上传应用成功", "success");
                             //获取镜像和模板信息
