@@ -3,10 +3,11 @@ define([
     'jquery',
     'vue',
     'bootstrap',
-    'jquery-validate',
-    'validate-extend',
+    'bootstrapSwitch',
     "common-module",
-], function ($, Vue, bootstrap, bootstrapSwitch, jquery_validate, validate_extend,common_module) {
+    'jquery-validate',
+    'validate-extend'
+], function ($, Vue, bootstrap, bootstrapSwitch, common_module, jquery_validate, validate_extend) {
     if($("#upload_image_dialog")[0]){
         var upload_image = new Vue({
             el: "#upload_image",
@@ -212,14 +213,15 @@ define([
                         success: function(data){
                             debugger
                             console.log(data);
-                            common_module.notify("[应用中心]","上传应用成功", "success");
+                            common_module.notify("[应用中心]", "上传应用成功", "success");
+                            $("#upload_image").modal('hide');
                             //获取镜像和模板信息
                             if(isPublic) {
                                 _self.getImageData("public");
-                                _self.getTemplate("public");
+                                _self.getTemplateData("public");
                             } else {
                                 _self.getImageData("private");
-                                _self.getTemplate("private");
+                                _self.getTemplateData("private");
                             }
                             Vue.nextTick(function(){
                                 _self.initJpages("#appholder", "appcontainer");

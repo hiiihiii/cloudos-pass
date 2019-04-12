@@ -141,7 +141,7 @@ public class AppStoreServiceImp implements AppStoreService {
                             LOGGE.info("[AppStoreServiceImp Info]: Add ImageInfo" + imageInfo.toString());
                             int count = imageInfoDao.addImageInfo(imageInfo);
                             if(count > 0){
-                                return APIResponse.success();
+                                return APIResponse.success("上传镜像成功");
                             }
                         } else {
                             imageInfo.setApp_id(exist.getApp_id());
@@ -181,7 +181,7 @@ public class AppStoreServiceImp implements AppStoreService {
                             userLogDao.addUserLog(userLog);
                             int count = imageInfoDao.updateImageInfo(imageInfo);
                             if(count > 0){
-                                return APIResponse.success();
+                                return APIResponse.success("上传镜像成功");
                             }
                         }
                     }

@@ -433,19 +433,18 @@ define([
                     }
                     $("#imageVersion .version-box").append(versionStr);
                     $("#imageVersion").modal({backdrop: 'static', keyboard: false});
-
                 },
 
                 submitDelete: function (){
                     var _self = this;
                     var versions = [];
                     $("#imageVersion .version-item").each(function (index, item) {
-                        debugger
                         var input = $(item).find("input")[0];
                         if($(input).prop("checked")){
                             versions.push($(input).val());
                         }
                     });
+                    $(".loading").css('display', 'block');
                     $.ajax({
                         type: "post",
                         url: "../appcenter/imageInfo/delete",
@@ -456,13 +455,36 @@ define([
                         dataType: "json",
                         success: function (result) {
                             if(result.code == "success"){
-
+                                if(result.data.success == versions.length) {
+                                    common_module.notify('[应用中心]',
+                                        "删除镜像成功" + result.data.success + "个，失败" + result.data.fail + "个", 'success');
+                                } else {
+                                    common_module.notify('[应用中心]',
+                                        "删除镜像成功" + result.data.success  +"个，失败" + result.data.fail + "个", 'warning');
+                                }
                             } else {
-
+                                common_module.notify('[应用中心]',"删除镜像失败", 'danger');
                             }
+                            //刷新数据
+                            if(_self.showPublic) {
+                                _self.getImageData("public");
+                                _self.getTemplate("public");
+                            } else {
+                                _self.getImageData("private");
+                                _self.getTemplate("private");
+                            }
+                            Vue.nextTick(function(){
+                                _self.initJpages("#appholder", "appcontainer");
+                            });
+                            setTimeout(function () {
+                                $(".loading").css('display', 'none');
+                            },1000);
                         },
                         error: function () {
-
+                            common_module.notify('[应用中心]',"删除镜像失败", 'danger');
+                            setTimeout(function () {
+                                $(".loading").css('display', 'none');
+                            },1000);
                         }
                     })
                 },
