@@ -64,6 +64,6 @@
     <update id="updateDeployCount">
         UPDATE tl_image
         SET deploycount = #{count}
-        WHERE uuid = #{imageid}
+        WHERE image_uuid = #{imageid}
     </update>
 </mapper>
