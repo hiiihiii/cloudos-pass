@@ -346,7 +346,7 @@ public class AppDeployServiceImp implements AppDeployService {
         rc.setDeployment_uuid(deployment.getDeploy_uuid());
         rc.setName(service.getMetadata().getName());
         rc.setNamespace("default");
-        rc.setReplicas(rc.getReplicas());
+        rc.setReplicas(replicationController.getSpec().getReplicas().toString());
         rc.setDesiredCount(rc.getReplicas());
         Map<String, String> selectors = service.getSpec().getSelector();
         rc.setSelector(JSONObject.fromObject(selectors).toString());
