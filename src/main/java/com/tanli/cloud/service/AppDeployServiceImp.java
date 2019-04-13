@@ -211,8 +211,8 @@ public class AppDeployServiceImp implements AppDeployService {
             K8sClient k8sClient = new K8sClient();
             for(int i = 0; i< rcs.size(); i++) {
                 K8s_Rc rc = rcs.get(i);
-                k8sRcDao.updateReplicas(deploymentId, rc.getDesiredCount());
                 k8sClient.updateReplicas(rc, rc.getDesiredCount());
+                k8sRcDao.updateReplicas(deploymentId, rc.getDesiredCount());
             }
             //添加用户日志
             DateTime now = DateTime.now();
