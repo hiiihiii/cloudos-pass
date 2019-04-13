@@ -163,7 +163,7 @@ define([
                         type: "post",
                         url: "../application/scale",
                         data: {
-                            serviceName:_self.serviceTableObj.name,
+                            serviceName:_self.serviceScaleObj.name,
                             instanceNum: insNum
                         },
                         dataType: "json",

@@ -253,21 +253,26 @@ public class AppDeployServiceImp implements AppDeployService {
                     .filter(k8s_service -> k8s_service.getName().equals(serviceName))
                     .findFirst().orElse(null);
             K8sClient k8sClient =new K8sClient();
-            k8sClient.updateReplicas(rc, instanceNum);
-            //添加用户日志
-            DateTime now = DateTime.now();
-            String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
-            UserLog userLog = new UserLog (
-                    UuidUtil.getUUID(),
-                    user.getUser_uuid(),
-                    user.getUserName(),
-                    SystemConst.K8S_SERVICE,
-                    service.getUuid(),
-                    "修改服务实例数为"+instanceNum,
-                    "0",
-                    nowStr );
-            userLogDao.addUserLog(userLog);
-            return APIResponse.success("伸缩"+serviceName + "成功");
+            if(k8sClient.updateReplicas(rc, instanceNum)) {
+                //更新数据库中对应rc的replicas
+                k8sRcDao.updateReplicas(rc.getUuid(), instanceNum);
+                //添加用户日志
+                DateTime now = DateTime.now();
+                String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+                UserLog userLog = new UserLog (
+                        UuidUtil.getUUID(),
+                        user.getUser_uuid(),
+                        user.getUserName(),
+                        SystemConst.K8S_SERVICE,
+                        service.getUuid(),
+                        "修改服务实例数为"+instanceNum,
+                        "0",
+                        nowStr );
+                userLogDao.addUserLog(userLog);
+                return APIResponse.success("伸缩"+serviceName + "成功");
+            } else {
+                return APIResponse.fail("伸缩"+serviceName + "失败");
+            }
         } catch (Exception e){
             e.printStackTrace();
             LOGGE.info("[AppDeployServiceImp Info]: " + "伸缩服务"+serviceName+"失败");

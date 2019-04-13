@@ -172,13 +172,21 @@ public class K8sClient {
         return rc;
     }
 
-    public void updateReplicas(K8s_Rc rc, String replicas){
-        ReplicationController replicationController = this.client
-                .replicationControllers()
-                .withName(rc.getName()).get();
-        ReplicationControllerSpec rcSpec =  replicationController.getSpec();
-        rcSpec.setReplicas(Integer.parseInt(replicas));
-        this.client.replicationControllers().createOrReplace(replicationController);
+    public boolean updateReplicas(K8s_Rc rc, String replicas){
+        ReplicationController replicationController = this.client.replicationControllers().list().getItems()
+                .stream()
+                .filter(temp -> temp.getMetadata().getName().equals(rc.getName()))
+                .findFirst().orElse(null);
+        if(replicationController!=null) {
+            this.client.replicationControllers()
+                    .inNamespace(replicationController.getMetadata().getNamespace())
+                    .withName(rc.getName())
+                    .edit()
+                    .editSpec().withReplicas(Integer.parseInt(replicas)).endSpec().done();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
