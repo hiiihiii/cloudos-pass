@@ -1,15 +1,19 @@
 {
   "relations": {
-    "app1": {// app1需要访问app2，app1是from，app2是to
+    // app1需要访问app2的portname1和portname2
+    "app1": {// app1依赖app2，app1是from，app2是to
       "app2": {
-        "name1": "value1",
-        "name2": "value2"
+        "portname1": "value1",
+        "portname2": "value2"
+      },
+      "app5": {
+        "portname3": "va5"
       }
     },
     "app3": {
       "app4": {
-        "name3": "value3",
-        "name4": "value4"
+        "portname4": "value3",
+        "portname5": "value4"
       }
     }
   }

@@ -81,6 +81,12 @@ public class AppstoreController {
         return appStoreService.checkAppExist(user, imageName, version, repoType);
     }
 
+    /**
+     * 检查部署名称是否唯一
+     * @param request
+     * @param deployName
+     * @return
+     */
     @RequestMapping("checkDeployName")
     @ResponseBody
     public APIResponse checkDeployName(HttpServletRequest request, String deployName){
@@ -88,6 +94,12 @@ public class AppstoreController {
         return appDeployService.checkDeployName(user, deployName);
     }
 
+    /**
+     * 部署镜像
+     * @param request
+     * @param deployedImage
+     * @return
+     */
     @PostMapping("image/deploy")
     @ResponseBody
     public APIResponse deployImage (HttpServletRequest request, DeployedImage deployedImage){
@@ -95,12 +107,17 @@ public class AppstoreController {
         return appDeployService.deployImage(user, deployedImage);
     }
 
+    /**
+     * 部署模板
+     * @param request
+     * @param deployedTemplate
+     * @return
+     */
     @PostMapping("template/deploy")
     @ResponseBody
     public APIResponse deployTemplate (HttpServletRequest request, DeployedTemplate deployedTemplate) {
         User user = (User) request.getSession().getAttribute("login_user");
-        appDeployService.deployTemplate(user, deployedTemplate);
-        return null;
+        return appDeployService.deployTemplate(user, deployedTemplate);
     }
 
     @PostMapping("imageInfo/delete")

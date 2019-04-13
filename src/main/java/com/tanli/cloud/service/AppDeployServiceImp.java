@@ -97,26 +97,29 @@ public class AppDeployServiceImp implements AppDeployService {
         if(template != null) {
             //判断模板中的镜像是否存在
             List<Map<String, String>> config = JSONArray.fromObject(template.getConfig());
-//            for(int i = 0; i < config.size(); i++) {
-//                String imageName = config.get(i).get("");
-//                ImageInfo imageInfo = imageInfoDao.getImagesAll(user.getUser_uuid())
-//                        .stream()
-//                        .filter(imageInfo1 -> imageName.equals(imageInfo1.getAppName()))
-//                        .findFirst().orElse(null);
-//                if(imageInfo == null) {
-//                    return APIResponse.fail("部署失败，该模板中的配置信息不存在");
-//                }
-//            }
-            Map<String, String> relation = JSONObject.fromObject(template.getRelation());
+            for(int i = 0; i < config.size(); i++) {
+                String imageName = config.get(i).get("appName");
+                ImageInfo imageInfo = imageInfoDao.getImagesAll(user.getUser_uuid())
+                        .stream()
+                        .filter(imageInfo1 -> imageName.equals(imageInfo1.getAppName()))
+                        .findFirst().orElse(null);
+                if(imageInfo == null) {
+                    return APIResponse.fail("部署失败，该模板中的配置信息不存在");
+                }
+            }
+            //根据relation添加相应的环境变量
+            Map<String, Object> relation = JSONObject.fromObject(template.getRelation());
+            deployContainerList = buildRelations(relation, deployContainerList);
             Deployment deployment = saveDeployment(deployedTemplate, user.getUser_uuid());
             if(deployment != null) {
                 //分别部署模板中的镜像
                 for(int i = 0; i < deployContainerList.size(); i++) {
                     K8sClient k8sClient = new K8sClient();
                     // 创建RC
-                    ReplicationController replicationController = k8sClient.createRC(deployedTemplate, deployContainerList.get(i));
+                    DeployContainer deployContainer = (DeployContainer) JSONObject.toBean(JSONObject.fromObject(deployContainerList.get(i)), DeployContainer.class);
+                    ReplicationController replicationController = k8sClient.createRC(deployedTemplate, deployContainer);
                     // 创建Service
-                    io.fabric8.kubernetes.api.model.Service service = k8sClient.createService(deployedTemplate, deployContainerList.get(i));
+                    io.fabric8.kubernetes.api.model.Service service = k8sClient.createService(deployedTemplate, deployContainer);
                     K8s_Rc rc = saveRc(deployedTemplate, deployment, service, replicationController);
                     K8s_Service svc = saveService(deployedTemplate ,deployment,service );
                     if(rc == null || svc == null) {
@@ -402,4 +405,50 @@ public class AppDeployServiceImp implements AppDeployService {
         }
         return null;
     }
+
+    /**
+     * 构建模板之间的关系
+     * @param relation
+     * @param deployContainerList
+     * @return
+     */
+    private List<DeployContainer> buildRelations(Map<String, Object> relation, List<DeployContainer> deployContainerList){
+        for(int i = 0 ; i < deployContainerList.size(); i++) {
+            JSONObject jsonObject_from = JSONObject.fromObject(deployContainerList.get(i));
+            List<Map<String, String>> env = JSONArray.fromObject(jsonObject_from.get("env"));
+            String appName = (String) jsonObject_from.get("imageName");
+            if(relation.get(appName)!=null) {
+                Map<String, String> relation_temp = JSONObject.fromObject(relation.get(appName));
+                for(int j = 0; j < relation_temp.size(); j++) {
+                    relation_temp.forEach((key, value) -> {
+                        String[] portNames = value.split(",");
+                        JSONObject jsonObject_to = null;
+                        for (int k = 0; k< deployContainerList.size(); k++) {
+                            if(JSONObject.fromObject(deployContainerList.get(k)).get("imageName").equals(key)) {
+                                jsonObject_to = JSONObject.fromObject(deployContainerList.get(k));
+                                break;
+                            }
+                        }
+                        List<Map<String, Object>> ports = JSONArray.fromObject(jsonObject_to.get("ports"));
+                        for(int p = 0; p<portNames.length; p++) {
+                            Map<String, String> envTemp = new HashMap<>();
+                            for(int q = 0; q <ports.size(); q++) {
+                                Map<String, Object> portDetail = ports.get(q);
+                                if(portDetail.get("name").equals(portNames[p])){
+                                    envTemp.put("name", portNames[p]);
+                                    envTemp.put("value", portDetail.get("port").toString());
+                                }
+                            }
+                            env.add(envTemp);
+                        }
+                    });
+                }
+                jsonObject_from.replace("env", env);
+                DeployContainer deployContainer = (DeployContainer) JSONObject.toBean(jsonObject_from, DeployContainer.class);
+                deployContainerList.set(i, deployContainer);
+            }
+        }
+        return deployContainerList;
+    }
+
 }
