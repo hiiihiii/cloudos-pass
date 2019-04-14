@@ -10,6 +10,7 @@ import com.tanli.cloud.model.response.HarborProject;
 import com.tanli.cloud.model.response.Repository;
 import com.tanli.cloud.model.response.User;
 import com.tanli.cloud.utils.APIResponse;
+import com.tanli.cloud.utils.K8sClient;
 import com.tanli.cloud.utils.UuidUtil;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,8 @@ public class UserManageServiceImp implements UserManageService {
     private ImageInfoDao imageInfoDao;
     @Autowired
     private TemplateDao templateDao;
+    @Autowired
+    private K8sClient k8sClient;
 
     private static final org.slf4j.Logger LOGGE = org.slf4j.LoggerFactory.getLogger(UserManageServiceImp.class);
 
@@ -88,11 +91,14 @@ public class UserManageServiceImp implements UserManageService {
         repository.setProject_name(repository.getRepo_name());
         repository.setCreate_time(nowStr);
         repository.setUpdate_time(nowStr);
-
+        k8sClient.createNamespace("test");
         //调用Harbor API创建project
         Boolean result = addHarborProject(repository.getRepo_name());
         if(result) {
             try {
+//                k8sClient.createNamespace(user.getUserName());
+                int count = userDao.addUser(user);
+                repositoryDao.addRepo(repository);
                 //操作日志
                 UserLog userLog = new UserLog();
                 userLog.setUuid(UuidUtil.getUUID());
@@ -104,8 +110,6 @@ public class UserManageServiceImp implements UserManageService {
                 userLog.setIsDeleted("0");
                 userLog.setCreate_time(nowStr);
                 userLogDao.addUserLog(userLog);
-                int count = userDao.addUser(user);
-                repositoryDao.addRepo(repository);
                 if(count > 0){
                     return APIResponse.success();
                 } else {
@@ -136,6 +140,7 @@ public class UserManageServiceImp implements UserManageService {
             Template template = templateList.stream()
                     .filter(template1 -> template1.getUuid().equals(id))
                     .findFirst().orElse(null);
+            User deleteUser = userDao.getAllUser().stream().filter(user1 -> user1.getUser_uuid().equals(id)).findFirst().orElse(null);
             if(tempImage!=null || template!=null) {//用户id下有应用不能删除
                 fail += 1;
                 break;
@@ -147,6 +152,8 @@ public class UserManageServiceImp implements UserManageService {
                 repositories.stream().forEach(repository -> {
                     deleteHarborProject(repository.getRepo_name());
                 });
+                //删除k8s中的命名空间
+//                k8sClient.deleteNamespace(deleteUser.getUserName());
                 //删除用户
                 int count = userDao.deleteById(ids[i]);
                 //操作日志

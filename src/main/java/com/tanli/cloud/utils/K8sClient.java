@@ -46,6 +46,14 @@ public class K8sClient {
     }
 
     /**
+     * 删除命名空间
+     * @param name
+     */
+    public boolean deleteNamespace(String name) {
+        return this.client.namespaces().withName(name).delete();
+    }
+
+    /**
      * 创建service
      * @param deployedApp
      * @param deployContainer

@@ -108,10 +108,16 @@ public class IntervalTask {
                 k8sPodDao.deletePodById(dbpod.getUuid());
                 System.out.println("tl_pod表【删除】：" + dbpod.getUuid());
             }
-            //temp中剩下的就是k8s新产生的，需要添加到数据库中
+            //temp中剩下的就是可能是k8s新产生的，需要添加到数据库中
             for(int j = 0; j < newPods.size(); j++) {
-                Pod newK8sPod = newPods.get(i);
-                addPodToDB(dbrc, dbservice, newK8sPod);
+                Pod tempPod = newPods.get(j);
+                K8s_Pod temp = k8sPodDao.getAllPods().stream()
+                        .filter(temp1 -> temp1.getName().equals(tempPod.getMetadata().getName()))
+                        .findFirst().orElse(null);
+                if(temp == null) {
+                    Pod newK8sPod = newPods.get(j);
+                    addPodToDB(dbrc, dbservice, newK8sPod);
+                }
             }
         }
     }
