@@ -84,6 +84,7 @@ public class IntervalTask {
             //从k8s中获取与labels相关的pod
             List<Pod> pods = new ArrayList<>();
             pods = k8sClient.getPod(labels);
+            //复制数据，注意深、浅拷贝
             List<Pod> newPods = new ArrayList<>();
             for(int j = 0; j < pods.size(); j++) {
                 newPods.add(pods.get(j));
