@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by tanli on 2019/2/9 0009.
@@ -196,13 +197,14 @@ public class K8sClient {
      */
     public List<Pod> getPod(Map<String, String> selectors) {
         List<Pod> targetPods = this.client.pods().list().getItems();
-        for(int i = 0; i < targetPods.size(); i++) {
-            Pod temp = targetPods.get(i);
-            if( ! selectors.equals(temp.getMetadata().getLabels())) {
-                targetPods.remove(i);
-            }
-        }
-        return targetPods;
+        return targetPods.stream()
+                .filter(pod -> {
+                    if(pod.getMetadata().getLabels().equals(selectors)) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }).collect(Collectors.toList());
     }
 
     public List<Node> getNode() {

@@ -3,8 +3,9 @@
 <mapper namespace="com.tanli.cloud.dao.K8sPodDao">
 
     <insert id="addPod" parameterType="com.tanli.cloud.model.K8s_Pod">
-        INSERT INTO tl_pod (uuid, rc_uuid, svc_uuid, name, namespace, hostIP, podIP, restartCount, image, status, update_time)
-        VALUES (#{uuid}, #{rc_uuid}, #{svc_uuid}, #{name}, #{namespace}, #{hostIP}, #{podIP}, #{restartCount}, #{image}, #{status}, #{update_time})
+        INSERT INTO tl_pod
+        (uuid, rc_uuid, svc_uuid, name,label, namespace, hostIP, podIP, restartCount, image, status, update_time)
+        VALUES (#{uuid}, #{rc_uuid}, #{svc_uuid}, #{name}, #{label}, #{namespace}, #{hostIP}, #{podIP}, #{restartCount}, #{image}, #{status}, #{update_time})
     </insert>
 
     <resultMap id="k8spods" type="com.tanli.cloud.model.K8s_Pod">
@@ -12,6 +13,7 @@
         <result column="rc_uuid" property="rc_uuid"></result>
         <result column="svc_uuid" property="svc_uuid"></result>
         <result column="name" property="name"></result>
+        <result column="label" property="label"></result>
         <result column="namespace" property="namespace"></result>
         <result column="hostIP" property="hostIP"></result>
         <result column="podIP" property="podIP"></result>
@@ -31,4 +33,8 @@
         status = #{status}, update_time = #{update_time}
         WHERE uuid = #{uuid}
     </update>
+
+    <delete id="deletePodById" >
+        DELETE from tl_pod WHERE uuid = #{pod_uuid}
+    </delete>
 </mapper>

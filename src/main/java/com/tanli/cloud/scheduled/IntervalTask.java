@@ -16,6 +16,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -38,63 +39,100 @@ public class IntervalTask {
     @Transactional
     @Scheduled(fixedDelay=120000)
     public void updatePods() throws InterruptedException {
-        List<K8s_Rc> rcs = k8sRcDao.getAllRc();
-        List<K8s_Pod> k8s_pods = k8sPodDao.getAllPods();
-        List<K8s_Service> k8s_services = k8sServiceDao.getAllService();
-        for(int i = 0; i < rcs.size(); i++) {
-            K8s_Rc rc = rcs.get(i);
-            Map<String, String> selector = JSONObject.fromObject(rc.getSelector());
-            //获取与RC相关的SVC
-            K8s_Service svc = k8s_services.stream()
-                    .filter(k8s_service -> {
-                        if(JSONObject.fromObject(k8s_service.getSelector()).equals(selector)){
+        System.out.println("updatePods 每隔2分钟" + new Date());
+        List<K8s_Rc> dbk8s_rcs = k8sRcDao.getAllRc();
+        List<K8s_Service> dbk8s_services = k8sServiceDao.getAllService();
+        List<K8s_Pod> dbk8s_pods = k8sPodDao.getAllPods();
+        //处理数据库中没有任何pod数据的情况
+        if(dbk8s_pods.size() == 0 ) {
+            for(int i = 0; i < dbk8s_rcs.size(); i++) {
+                K8s_Rc rc = dbk8s_rcs.get(i);
+                Map<String, String> selectors = JSONObject.fromObject(rc.getSelector());
+                K8s_Service svc = dbk8s_services.stream()
+                        .filter(k8s_service -> JSONObject.fromObject(k8s_service.getSelector()).equals(selectors))
+                        .findFirst().orElse(null);
+                List<Pod> pods = new ArrayList<>();
+                pods = k8sClient.getPod(selectors);
+                for(int j = pods.size()-1; j >= 0; j--) {
+                    addPodToDB(rc, svc, pods.get(j));
+                }
+            }
+            return;
+        }
+        //处理数据库中已有pod数据的情况
+        for(int i = 0; i<dbk8s_pods.size(); i++) {
+            K8s_Pod dbpod = dbk8s_pods.get(i);
+            boolean isDeleted = true; //用于判断该pod是否已从k8s中删除
+            Map<String, String> labels = JSONObject.fromObject(dbpod.getLabel());
+            //根据labels判断与该pod相关的rc和svc
+            K8s_Rc dbrc = dbk8s_rcs.stream()
+                    .filter(rc -> {
+                        if(JSONObject.fromObject(rc.getSelector()).equals(labels)){
                             return true;
                         } else {
                             return false;
                         }
                     }).findFirst().orElse(null);
-            //从Kubernetes中获取rc相关的pod
-            List<Pod> pods = k8sClient.getPod(selector);
-            for(int j = 0; j<pods.size();j++) {
+            K8s_Service dbservice = dbk8s_services.stream()
+                    .filter(k8s_service -> {
+                        if(JSONObject.fromObject(k8s_service.getSelector()).equals(labels)){
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }).findFirst().orElse(null);
+            //从k8s中获取与labels相关的pod
+            List<Pod> pods = new ArrayList<>();
+            pods = k8sClient.getPod(labels);
+            List<Pod> newPods = new ArrayList<>();
+            for(int j = 0; j < pods.size(); j++) {
+                newPods.add(pods.get(j));
+            }
+            DateTime now = DateTime.now();
+            String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+            for(int j = 0; j < pods.size(); j++) {
                 Pod pod = pods.get(j);
-                //判断该pod是否已存在数据库中
-                K8s_Pod k8s_pod = k8s_pods.stream()
-                        .filter(tempPod->{
-                            if(tempPod.getName().equals(pod.getMetadata().getName()) &&
-                                    tempPod.getNamespace().equals(pod.getMetadata().getNamespace())) {
-                                return true;
-                            } else {
-                                return false;
-                            }
-                        }).findFirst().orElse(null);
-                DateTime now = DateTime.now();
-                String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
-                if(k8s_pod!=null) { //已在数据库中存在了
-                    k8s_pod.setRestartCount(pod.getStatus().getContainerStatuses().get(0).getRestartCount());
-                    k8s_pod.setStatus(pod.getStatus().getPhase());
-                    k8s_pod.setUpdate_time(nowStr);
-                    System.out.println(k8s_pod.getUuid());
-                    k8sPodDao.updatePod(k8s_pod);
-                } else { //不存在数据库中
-                    k8s_pod = new K8s_Pod();
-                    k8s_pod.setUuid(UuidUtil.getUUID());
-                    k8s_pod.setRc_uuid(rc.getUuid());
-                    k8s_pod.setSvc_uuid(svc.getUuid());
-                    k8s_pod.setName(pod.getMetadata().getName());
-                    k8s_pod.setNamespace(pod.getMetadata().getNamespace());
-                    //pod是单容器的
-                    k8s_pod.setImage(pod.getSpec().getContainers().get(0).getImage());
-                    k8s_pod.setRestartCount(pod.getStatus().getContainerStatuses().get(0).getRestartCount());
-                    k8s_pod.setPodIP(pod.getStatus().getPodIP());
-                    k8s_pod.setHostIP(pod.getStatus().getHostIP());
-                    k8s_pod.setStatus(pod.getStatus().getPhase());
-                    k8s_pod.setUpdate_time(nowStr);
-                    System.out.println(k8s_pod.getUuid());
-                    k8sPodDao.addPod(k8s_pod);
+                if(dbpod.getName().equals(pod.getMetadata().getName())) {
+                    isDeleted = false; // 表示该pod未被k8s删除，更新数据库
+                    dbpod.setRestartCount(pod.getStatus().getContainerStatuses().get(0).getRestartCount());
+                    dbpod.setStatus(pod.getStatus().getPhase());
+                    dbpod.setUpdate_time(nowStr);
+                    k8sPodDao.updatePod(dbpod);
+                    newPods.remove(j);
+                    System.out.println("tl_pod表【更新】：" + dbpod.getUuid());
+                    break;
                 }
             }
+            if(isDeleted) { //该pod已被k8s删除，从数据库中删除该pod
+                k8sPodDao.deletePodById(dbpod.getUuid());
+                System.out.println("tl_pod表【删除】：" + dbpod.getUuid());
+            }
+            //temp中剩下的就是k8s新产生的，需要添加到数据库中
+            for(int j = 0; j < newPods.size(); j++) {
+                Pod newK8sPod = newPods.get(i);
+                addPodToDB(dbrc, dbservice, newK8sPod);
+            }
         }
+    }
 
-        System.out.println("updatePods 每隔2分钟"+new Date());
+    public int addPodToDB(K8s_Rc rc, K8s_Service svc, Pod pod) {
+        DateTime now = DateTime.now();
+        String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+        K8s_Pod newPod = new K8s_Pod();
+        newPod.setUuid(UuidUtil.getUUID());
+        newPod.setRc_uuid(rc.getUuid());
+        newPod.setSvc_uuid(svc.getUuid());
+        newPod.setName(pod.getMetadata().getName());
+        newPod.setNamespace(pod.getMetadata().getNamespace());
+        newPod.setLabel(JSONObject.fromObject(pod.getMetadata().getLabels()).toString());
+        //pod是单容器的
+        newPod.setImage(pod.getSpec().getContainers().get(0).getImage());
+        newPod.setRestartCount(pod.getStatus().getContainerStatuses().get(0).getRestartCount());
+        newPod.setPodIP(pod.getStatus().getPodIP());
+        newPod.setHostIP(pod.getStatus().getHostIP());
+        newPod.setStatus(pod.getStatus().getPhase());
+        newPod.setUpdate_time(nowStr);
+        System.out.println("tl_pod表【新增】：" + newPod.getUuid());
+        return k8sPodDao.addPod(newPod);
     }
 }
