@@ -36,7 +36,7 @@
                     <input class="cloud-checkbox" type="checkbox"/>
                 </div>
             </td>
-            <td v-cloak="" v-on:click="getServiceDetail($event, app.deploy_uuid)"
+            <td v-cloak="" v-on:click="getServiceDetail(app.deploy_uuid)"
                 v-bind:title="app.deploy_name"><a>{{app.deploy_name}}</a></td>
             <td v-cloak="" v-bind:title="app.status">
                 <i class="fa fa-spin fa-spinner" v-if="creating(app.status)"></i>
@@ -78,7 +78,8 @@
                     <tr>
                         <th>名称</th>
                         <th>状态</th>
-                        <th>访问IP</th>
+                        <th>访问地址</th>
+                        <th>实例个数</th>
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -87,6 +88,7 @@
                         <td v-cloak="">{{service.name}}</td>
                         <td v-cloak=""><i class="fa fa-check-circle"></i>{{service.status}}</td>
                         <td v-cloak="">{{service.ips}}</td>
+                        <td v-cloak="">{{service.replicas}}</td>
                         <td v-cloak="">
                             <span class="operate-btn" v-on:click="showManualScaleDialog($event, service)" title="手动伸缩">
                                 <i class="fa fa-arrows-h"></i></span>

@@ -96,10 +96,14 @@ public class ApplicationServiceImp implements ApplicationService{
                 .stream()
                 .filter(k8s_service -> k8s_service.getDeployment_uuid().equals(deployid))
                 .collect(Collectors.toList());
+        List<K8s_Rc> rcs = k8sRcDao.getAllRc();
         services.stream().forEach(k8s_service -> {
+            K8s_Rc rc = rcs.stream().filter(rc1 -> rc1.getName().equals(k8s_service.getName())).findFirst().orElse(new K8s_Rc());
             R_Service service = new R_Service();
+            service.setDeploy_uuid(k8s_service.getDeployment_uuid());
             service.setUuid(k8s_service.getUuid());
             service.setName(k8s_service.getName());
+            service.setReplicas(Integer.parseInt(rc.getReplicas()));
             List<String> ips = new ArrayList<>();
             List<Map<String, Object>> port = JSONArray.fromObject(k8s_service.getPorts());
             for(int i = 0; i < port.size(); i++) {

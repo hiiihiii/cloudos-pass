@@ -88,8 +88,7 @@ define([
                 },
 
                 // 获取服务详情
-                getServiceDetail: function (event, deployid) {
-                    debugger
+                getServiceDetail: function ( deployid) {
                     var _self = this;
                     _self.serviceDetailFlag = true;
                     if(_self.serviceTableObj != null) {
@@ -107,32 +106,31 @@ define([
                             if(data.code == 'success') {
                                 console.log(data.data);
                                 _self.serviceInfos = data.data;
+                                common_module.notify("[应用实例]","获取服务实例详情成功", "success");
                             } else {
-
+                                common_module.notify("[应用实例]","获取服务实例详情失败", "danger");
                             }
                         },
                         error: function () {
-
+                            common_module.notify("[应用实例]","获取服务实例详情失败", "danger");
                         }
                     });
                     Vue.nextTick(function () {
                         _self.serviceTableObj = common_module.dataTables("#service_table");
-                    });
+                    }, 0);
                 },
 
                 // 隐藏详情框
                 hideServiceDetail: function () {
                     var _self = this;
                     _self.serviceDetailFlag = false;
-                    if(_self.serviceTableObj != null) {
-                        _self.serviceTableObj.destroy();
-                    }
                 },
 
                 // 应用启停
                 stopOrStart: function (event, deploymentid, type) {
                     var _self = this;
                     var url = "../application/" + type;
+                    var typeCN = (type === 'start') ? "启动" : "停止";
                     $.ajax({
                         type: "post",
                         url: url,
@@ -141,10 +139,14 @@ define([
                         },
                         dataType: "json",
                         success: function (result) {
-
+                            if(result.code==='success') {
+                                common_module.notify("[应用实例]", typeCN + "应用实例成功", "success");
+                            } else {
+                                common_module.notify("[应用实例]", typeCN + "应用实例失败", "danger");
+                            }
                         },
                         error: function () {
-
+                            common_module.notify("[应用实例]", typeCN + "应用实例失败", "danger");
                         }
                     })
                 },
@@ -159,6 +161,7 @@ define([
                 submitScale: function () {
                     var _self = this;
                     var insNum = $("#manualScale #insNum").val();
+                    $(".loading").css("display", 'block');
                     $.ajax({
                         type: "post",
                         url: "../application/scale",
@@ -169,17 +172,24 @@ define([
                         dataType: "json",
                         success: function (result) {
                             if(result.code =='success') {
-
+                                common_module.notify("[应用实例]","伸缩服务实例成功", "success");
+                                $('#manualScale').modal("hide");
+                                _self.getServiceDetail(_self.serviceScaleObj.deploy_uuid);
                             } else {
-
+                                common_module.notify("[应用实例]","伸缩服务实例失败", "danger");
                             }
+                            setTimeout(function () {
+                                $(".loading").css("display", 'none');
+                            },100);
                         },
                         error: function () {
-
+                            common_module.notify("[应用实例]","伸缩服务实例失败", "danger");
+                            setTimeout(function () {
+                                $(".loading").css("display", 'none');
+                            },100);
                         }
                     });
                 }
-
             }
         });
     }
