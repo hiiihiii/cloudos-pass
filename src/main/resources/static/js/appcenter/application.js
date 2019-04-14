@@ -76,13 +76,13 @@ define([
                             if(data.code == "success") {
                                 debugger;
                                 _self.appInsInfos = data.data;
-                                common_module.notify("[应用实例]", "获取应用信息成功","success");
+                                common_module.notify("[应用实例]", "获取应用实例成功","success");
                             } else {
-                                common_module.notify("[应用实例]", "获取应用信息失败","success");
+                                common_module.notify("[应用实例]", "获取应用实例失败","success");
                             }
                         },
                         error: function () {
-                            common_module.notify("[应用实例]", "获取应用信息失败","danger");
+                            common_module.notify("[应用实例]", "获取应用实例失败","danger");
                         }
                     });
                 },
