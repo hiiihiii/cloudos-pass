@@ -92,7 +92,7 @@
                                 </div>
                                 <!--<div class="app-delete" title="删除"></div>-->
                                 <div class="app-img">
-                                    <img v-bind:src="imageInfo.logo_url" v-on:error="setDefault($event)" v-cloak=""/>
+                                    <img v-bind:src="imageInfo.temp_logo_url" v-on:error="setDefault($event)" v-cloak=""/>
                                 </div>
                                 <div class="app-desc" v-bind:title="imageInfo.description" v-cloak="">
                                     {{imageInfo.description}}
@@ -148,9 +148,9 @@
                         <!--应用详情页面 镜像 部署和删除-->
                         <div v-show="imageDetail">
                             <div class="operation-box">
-                                <span><i class="fa fa-pencil"></i>编辑</span>
-                                <span><i class="fa fa-toggle-right"></i>部署</span>
-                                <span v-on:click="showImageVersions"><i class="fa fa-trash-o"></i>删除</span>
+                                <span v-cloak="" v-on:click="showEditImage"><i class="fa fa-pencil"></i>编辑</span>
+                                <span v-cloak=""><i class="fa fa-toggle-right"></i>部署</span>
+                                <span v-cloak="" v-on:click="showImageVersions"><i class="fa fa-trash-o"></i>删除</span>
                             </div>
                         </div>
                         <!--应用详情页面 模板 部署和删除-->
@@ -172,7 +172,7 @@
                             <div id="imageBaseInfo" class="tab-pane fade in active">
                                 <div class="upper">
                                     <span v-cloak="">{{selectedImage.appName}}</span>
-                                    <img v-bind:src="selectedImage.logo_url" v-on:error="setDefault($event)" v-cloak=""/>
+                                    <img v-bind:src="selectedImage.temp_logo_url" v-on:error="setDefault($event)" v-cloak=""/>
                                     <p v-cloak="">{{selectedImage.description}}</p>
                                 </div>
                                 <div class="floor">
@@ -439,26 +439,225 @@
                 </div>
             </div>
         </div>
-        <!--显示镜像版本的对话框-->
-        <div id="imageVersion_dialog">
-            <div class="modal fade" id="imageVersion" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <div class="cloud-modal-title">
-                                <i class="fa fa-plus"></i>
-                                <h4 class="modal-title">删除镜像</h4>
+    </div>
+    <!--显示镜像版本的对话框-->
+    <div id="imageVersion_dialog">
+        <div class="modal fade" id="imageVersion" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <div class="cloud-modal-title">
+                            <i class="fa fa-plus"></i>
+                            <h4 class="modal-title">删除镜像</h4>
+                        </div>
+                    </div>
+                    <div class="modal-body cloud-modal-body">
+                        <div class="version-box"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn cloud-btn"
+                                v-on:click="submitDelete" v-cloak="">确定</button>
+                        <button type="button" class="btn cloud-btn" data-dismiss="modal" v-cloak="">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--编辑镜像对话框-->
+    <div id="edit_image_dialog">
+        <div class="modal fade" id="edit_image" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <div class="cloud-modal-title">
+                            <i class="fa fa-plus"></i>
+                            <h4 class="modal-title">编辑镜像</h4>
+                        </div>
+                    </div>
+                    <div class="modal-body cloud-modal-body">
+                        <form id="edit_image_form" role="form" class="form-horizontal" enctype="multipart/form-data">
+                            <div class="modal-body-left">
+                                <ul class="info-type">
+                                    <li class="info-item"
+                                        v-bind:class="infoTag == 'baseInfo' ? 'info-item-selected' : ''">基本信息</li>
+                                    <li class="info-item"
+                                        v-bind:class="infoTag == 'configInfo' ? 'info-item-selected' : ''">配置信息</li>
+                                    <li class="info-item"
+                                        v-bind:class="infoTag == 'runtimeInfo' ? 'info-item-selected' : ''">资源要求</li>
+                                </ul>
                             </div>
-                        </div>
-                        <div class="modal-body cloud-modal-body">
-                            <div class="version-box"></div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn cloud-btn"
-                                    v-on:click="submitDelete" v-cloak="">确定</button>
-                            <button type="button" class="btn cloud-btn" data-dismiss="modal" v-cloak="">取消</button>
-                        </div>
+                            <div class="modal-body-right">
+                                <div class="base-info" v-show="infoTag == 'baseInfo'" v-cloak="">
+                                    <!--应用名称-->
+                                    <div class="form-group">
+                                        <label><span class="cloud-required">  *</span>名称</label>
+                                        <span v-cloak="" style="position: relative;right: 0;">{{selectedImage.appName}}</span>
+                                    </div>
+                                    <!--图标-->
+                                    <div class="form-group">
+                                        <label><span class="cloud-required">  *</span>图标</label>
+                                        <div class="file-container">
+                                            <input class="form-control file-input" type="text" name="logoFileName"
+                                                  v-model="editBind.logoFileName" readonly="readonly" />
+                                            <input type="file" class="file-input-btn" name="logo" id="logo" v-on:change="fileChange_edit('logo')"/>
+                                            <label class="btn cloud-btn"><i class="fa fa-upload"></i>选择文件</label>
+                                        </div>
+                                        <span class="input-tip">选择镜像的图标文件，文件类型可以是png、jpg或jpeg</span>
+                                    </div>
+                                    <!--版本-->
+                                    <div class="form-group">
+                                        <label><span class="cloud-required">  *</span>版本</label>
+                                        <select v-cloak="" v-on:change="changeVersion_edit" name="version">
+                                            <option v-for="val in selectedImage.version" v-cloak="" v-bind:value="val">{{val}}</option>
+                                        </select>
+                                    </div>
+                                    <!--标签-->
+                                    <div class="form-group">
+                                        <label><span class="cloud-required">  *</span>标签</label>
+                                        <div>
+                                            <select class="select2" name="appTag">
+                                                <option v-for="(val, key) in definedAppTag" v-bind:value="key">{{key}}</option>
+                                            </select>
+                                            <input class="form-control input-select2" type="text" v-on:change="emptySelect2"
+                                                   v-model="editBind.appTag" name="appTag_input"/>
+                                        </div>
+                                        <span class="input-tip">可以选择系统内置标签，或者输入自定义标签</span>
+                                    </div>
+                                    <!--应用简介-->
+                                    <div class="form-group">
+                                        <label >应用简介</label>
+                                        <textarea class="form-control cloud-form-control"
+                                                  name="description" maxlength="10000" v-model="selectedImage.description"></textarea>
+                                        <span class="input-tip textarea-tip">对上传的镜像进行详细描述</span>
+                                    </div>
+                                    <!--版本特性-->
+                                    <div class="form-group">
+                                        <label >版本特性</label>
+                                        <textarea class="form-control cloud-form-control"
+                                                  name="v_description" maxlength="1000" v-model="editBind.v_desc"></textarea>
+                                        <span class="input-tip textarea-tip">简要描述镜像版本的新特性</span>
+                                    </div>
+                                </div>
+                                <div class="config-info" v-show="infoTag == 'configInfo'" v-cloak="">
+                                    <!--目录映射-->
+                                    <div class="form-group">
+                                        <label >目录映射</label>
+                                        <input class="form-control cloud-form-control" type="text" name="volumeDir"
+                                               v-model="editBind.volume"/>
+                                        <span class="input-tip textarea-tip">容器运行时挂载的目录</span>
+                                    </div>
+                                    <!--运行命令-->
+                                    <div class="form-group">
+                                        <label >运行命令</label>
+                                        <input class="form-control cloud-form-control" type="text" name="cmd"
+                                               v-model="editBind.cmd"/>
+                                        <span class="input-tip">多个命令使用英文逗号分割</span>
+                                    </div>
+                                    <!--命令参数-->
+                                    <div class="form-group" id="cmdParam-box">
+                                        <label >命令参数</label>
+                                        <span v-on:click="addCmdParam('')"><i class="fa fa-plus"></i></span>
+
+                                    </div>
+                                    <!--环境变量-->
+                                    <div class="form-group">
+                                        <label>环境变量</label>
+                                        <span v-on:click="addEnv('')"><i class="fa fa-plus"></i></span>
+                                        <div class="modal-table-box">
+                                            <table class="table cloud-modal-table" id="env_table">
+                                                <thead>
+                                                <tr>
+                                                    <th>变量</th>
+                                                    <th>值</th>
+                                                    <th>操作</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <!--端口映射-->
+                                    <div class="form-group port-form-group" >
+                                        <label>
+                                            <span class="cloud-required">  *</span>端口映射
+                                        </label>
+                                        <span v-on:click="addPort('',true)"><i class="fa fa-plus"></i></span>
+                                        <div class="modal-table-box">
+                                            <table class="table cloud-modal-table" id="port_table">
+                                                <thead>
+                                                <tr>
+                                                    <th>名称</th>
+                                                    <th style="width: 82px;">协议</th>
+                                                    <th>容器端口</th>
+                                                    <th>集群内端口</th>
+                                                    <th>集群外端口</th>
+                                                    <th>操作</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="runtime-info" v-show="infoTag == 'runtimeInfo'" v-cloak="">
+                                    <div class="form-group">
+                                        <label >启动限制</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label ><span class="cloud-required">  *</span>CPU</label>
+                                        <input class="form-control cloud-form-control"
+                                               type="text" name="mincpu" v-model="editBind.requests.cpu"/>
+                                        <span class="input-tip">单位：核，不能大于运行限制的CPU</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><span class="cloud-required">  *</span>内存</label>
+                                        <div>
+                                            <input class="form-control runtime-input" type="text" name="minMemory"
+                                                   v-cloak="" v-model="editBind.requests.memory"/>
+                                            <select class="form-control runtime-select" name="minMemoryUnit"
+                                                    v-cloak="" v-model="editBind.requests.mUnit">
+                                                <option value="Mi">MB</option>
+                                                <option value="Gi">GB</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label >运行限制</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><span class="cloud-required">  *</span>CPU</label>
+                                        <input class="form-control cloud-form-control" type="text" name="maxcpu"
+                                               v-cloak="" v-model="editBind.limits.cpu"/>
+                                        <span class="input-tip">单位：核，不能小于运行限制的CPU</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label><span class="cloud-required">  *</span>内存</label>
+                                        <div>
+                                            <input class="form-control runtime-input" type="text" name="maxMemory"
+                                                   v-cloak="" v-model="editBind.limits.memory"/>
+                                            <select class="form-control runtime-select" name="maxMemoryUnit"
+                                                    v-cloak="" v-model="editBind.limits.mUnit">
+                                                <option value="Mi">MB</option>
+                                                <option value="Gi">GB</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn cloud-btn" v-show="previousStep"
+                                v-on:click="toPrevious" v-cloak="">上一步</button>
+                        <button type="button" class="btn cloud-btn" v-show="nextStep"
+                                v-on:click="toNext" v-cloak="">下一步</button>
+                        <button type="button" class="btn cloud-btn" v-on:click="submitEdit" v-show="submitTag" v-cloak="">确定</button>
+                        <button type="button" class="btn cloud-btn" data-dismiss="modal" v-cloak="">取消</button>
                     </div>
                 </div>
             </div>

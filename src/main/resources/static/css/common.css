@@ -741,35 +741,42 @@ span.checkbox+a{
 }
 /*展示应用结束*/
 /*上传镜像开始*/
-#upload_image_form .select2+input {
+#upload_image_form .select2+input,
+#edit_image_form .select2+input {
     position: relative;
     margin-top: -30px;
     width: 94%;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
-#upload_image_form .select2-selection {
+#upload_image_form .select2-selection,
+#edit_image_form .select2-selection {
     height: 30px;
 }
-#upload_image_form .select2-selection__arrow {
+#upload_image_form .select2-selection__arrow,
+#edit_image_form .select2-selection__arrow {
     height: 28px;
 }
-#upload_image_form .file-input {
+#upload_image_form .file-input,
+#edit_image_form .file-input {
     display: inline-block;
     width: 74%;
 }
-#upload_image_form .file-input-btn {
+#upload_image_form .file-input-btn,
+#edit_image_form .file-input-btn {
     opacity: 0;
     display: inline-block;
     width: 87px;
 }
-#upload_image_form label.cloud-btn {
+#upload_image_form label.cloud-btn,
+#edit_image_form label.cloud-btn {
     margin-left: -90px;
     width: 90px;
     margin-bottom: 3px;
     cursor: pointer;
 }
 #upload_image_form .modal-body-left,
+#edit_image_form .modal-body-left,
 #deploy_image_form .modal-body-left,
 #deploy_template_form .modal-body-left {
     display: inline-block;
@@ -778,6 +785,7 @@ span.checkbox+a{
     position: fixed;
 }
 #upload_image_form .modal-body-right,
+#edit_image_form .modal-body-right,
 #deploy_image_form .modal-body-right,
 #deploy_template_form .modal-body-right {
     display: inline-block;
@@ -785,12 +793,14 @@ span.checkbox+a{
     margin-left: 165px;
 }
 #upload_image_form .info-type,
+#upload_image_form .info-type,
 #deploy_image_form .info-type,
 #deploy_template_form .info-type {
     text-align: center;
     box-shadow: 1px 0px 3px #dedada;
 }
 #upload_image_form .info-item-selected,
+#edit_image_form .info-item-selected,
 #deploy_image_form .info-item-selected,
 #deploy_template_form .info-item-selected{
     border-right: 4px solid #ec670b;
@@ -801,12 +811,14 @@ span.checkbox+a{
     color: #ec670b;
 }
 #upload_image_form .info-item,
+#edit_image_form .info-item,
 #deploy_image_form .info-item,
 #deploy_template_form .info-item {
     padding: 10px 0;
     font-size: 12px;
 }
 #upload_image .modal-dialog,
+#edit_image .modal-dialog,
 #deploy_image .modal-dialog,
 #deploy_template .modal-dialog {
     width: 750px;
@@ -818,6 +830,7 @@ span.checkbox+a{
     width: 500px;
 }
 #upload_image .modal-table-operation,
+#edit_image .modal-table-operation,
 #deploy_image .modal-table-operation,
 #deploy_template .modal-table-operation {
     cursor: pointer;
@@ -825,9 +838,11 @@ span.checkbox+a{
     padding-top: 4px;
 }
 #upload_image .form-group > span,
+#edit_image .form-group > span,
 #deploy_image .form-group > span,
 #deploy_template .form-group > span,
 #upload_image .cmdParam-item .delete-cmd-btn,
+#edit_image .cmdParam-item .delete-cmd-btn,
 #deploy_image .cmdParam-item .delete-cmd-btn,
 #deploy_template .cmdParam-item .delete-cmd-btn {
     position: absolute;
@@ -835,37 +850,44 @@ span.checkbox+a{
     right: -20px;
 }
 #upload_image .cmdParam-item .delete-cmd-btn,
+#edit_image .cmdParam-item .delete-cmd-btn,
 #deploy_image .cmdParam-item .delete-cmd-btn,
 #deploy_template .cmdParam-item .delete-cmd-btn {
     bottom: 4px;
 }
 #upload_image #port_table,
+#edit_image #port_table,
 #deploy_image #port_table {
     width: 500px;
 }
 #upload_image .runtime-input,
+#edit_image .runtime-input,
 #deploy_image .runtime-input,
 #deploy_template .runtime-input {
     width: 75%;
     display: inline-block;
 }
 #upload_image .runtime-select,
+#edit_image .runtime-select,
 #deploy_image .runtime-select,
 #deploy_template .runtime-select {
     width: 23%;
     display: inline-block;
 }
 #upload_image .port-form-group,
+#edit_image .port-form-group,
 #deploy_image .port-form-group,
 #deploy_template .port-form-group {
     width: 500px;
 }
 #upload_image .cmdParam-item,
+#edit_image .cmdParam-item,
 #deploy_image .cmdParam-item,
 #deploy_template .cmdParam-item {
     position: relative;
 }
 #upload_image .cmdParam-item:not(:last-child),
+#edit_image .cmdParam-item:not(:last-child),
 #deploy_image .cmdParam-item:not(:last-child),
 #deploy_template .cmdParam-item:not(:last-child) {
     margin-bottom: 15px;

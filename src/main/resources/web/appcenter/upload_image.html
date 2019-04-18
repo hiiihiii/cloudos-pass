@@ -60,7 +60,7 @@
                                 <div class="form-group">
                                     <label><span class="cloud-required">  *</span>标签</label>
                                     <div>
-                                        <select class="select2" name="appTag"  v-on:change="tagChange">
+                                        <select class="select2" name="appTag"  v-on:input="tagChange">
                                             <option v-for="(val, key) in definedAppTag" v-bind:value="key">{{key}}</option>
                                         </select>
                                         <input class="form-control input-select2" type="text"

@@ -43,7 +43,37 @@ define([
                     ports:[]
                 },
                 imageDetail: false,
-                templateDetail: false
+                templateDetail: false,
+                //编辑镜像框
+                definedAppTag: {
+                    "WebServer": "WebServer",
+                    "DBMS": "数据库",
+                    "Application": "应用"
+                },
+                infoTag: "baseInfo",
+                nextStep: true,
+                previousStep: false,
+                submitTag: false,
+                editBind: {
+                    logoFileName:'',
+                    appTag: '',
+                    v_desc: '',
+                    volume: '',
+                    cmd: '',
+                    cmdParams: [],
+                    env: [],
+                    ports: [],
+                    requests: {
+                        cpu:'',
+                        memory:'',
+                        mUnit:''
+                    },
+                    limits: {
+                        cpu:'',
+                        memory:'',
+                        mUnit:''
+                    }
+                }
             },
             mounted: function () {
                 var _self = this;
@@ -62,6 +92,43 @@ define([
                 });
             },
             methods: {
+                //下一步
+                toNext: function () {
+                    var _self = this;
+                    if(_self.infoTag == 'baseInfo'){
+                        _self.infoTag = 'configInfo';
+                        _self.previousStep = true;
+                        _self.nextStep = true;
+                    } else if(_self.infoTag == 'configInfo'){
+                        _self.infoTag = 'runtimeInfo';
+                        _self.previousStep = true;
+                        _self.nextStep = false;
+                    }
+                    if(_self.infoTag == 'runtimeInfo'){
+                        _self.submitTag = true;
+                    } else {
+                        _self.submitTag = false;
+                    }
+                },
+
+                //上一步
+                toPrevious: function () {
+                    var _self = this;
+                    if(_self.infoTag == 'configInfo'){
+                        _self.infoTag = 'baseInfo';
+                        _self.previousStep = false;
+                        _self.nextStep = true;
+                    } else if(_self.infoTag == 'runtimeInfo'){
+                        _self.infoTag = 'configInfo';
+                        _self.previousStep = true;
+                        _self.nextStep = true;
+                    }
+                    if(_self.infoTag == 'runtimeInfo'){
+                        _self.submitTag = true;
+                    } else {
+                        _self.submitTag = false;
+                    }
+                },
                 //显示上传镜像框框
                 showUploadDialog: function () {
                     //select2初始化
@@ -108,6 +175,36 @@ define([
                         }
                     }
                     $("#deploy_template").modal({backdrop: 'static', keyboard: false});
+                },
+
+                //显示编辑镜像框
+                showEditImage: function () {
+                    var _self = this;
+                    //初始化select2
+                    $("#edit_image_form select[name='appTag']").select2({
+                        dropdownParent: $('#edit_image'),
+                        minimumResultsForSearch: -1//去除搜索框
+                    }).on('change', function () {
+                        var tag = $("#edit_image_form select[name='appTag']").val();
+                        _self.editBind.appTag = tag;
+                    });
+                    $("#edit_image_form select[name='appTag']").val("");
+                    _self.editBind.appTag = _self.selectedImage.appTag;
+                    console.log(_self.selectedImage);
+                    _self.getInfoByVersion_edit(_self.selectedImage.version[0]);
+                    $("#edit_image").modal({backdrop: 'static', keyboard: false});
+                },
+
+                fileChange_edit: function (type) {
+                    var _self = this;
+                    var logoFile = document.getElementById("logo");
+                    if(logoFile.files[0]){
+                        _self.editBind.logoFileName = logoFile.files[0].name;
+                    }
+                },
+
+                emptySelect2: function () {
+                    $("#edit_image_form select[name='appTag']").val(null)
                 },
 
                 //设置默认图标
@@ -193,7 +290,7 @@ define([
                             dataArray[i].source_url = JSON.parse(dataArray[i].source_url);
                             dataArray[i].v_description = JSON.parse(dataArray[i].v_description);
                             dataArray[i].version = JSON.parse(dataArray[i].version);
-                            dataArray[i].logo_url = "ftp://docker:dockerfile@" + dataArray[i].logo_url;
+                            dataArray[i].temp_logo_url = "ftp://docker:dockerfile@" + dataArray[i].logo_url;
                             dataArray[i].appType = "docker";
                             if(dataArray[i].appName.length > 6) {
                                 dataArray[i].temp_name = dataArray[i].appName.slice(0,6) + '...';
@@ -349,6 +446,112 @@ define([
                     _self.imageDetailBind.v_description = imageInfo.v_description[version];
                 },
 
+                changeVersion_edit: function () {
+                    var _self = this;
+                    var version = $("#edit_image_form select[name='version']").val();
+                    _self.getInfoByVersion_edit(version);
+                },
+
+                getInfoByVersion_edit: function(version){
+                    var _self = this;
+                    var metadata = _self.selectedImage.metadata[version];
+                    $("#edit_image #cmdParam-box .cmdParam-item").empty();
+                    $("#edit_image #env_table tbody tr").empty();
+                    $("#edit_image #port_table tbody tr").empty();
+                    _self.editBind.logoFileName = _self.selectedImage.logo_url;
+                    _self.editBind.v_desc = _self.selectedImage.v_description[version];
+                    _self.editBind.volume = metadata.volume;
+                    _self.editBind.cmd = metadata.cmd;
+
+                    _self.editBind.cmdParams = metadata.cmdParams;
+                    for(var i = 0; i < metadata.cmdParams.length; i++) {
+                        _self.addCmdParam(metadata.cmdParams[i]);
+                    }
+
+                    _self.editBind.env = metadata.env;
+                    for(var i = 0; i < metadata.env.length; i++) {
+                        _self.addEnv(metadata.env[i]);
+                    }
+
+                    _self.editBind.ports = metadata.ports;
+                    for(var i = 0; i < metadata.ports.length; i++) {
+                        if(i === 0) {
+                            _self.addPort(metadata.ports[i], false);
+                        } else {
+                            _self.addPort(metadata.ports[i], true);
+                        }
+                    }
+
+                    _self.editBind.requests.cpu = metadata.requests.cpu;
+                    _self.editBind.requests.memory = metadata.requests.memory.substr(0, metadata.requests.memory.length - 2);
+                    _self.editBind.requests.mUnit = metadata.requests.memory.substr(metadata.requests.memory.length - 2);
+
+                    _self.editBind.limits.cpu = metadata.limits.cpu;
+                    _self.editBind.limits.memory = metadata.limits.memory.substr(0, metadata.limits.memory.length - 2);
+                    _self.editBind.limits.mUnit = metadata.limits.memory.substr(metadata.limits.memory.length - 2);
+                },
+
+                addCmdParam: function (value) {
+                    var cmdParam = value || '';
+                    var cmdParamStr =
+                        '<div class="cmdParam-item">' +
+                        '<input class="form-control" type="text" name="cmdParam" value="'+ cmdParam +'" />' +
+                        '<span class="delete-cmd-btn"><i class="fa fa-trash-o"></i></span>'+
+                        '</div>';
+                    var cmdParam_box = $("#edit_image #cmdParam-box");
+                    cmdParam_box.append(cmdParamStr);
+                    var cmdParam_items = cmdParam_box.find(".delete-cmd-btn");
+                    $(cmdParam_items[cmdParam_items.length-1]).on("click", function () {
+                        $(this).parent().remove();
+                    });
+                },
+
+                addEnv: function (envObj) {
+                    envObj = envObj || {name:'', value: ''};
+                    var envStr =
+                        '<tr>' +
+                        '<td><input class="form-control" type="text" value="'+ envObj.name +'" name="envKey" /></td>' +
+                        '<td><input class="form-control" type="text" value="' + envObj.value + '" name="envValue" /></td>' +
+                        '<td><span class="modal-table-operation"><i class="fa fa-trash-o"></i></span></td>' +
+                        '</tr>';
+                    var envTbody = $("#edit_image #env_table tbody");
+                    envTbody.append(envStr);
+                    var trs = envTbody.find("tr");
+                    $(trs[trs.length-1]).on("click", ".modal-table-operation", function () {
+                        /*detach方法可以删除绑定的事件，而remove能*/
+                        $(this).parents("tr").remove();
+                    });
+                },
+
+                addPort: function (portObj, canDelete) {
+                    portObj = portObj || {portName:'', protocol:'TCP',containerPort:'',port:'',nodePort:''};
+                    var portStr = '<tr>' +
+                        '<td><input class="form-control" type="text" value="' + portObj.portName + '" name="portName"/></td>' +
+                        '<td>' +
+                        '<select class="form-control" name="protocol" value="' + portObj.protocol + '">' +
+                        '<option value="TCP">TCP</option>' +
+                        '<option value="UDP">UDP</option>' +
+                        '</select>' +
+                        '</td>' +
+                        '<td><input class="form-control" type="text" maxlength="5" value="'+portObj.containerPort+'" name="containerPort"/></td>' +
+                        '<td><input class="form-control" type="text" maxlength="5" value="'+portObj.port+'" name="port"/></td>' +
+                        '<td><input class="form-control" type="text" maxlength="5" value="'+portObj.nodePort+'" name="nodePort"/></td>';
+                    if(canDelete){
+                        portStr +=
+                            '<td><span class="modal-table-operation"><i class="fa fa-trash-o"></i></span></td>' +
+                            '</tr>';
+                    } else {
+                        portStr += '</tr>';
+                    }
+                    var portTbody = $("#edit_image #port_table tbody");
+                    portTbody.append(portStr);
+                    var trs = portTbody.find("tr");
+                    $(trs[trs.length-1]).on("click", ".modal-table-operation", function () {
+                        /*detach方法不能删除绑定的事件，而remove能*/
+                        $(this).parents("tr").remove();
+                    });
+                },
+
                 getInfoByAppName: function (templateInfo, appname) {
                     var _self = this;
                     var config = [];
@@ -491,6 +694,19 @@ define([
 
                 closeAppDetail: function () {
                     $("#appstore .app-detail").css("display", "none");
+                },
+
+                submitEdit: function () {
+                    var _self = this;
+                    var formData = new FormData();
+                    // formData.append("appName", $("#upload_image_form #appName").val());
+                    // formData.append("logoFile", $("#upload_image_form #logo")[0].files[0]);
+                    // formData.append("version",$("#upload_image_form #version").val());
+                    // formData.append("appTag", _self.bindData.appTag_input);
+                    // formData.append("description", $("#upload_image_form textarea[name='description']").val());
+                    // formData.append("v_description", $("#upload_image_form textarea[name='v_description']").val());
+                    // formData.append("sourceFile", $("#upload_image_form #source")[0].files[0]);
+
                 }
             }
         });
