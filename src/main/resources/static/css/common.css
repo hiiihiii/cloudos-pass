@@ -827,7 +827,7 @@ span.checkbox+a{
     height: 330px;
 }
 #add_template .modal-dialog {
-    width: 500px;
+    width: 600px;
 }
 #upload_image .modal-table-operation,
 #edit_image .modal-table-operation,
@@ -1062,7 +1062,7 @@ span.checkbox+a{
 }
 #add_template_form .form-group .form-control{
     margin-right: 50px;
-    width: 70%;
+    width: 64%;
 }
 #add_template_form .select-file {
     margin-left: -80px;

@@ -29,9 +29,9 @@
                                 <!--部署名称-->
                                 <div class="form-group">
                                     <label><span class="cloud-required">  *</span>名称</label>
-                                    <div>
-                                        <input type="text" class="form-control" id="deployName" name="deployName" placeholder="请输入名称" maxlength="64"/>
-                                    </div>
+                                    <input type="text" class="form-control cloud-form-control" id="deployName" name="deployName"
+                                           placeholder="请输入名称" maxlength="64"/>
+                                    <span class="input-tip">部署名称，最多64个字符，且必须唯一</span>
                                 </div>
                                 <!--镜像名称-->
                                 <div class="form-group">
@@ -53,9 +53,8 @@
                                 <!--部署描述-->
                                 <div class="form-group">
                                     <label >描述</label>
-                                    <div>
-                                        <textarea class="form-control" name="description" maxlength="100"></textarea>
-                                    </div>
+                                    <textarea class="form-control" name="description" maxlength="1000"></textarea>
+                                    <span class="input-tip textarea-tip">对部署应用进行详细描述</span>
                                 </div>
                             </div>
                             <div class="resource-info" v-show="infoTag == 'resourceInfo'" v-cloak="">
@@ -64,10 +63,9 @@
                                 </div>
                                 <div class="form-group">
                                     <label ><span class="cloud-required">  *</span>CPU</label>
-                                    <div>
-                                        <input class="form-control" type="text" name="mincpu"
-                                            v-bind:value="selectedVersion.requests.cpu" v-cloak=""/>
-                                    </div>
+                                    <input class="form-control cloud-form-control" type="text" name="mincpu"
+                                        v-bind:value="selectedVersion.requests.cpu" v-cloak=""/>
+                                    <span class="input-tip">单位：核，不能大于运行限制的CPU</span>
                                 </div>
                                 <div class="form-group">
                                     <label ><span class="cloud-required">  *</span>内存</label>
@@ -86,10 +84,9 @@
                                 </div>
                                 <div class="form-group">
                                     <label ><span class="cloud-required">  *</span>CPU</label>
-                                    <div>
-                                        <input class="form-control" type="text" name="maxcpu"
-                                               v-bind:value="selectedVersion.limits.cpu" v-cloak=""/>
-                                    </div>
+                                    <input class="form-control cloud-form-control" type="text" name="maxcpu"
+                                           v-bind:value="selectedVersion.limits.cpu" v-cloak=""/>
+                                    <span class="input-tip">单位：核，不能小于运行限制的CPU</span>
                                 </div>
                                 <div class="form-group">
                                     <label ><span class="cloud-required">  *</span>内存</label>
@@ -108,32 +105,28 @@
                                 <!--服务名称-->
                                 <div class="form-group">
                                     <label><span class="cloud-required">  *</span>服务名称</label>
-                                    <div>
-                                        <input class="form-control" type="text" name="serviceName" />
-                                    </div>
+                                    <input class="form-control cloud-form-control" type="text" name="serviceName" />
+                                    <span class="input-tip">在Kubernetes中的服务名称，该名称必须在用户命名空间中唯一</span>
                                 </div>
                                 <!--副本数-->
                                 <div class="form-group">
                                     <label><span class="cloud-required">  *</span>实例个数</label>
-                                    <div>
-                                        <input class="form-control" type="number" name="instanceCount" />
-                                    </div>
+                                    <input class="form-control cloud-form-control" type="number" name="instanceCount" />
+                                    <span class="input-tip textarea-tip">服务的副本个数，最小为1</span>
                                 </div>
                                 <!--目录映射-->
                                 <div class="form-group">
                                     <label >目录映射</label>
-                                    <div>
-                                        <input class="form-control" type="text" name="volumeDir"
-                                               v-bind:value="selectedVersion.volume" v-cloak=""/>
-                                    </div>
+                                    <input class="form-control cloud-form-control" type="text" name="volumeDir"
+                                           v-bind:value="selectedVersion.volume" v-cloak=""/>
+                                    <span class="input-tip textarea-tip">容器运行时挂载的目录</span>
                                 </div>
                                 <!--运行命令-->
                                 <div class="form-group">
                                     <label >运行命令</label>
-                                    <div>
-                                        <input class="form-control" type="text" name="cmd"
-                                               v-bind:value="selectedVersion.cmd" v-cloak=""/>
-                                    </div>
+                                    <input class="form-control" type="text" name="cmd"
+                                           v-bind:value="selectedVersion.cmd" v-cloak=""/>
+                                    <span class="input-tip">多个命令使用英文逗号分割</span>
                                 </div>
                                 <!--命令参数-->
                                 <div class="form-group" id="cmdParam-box">

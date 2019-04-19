@@ -256,9 +256,9 @@
                         <!--模板名称-->
                         <div class="form-group">
                             <label><span class="cloud-required">  *</span>名称</label>
-                            <div class="form-content">
-                                <input type="text" class="form-control" id="templateName" name="templateName" placeholder="请输入名称" maxlength="64"/>
-                            </div>
+                            <input type="text" class="form-control cloud-form-control"
+                                   id="templateName" name="templateName" placeholder="请输入名称" maxlength="64" />
+                            <span class="input-tip template-name-tip">模板名称，最多64个字符</span>
                         </div>
                         <!--图标-->
                         <div class="form-group">
@@ -269,13 +269,13 @@
                                 <input type="file" class="file-input-btn" name="logo" id="logo" v-on:change="fileChange($event)"/>
                                 <label class="btn cloud-btn select-file"><i class="fa fa-upload"></i>选择文件</label>
                             </div>
+                            <span class="input-tip template-logo-tip">选择模板的图标文件，文件类型可为png、jpg、jpeg</span>
                         </div>
                         <!--描述-->
                         <div class="form-group">
                             <label >描述</label>
-                            <div class="form-content">
-                                <textarea class="form-control" name="description" maxlength="1000"></textarea>
-                            </div>
+                            <textarea class="form-control" name="description" maxlength="1000"></textarea>
+                            <span class="input-tip template-desc-tip">可对模板进行简要描述</span>
                         </div>
                         <!--是否发布-->
                         <div class="form-group">
