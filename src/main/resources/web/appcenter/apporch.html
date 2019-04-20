@@ -54,7 +54,7 @@
                 <td v-cloak="" v-bind:title="template.description">{{template.description}}</td>
                 <td v-cloak="" v-text="template.isPublish == '0'? '未发布': '已发布'"></td>
                 <td>
-                    <span class="operate-btn" title="编辑"><i class="fa fa-pencil"></i></span>
+                    <span class="operate-btn" title="编辑" v-cloak="" v-on:click="showEditTemplate(template.uuid)"><i class="fa fa-pencil"></i></span>
                     <span class="operate-btn" title="部署"><i class="fa fa-toggle-right"></i></span>
                     <span class="operate-btn" title="发布"
                           v-on:click="publishTemplate(template.uuid, template.templateName)"
@@ -66,7 +66,62 @@
             </tbody>
         </table>
     </div>
-
+    <!--编辑模板基本信息框-->
+    <div class="modal fade" id="edit_template" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <div class="cloud-modal-title">
+                        <i class="fa fa-plus"></i>
+                        <h4 class="modal-title">编辑模板基本信息</h4>
+                    </div>
+                </div>
+                <div class="modal-body cloud-modal-body">
+                    <form id="edit_template_form" role="form" class="form-horizontal" enctype="multipart/form-data">
+                        <!--模板id-->
+                        <div class="form-group">
+                            <input id="templateid" name="templateid" v-bind:value="editTemplate.uuid" class="hidden"/>
+                        </div>
+                        <!--模板名称-->
+                        <div class="form-group">
+                            <label><span class="cloud-required">  *</span>名称</label>
+                            <span>{{editTemplate.templateName}}</span>
+                        </div>
+                        <!--图标-->
+                        <div class="form-group">
+                            <label><span class="cloud-required">  *</span>图标</label>
+                            <div class="file-container">
+                                <input class="form-control file-input" type="text" name="logoFileName"
+                                       v-model="logoFileName" readonly="readonly" />
+                                <input type="file" class="file-input-btn" name="logo" id="logo" v-on:change="fileChange($event)"/>
+                                <label class="btn cloud-btn select-file"><i class="fa fa-upload"></i>选择文件</label>
+                            </div>
+                            <span class="input-tip template-logo-tip">选择模板的图标文件，文件类型可为png、jpg、jpeg</span>
+                        </div>
+                        <!--描述-->
+                        <div class="form-group">
+                            <label >描述</label>
+                            <textarea class="form-control" name="description" maxlength="1000" v-cloak=""
+                                      v-model="editTemplate.description"></textarea>
+                            <span class="input-tip template-desc-tip">可对模板进行简要描述</span>
+                        </div>
+                        <!--是否发布-->
+                        <!--<div class="form-group">-->
+                            <!--<label><span class="cloud-required">  *</span>是否发布</label>-->
+                            <!--<div id="isPublish" class="switch">-->
+                                <!--<input type="checkbox" class="form-control" />-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn cloud-btn" v-on:click="submitEdit" v-cloak="">确定</button>
+                    <button type="button" class="btn cloud-btn" data-dismiss="modal" v-cloak="">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div th:replace="common/footer::footer"></div>
 <script type="text/javascript">

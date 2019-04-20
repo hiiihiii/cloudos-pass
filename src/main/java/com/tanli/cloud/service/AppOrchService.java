@@ -12,4 +12,6 @@ public interface AppOrchService {
     public APIResponse getImageInfo(User user);
 
     public APIResponse addTemplate(User user, Template template, MultipartFile file);
+
+    public APIResponse editTemplate(User user, String uuid, String description, MultipartFile file);
 }

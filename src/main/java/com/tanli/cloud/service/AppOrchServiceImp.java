@@ -1,5 +1,6 @@
 package com.tanli.cloud.service;
 
+import com.tanli.cloud.constant.SystemConst;
 import com.tanli.cloud.dao.ImageInfoDao;
 import com.tanli.cloud.dao.RepositoryDao;
 import com.tanli.cloud.dao.TemplateDao;
@@ -94,6 +95,42 @@ public class AppOrchServiceImp implements AppOrchService{
         } else {
             LOGGE.info("[AppOrchServiceImp Error]: " + "上传logo文件失败");
             return APIResponse.fail("上传logo文件失败");
+        }
+    }
+
+    @Override
+    public APIResponse editTemplate(User user, String uuid, String description, MultipartFile file) {
+        Template template = templateDao.getAllTemplate().stream().filter(template1 -> template1.getUuid().equals(uuid)).findFirst().orElse(null);
+        if(template == null){
+            return APIResponse.fail("修改的模板不存在");
+        }
+        DateTime now = DateTime.now();
+        String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+        try {
+            LOGGE.info("[AppOrchServiceImp Error]: " + "修改模板" + template.getTemplateName() + "基本信息");
+            if(file != null) {
+                //上传logo到FTP中
+                String originalFileName = file.getOriginalFilename();//必须使用originFileName
+                String[] temp = originalFileName.split("\\.");
+                String newFileName = template.getTemplateName() + "." + temp[temp.length-1];
+                String logoUrl = uploadFile(originalFileName, file, newFileName);
+                template.setLogo_url(logoUrl);
+            }
+            template.setDescription(description);
+            template.setUpdate_time(nowStr);
+            templateDao.updataBaseInfo(template);
+            UserLog userLog = new UserLog(UuidUtil.getUUID(),
+                    user.getUser_uuid(),
+                    user.getUserName(),
+                    SystemConst.TEMPLATE,
+                    template.getUuid(),
+                    "修改模板基本信息",
+                    "0",nowStr);
+            userLogDao.addUserLog(userLog);
+            return APIResponse.success("修改模板" + template.getTemplateName() + "成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return APIResponse.fail("修改模板" + template.getTemplateName() + "失败");
         }
     }
 

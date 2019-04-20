@@ -33,6 +33,12 @@
         WHERE uuid = #{templateId}
     </update>
 
+    <update id="updataBaseInfo" parameterType="com.tanli.cloud.model.Template">
+        UPDATE tl_template
+        SET logo_url = #{logo_url}, description = #{description}, update_time = #{update_time}
+        WHERE uuid = #{uuid}
+    </update>
+
     <delete id="deleteById">
         DELETE FROM tl_template
         WHERE uuid = #{templateId}

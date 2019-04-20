@@ -17,7 +17,14 @@ define([
             el: "#apporch",
             data:{
                 templateList: [],
-                templateTableObj: ''
+                templateTableObj: '',
+                editTemplate: {
+                    uuid:'',
+                    templateName:'',
+                    logo_url: '',
+                    description:''
+                },
+                logoFileName:'',
             },
             mounted: function(){
                 var _self = this;
@@ -43,7 +50,6 @@ define([
                 //获取镜像模板信息
                 getTemplate: function () {
                     var _self = this;
-
                     $.ajax({
                         url: "../apporch/templateinfo",
                         type: "get",
@@ -172,6 +178,64 @@ define([
                     _self.getTemplate();
                     Vue.nextTick(function () {
                         _self.templateTableObj = common_module.dataTables("#template_table");
+                    });
+                },
+
+                showEditTemplate: function (templateid) {
+                    var _self = this;
+                    for(var i = 0; i < _self.templateList.length; i++) {
+                        if(_self.templateList[i].uuid == templateid) {
+                            _self.editTemplate = _self.templateList[i];
+                            _self.logoFileName = _self.templateList[i].logo_url;
+                            break;
+                        }
+                    }
+                    console.log(_self.editTemplate);
+                    $("#edit_template").modal({backdrop: 'static', keyboard: false});
+                },
+
+                fileChange: function (event) {
+                    var _self = this;
+                    var logoFile = document.getElementById("logo");
+                    if(logoFile.files[0]){
+                        _self.logoFileName = logoFile.files[0].name;
+                    }
+                },
+                submitEdit: function () {
+                    var _self = this;
+                    var formdata = new FormData();
+                    formdata.append("uuid", _self.editTemplate.uuid);
+                    formdata.append("description", _self.editTemplate.description);
+                    if(_self.logoFileName != _self.editTemplate.logo_url) {
+                        formdata.append("logoFile", $("#edit_template_form #logo")[0].files[0]);
+                    }
+                    $(".loading").css("display", "block");
+                    $.ajax({
+                        url:'../apporch/template/edit',
+                        type: 'post',
+                        data: formdata,
+                        processData: false,
+                        contentType: false,
+                        dataType:'json',
+                        async: false,
+                        success: function (result) {
+                            if(result.code=='success') {
+                                $("#edit_template").modal('hide');
+                                common_module.notify('[应用编排]','修改'+_self.editTemplate.templateName+"成功",'success');
+                                _self.getTemplate();
+                            } else {
+                                common_module.notify('[应用编排]','修改'+_self.editTemplate.templateName+"失败",'danger');
+                            }
+                            setTimeout(function () {
+                                $(".loading").css("display", 'none');
+                            },1000);
+                        },
+                        error: function () {
+                            common_module.notify('[应用编排]','修改'+_self.editTemplate.templateName+"失败",'danger');
+                            setTimeout(function () {
+                                $(".loading").css("display", 'none');
+                            },1000);
+                        }
                     });
                 }
             }

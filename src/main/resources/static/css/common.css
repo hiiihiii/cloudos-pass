@@ -823,9 +823,11 @@ span.checkbox+a{
 #deploy_template .modal-dialog {
     width: 750px;
 }
-#add_template .cloud-modal-body {
+#add_template .cloud-modal-body,
+#edit_template .cloud-modal-body {
     height: 330px;
 }
+#edit_template .modal-dialog,
 #add_template .modal-dialog {
     width: 600px;
 }
@@ -1053,17 +1055,21 @@ span.checkbox+a{
     width: 174px;
     height: 26px;
 }
-#add_template_form {
+#add_template_form,
+#edit_template_form {
     margin-left: 75px;
 }
-#add_template_form .form-group label{
+#edit_template_form .form-group label,
+#add_template_form .form-group label {
     font-size: 14px;
     text-align: left;
 }
-#add_template_form .form-group .form-control{
+#edit_template_form .form-group .form-control,
+#add_template_form .form-group .form-control {
     margin-right: 50px;
     width: 64%;
 }
+#edit_template_form .select-file,
 #add_template_form .select-file {
     margin-left: -80px;
     width: 90px !important;
@@ -1072,12 +1078,14 @@ span.checkbox+a{
     font-size: 12px !important;
     cursor: pointer;
 }
+#edit_template_form .file-input-btn,
 #add_template_form .file-input-btn {
     opacity: 0;
     display: inline-block;
     width: 87px;
 }
-#add_template_form .file-input {
+#add_template_form .file-input,
+#edit_template_form .file-input {
     display: inline-block;
     width: 44% !important;
     margin-right: 0 !important;

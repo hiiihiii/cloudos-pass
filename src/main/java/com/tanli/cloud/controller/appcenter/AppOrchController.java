@@ -56,6 +56,14 @@ public class AppOrchController {
         return appOrchService.addTemplate(user, template, logofile);
     }
 
+    @PostMapping("template/edit")
+    @ResponseBody
+    public APIResponse editTemplate(HttpServletRequest request, String uuid, String description,
+                                    @RequestParam(value = "logoFile", required = false) MultipartFile logofile) {
+        User user = (User) request.getSession().getAttribute("login_user");
+        return appOrchService.editTemplate(user, uuid, description, logofile);
+    }
+
     @RequestMapping("templateinfo")
     @ResponseBody
     public APIResponse getTemplate(HttpServletRequest request, HttpServletResponse response){
