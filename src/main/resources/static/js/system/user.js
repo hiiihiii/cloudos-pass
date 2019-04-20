@@ -14,7 +14,15 @@ define([
             data: {
                 userInfos: [],
                 roleInfos: [],
-                userTableObj: null
+                userTableObj: null,
+                editUser: {
+                    userName: '',
+                    password: '',
+                    role_name: '',
+                    email:'',
+                    telephone: ''
+                },
+                password_edit: ''
             },
             mounted: function () {
                 $(".loading").css('display','block');
@@ -141,6 +149,65 @@ define([
                         },
                         error: function () {
                             common_module.notify('[用户]', '添加用户失败', 'danger');
+                            setTimeout(function () {
+                                $(".loading").css('display','none');
+                            },1000);
+                        }
+                    });
+                },
+
+                showEditUser: function (userid) {
+                    var _self = this;
+                    _self.getRole();
+                    for(var i = 0; i <_self.userInfos.length; i++) {
+                        if(userid == _self.userInfos[i].user_uuid){
+                            _self.editUser = _self.userInfos[i];
+                            _self.password_edit = _self.editUser.password;
+                            console.log(_self.editUser);
+                            break;
+                        }
+                    }
+                    $("#edit_user").modal({backdrop: 'static', keyboard: false});
+                },
+
+                submitEdit: function () {
+                    var _self = this;
+                    var formdata = new FormData();
+                    formdata.append("user_uuid", _self.editUser.user_uuid);
+                    formdata.append("userName", _self.editUser.userName);
+                    formdata.append("role_uuid", _self.editUser.role_uuid);
+                    // formdata.append("password", $("#edit_user_form input[name='password_edit']").val());
+                    formdata.append("email",$("#edit_user_form input[name='email_edit']").val());
+                    formdata.append("telephone",$("#edit_user_form input[name='telephone_edit']").val());
+                    $(".loading").css('display','block');
+                    $.ajax({
+                        url: '../user/edit',
+                        type: 'post',
+                        data: formdata,
+                        dataType: 'json',
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            if(data.code == 'success') {
+                                //销毁表格
+                                if(_self.userTableObj != null) {
+                                    _self.userTableObj.destroy();
+                                }
+                                _self.getUserData();
+                                Vue.nextTick(function () {
+                                    _self.userTableObj = common_module.dataTables("#user_table");
+                                });
+                                common_module.notify('[用户]', '修改用户'+ _self.editUser.userName +'成功', 'success');
+                                $("#edit_user").modal('hide');
+                            } else {
+                                common_module.notify('[用户]', '修改用户'+_self.editUser.userName+'失败', 'danger');
+                            }
+                            setTimeout(function () {
+                                $(".loading").css('display','none');
+                            },1000);
+                        },
+                        error: function () {
+                            common_module.notify('[用户]', '修改用户'+_self.editUser.userName+'失败', 'danger');
                             setTimeout(function () {
                                 $(".loading").css('display','none');
                             },1000);

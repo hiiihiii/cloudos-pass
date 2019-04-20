@@ -1,6 +1,7 @@
 package com.tanli.cloud.service;
 
 import com.tanli.cloud.constant.EnvConst;
+import com.tanli.cloud.constant.SystemConst;
 import com.tanli.cloud.dao.*;
 import com.tanli.cloud.model.ImageInfo;
 import com.tanli.cloud.model.Project;
@@ -121,6 +122,33 @@ public class UserManageServiceImp implements UserManageService {
             }
         }
         return APIResponse.fail("增加用户失败");
+    }
+
+    @Override
+    public APIResponse editUser(User user, User editUser) {
+        User dbUser = userDao.getAllUser().stream().filter(user1 -> user1.getUser_uuid().equals(editUser.getUser_uuid())).findFirst().orElse(null);
+        if(dbUser == null) {
+            return APIResponse.fail("用户"+editUser.getUserName()+"不存在，修改");
+        }
+        try {
+            DateTime now = DateTime.now();
+            String nowStr = now.getYear()+"-"+now.getMonthOfYear()+"-"+now.getDayOfMonth()+" "+ now.getHourOfDay() + ":"+now.getMinuteOfHour()+":"+now.getSecondOfMinute();
+//            dbUser.setPassword(editUser.getPassword());
+            dbUser.setEmail(editUser.getEmail());
+            dbUser.setTelephone(editUser.getTelephone());
+            dbUser.setUpdate_time(nowStr);
+            UserLog userLog = new UserLog(UuidUtil.getUUID(),
+                    user.getUser_uuid(),
+                    user.getUserName(),
+                    SystemConst.USER,
+                    editUser.getUser_uuid(),
+                    "修改用户"+editUser.getUserName()+"的基本信息", "0", nowStr);
+            userDao.updateUser(dbUser);
+            return APIResponse.success("修改"+editUser.getUserName()+"的基本信息成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return APIResponse.fail("修改"+editUser.getUserName()+"的基本信息失败");
+        }
     }
 
     @Override

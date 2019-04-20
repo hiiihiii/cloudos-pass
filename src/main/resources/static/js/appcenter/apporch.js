@@ -201,6 +201,7 @@ define([
                         _self.logoFileName = logoFile.files[0].name;
                     }
                 },
+
                 submitEdit: function () {
                     var _self = this;
                     var formdata = new FormData();

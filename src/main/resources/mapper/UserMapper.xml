@@ -36,4 +36,10 @@
         DELETE FROM tl_user
         WHERE user_uuid = #{id}
     </delete>
+
+    <update id="updateUser" parameterType="com.tanli.cloud.model.response.User">
+        UPDATE tl_user
+        SET password = #{password}, email = #{email}, telephone = #{telephone}, update_time = #{update_time}
+        WHERE user_uuid = #{user_uuid}
+    </update>
 </mapper>

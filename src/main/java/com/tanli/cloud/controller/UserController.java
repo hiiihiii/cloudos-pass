@@ -49,6 +49,13 @@ public class UserController {
         return userManageService.addUser(user);
     }
 
+    @PostMapping("user/edit")
+    @ResponseBody
+    public APIResponse editUser(HttpServletRequest request, User user) {
+        User login_user = (User) request.getSession().getAttribute("login_user");
+        return userManageService.editUser(login_user, user);
+    }
+
     @PostMapping("user/delete")
     @ResponseBody
     public APIResponse deleteUser(HttpServletRequest request,

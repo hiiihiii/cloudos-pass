@@ -39,7 +39,7 @@
             <td v-cloak="">{{user.email}}</td>
             <td v-cloak="">{{user.telephone}}</td>
             <td v-cloak="">
-                <span class="operate-btn" title="编辑"><i class="fa fa-pencil"></i></span>
+                <span class="operate-btn" title="编辑" v-cloak="" v-on:click="showEditUser(user.user_uuid)"><i class="fa fa-pencil"></i></span>
                 <span class="operate-btn" title="删除" v-cloak=""
                       v-on:click="deleteByIds($event, 'one')"><i class="fa fa-trash-o"></i></span>
             </td>
@@ -47,6 +47,7 @@
         </tbody>
     </table>
     <div th:replace="system/add_user::add_user"></div>
+    <div th:replace="system/edit_user::edit_user"></div>
 </div>
 <div th:replace="common/footer::footer"></div>
 <script type="text/javascript">

@@ -15,4 +15,5 @@ public interface UserDao {
     public List<User> getAllUser();
     public int addUser(User user);
     public int deleteById(@Param("id")String userid);
+    public int updateUser(User user);
 }
