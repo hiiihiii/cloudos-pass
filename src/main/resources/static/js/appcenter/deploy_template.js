@@ -121,7 +121,8 @@ define([
                     for(var i = 0; i < envObj.length; i++){
                         var envStr =
                             '<tr>' +
-                            '<td><input class="form-control" type="text" value="'+ envObj[i].name +'" name="envKey" /></td>' +
+                            '<td><label>'+ envObj[i].name +'</label></td>' +
+                            // '<td><input class="form-control" type="text" value="'+ envObj[i].name +'" name="envKey" /></td>' +
                             '<td><input class="form-control" type="text" value="' + envObj[i].value + '" name="envValue" /></td>' +
                             '<td><span class="modal-table-operation"><i class="fa fa-trash-o"></i></span></td>' +
                             '</tr>';
@@ -143,7 +144,8 @@ define([
                     }
                     for(var i = 0; i < portObj.length; i++){
                         var portStr = '<tr>' +
-                            '<td><input class="form-control" type="text" value="' + portObj[i].portName + '" name="portName"/></td>' +
+                            // '<td><input class="form-control" type="text" value="' + portObj[i].portName + '" name="portName"/></td>' +
+                            '<td><label>' + portObj[i].portName + '</label></td>' +
                             '<td>' +
                             '<select class="form-control" name="protocol" value="' + portObj[i].protocol + '">' +
                             '<option value="TCP">TCP</option>' +

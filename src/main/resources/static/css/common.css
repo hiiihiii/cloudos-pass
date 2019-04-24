@@ -1126,6 +1126,13 @@ span.checkbox+a{
     border: none;
     background-color: transparent;
 }
+#deploy_template .cloud-modal-table td label,
+#deploy_image .cloud-modal-table td label,
+#deploy_template #env_table td label,
+#deploy_image #env_table td label {
+    margin: 5px;
+    font-weight: normal;
+}
 /*部署模板结束*/
 /*模板详情开始*/
 #template_detail .content {

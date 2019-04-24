@@ -155,7 +155,7 @@ define([
                     var _self = this;
                     switch (id){
                         case "logo":
-                            var logoFile = document.getElementById("logo");
+                            var logoFile = document.getElementById("logo_upload");
                             if(logoFile.files[0]){
                                 _self.bindData.logoFileName = logoFile.files[0].name;
                             }

@@ -90,7 +90,8 @@ define([
                     envObj = envObj || {name:'', value: ''};
                     var envStr =
                         '<tr>' +
-                        '<td><input class="form-control" type="text" value="'+ envObj.name +'" name="envKey" /></td>' +
+                            '<td><label>'+envObj.name+'</label></td>'+
+                        // '<td><input class="form-control" type="text" value="'+ envObj.name +'" name="envKey" /></td>' +
                         '<td><input class="form-control" type="text" value="' + envObj.value + '" name="envValue" /></td>' +
                         '<td><span class="modal-table-operation"><i class="fa fa-trash-o"></i></span></td>' +
                         '</tr>';
@@ -107,7 +108,8 @@ define([
                 addPort: function (portObj, canDelete) {
                     portObj = portObj || {portName:'', protocol:'TCP',containerPort:'',port:'',nodePort:''};
                     var portStr = '<tr>' +
-                        '<td><input class="form-control" type="text" value="' + portObj.portName + '" name="portName"/></td>' +
+                        '<td><label>' + portObj.portName + '</label></td>' +
+                        // '<td><input class="form-control" type="text" value="' + portObj.portName + '" name="portName"/></td>' +
                         '<td>' +
                         '<select class="form-control" name="protocol" value="' + portObj.protocol + '">' +
                         '<option value="TCP">TCP</option>' +

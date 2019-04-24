@@ -195,6 +195,7 @@
                 <div class="app-info-box">
                     <div v-for="(item, index) in selected.env">
                         <div class="form-group">
+                            <!--环境变量name-->
                             <label v-cloak="">{{item.name}}：</label>
                             <input class="template-form-control" type="text" v-model="item.value" name="envValue" v-cloak=""
                                    v-on:change="saveImageInfo($event, selected.appName, 'env', index, 'value')"/>
@@ -206,8 +207,9 @@
                     <div v-for="(item, index) in selected.ports">
                         <div class="form-group">
                             <label><span class="cloud-required">  *</span>名称： </label>
-                            <input class="template-form-control" type="text" v-model="item.portName" v-cloak=""
-                                   v-on:change="saveImageInfo($event, selected.appName, 'ports', index, 'portName')"/>
+                            <span v-cloak="">{{item.portName}}</span>
+                            <!--<input class="template-form-control" type="text" v-model="item.portName" v-cloak=""-->
+                                   <!--v-on:change="saveImageInfo($event, selected.appName, 'ports', index, 'portName')"/>-->
                         </div>
                         <div class="form-group">
                             <label><span class="cloud-required">  *</span>容器端口： </label>
