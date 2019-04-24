@@ -33,12 +33,10 @@ define([
             },
             mounted: function () {
                 var _self = this;
+                debugger
                 $(".loading").css("display", "block");
                 _self.getUsers();
                 _self.getK8sNodes();
-                _self.allAppIns = _self.getApplications();
-                _self.classifyAppIns();
-                _self.initEcharts();
                 _self.getLogs();
                 _self.getImageData('public');
                 _self.getImageData('private');
@@ -46,6 +44,9 @@ define([
                 _self.getTemplateData('private');
                 _self.setAllApps();
                 _self.setPercent();
+                _self.allAppIns = _self.getApplications();
+                _self.classifyAppIns();
+                _self.initEcharts();
                 setTimeout(function () {
                     $(".loading").css("display", "none");
                 }, 1000);
@@ -201,6 +202,8 @@ define([
                     }
                 },
                 initEcharts: function () {
+                    var _self = this;
+                    var totalNum = _self.unknownApps.length + _self.runningApps.length + _self.stopApps.length + "";
                     var echartsObj = echarts.init(document.getElementById("app-statistics"));
                     var option = {
                         tooltip: { // 鼠标悬浮时的提示信息
@@ -217,7 +220,7 @@ define([
                             top: 'center',
                             left: 'center',
                             style: {
-                                text: '7',
+                                text: totalNum,
                                 fill: '#000',           // 填充色。
                                 fontSize: 20,           // 字体大小
                                 fontWeight: 'bold'
@@ -242,11 +245,11 @@ define([
                                 }
                             },
                             data:[{
-                                value: 2, name: "运行"
+                                value: _self.runningApps.length, name: "运行"
                             }, {
-                                value: 2, name: "停止"
+                                value: _self.stopApps.length, name: "停止"
                             }, {
-                                value: 3, name: "异常"
+                                value: _self.unknownApps.length, name: "异常"
                             }]
                         }]
                     };
@@ -349,9 +352,11 @@ define([
                         url: "../application/info",
                         type: "get",
                         dataType: "json",
+                        async: false,
                         success: function (result) {
                             if(result.code == "success") {
                                 applications = result.data;
+                                console.log("apps:");
                                 console.log(result.data);
                             } else {
                                 common_module.notify("[应用实例]","获取应用数据失败", "danger");
@@ -422,20 +427,23 @@ define([
                 classifyAppIns: function () {
                     var _self = this;
                     _self.runningApps = _self.stopApps = _self.unknownApps = [];
-                    for(var i = 0 ; i < _self.allAppIns.length; i++) {
-                        var temp = _self.allAppIns[i];
-                        switch (temp.status) {
-                            case "运行中":
-                                _self.runningApps.push(temp);
-                                break;
-                            case "停止":
-                                _self.stopApps.push(temp);
-                                break;
-                            case "异常":
-                                _self.unknownApps.push(temp);
-                                break;
+                    if(_self.allAppIns.length) {
+                        for(var i = 0 ; i < _self.allAppIns.length; i++) {
+                            var temp = _self.allAppIns[i];
+                            switch (temp.status) {
+                                case "运行中":
+                                    _self.runningApps.push(temp);
+                                    break;
+                                case "停止":
+                                    _self.stopApps.push(temp);
+                                    break;
+                                case "异常":
+                                    _self.unknownApps.push(temp);
+                                    break;
+                            }
                         }
                     }
+
                 },
                 classifyApp: function (array, Type) {
 

@@ -103,7 +103,8 @@ label.error{
 }
 /*vue*/
 [v-cloak] {
-    visibility: hidden;
+    display: none !important;
+    /*visibility: hidden !important;*/
 }
 #system_role,
 #system_user,
@@ -284,4 +285,7 @@ div.error {
     color: rgb(236,103,11);
     cursor: pointer;
     margin-left: 3px;
+}
+.logout:hover {
+    color: rgb(236,103,11);
 }

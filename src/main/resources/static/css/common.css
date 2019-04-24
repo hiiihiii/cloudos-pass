@@ -356,6 +356,7 @@ span.checkbox+a{
     flex: 3;
     padding-top: 5px;
     padding-left: 10px;
+    min-height: 320px;
 }
 #overview .left-top .content-box,
 #overview .left-bottom .content-box,
@@ -438,6 +439,7 @@ span.checkbox+a{
 }
 #overview .app-statistics {
     padding-bottom: 10px;
+    height: 90px;
 }
 #overview .app-statistics .app-info span {
     font-size: 14px;
@@ -487,6 +489,7 @@ span.checkbox+a{
     display: inline-block;
     margin-right: 40px;
     width: 155px;
+    height: 125px;
 }
 .exception-list {
     height: 290px;

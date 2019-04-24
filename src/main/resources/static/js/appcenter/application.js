@@ -74,7 +74,6 @@ define([
                         dataType: "json",
                         success: function (data) {
                             if(data.code == "success") {
-                                debugger;
                                 _self.appInsInfos = data.data;
                                 common_module.notify("[应用实例]", "获取应用实例成功","success");
                             } else {
