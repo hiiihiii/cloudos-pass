@@ -192,7 +192,7 @@ define([
                     } else {
                         formData.append("type", "private");
                     }
-                    formData.append("logoFile", $("#upload_image_form #logo")[0].files[0]);
+                    formData.append("logoFile", $("#upload_image_form #logo_upload")[0].files[0]);
                     formData.append("version",$("#upload_image_form #version").val());
                     formData.append("appTag", _self.bindData.appTag_input);
                     formData.append("description", $("#upload_image_form textarea[name='description']").val());

@@ -4,8 +4,9 @@ define([
     'vue',
     'bootstrap',
     'jquery-validate',
-    'validate-extend'
-], function ($, Vue, bootstrap, bootstrapSwitch, jquery_validate, validate_extend) {
+    'validate-extend',
+    "common-module"
+], function ($, Vue, bootstrap, bootstrapSwitch, jquery_validate, validate_extend,common_module) {
     if($("#deploy_template")[0]){
         var deployTemplate = new Vue({
             el: '#deploy_template',
@@ -178,12 +179,13 @@ define([
                     var formdata = new FormData();
                     var template = JSON.parse(sessionStorage.getItem("deployTemplate"));
                     //公有字段
-                    formdata.append("deploy_name", $("#deploy_template_form input[name='deployName']").val());
+                    var deployName = $("#deploy_template_form input[name='deployName']").val();
+                    formdata.append("deploy_name", deployName);
                     formdata.append("deploy_type", "template");
                     formdata.append("description", $("#deploy_template_form textarea[name='description']").val());
                     formdata.append("app_id", template.uuid);
                     formdata = _self.generateMetadata(formdata, template);
-
+                    $(".loading").css("display","block");
                     $.ajax({
                         type: "post",
                         url: "../appcenter/template/deploy",
@@ -192,10 +194,24 @@ define([
                         processData: false,
                         contentType: false,
                         success: function (data) {
-
+                            if(data.code === 'success') {
+                                common_module.notify("[应用中心]",'部署应用模板'+template.templateName+'成功，部署名称为'+deployName,'success');
+                                $("#deploy_template").modal('hide');
+                                //跳转
+                                window.location.href="../application/";
+                                sessionStorage.href = "/application";
+                            } else {
+                                common_module.notify("[应用中心]",'部署应用模板'+'失败','danger');
+                            }
+                            setTimeout(function () {
+                                $(".loading").css("display","none");
+                            }, 1000);
                         },
                         error: function () {
-
+                            common_module.notify("[应用中心]",'部署应用模板'+'失败','danger');
+                            setTimeout(function () {
+                                $(".loading").css("display","none");
+                            }, 1000);
                         }
                     });
                 },
@@ -238,7 +254,7 @@ define([
                         container.ports = [];
                         $("#" + configTabId + " #" + imageName + "port_table tbody").find("tr").each(function (index, ele) {
                             var port = {};
-                            port.name = $($(ele).find("input[name='portName']")[0]).val();
+                            port.name = $($(ele).find("label")[0]).text();
                             port.nodePort = $($(ele).find("input[name='nodePort']")[0]).val();
                             port.port = $($(ele).find("input[name='port']")[0]).val();
                             port.protocol = $($(ele).find("select[name='protocol']")[0]).val();

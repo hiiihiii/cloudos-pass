@@ -4,8 +4,9 @@ define([
     'vue',
     'bootstrap',
     'jquery-validate',
-    'validate-extend'
-], function ($, Vue, bootstrap, bootstrapSwitch, jquery_validate, validate_extend) {
+    'validate-extend',
+    "common-module"
+], function ($, Vue, bootstrap, bootstrapSwitch, jquery_validate, validate_extend,common_module) {
     if($("#deploy_image_dialog")[0]){
         var deploy_image = new Vue({
             el: '#deploy_image',
@@ -190,12 +191,13 @@ define([
                     var formdata = new FormData();
                     var image = JSON.parse(sessionStorage.getItem("deployImage"));
                     //公有字段
-                    formdata.append("deploy_name", $("#deploy_image_form input[name='deployName']").val());
+                    var deployName = $("#deploy_image_form input[name='deployName']").val();
+                    formdata.append("deploy_name", deployName);
                     formdata.append("deploy_type", "docker");
                     formdata.append("description", $("#deploy_image_form textarea[name='description']").val());
                     formdata.append("app_id", image.app_id);
                     formdata = _self.generateMetadata(formdata, image);
-
+                    $(".loading").css("display","block");
                     $.ajax({
                         type: "post",
                         url: "../appcenter/image/deploy",
@@ -203,11 +205,25 @@ define([
                         processData: false,
                         contentType: false,
                         dataType: "json",
-                        success: function (data) {
-
+                        success: function (result) {
+                            if(result.code === 'success') {
+                                common_module.notify("[应用中心]","部署镜像" + image.appName +"成功，部署名称为"+deployName,"success");
+                                $("#deploy_image").modal('hide');
+                                //跳转到应用实例页面
+                                window.location.href="../application/";
+                                sessionStorage.href = "/application";
+                            } else {
+                                common_module.notify("[应用中心]","部署镜像" + image.appName +"失败","danger");
+                            }
+                            setTimeout(function () {
+                                $(".loading").css("display","none");
+                            },1000);
                         },
                         error: function () {
-
+                            common_module.notify("[应用中心]","部署镜像" + image.appName +"失败","danger");
+                            setTimeout(function () {
+                                $(".loading").css("display","none");
+                            },1000);
                         }
                     });
                 },
@@ -247,7 +263,7 @@ define([
                     var ports = [];
                     $("#deploy_image_form #port_table tbody").find("tr").each(function (index, element) {
                         var port = {};
-                        port.name = $($(element).find("input[name='portName']")[0]).val();
+                        port.name = $($(element).find("label")[0]).text();
                         port.nodePort = $($(element).find("input[name='nodePort']")[0]).val();
                         port.port = $($(element).find("input[name='port']")[0]).val();
                         port.protocol = $($(element).find("select[name='protocol']")[0]).val();
