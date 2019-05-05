@@ -114,9 +114,10 @@ public class IntervalTask {
                 K8s_Pod temp = k8sPodDao.getAllPods().stream()
                         .filter(temp1 -> temp1.getName().equals(tempPod.getMetadata().getName()))
                         .findFirst().orElse(null);
-                if(temp == null) {
-                    Pod newK8sPod = newPods.get(j);
-                    addPodToDB(dbrc, dbservice, newK8sPod);
+                if(temp == null) {//如果这个for循环放在再外一层，就不需要判断了
+                    //Pod newK8sPod = newPods.get(j);
+                    //addPodToDB(dbrc, dbservice, newK8sPod);
+                    addPodToDB(dbrc, dbservice, tempPod);
                 }
             }
         }

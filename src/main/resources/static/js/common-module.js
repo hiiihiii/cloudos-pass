@@ -258,7 +258,8 @@ define([
         dataTables: tables,
         notify: notify,
         checkAll: checkAll,
-        checkOne: checkOne
+        checkOne: checkOne,
+        eventBus: new Vue()
     };
     return commonModule;
 });

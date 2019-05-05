@@ -6,7 +6,7 @@ define([
     'jquery-validate',
     'validate-extend',
     "common-module"
-], function ($, Vue, bootstrap, bootstrapSwitch, jquery_validate, validate_extend,common_module) {
+], function ($, Vue, bootstrap, jquery_validate, validate_extend,common_module) {
     if($("#deploy_image_dialog")[0]){
         var deploy_image = new Vue({
             el: '#deploy_image',
@@ -210,8 +210,8 @@ define([
                                 common_module.notify("[应用中心]","部署镜像" + image.appName +"成功，部署名称为"+deployName,"success");
                                 $("#deploy_image").modal('hide');
                                 //跳转到应用实例页面
-                                window.location.href="../application/";
                                 sessionStorage.href = "/application";
+                                window.location.href="../application/";
                             } else {
                                 common_module.notify("[应用中心]","部署镜像" + image.appName +"失败","danger");
                             }

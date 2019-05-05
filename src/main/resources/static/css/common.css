@@ -784,8 +784,8 @@ span.checkbox+a{
 #deploy_template_form .modal-body-left {
     display: inline-block;
     width: 135px;
-    /*position: absolute;*/
-    position: fixed;
+    position: absolute;
+    /*position: fixed;*/
 }
 #upload_image_form .modal-body-right,
 #edit_image_form .modal-body-right,

@@ -215,19 +215,10 @@ define([
                             console.log(data);
                             common_module.notify("[应用中心]", "上传应用成功", "success");
                             $("#upload_image").modal('hide');
-                            //获取镜像和模板信息
-                            if(isPublic) {
-                                _self.getImageData("public");
-                                _self.getTemplateData("public");
-                            } else {
-                                _self.getImageData("private");
-                                _self.getTemplateData("private");
-                            }
-                            Vue.nextTick(function(){
-                                _self.initJpages("#appholder", "appcontainer");
-                            });
+                            //通知appstore.js刷新
                             setTimeout(function () {
                                 $(".loading").css("display", "none");
+                                common_module.eventBus.$emit('uploadEnd', null);
                             },1000);
                         },
                         error: function(){
@@ -237,82 +228,6 @@ define([
                             },1000);
                         }
                     });
-                },
-
-                getImageData: function (type) {
-                    var _self = this;
-                    $.ajax({
-                        url: "../appcenter/imageinfo",
-                        type: "get",
-                        data: {
-                            repoType: type
-                        },
-                        dataType: "json",
-                        async: false,
-                        success: function (data) {
-                            _self.imageInfos = _self.convertData(data.data, 'image');
-                            console.log(_self.imageInfos);
-                            common_module.notify("[应用中心]","获取镜像数据成功", "success");
-                        },
-                        error: function () {
-                            common_module.notify("[应用中心]","获取镜像数据失败", "danger");
-                        }
-                    })
-                },
-                getTemplateData: function (type) {
-                    var _self = this;
-                    $.ajax({
-                        url: "../appcenter/templateinfo",
-                        type: 'get',
-                        dataType: 'json',
-                        data: {
-                            repoType: type
-                        },
-                        async: false,
-                        success: function (data) {
-                            if(data.code === "success"){
-                                _self.templateInfos = _self.convertData(data.data, 'template');
-                                console.log(_self.templateInfos);
-                                common_module.notify('[应用中心]', '获取模板信息成功', 'success');
-                            } else {
-                                common_module.notify('[应用中心]', '获取模板信息失败', 'fail');
-                            }
-                        },
-                        error: function () {
-                            common_module.notify('[应用中心]', '获取模板信息失败', 'fail');
-                        }
-                    });
-                },
-                convertData: function(dataArray, type){
-                    if(type === 'image'){
-                        for(var i = 0; i < dataArray.length; i++){
-                            dataArray[i].createType = JSON.parse(dataArray[i].createType);
-                            dataArray[i].metadata = JSON.parse(dataArray[i].metadata);
-                            dataArray[i].source_url = JSON.parse(dataArray[i].source_url);
-                            dataArray[i].v_description = JSON.parse(dataArray[i].v_description);
-                            dataArray[i].version = JSON.parse(dataArray[i].version);
-                            dataArray[i].logo_url = "ftp://docker:dockerfile@" + dataArray[i].logo_url;
-                            dataArray[i].appType = "docker";
-                            if(dataArray[i].appName.length > 6) {
-                                dataArray[i].temp_name = dataArray[i].appName.slice(0,6) + '...';
-                            } else {
-                                dataArray[i].temp_name = dataArray[i].appName;
-                            }
-                        }
-                    } else {
-                        for(var i = 0; i < dataArray.length; i++) {
-                            dataArray[i].relation = JSON.parse(dataArray[i].relation);
-                            dataArray[i].config = JSON.parse(dataArray[i].config);
-                            dataArray[i].temp_logo_url = "ftp://docker:dockerfile@" + dataArray[i].logo_url;
-                            dataArray[i].appType = 'template';
-                            if(dataArray[i].templateName.length > 6) {
-                                dataArray[i].temp_name = dataArray[i].templateName.slice(0,6) + '...';
-                            } else {
-                                dataArray[i].temp_name = dataArray[i].templateName;
-                            }
-                        }
-                    }
-                    return dataArray;
                 },
 
                 //构造上传时的metadata, 数据格式见static/json/metadata.json

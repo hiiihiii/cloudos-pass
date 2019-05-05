@@ -541,6 +541,7 @@ define([
                     formData.append("relation",JSON.stringify(relation));
                     var config = _self.createConfig();
                     formData.append("config", JSON.stringify(config));
+                    $(".loading").css("display", 'block');
                     $.ajax({
                         url: "../apporch/template/add",
                         type: "post",
@@ -548,10 +549,23 @@ define([
                         processData: false,
                         contentType: false,
                         success: function(data){
-                            console.log(data);
-                            window.location.href="../apporch/templateinfo";
+                            if(data.code=='success') {
+                                console.log(data);
+                                common_module.notify('[应用编排]','新增应用模板成功','success');
+                                window.location.href="../apporch";
+                            } else {
+                                common_module.notify('[应用编排]','新增应用模板成功','danger');
+                                setTimeout( function(){
+                                    $('.loading').css('display','none');
+                                }, 1000);
+                            }
                         },
-                        error: function(){}
+                        error: function(){
+                            common_module.notify('[应用编排]','新增应用模板成功','danger');
+                            setTimeout( function(){
+                                $('.loading').css('display','none');
+                            }, 1000);
+                        }
                     });
                 },
                 

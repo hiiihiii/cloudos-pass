@@ -77,6 +77,7 @@ define([
             },
             mounted: function () {
                 var _self = this;
+                common_module.eventBus.$on('uploadEnd', _self.refreshRepo);
                 _self.showPublic = true;
                 _self.showPrivate = false;
                 //设置分类全部选中
@@ -707,6 +708,10 @@ define([
                     // formData.append("v_description", $("#upload_image_form textarea[name='v_description']").val());
                     // formData.append("sourceFile", $("#upload_image_form #source")[0].files[0]);
 
+                },
+
+                uploadEnd: function() {
+                    console.log("uploadEnd");
                 }
             }
         });

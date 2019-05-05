@@ -289,3 +289,10 @@ div.error {
 .logout:hover {
     color: rgb(236,103,11);
 }
+.no-content {
+    font-size: 20px;
+    font-weight: bold;
+    color: #c5c1c1;
+    text-align: center;
+    margin-top: 50%;
+}
