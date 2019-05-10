@@ -426,7 +426,10 @@ define([
                 },
                 classifyAppIns: function () {
                     var _self = this;
-                    _self.runningApps = _self.stopApps = _self.unknownApps = [];
+                    debugger;
+                    _self.runningApps =[];
+                    _self.stopApps =[];
+                    _self.unknownApps = [];
                     if(_self.allAppIns.length) {
                         for(var i = 0 ; i < _self.allAppIns.length; i++) {
                             var temp = _self.allAppIns[i];

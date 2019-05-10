@@ -242,7 +242,7 @@ define([
                         async: false,
                         success: function (data) {
                             _self.imageInfos = _self.convertData(data.data, 'image');
-                            console.log(_self.imageInfos);
+                            console.log(_self.imageInfos[1]);
                             common_module.notify("[应用中心]","获取镜像数据成功", "success");
                             setTimeout(function () {
                                 $(".loading").css("display", "none");
