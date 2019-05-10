@@ -79,12 +79,10 @@ define([
 
                 //进入连线模式并设置创建连线处理程序
                 setCreateLinkMode: function () {
-                    debugger
                     var _self = this;
                     _self.twaverObj.isLinkMode = true;
                     //进入连线模式并设置创建连线处理程序
                     _self.twaverObj.network.setCreateLinkInteractions(function (from, to) {
-                        debugger;
                         //相同起始点和终点之间不允许有连线
                         if(from === to) {
                             common_module.notify("[增加模板]", "相同起始点和终点之间不允许有连线", "warning");
@@ -95,7 +93,13 @@ define([
                         if(!links || links.size()==0) {
                             _self.twaverObj.fromNode = from;
                             _self.twaverObj.toNode = to;
-                            _self.showPortListDialog(to);
+                            //判断如果加入连线后 图中有没有环
+                            var hasloop = _self.hasLoop(from, to);
+                            if(hasloop) {
+                                common_module.notify("[增加模板]", "添加连线后可能存在环", "warning");
+                            } else {
+                                _self.showPortListDialog(to);
+                            }
                         } else {
                             common_module.notify("[增加模板]", "镜像之间已存在连线", "warning");
                         }
@@ -347,7 +351,6 @@ define([
                     // 展示选中节点的信息
                     if(last != null){
                         var imageName = last.getName();
-                        console.log(imageName);
                         _self.showSelectedImageInfo(imageName);
                     }
                 },
@@ -355,7 +358,6 @@ define([
                 //展示端口模态框
                 showPortListDialog: function (toNode) {
                     var _self = this;
-                    debugger
                     var imageName = toNode.getName();
                     var version = "";
                     var ports = [];
@@ -427,7 +429,6 @@ define([
                  * @param k3：数组每项的key
                  */
                 saveImageInfo:function (event, imageName, k1, k2, k3) {
-                    debugger;
                     var _self = this;
                     var value = $(event.target).val();
                     var version = _self.twaverObj.selectedImage.version;
@@ -613,9 +614,122 @@ define([
                 },
 
                 //判断图中是否有环路
-                hasLoop: function () {
+                hasLoop: function (fromNode, toNode) {
                     var result = false;
-                    return result;
+                    var _self = this;
+                    var data = _self.twaverObj.box.getDatas()._as;//data包括了link和node
+                    var nodes = _self.calculateNode(data);
+                    //辅助对象，使镜像名称与0,1,2,...对应起来
+                    var helpObj = {};
+                    for(var i = 0; i < nodes.length; i++) {
+                        var imageName = nodes[i].getImage();
+                        helpObj[imageName] = i;
+                    }
+                    var graph = [];
+                    //初始化图的邻接矩阵为全零
+                    for(var i = 0; i< nodes.length; i++) {
+                        var temp = [];
+                        for(var j = 0; j < nodes.length; j++) {
+                            temp.push(0);
+                        }
+                        graph.push(temp);
+                    }
+                    //设置已有的边
+                    for(var i = 0; i < nodes.length; i++) {
+                        debugger
+                        var links = nodes[i].getLinks();
+                        if(links) {
+                            var temp = links._as;
+                            for(var j = 0; j < temp.length; j++) {
+                                var fromName = temp[j]._fromNode.getName();
+                                var toName = temp[j]._toNode.getName();
+                                graph = _self.setEdge(graph, helpObj, fromName, toName);
+                            }
+                        } else {
+                            continue;
+                        }
+                    }
+                    //设置预计加入的边
+                    _self.setEdge(graph, helpObj, fromNode.getName(), toNode.getName());
+                    console.log(graph);
+                    return _self.topSort(graph);
+                    // return result;
+                },
+
+                //计算图中Node的个数
+                calculateNode: function (data) {
+                    var nodes = [];
+                    for(var i = 0 ; i < data.length; i++) {
+                        if(!(data[i] instanceof twaver.Link)){
+                            nodes.push(data[i]);
+                        }
+                    }
+                    return nodes;
+                },
+
+                setEdge: function (graph, helpObj, fromName, toName) {
+                    var fromIndex =0, toIndex = 0;
+                    for(var key in helpObj) {
+                        if(key == fromName) {
+                            fromIndex = helpObj[key];
+                        }
+                        if(key == toName) {
+                            toIndex = helpObj[key];
+                        }
+                    }
+                    graph[fromIndex][toIndex] = 1;
+                    return graph;
+                },
+
+                //使用拓扑排序判断有向图是否有环
+                topSort: function (graph) {
+                    //入度为0的结点的个数，也就是入队个数
+                    var number = 0;
+                    //用队列保存拓扑序列
+                    var queue = [];
+                    //暂时存放拓扑序列
+                    var temp = [];
+                    //记录每个结点的入度，初始化为0
+                    var count = [];
+                    for(var i = 0; i < graph.length; i++) {
+                        count.push(0);
+                    }
+                    //计算每个节点的入度
+                    for(var i = 0; i < graph.length; i++){
+                        for(var j = 0; j < graph.length; j++){
+                            if(graph[i][j] == 1){
+                                count[j] = count[j] + 1;
+                            }
+                        }
+                    }
+
+                    for(var i = 0; i < graph.length; i++){
+                        if(count[i] == 0){
+                            queue.push(i);
+                        }
+                    }
+
+                    //删除这些被删除结点的出边（即对应结点入度减一）
+                    while(queue.length!=0){
+                        var i = queue[0];
+                        temp.push(queue.shift());
+                        number += 1;
+                        for(var j = 0; j < graph.length; j++){
+                            if(graph[i][j] == 1) {
+                                count[j] -= 1;
+                                //出现了新的入度为0的结点，删除
+                                if(count[j] == 0) {
+                                    queue.push(j);
+                                }
+                            }
+                        }
+                    }
+
+                    if(number != graph.length){
+                        return true;//最后存在入度为1的结点，这个有向图是有回路的
+                    }else{
+                        return false;
+                    }
                 },
 
                 //在twaver中注册图片
