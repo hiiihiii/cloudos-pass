@@ -382,9 +382,12 @@ define([
                 //确认端口，关闭端口选择框
                 confirmPorts: function () {
                     var _self = this;
-                    var portNames = $("#portList_dialog select[name='portList']").val();
-                    _self.createLink(_self.twaverObj.fromNode, _self.twaverObj.toNode, portNames.join(","));
-                    $("#portList_dialog").modal('hide');
+                    debugger
+                    var portNamesArray = $("#portList_dialog select[name='portList']").val();
+                    if($("#portSelectForm").valid()) {
+                        _self.createLink(_self.twaverObj.fromNode, _self.twaverObj.toNode, portNamesArray.join(","));
+                        $("#portList_dialog").modal('hide');
+                    }
                 },
                 //创建连线
                 createLink: function (from, to, linName) {
@@ -753,6 +756,21 @@ define([
                 },
                 messages:{
                 }
+            }
+        });
+
+        var portsValidator = $("#portSelectForm").validate({
+            rules: {
+                portList: {
+                    required: true,
+                    portNotEmpty: true
+                },
+                messages:{
+
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parent());
             }
         });
 

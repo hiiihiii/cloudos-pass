@@ -307,9 +307,9 @@
                     </div>
                 </div>
                 <div class="modal-body cloud-modal-body">
-                    <form role="form" class="form-horizontal" enctype="multipart/form-data">
+                    <form role="form" id="portSelectForm" class="form-horizontal" enctype="multipart/form-data">
                         <div class="form-group">
-                            <label>端口名称：</label>
+                            <label>端口名称<span class="cloud-required">  *</span>：</label>
                             <select class="js-example-basic-multiple form-control" name="portList" multiple="multiple">
                                 <option v-for="port in ports" v-bind:value="port.portName" v-cloak="">{{port.portName}}</option>
                             </select>

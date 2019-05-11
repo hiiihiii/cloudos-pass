@@ -23,6 +23,15 @@ define([
         }
     }, '该项不能为空');
 
+    //编排是端口名称不为空
+    $.validator.addMethod("portNotEmpty", function (value, element) {
+        if(value.length) {
+            return true;
+        } else {
+            return false;
+        }
+    }, "端口名称不能为空");
+
     //上传镜像，同名同版本验证
     $.validator.addMethod('imageUnique', function (value, element) {
         debugger

@@ -1100,10 +1100,14 @@ span.checkbox+a{
     width: 81% !important;
 }
 #portList_dialog .cloud-modal-body {
-    height: 65px;
+    height: 85px;
 }
 #portList_dialog .form-group {
     margin-bottom: 0;
+}
+#portSelectForm .error {
+    margin-top: 5px;
+    margin-left: 77px;
 }
 /*新版应用编排结束*/
 /*部署模板开始*/
