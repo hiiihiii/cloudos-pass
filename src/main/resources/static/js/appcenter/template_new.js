@@ -378,7 +378,8 @@ define([
                     $("#portList_dialog select[name='portList']").select2();
                     $("#portList_dialog").modal({backdrop: 'static', keyboard: false});
                 },
-                //确认端口
+
+                //确认端口，关闭端口选择框
                 confirmPorts: function () {
                     var _self = this;
                     var portNames = $("#portList_dialog select[name='portList']").val();
@@ -753,6 +754,11 @@ define([
                 messages:{
                 }
             }
+        });
+
+        $("#portList_dialog").on('hidden.bs.modal', function() {
+            //清空端口
+            template.ports = [];
         });
     }
 });
