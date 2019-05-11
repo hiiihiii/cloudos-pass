@@ -645,8 +645,6 @@ define([
                                 var toName = temp[j]._toNode.getName();
                                 graph = _self.setEdge(graph, helpObj, fromName, toName);
                             }
-                        } else {
-                            continue;
                         }
                     }
                     //设置预计加入的边
@@ -694,7 +692,7 @@ define([
                     for(var i = 0; i < graph.length; i++) {
                         count.push(0);
                     }
-                    //计算每个节点的入度
+                    //计算每个节点的入度, O(N2)
                     for(var i = 0; i < graph.length; i++){
                         for(var j = 0; j < graph.length; j++){
                             if(graph[i][j] == 1){
@@ -702,13 +700,12 @@ define([
                             }
                         }
                     }
-
+                    //遍历图中所有结点，找入度为0的结点删除（放进队列）
                     for(var i = 0; i < graph.length; i++){
                         if(count[i] == 0){
                             queue.push(i);
                         }
                     }
-
                     //删除这些被删除结点的出边（即对应结点入度减一）
                     while(queue.length!=0){
                         var i = queue[0];
