@@ -6,6 +6,7 @@ require.config({
     paths: {
         "jquery": "lib/jquery/jquery-3.3.1.min",
         "vue": "lib/vue/vue.min",
+        "angular": "lib/angular/angular.min",
         "bootstrap": "lib/bootstrap/js/bootstrap.min",
         "bootstrapSwitch": "lib/bootstrap/js/bootstrap-switch",
         "bootstrap-notify": "lib/bootstrap-notify/bootstrap-notify.min",
